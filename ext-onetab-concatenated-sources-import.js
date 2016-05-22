@@ -2423,14 +2423,14 @@ function oE(elt) {
 }
 uQ();
 document.addEventListener("DOMContentLoaded", function() {
-    fV();
+    B();
 });
 /**
  * @return {undefined}
  */
-function fV() {
-    B();
-}
+// function fV() {
+//     B();
+// }
 /**
  * @return {undefined}
  */

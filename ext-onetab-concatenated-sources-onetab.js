@@ -1226,12 +1226,13 @@ function vQ(dataAndEvents, until) {
 function jV(line) {
     /** @type {Element} */
     var div = document.createElement("div");
+    div.className = "total-tab-count"
     /** @type {string} */
     div.style.paddingTop = "40px";
     /** @type {string} */
     div.style.paddingBottom = "24px";
     /** @type {string} */
-    div.style.paddingLeft = "268px";
+    div.style.paddingLeft = "400px";
     /** @type {string} */
     div.style.fontSize = "18px";
     /** @type {string} */
@@ -1254,7 +1255,7 @@ function uE() {
     /** @type {string} */
     image.style.height = 114 / 2 + "px";
     /** @type {string} */
-    image.style.width = 414 / 2 + "px";
+    // image.style.width = 414 / 2 + "px";
     /** @type {string} */
     image.style.position = "absolute";
     /** @type {string} */
@@ -1475,6 +1476,7 @@ function O(el) {
     if (!el) {
         return;
     }
+    console.log("length "+el.childNodes.length);
     for (; el.childNodes.length > 0;) {
         el.removeChild(el.childNodes[0]);
     }
@@ -2868,12 +2870,14 @@ function GQ(data) {
     };
     /** @type {Element} */
     var obj = document.createElement("div");
+    obj.className = 'tabs-group';
     /** @type {string} */
     obj.style.paddingTop = "15px";
     /** @type {string} */
     obj.style.paddingLeft = "0px";
     /** @type {Element} */
     var select = document.createElement("div");
+     select.className = 'tab-group-header';
     obj.appendChild(select);
     /** @type {string} */
     select.style.paddingLeft = "20px";
@@ -2945,6 +2949,7 @@ function GQ(data) {
     span.appendChild(function() {
         /** @type {Element} */
         var div = document.createElement("div");
+        div.className = 'group-name-container';
         /** @type {string} */
         div.style.display = "inline-block";
         /** @type {string} */
@@ -2957,6 +2962,8 @@ function GQ(data) {
         div.style.verticalAlign = "middle";
         /** @type {Element} */
         element = document.createElement("div");
+        element.className = 'element'
+        
         /** @type {string} */
         element.style.fontSize = "0px";
         /** @type {string} */
@@ -2964,10 +2971,13 @@ function GQ(data) {
         /** @type {string} */
         element.style.paddingRight = "30px";
         model = new JQ(element, function(value, dataAndEvents) {
+
             if (dataAndEvents) {
                 /** @type {string} */
                 element.style.display = hE(value) != "" ? "inline-block" : "none";
-                data["label"] = hE(value) == "" ? "" : value;
+                data["label"] = hE(value) == "" ? "Untitled Group" : value;
+                // data["label"] = "Untitled Group";
+                console.log('value'+hE(value));
                 verifyCheckboxRadio();
                 window["chrome"]["runtime"]["getBackgroundPage"](function(dataAndEvents) {
                     dataAndEvents["recreateContextMenus"]();
@@ -3038,7 +3048,7 @@ function GQ(data) {
             div.style.paddingTop = "0px";
             /** @type {string} */
             div.style.paddingBottom = "2px";
-            div.appendChild(document.createTextNode("Created " + (new Date(data["createDate"])).toLocaleString()));
+            div.appendChild(document.createTextNode("Created" + (new Date(data["createDate"])).toLocaleString()));
             return div;
         }());
         new xQ(div, "Restore all", 30, function(ele) {
@@ -3329,14 +3339,18 @@ function GQ(data) {
         sV(udataCur);
     };
     /** @type {Element} */
-    var innerWrapper = document.createElement("div");
-    obj.appendChild(innerWrapper);
+    var siteURL = document.createElement("li");
+    var siteURLContainer = document.createElement("ul");
+    siteURLContainer.className = 'site-urls tabs';
+    obj.appendChild(siteURLContainer);
+    siteURLContainer.appendChild(siteURL);
+    siteURL.className ='site-url tab';
     /** @type {string} */
-    innerWrapper.style.paddingRight = "20px";
+    siteURL.style.paddingRight = "20px";
     /** @type {string} */
-    innerWrapper.style.paddingLeft = "12px";
+    siteURL.style.paddingLeft = "12px";
     /** @type {string} */
-    innerWrapper.style.paddingTop = "12px";
+    siteURL.style.paddingTop = "12px";
     var key;
     for (key in data["tabsMeta"]) {
         var localStorage = data["tabsMeta"][key];
@@ -3348,7 +3362,7 @@ function GQ(data) {
         /** @type {string} */
         sourceEl.style.marginLeft = "20px";
         wrapper.appendChild(info);
-        innerWrapper.appendChild(wrapper);
+        siteURL.appendChild(wrapper);
         /** @type {string} */
         info.style.display = "inline-block";
         /** @type {string} */
@@ -3921,13 +3935,13 @@ function Z() {
  */
 function B() {
     /** @type {(HTMLElement|null)} */
-    var div = document.getElementById("contentAreaDiv");
-    O(div);
+    var contentAreaDiv = document.getElementById("contentAreaDiv");
+    O(contentAreaDiv);
     /** @type {string} */
-    div.style.paddingTop = "0px";
+    contentAreaDiv.style.paddingTop = "0px";
     /** @type {string} */
-    div.style.paddingLeft = "0px";
-    div.appendChild(uE());
+    contentAreaDiv.style.paddingLeft = "0px";
+    contentAreaDiv.appendChild(uE());
     var cardArray = lQ();
     var lines = cardArray["tabGroups"];
     if (!lines) {
@@ -3955,12 +3969,12 @@ function B() {
     /** @type {string} */
     var result = "Total: " + prevChunksLen + " " + (prevChunksLen == 1 ? "tab" : "tabs");
     var frag = jV(result);
-    div.appendChild(frag);
+    contentAreaDiv.appendChild(frag);
     /** @type {Element} */
     var div2 = document.createElement("div");
     /** @type {string} */
     div2.id = "updateAvailableMsgDiv";
-    div.appendChild(div2);
+    contentAreaDiv.appendChild(div2);
     RQ();
     /** @type {Array} */
     jQ = [];
@@ -3989,7 +4003,7 @@ function B() {
     i = 0;
     for (; i < lines.length; i++) {
         line = lines[i];
-        div.appendChild(GQ(line));
+        contentAreaDiv.appendChild(GQ(line));
     }
     if (lines.length == 0) {
         div.appendChild(function() {
@@ -4005,7 +4019,7 @@ function B() {
             return div;
         }());
     }
-    div.appendChild(function() {
+    contentAreaDiv.appendChild(function() {
         /** @type {Element} */
         var el = document.createElement("div");
         /** @type {string} */

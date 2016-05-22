@@ -46,3 +46,12 @@ input[type=text] {
     filter: alpha(opacity=100);
     opacity: 1;
 }
+ul{
+    margin: 0;
+    padding: 0;
+}
+li{
+    list-style: none;
+    padding-left: 0;
+    margin-left: 0;
+}

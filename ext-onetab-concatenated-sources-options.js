@@ -429,14 +429,14 @@ function O(desc) {
  */
 function M(a) {
     /** @type {Element} */
-    var content = document.createElement("div");
+    var contentAreaDiv = document.createElement("div");
     /** @type {string} */
-    content.style.fontSize = "1px";
+    contentAreaDiv.style.fontSize = "1px";
     /** @type {string} */
-    content.style.height = a + "px";
+    contentAreaDiv.style.height = a + "px";
     /** @type {string} */
-    content.style.width = 1 + "px";
-    return content;
+    contentAreaDiv.style.width = 1 + "px";
+    return contentAreaDiv;
 }
 /**
  * @param {?} elt
@@ -1430,6 +1430,7 @@ function jV(message) {
     return div;
 }
 /**
+ * Adding Logo section
  * @return {?}
  */
 function uE() {
@@ -1585,30 +1586,36 @@ function RV(key) {
 }
 uQ();
 document.addEventListener("DOMContentLoaded", function() {
-    fV();
+    B();
 });
 /**
  * @return {undefined}
  */
-function fV() {
-    B();
-}
+// function fV() {
+//     B();
+// }
 /**
  * @return {undefined}
  */
 function B() {
     /** @type {(HTMLElement|null)} */
-    var content = document.getElementById("contentAreaDiv");
-    O(content);
+    var contentAreaDiv = document.getElementById("contentAreaDiv");
+    // O(contentAreaDiv);
     /** @type {string} */
-    content.style.paddingTop = "0px";
+    contentAreaDiv.style.paddingTop = "0px";
     /** @type {string} */
-    content.style.paddingLeft = "0px";
-    content.appendChild(uE());
-    content.appendChild(jV("Options"));
+    contentAreaDiv.style.paddingLeft = "0px";
+
+    // Adding logo section
+    contentAreaDiv.appendChild(uE());
+
+    // Adding Options Section and its functions
+    contentAreaDiv.appendChild(jV("Options"));
+
+
     /** @type {Element} */
     var innerWrapper = document.createElement("div");
-    content.appendChild(innerWrapper);
+    contentAreaDiv.appendChild(innerWrapper);
     /** @type {string} */
     innerWrapper.style.paddingTop = "24px";
     /** @type {string} */

@@ -1462,6 +1462,7 @@ function KQ() {
                                  */
                                 "onclick": function(evt, event) {
                                     _Q(item["id"]);
+                                    console.log( _Q(item["id"]));
                                 }
                             }));
                             CE.B9.push(window["chrome"]["contextMenus"]["create"]({
