@@ -50,9 +50,8 @@
    },
    "key": "MIGfMA0GCSqGSIb3DQEBAQUAA4GNADCBiQKBgQDs2r/nSa4MRBoDT1pBx+Q9gI0JaTBaIrsD4uKT9oA4HUF2xboeOA1BDw3lmoJ4G8BL0tAbJTcEnxlkTsCY7C413MojaeDZy4pza3RJqkMAKiJisl8t8eiP+c0ox3l1syb1xmI7EEIouXIxlCX8LGoguB0AuWtunGLCjiLoM2vJLQIDAQAB",
    "manifest_version": 2,
-   "name": "OneTab",
+   "name": "OneTab Advanced",
    "options_page": "options.html",
    "permissions": [ "tabs", "\u003Call_urls>", "webRequest", "webRequestBlocking", "contextMenus" ],
-   "update_url": "https://clients2.google.com/service/update2/crx",
-   "version": "1.7"
+   "version": "0.1"
 }
