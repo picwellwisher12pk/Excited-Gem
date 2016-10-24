@@ -42,16 +42,16 @@
       "matches": [ "http://*/*", "https://*/*" ]
    } ],
    "content_security_policy": "script-src 'self' https://ssl.google-analytics.com; object-src 'self'",
-   "description": "Save up to 95% memory and reduce tab clutter",
+   "description": "A try to make a better version of Onetab",
    "icons": {
       "128": "images/extension-icon128.png",
       "16": "images/extension-icon16.png",
       "48": "images/extension-icon48.png"
    },
-   "key": "MIGfMA0GCSqGSIb3DQEBAQUAA4GNADCBiQKBgQDs2r/nSa4MRBoDT1pBx+Q9gI0JaTBaIrsD4uKT9oA4HUF2xboeOA1BDw3lmoJ4G8BL0tAbJTcEnxlkTsCY7C413MojaeDZy4pza3RJqkMAKiJisl8t8eiP+c0ox3l1syb1xmI7EEIouXIxlCX8LGoguB0AuWtunGLCjiLoM2vJLQIDAQAB",
+   // "key": "MIGfMA0GCSqGSIb3DQEBAQUAA4GNADCBiQKBgQDs2r/nSa4MRBoDT1pBx+Q9gI0JaTBaIrsD4uKT9oA4HUF2xboeOA1BDw3lmoJ4G8BL0tAbJTcEnxlkTsCY7C413MojaeDZy4pza3RJqkMAKiJisl8t8eiP+c0ox3l1syb1xmI7EEIouXIxlCX8LGoguB0AuWtunGLCjiLoM2vJLQIDAQAB",
    "manifest_version": 2,
-   "name": "OneTab Advanced",
+   "name": "Advanced OneTab",
    "options_page": "options.html",
    "permissions": [ "tabs", "\u003Call_urls>", "webRequest", "webRequestBlocking", "contextMenus" ],
-   "version": "0.1"
+   "version": "0.2"
 }
