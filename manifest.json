@@ -1,12 +1,14 @@
 {
    "background": {
-      "scripts": [ "ext-onetab-concatenated-sources-background.js" ]
+      "scripts": [ "js/background.js" ]
    },
    "browser_action": {
       "default_icon": {
          "19": "images/icon19.png",
          "38": "images/icon38.png"
-      }
+      },
+      "default_title":"Advanced OneTab",
+      "default_popup":"onetab.html"
    },
    "commands": {
       "display-onetab": {
@@ -38,7 +40,7 @@
       }
    },
    "content_scripts": [ {
-      "js": [ "ext-onetab-concatenated-sources-contentscript.js" ],
+      "js": [ "js/content.js" ],
       "matches": [ "http://*/*", "https://*/*" ]
    } ],
    "content_security_policy": "script-src 'self' https://ssl.google-analytics.com; object-src 'self'",
