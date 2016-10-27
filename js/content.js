@@ -8,35 +8,36 @@ function data2DOM(el,data){
 	for (var property in data) {
 		if (property == ignoredKeys[0] || property == ignoredKeys[1] || property == ignoredKeys[2]) continue;
 	    if (data.hasOwnProperty(property)) {
-	    	console.log(property, data[property]);
 			el.data(property,data[property]);
 	    }
 	}
 }
-
-
-var tabsList =[];
-console.log("ContentScript");
+/**
+ * [saveData description]
+ * @param  {String/Object/Array} data    [description]
+ * @param  {String} message [description]
+ */
+function saveData (data, message) {
+	chrome.storage.sync.set(data, function() {
+    	chrome.notifications.create('reminder', {
+	        type: 'basic',
+	        iconUrl: '../images/extension-icon48.png',
+	        title: 'Data saved',
+	        message: message
+	     }, function(notificationId) {});
+    });
+}
 chrome.runtime.onMessage.addListener(function(request, sender) {
-	console.log("getting message inside contentscript");
     tabsList = request.tabsList;
-    // console.log(request);
     $.each(tabsList, function( index, value ) {
-    	// console.log(value);
-      img = $("<img/>");
-      img.prop("src",value.favIconUrl)
-	  a = $("<a></a>")
-	  a.html(value.title)
-	  a.prop("href",value.url);
-
-	  li = $("<li></li>");
-	  li.addClass('list-group-item');
-	  data2DOM(li,value);
-
-	  console.log("li.data",li.data());
-
+	  saveData(value, "Tabs Saved");
+      img = $("<img src='"+value.favIconUrl+"'/>");
+	  a = $("<a>"+value.title+"</a>")
+	  a.addClass('list-group-item')
+	  a.prop({"href":value.url,"target":"_blank","draggable": true});
+	  data2DOM(a,value);
 	  a.prepend(img);
-	  li.append(a);
-	  $("ul.tabs-list").append(li);
+	  $(".tabs-list").append(a);
 	});
+	
 });
