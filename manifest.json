@@ -54,6 +54,6 @@
    "manifest_version": 2,
    "name": "Advanced OneTab",
    "options_page": "options.html",
-   "permissions": [ "tabs", "\u003Call_urls>", "webRequest", "webRequestBlocking", "contextMenus" ],
+   "permissions": [ "tabs", "\u003Call_urls>", "webRequest", "webRequestBlocking", "contextMenus","webNavigation"],
    "version": "0.2"
 }

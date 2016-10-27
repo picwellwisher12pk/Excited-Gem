@@ -39,20 +39,23 @@ chrome.browserAction.onClicked.addListener(function(tab) {
     chrome.tabs.query({currentWindow: true	}, 
     	function(tabs) {		
     		allTabs = tabs;
+    		console.log("alltabs within tabquery");
     }); 
     /**
-     * Creating new tab and opening the oneTab Extension's main page in it.
+     * Creating new tab and opening the oneTab Extension's main page in it if it not opened yet
+     * Otherwise bring focus on the onetab Main page.
      */
     if(_oneTabPageOpened == null){
     	chrome.tabs.create({url: onetabURL, pinned: true},
     		function(tab)
     		{
 	        	_oneTabPageOpened = tab.id;
-	        	chrome.tabs.onCreated.addListener(function(tab)
-	        		{
-	    			chrome.runtime.sendMessage({tabList: allTabs});
+	        	chrome.tabs.onUpdated.addListener(function(tabId , info) 
+	        	{
+	        		if (info.status == "complete"){
+	    				chrome.runtime.sendMessage({tabsList: allTabs});
 	    			}
-	    		);//onCreated
+	    		});//onCreated
         	});//Create Tab
 	}
 	else {
