@@ -7,8 +7,8 @@
          "19": "images/icon19.png",
          "38": "images/icon38.png"
       },
-      "default_title":"Advanced OneTab",
-      "default_popup":"onetab.html"
+      "default_title":"Advanced OneTab"
+      // ,"default_popup":"popup.html"
    },
    "commands": {
       "display-onetab": {
