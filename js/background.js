@@ -1,6 +1,28 @@
+var onetabURL  = chrome.extension.getURL("onetab.html");
 var _oneTabPageOpened = null;
 var allTabs;
-
+/**
+ * Opens OneTab Main Page
+ * @return {[type]} [description]
+ */
+function openOneTabPage () {
+	if(_oneTabPageOpened == null){
+    	chrome.tabs.create({url: onetabURL, pinned: true},
+    		function(tab)
+    		{
+	        	_oneTabPageOpened = tab.id;
+	        	chrome.tabs.onUpdated.addListener(function(tabId , info) 
+	        	{
+	        		if (info.status == "complete"){
+	    				chrome.runtime.sendMessage({tabsList: allTabs});
+	    			}
+	    		});//onCreated
+        	});//Create Tab
+	}
+	else {
+		chrome.tabs.update(_oneTabPageOpened, {selected: true});
+	}
+}
 /**
  * Sets badge label to Tabs count
  * @param {Integer} tabId     [description]
@@ -32,7 +54,6 @@ chrome.browserAction.onClicked.addListener(function(tab) {
 	 * URL of onetab main page
 	 * @type {String}
 	 */
-    onetabURL  = chrome.extension.getURL("onetab.html");
     /**
      * Getting All tabs
      */
@@ -41,25 +62,25 @@ chrome.browserAction.onClicked.addListener(function(tab) {
     		allTabs = tabs;
     		console.log("alltabs within tabquery");
     }); 
-    /**
-     * Creating new tab and opening the oneTab Extension's main page in it if it not opened yet
-     * Otherwise bring focus on the onetab Main page.
-     */
-    if(_oneTabPageOpened == null){
-    	chrome.tabs.create({url: onetabURL, pinned: true},
-    		function(tab)
-    		{
-	        	_oneTabPageOpened = tab.id;
-	        	chrome.tabs.onUpdated.addListener(function(tabId , info) 
-	        	{
-	        		if (info.status == "complete"){
-	    				chrome.runtime.sendMessage({tabsList: allTabs});
-	    			}
-	    		});//onCreated
-        	});//Create Tab
-	}
-	else {
-		chrome.tabs.update(_oneTabPageOpened, {selected: true});
-	}
+    openOneTabPage();
+    
 
 });
+
+chrome.contextMenus.create({
+    "title": "Tab it",
+    "id": "1",
+    "contexts": ["page", "selection", "image", "link"],
+    "onclick" : clickHandler
+  });
+chrome.contextMenus.create({
+    "title": "Buzz This",
+    "id": "2",
+    "onclick" : clickHandler,
+    "parentId": "1"
+  });
+
+
+ function clickHandler(){
+ 	return ;
+ }
