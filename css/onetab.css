@@ -4,6 +4,10 @@ body {
     cursor:pointer;
     color:#234da7;
 }
+.list-group-item>img{
+    width: 16px;
+    height: 16px;
+}
 input[type=text] {
     padding: 4px 4px;
     border: 1px solid #ccc;
