@@ -14,25 +14,25 @@
       "display-onetab": {
          "description": "Display OneTab",
          "suggested_key": {
-            "default": "Alt+Shift+D"
+            "default": "Ctrl+Shift+D"
          }
       },
       "send-tabs-on-the-left-to-onetab": {
          "description": "Send tabs on the left to OneTab",
          "suggested_key": {
-            "default": "Alt+Shift+Left"
+            "default": "Ctrl+Shift+Left"
          }
       },
       "send-tabs-on-the-right-to-onetab": {
          "description": "Send tabs on the right to OneTab",
          "suggested_key": {
-            "default": "Alt+Shift+Right"
+            "default": "Ctrl+Shift+Right"
          }
       },
       "send-all-tabs-except-this-to-onetab": {
          "description": "Send all tabs except this tab to OneTab",
          "suggested_key": {
-            "default": "Alt+Shift+Up"
+            "default": "Ctrl+Shift+Up"
          }
       },
       "send-current-tab-to-onetab": {
