@@ -1,5 +1,4 @@
-body {
-}
+body { padding-top: 70px; }
 .clickable {
     cursor:pointer;
     color:#234da7;
