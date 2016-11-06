@@ -34,7 +34,6 @@ function data2DOM(el,data){
 }
 chrome.runtime.onMessage.addListener(function(request, sender) {
     tabsList = request.tabsList;
-    console.log("reqest",request);
-    console.log("tabs",tabsList);
-    $('.tabs-list-container').append(tabsList);
+    tabsList = enlistTabs(tabsList);
+    $('.tabs-list-container').html(tabsList);
 });
