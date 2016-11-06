@@ -54,7 +54,7 @@
    "manifest_version": 2,
    "name": "Advanced OneTab",
    "options_page": "options.html",
-   "permissions": [ "tabs", "\u003Call_urls>", "webRequest", "webRequestBlocking", "contextMenus","webNavigation","storage","notifications"],
+   "permissions": [ "tabs", "<all_urls>","webRequest", "webRequestBlocking", "contextMenus","webNavigation","storage","notifications"],
    "version": "0.2",
     "web_accessible_resources": [
     "../images/extension-icon48.png"
