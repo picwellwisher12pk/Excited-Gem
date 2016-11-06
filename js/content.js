@@ -1,4 +1,24 @@
 /**
+ * Makes a HTML list of given data (Mainly for Tabs)
+ * @param  {[type]} data [description]
+ * @return {HTML Entity}      [description]
+ */
+function enlistTabs (data) {
+	var list = $("<div/>");
+	list.addClass('tabs-list list-group');
+	$.each(data, function( index, value ) {
+      img = $("<img src='"+value.favIconUrl+"'/>");
+	  a = $("<a>"+value.title+"</a>")
+	  a.addClass('list-group-item')
+	  a.prop({"href":value.url,"target":"_blank","draggable": true});
+	  data2DOM(a,value);
+	  a.prepend(img);
+	  list.append(a);
+	});
+	return list;
+
+}
+/**
  * Will attach data from Chrome tabs to HTML nodes to retreive later
  * @param  {Element} element [description]
  * @param  {Object} data    [description]
@@ -12,32 +32,9 @@ function data2DOM(el,data){
 	    }
 	}
 }
-/**
- * [saveData description]
- * @param  {String/Object/Array} data    [description]
- * @param  {String} message [description]
- */
-function saveData (data, message) {
-	chrome.storage.sync.set(data, function() {
-    	chrome.notifications.create('reminder', {
-	        type: 'basic',
-	        iconUrl: '../images/extension-icon48.png',
-	        title: 'Data saved',
-	        message: message
-	     }, function(notificationId) {});
-    });
-}
 chrome.runtime.onMessage.addListener(function(request, sender) {
     tabsList = request.tabsList;
-    $.each(tabsList, function( index, value ) {
-	  saveData(value, "Tabs Saved");
-      img = $("<img src='"+value.favIconUrl+"'/>");
-	  a = $("<a>"+value.title+"</a>")
-	  a.addClass('list-group-item')
-	  a.prop({"href":value.url,"target":"_blank","draggable": true});
-	  data2DOM(a,value);
-	  a.prepend(img);
-	  $(".tabs-list").append(a);
-	});
-	
+    console.log("reqest",request);
+    console.log("tabs",tabsList);
+    $('.tabs-list-container').append(tabsList);
 });
