@@ -8,6 +8,7 @@ var onetabURL  = chrome.extension.getURL("onetab.html");
 var allTabs;
 var ignoredUrlPatterns = [
 "chrome://*",
+"chrome-extension://*",
 "http(s)?://localhost*"
 ];
 var ignoredDataKeys = ['url','favIconUrl','title'];
@@ -50,14 +51,13 @@ function openOneTabPage () {
 	        	chrome.tabs.onUpdated.addListener(function(tabId , info) 
 	        	{
 	        		if (info.status == "complete"){
-	        			list = listAllTabs();
-    					chrome.runtime.sendMessage({tabsList: list});
+	        			sendToContent ();
 	    			}
 	    		});//onCreated
         	});//Create Tab
 	}
 	else {
-		chrome.tabs.update(_oneTabPageOpened, {selected: true});//If OneTab Page is opened ,brings focus to it.
+		chrome.tabs.update(_oneTabPageOpened, {selected: true},sendToContent);//If OneTab Page is opened ,brings focus to it.
 	}
 }
 /**
@@ -103,7 +103,7 @@ function santizeTabs(tabs , ignoredUrlPatterns){
 		url = tab.url;
 		var pattern = new RegExp(ignoredUrlPatterns.join("|"), "i");
 		var matched = url.match(pattern) == null;
-		console.log(url,pattern,matched);
+		log(url,pattern,matched);
 		return(matched);
 	});
 	return refinedTabs;
@@ -117,6 +117,10 @@ function listAllTabs(){
 	refineTabs = santizeTabs(getAllTabs(),ignoredUrlPatterns);
  	return refineTabs;
  }
+function sendToContent () {
+	var data = listAllTabs();
+	chrome.runtime.sendMessage({tabsList: data});
+}
 
 /**
  * Running setTabCountInBage when the Chrome Extension is installed ,a tab is created, removed , attached or detached.
@@ -138,10 +142,10 @@ chrome.browserAction.onClicked.addListener(function(tab) {
 /**
  * Creating Context Menus
  */
-// chrome.contextMenus.create({
-//     "title": "List all tabs",
-//     "onclick" : listAllTabs,
-//   });
+chrome.contextMenus.create({
+    "title": "Refresh Main Page",
+    "onclick" : sendToContent,
+  });
 chrome.contextMenus.create({
     "title": "Show Excited Gem Page",
     "onclick" : openOneTabPage,
