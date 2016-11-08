@@ -3,9 +3,27 @@ body { padding-top: 70px; }
     cursor:pointer;
     color:#234da7;
 }
+.list-group-item{
+    transition: all 0.4s;
+}
+.list-group-item:hover{
+    background-color: #eee;
+    /*cursor: pointer;*/
+}
 .list-group-item>img{
     width: 16px;
     height: 16px;
+    margin: 0 5px;
+}
+.list-group-item>span{
+    padding-left: 15px;
+}
+.list-group-item .glyphicon{
+    padding-left: 5px;
+    padding-right: 5px;
+}
+.list-group-item .glyphicon.disabled{
+    color:#aaa;
 }
 input[type=text] {
     padding: 4px 4px;

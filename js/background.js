@@ -13,6 +13,27 @@ var ignoredUrlPatterns = [
 ];
 var ignoredDataKeys = ['url','favIconUrl','title'];
 var _development = true;
+
+/**
+ * Messaging Beacon between content and Background js
+ * @param  {[type]} request [description]
+ * @param  {[type]} sender) {               tabsList [description]
+ * @return {[type]}         [description]
+ */
+chrome.runtime.onMessage.addListener(function(request, sender) {
+	 url = chrome.extension.getURL("/onetab.html");
+    if(sender.url == url)
+    {
+    	chrome.tabs.remove(parseInt(request.closeTab),function(){
+    		log("tab removed");
+    		getAllTabs();
+    		log(getAllTabs());
+    		setTimeout(getAllTabs,500);
+        	// sendToContent ();
+        });
+    }
+});
+
 /**
  * Logging only for development environment
  * @param  {[type]} input  [description]
@@ -81,6 +102,7 @@ function setTabCountInBadge(tabId , info){
  * @return {[type]}        [description]
  */
 function getAllTabs(windowId){
+	console.log("getAllTabs");
 	if(windowId == undefined) windowId = chrome.windows.WINDOW_ID_CURRENT;
     chrome.tabs.query(
     {
@@ -89,6 +111,7 @@ function getAllTabs(windowId){
     	function(tabs) {
     		allTabs = tabs;
     }); 
+    console.log("getAllTabs Return:", allTabs);
     return allTabs;
 }
 /**
@@ -103,7 +126,7 @@ function santizeTabs(tabs , ignoredUrlPatterns){
 		url = tab.url;
 		var pattern = new RegExp(ignoredUrlPatterns.join("|"), "i");
 		var matched = url.match(pattern) == null;
-		log(url,pattern,matched);
+		// log(url,pattern,matched);
 		return(matched);
 	});
 	return refinedTabs;
@@ -113,23 +136,27 @@ function santizeTabs(tabs , ignoredUrlPatterns){
  * [listAllTabs description]
  * @return {[type]} [description]
  */
-function listAllTabs(){
-	refineTabs = santizeTabs(getAllTabs(),ignoredUrlPatterns);
- 	return refineTabs;
+function listAllTabs(ignored){
+	return refinedTabs = santizeTabs(getAllTabs(),ignoredUrlPatterns);
+	
  }
-function sendToContent () {
-	var data = listAllTabs();
+function sendToContent (ignored) {
+	var data = listAllTabs(ignored);
 	chrome.runtime.sendMessage({tabsList: data});
 }
 
 /**
  * Running setTabCountInBage when the Chrome Extension is installed ,a tab is created, removed , attached or detached.
  */
-chrome.runtime.onInstalled.addListener(setTabCountInBadge)
-chrome.tabs.onCreated.addListener(setTabCountInBadge);
-chrome.tabs.onRemoved.addListener(setTabCountInBadge);
-chrome.tabs.onDetached.addListener(setTabCountInBadge);
-chrome.tabs.onAttached.addListener(setTabCountInBadge);
+function onUpdate (functions) {
+	chrome.runtime.onInstalled.addListener(functions)
+	chrome.tabs.onCreated.addListener(functions);
+	chrome.tabs.onRemoved.addListener(functions);
+	chrome.tabs.onDetached.addListener(functions);
+	chrome.tabs.onAttached.addListener(functions);
+}
+onUpdate(setTabCountInBadge);
+onUpdate(sendToContent);
 
 /**
  * On clicking extension button
@@ -146,6 +173,10 @@ chrome.contextMenus.create({
     "title": "Refresh Main Page",
     "onclick" : sendToContent,
   });
+// chrome.contextMenus.create({
+//     "title": "Refresh Main Page including Ignored",
+//     "onclick" : sendToContent(true),
+//   });
 chrome.contextMenus.create({
     "title": "Show Excited Gem Page",
     "onclick" : openOneTabPage,
