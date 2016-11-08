@@ -89,6 +89,7 @@ chrome.runtime.onMessage.addListener(function(request, sender) {
         tabsList = request.tabsList;
         tabsList = enlistTabs(tabsList);
         $('.tabs-list-container').html(tabsList);
+        delete tabsList;
         
     } else {
         // Content script code
