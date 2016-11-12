@@ -107,7 +107,7 @@ function setTabCountInBadge(tabId , info){
  */
 function getAllTabs(windowId,returnType){
 	// console.log("getAllTabs");
-	if(returnType == undefined) returnType = "refined";
+	if(returnType == undefined) returnType = "all";
 	if(windowId == undefined) windowId = chrome.windows.WINDOW_ID_CURRENT;
     chrome.tabs.query(
     {
@@ -137,10 +137,14 @@ function santizeTabs(tabs , ignoredUrlPatterns){
 	});
 	return refinedTabs;
 }
-function sendTabsToContent (data) {
-	if(data == undefined) data = refinedTabs;
+function reSendTabsToContent () {
 	getAllTabs();
-	sendToContent("tabsList",refinedTabs);
+	sendToContent();
+}
+function sendTabsToContent (data) {
+	if(data == undefined) data = allTabs;
+	getAllTabs();
+	sendToContent("tabsList",data);
 }
 /**
  * [listAllTabs description]
@@ -164,21 +168,42 @@ function onUpdate (functions) {
 }
 onUpdate(setTabCountInBadge);
 onUpdate(getAllTabs);
-
+chrome.runtime.onInstalled.addListener(function(){
+	getAllTabs();
+	sendTabsToContent();
+})
 /**
  * On clicking extension button
  */
 chrome.browserAction.onClicked.addListener(function(tab) {
     openOneTabPage();   
 });
-
-
+chrome.idle.setDetectionInterval(30);
+chrome.idle.onStateChanged.addListener(function(newState){
+if(newState == 'idle'){
+	console.log("idle");
+}
+})
+function tabToList (tabId) {
+	chrome.tabs.query({
+    active: true,
+    lastFocusedWindow: true
+}, function(tabs) {
+    // and use that tab to fill in out title and url
+    var tab = tabs[0];
+    sendToContent("tabsList",tab);
+});
+}
 /**
  * Creating Context Menus
  */
 chrome.contextMenus.create({
     "title": "Refresh Main Page",
-    "onclick" : sendTabsToContent,
+    "onclick" : reSendTabsToContent ,
+  });
+chrome.contextMenus.create({
+    "title": "Send Current tab to list",
+    "onclick" : tabToList ,
   });
 // chrome.contextMenus.create({
 //     "title": "Refresh Main Page including Ignored",
