@@ -75,13 +75,34 @@
         <!-- /.container-fluid -->
     </nav>
     <div class="container-fluid">
-       <!--  <div class="page-header">
+        <!--  <div class="page-header">
             <h1>Excited Gem <small>Nitro For Chrome</small></h1>
         </div> -->
-        <h2>Tabs :  <small>Current window (Not Including ignored group)</small></h2>
-        <div class="tabs-list-container">
-        </div>
-        <div class="saved-list">
+        
+        <ul class="nav nav-tabs" role="tablist">
+            <li role="presentation" class="active">
+              <a href="#active-tabs" aria-controls="active-tabs" role="tab" data-toggle="tab">Active Tabs</a>
+            </li>
+            <li role="presentation">
+              <a href="#sleeping" aria-controls="sleeping" role="tab" data-toggle="tab">Sleeping Tabs</a>
+            </li>
+            <li role="presentation">
+              <a href="#tabslist" aria-controls="tabslist" role="tab" data-toggle="tab">Saved Tabs List</a>
+            </li>
+            <li role="presentation">
+              <a href="#settings" aria-controls="settings" role="tab" data-toggle="tab">Settings</a>
+            </li>
+        </ul>
+        <!-- Tab panes -->
+        <div class="tab-content">
+            <div role="tabpanel" class="tab-pane active" id="active-tabs">
+                <h2>Tabs :  <small>Current window (Not Including ignored group)</small></h2>
+                <div class="tabs-list-container">
+                </div>
+            </div>
+            <div role="tabpanel" class="tab-pane" id="sleeping">...</div>
+            <div role="tabpanel" class="tab-pane" id="tabs-list">...</div>
+            <div role="tabpanel" class="tab-pane" id="settings">...</div>
         </div>
     </div>
 </body>
