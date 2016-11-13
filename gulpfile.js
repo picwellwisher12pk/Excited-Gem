@@ -114,16 +114,6 @@ gulp.task('js',function(){
     .pipe(browserSync.reload({stream:true, once: true}));
 });
 
-// gulp.task('browser-sync', function() {
-//     browserSync.init({
-//         server: {
-//             baseDir: "./",
-//             index: "onetab.html"
-//         },
-//         host:"gjcpffobjmdpkomjbphechhnpnhmnfpa",
-//         online:true
-//     });
-// });
 gulp.task('browser-sync', function() {
     browserSync.init({
         server: {
