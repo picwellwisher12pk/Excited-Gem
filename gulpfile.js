@@ -8,6 +8,8 @@ var minifyCSS = require('gulp-cssnano');
 
 //JS
 var jshint = require('gulp-jshint');
+var ts = require("gulp-typescript");
+var tsProject = ts.createProject("tsconfig.json");
 
 //General
 var gulp = require('gulp');
@@ -32,6 +34,7 @@ var src = {
     "url"    : "./src",
     "markup" : "./src/*.html",
     "scripts": "./src/js/*",
+    "typescripts"     : "./src/js/*.ts",
     "styles" : "./src/styles/*",
     "images" : "./src/images/*",
     "fonts"  : "./src/fonts/*"
@@ -113,6 +116,11 @@ gulp.task('js',function(){
     .pipe(gulp.dest(src.scripts))
     .pipe(browserSync.reload({stream:true, once: true}));
 });
+gulp.task('ts',function(){
+   return tsProject.src()
+    .pipe(tsProject())
+    .js.pipe(gulp.dest(dest.scripts));
+});
 
 gulp.task('browser-sync', function() {
     browserSync.init({
@@ -127,10 +135,11 @@ gulp.task('bs-reload', function () {
     browserSync.reload();
 });
 
-gulp.task('default', ['browser-sync','html','css'], function () {
+gulp.task('default', ['browser-sync','html','ts','js','css'], function () {
     gulp.watch(src.images, ['img']);
     gulp.watch(src.markup, ['html']);
     gulp.watch(src.styles, ['css']);
     gulp.watch(src.scripts, ['js']);
-    gulp.watch([src.markup,src.styles,src.scripts], ['bs-reload']);
+    gulp.watch(src.typescripts, ['ts']);
+    gulp.watch([src.markup,src.styles,src.scripts,src.typescripts], ['bs-reload']);
 });
