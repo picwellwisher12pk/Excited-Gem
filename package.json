@@ -1,39 +1,37 @@
 {
-  "name": "excited-gem",
-  "version": "0.7.0",
-  "description": "A power set for Chrome",
-  "main": "onetab.html",
-  "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
-  },
-  "repository": {
-    "type": "git",
-    "url": "git+https://github.com/picwellwisher12pk/onetab-advanced.git"
-  },
-  "author": "Amir Hameed",
-  "license": "MIT",
-  "bugs": {
-    "url": "https://github.com/picwellwisher12pk/onetab-advanced/issues"
-  },
-  "homepage": "https://github.com/picwellwisher12pk/onetab-advanced#readme",
-  "dependencies": {
-    "browser-sync": "^2.17.5",
-    "gulp": "^3.9.1",
-    "gulp-autoprefixer": "^3.1.1",
-    "gulp-cssnano": "^2.1.2",
-    "gulp-debug": "^3.0.0",
-    "gulp-filter": "^4.0.0",
-    "gulp-header": "^1.8.8",
-    "gulp-jshint": "^2.0.2",
-    "gulp-notify": "^2.2.0",
-    "gulp-plumber": "^1.1.0",
-    "gulp-pug": "^3.1.0",
-    "gulp-rename": "^1.2.2",
-    "gulp-rimraf": "^0.2.1",
-    "gulp-sass": "^2.3.2",
-    "gulp-typescript": "^3.1.2",
-    "gulp-util": "^3.0.7",
-    "react": "^15.3.2",
-    "typescript": "^2.0.9"
-  }
+	"name": "excited-gem",
+	"version": "0.7.0",
+	"description": "A power set for Chrome",
+	"homepage": "https://github.com/picwellwisher12pk/onetab-advanced#readme",
+	"bugs": "{}",
+	"license": "MIT",
+	"author": "Amir Hameed",
+	"main": "gulpfile.js",
+	"repository": {
+		"type": "git",
+		"url": "git+https://github.com/picwellwisher12pk/onetab-advanced.git"
+	},
+	"scripts": {
+		"test": "echo \"Error: no test specified\" && exit 1"
+	},
+	"dependencies": {
+		"browser-sync": "^2.17.5",
+		"gulp": "^3.9.1",
+		"gulp-autoprefixer": "^3.1.1",
+		"gulp-cssnano": "^2.1.2",
+		"gulp-debug": "^3.0.0",
+		"gulp-filter": "^4.0.0",
+		"gulp-header": "^1.8.8",
+		"gulp-jshint": "^2.0.2",
+		"gulp-notify": "^2.2.0",
+		"gulp-plumber": "^1.1.0",
+		"gulp-pug": "^3.1.0",
+		"gulp-rename": "^1.2.2",
+		"gulp-rimraf": "^0.2.1",
+		"gulp-sass": "^2.3.2",
+		"gulp-typescript": "^3.1.2",
+		"gulp-util": "^3.0.7",
+		"react": "^15.3.2",
+		"typescript": "^2.0.9"
+	}
 }

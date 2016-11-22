@@ -31,22 +31,22 @@ var config = {
   threshold: '1kb'
 };
 var src = {
-    "url"    : "./src",
-    "markup" : "./src/*.html",
-    "scripts": "./src/js/*",
-    "typescripts"     : "./src/js/*.ts",
-    "styles" : "./src/styles/*",
-    "images" : "./src/images/*",
-    "fonts"  : "./src/fonts/*"
-}
+    url    : "src",
+    markup : "src/*.html",
+    scripts: "src/scripts/*.js",
+    typescripts     : "src/scripts/*.ts",
+    styles : ["src/styles/*.css","src/styles/*.scss"],
+    images : "src/images/*",
+    fonts  : "src/fonts/*"
+};
 var dest = {
-    "url"   : "./",
-    "index" : "./onetab.html",
-    "script": "./js/",
-    "styles": "./css/",
-    "images": "./images/",
-    "fonts" : "./fonts/"
-}
+    url   : ".",
+    index : "onetab.html",
+    scripts: "js/",
+    styles: "css/",
+    images: "images/",
+    fonts : "fonts/"
+};
 
 var banner = [
   '/*!\n' +
@@ -61,6 +61,8 @@ var banner = [
 ].join('');
 
 gulp.task('html', function () {
+    debugger;
+    console.log(src.markup,dest.url);
     return gulp.src(src.markup)
     .pipe(plumber())
     .pipe(gulp.dest(dest.url))
@@ -75,6 +77,7 @@ gulp.task('img', function () {
     .pipe(browserSync.reload({stream:true}));
 });
 gulp.task('css', function () {
+    console.log("CSS");
     return gulp.src(src.styles)
     .pipe(plumber())
     .pipe(debug({title: 'CSS:'}))
@@ -99,8 +102,9 @@ gulp.task('css', function () {
     .pipe(rename({suffix :".min" }))
     .pipe(gulp.dest(dest.styles)).on('error', gutil.log)
     .pipe(notify({title: package.name+' message',message: "CSS loaded"})).on('error', gutil.log)
-    .pipe(browserSync.reload({stream:true})); 
+    .pipe(browserSync.reload({stream:true}));
 });
+
 
 gulp.task('js',function(){
     return gulp.src(src.scripts)
@@ -114,18 +118,19 @@ gulp.task('js',function(){
     .pipe(header(banner, { package : package }))
     .pipe(rename({ suffix: '.min' }))
     .pipe(gulp.dest(src.scripts))
-    .pipe(browserSync.reload({stream:true, once: true}));
+    .pipe(browserSync.reload({stream:true}));
 });
 gulp.task('ts',function(){
-   return tsProject.src()
+debugger;
+    return tsProject.src()
     .pipe(tsProject())
-    .js.pipe(gulp.dest(dest.scripts));
+    .js.pipe(gulp.dest(dest.scripts))
 });
 
-gulp.task('browser-sync', function() {
+gulp.task('start-browsersync', function() {
     browserSync.init({
         server: {
-            baseDir: "./",
+            baseDir: ".",
             index: "onetab.html"
         },
         online:true
@@ -134,12 +139,24 @@ gulp.task('browser-sync', function() {
 gulp.task('bs-reload', function () {
     browserSync.reload();
 });
-
-gulp.task('default', ['browser-sync','html','ts','js','css'], function () {
-    gulp.watch(src.images, ['img']);
-    gulp.watch(src.markup, ['html']);
-    gulp.watch(src.styles, ['css']);
+// 
+gulp.task('default', ['start-browsersync'
+    ,'html'
+    ,'css'
+    // ,'js'
+    // ,'ts'
+    ], function (e) {
+    console.log('Default',e);
+    gulp.watch(src.markup, ['html'],console.log("HTML running from watch"));
+    gulp.watch(src.styles, ['bs-reload','css'],console.log("CSS running from match"));
     gulp.watch(src.scripts, ['js']);
     gulp.watch(src.typescripts, ['ts']);
-    gulp.watch([src.markup,src.styles,src.scripts,src.typescripts], ['bs-reload']);
+    gulp.watch(src.images, ['img']);
+    gulp.watch([
+        dest.markup
+        ,dest.styles
+        ,dest.images
+        ,dest.scripts
+        ,dest.typescripts
+        ], ['bs-reload','bs-reload']);
 });

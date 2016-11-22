@@ -1,12 +1,4 @@
 /*!
- * excited-gem
- * 
- * 
- * @author Amir Hameed
- * @version 0.7.0
- * Copyright 2016. MIT licensed.
- */
-/*!
  * Bootstrap v3.3.7 (http://getbootstrap.com)
  * Copyright 2011-2016 Twitter, Inc.
  * Licensed under the MIT license

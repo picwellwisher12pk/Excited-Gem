@@ -1,5 +1,4 @@
 function onRemove(e) {
-    // let e = new Array(e);
     e = e.target;
     if (e != undefined) {
         console.log("before", $(e).parents('ul').find('li'));
@@ -24,18 +23,7 @@ $(document).ready(function () {
         console.log("remove tab btn clicked");
     });
 });
-// document.addEventListener('click', function(e) {
-//     if (hasClass(e.target, 'remove-tab')) {
-//         console.log(e.target);
-//     }
-// }, false);
-/**
- * Makes a HTML list of given data (Mainly for Tabs)
- * @param  {[type]} data [description]
- * @return {HTML Entity}      [description]
- */
 function enlistTabs(data) {
-    console.log(data);
     var list = $("<ul/>");
     list.addClass('tabs-list list-group');
     $.each(data, function (index, value) {
@@ -57,16 +45,10 @@ function enlistTabs(data) {
         item.prepend(pinned);
         item.prepend(audible);
         item.append(options);
-        // remove.addEventListener('click',onRemove(event),false);
         list.append(item);
     });
     return list;
 }
-/**
- * Will attach data from Chrome tabs to HTML nodes to retreive later
- * @param  {Element} element [description]
- * @param  {Object} data    [description]
- */
 function data2DOM(el, data) {
     ignoredKeys = ['url', 'favIconUrl', 'title'];
     for (var property in data) {
