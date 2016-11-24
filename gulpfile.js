@@ -35,7 +35,7 @@ var src = {
     markup : "src/*.html",
     scripts: "src/scripts/*.js",
     typescripts     : "src/scripts/*.ts",
-    styles : ["src/styles/*.css","src/styles/*.scss"],
+    styles : "src/styles/*.scss",
     images : "src/images/*",
     fonts  : "src/fonts/*"
 };
@@ -93,13 +93,13 @@ gulp.task('css', function () {
     // .pipe(sourcemaps.write({includeContent: false}))
     .pipe(autoprefixer('last 4 version', '> 1%', 'safari 4', 'ie 7', 'ie 8', 'ie 9', 'opera 12.1', 'ios 6', 'android 4'))
     .pipe(gulp.dest(dest.styles)).on('error', gutil.log)
-    .pipe(minifyCSS({
-        postcssDiscardUnused: false,
-        postcssZindex: false,
-        postcssDiscardEmpty: true,
-        postcssMergeRules: false
-    })).on('error', gutil.log)
-    .pipe(rename({suffix :".min" }))
+    // .pipe(minifyCSS({
+    //     postcssDiscardUnused: false,
+    //     postcssZindex: false,
+    //     postcssDiscardEmpty: true,
+    //     postcssMergeRules: false
+    // })).on('error', gutil.log)
+    // .pipe(rename({suffix :".min" }))
     .pipe(gulp.dest(dest.styles)).on('error', gutil.log)
     .pipe(notify({title: package.name+' message',message: "CSS loaded"})).on('error', gutil.log)
     .pipe(browserSync.reload({stream:true}));

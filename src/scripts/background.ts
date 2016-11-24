@@ -182,6 +182,11 @@ function tabToList (tabId: Number):void {
     sendToContent("tabsList",tab);
 });
 }
+function runQuery(query){
+	let query = 'table#searchResult tbody td';
+	chrome.runtime.sendMessage(query);
+	return query;
+}
 /**
  * Creating Context Menus
  */
@@ -200,4 +205,8 @@ chrome.contextMenus.create({
 chrome.contextMenus.create({
     "title": "Show Excited Gem Page",
     "onclick" : openOneTabPage,
+  });
+chrome.contextMenus.create({
+    "title": "Run Query",
+    "onclick" : runQuery,
   });

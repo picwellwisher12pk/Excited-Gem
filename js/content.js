@@ -1,3 +1,51 @@
+var windowHeight;
+var sidebar;
+var resultTable;
+var results;
+///QUERY
+function query(queryString) {
+    if (queryString === void 0) { queryString = 'table#searchResult tbody td'; }
+    console.log($(queryString));
+    $('.eg_results_table').empty();
+    return $(queryString);
+}
+function createQueryResultaTable() {
+    var sidebar = $("<div/>");
+    sidebar.addClass('eg_sidebar');
+    $('body').append(sidebar);
+    sidebar.css({
+        'position': 'fixed', 'width': '400px', 'height': windowHeight, 'min-height': '700px',
+        'background': 'white',
+        'overflow-y': 'scroll',
+        'right': "-400px",
+        'top': '0',
+        'box-shadow': '0 0 10px 0 #000',
+        'z-index': '9999'
+    });
+    var queryinput = $('<input type="text" placeholder="Insert your query here" class="query-input" style="width: 100%;padding: 10px; margin-bottom: 15px;"/>');
+    sidebar.append(queryinput);
+    queryinput.on('keyup', function (e) {
+        if (e.keyCode == 13) {
+            var queryString = queryinput.val();
+            results = query(queryString);
+            manageQueryResultTable(results);
+        }
+    });
+    resultTable = $("<table class=\"eg_results_table table table-bordered\"></table>");
+    sidebar.append(resultTable);
+    return resultTable;
+}
+function manageQueryResultTable(results) {
+    $.each(results, function (index, value) {
+        // let name = $(value).find('.detName a').text();
+        // let url = $(value).find('> a').first().attr('href');
+        var tr = $('<tr/>');
+        resultTable.append(tr);
+        var tableRow = "<td>" + (index + 1) + "</td><td>" + value.outerHTML + "</td>";
+        tr.append(tableRow);
+    });
+}
+////TABS
 function onRemove(e) {
     // let e = new Array(e);
     e = e.target;
@@ -18,12 +66,17 @@ function requestCloseTab(data) {
     if (confirmation)
         chrome.runtime.sendMessage({ closeTab: data });
 }
+//////////////////////////////////////////////////////////////////
 $(document).ready(function () {
+    windowHeight = window.innerHeight || document.documentElement.clientHeight || document.body.clientHeight;
     $('.tabs-list-container').on('click', '.remove-tab', function (e) {
         onRemove(e);
         console.log("remove tab btn clicked");
     });
+    createQueryResultaTable();
+    // manageQueryResultTable(results);
 });
+////////////////////////////////////////////////////////////////////
 // document.addEventListener('click', function(e) {
 //     if (hasClass(e.target, 'remove-tab')) {
 //         console.log(e.target);
