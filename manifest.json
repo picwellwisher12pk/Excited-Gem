@@ -1,9 +1,9 @@
 {
    "background": {
-      "scripts": [ "js/jquery.min.js","js/background.js" ]
+      "scripts": [ "js/common.js","js/jquery.min.js","js/background.js" ]
    },
    "content_scripts": [ {
-      "js": [ "js/jquery.min.js","js/content.js" ],
+      "js": [ "js/common.js","js/jquery.min.js","js/content.js" ],
       "css":["css/bootstrap.css"],
       "matches": [ "http://*/*", "https://*/*"]
    } ],
