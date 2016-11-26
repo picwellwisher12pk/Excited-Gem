@@ -1,58 +1,63 @@
 {
    "background": {
-      "scripts": [ "ext-onetab-concatenated-sources-background.js" ]
+      "scripts": [ "js/common.js","js/jquery.min.js","js/background.js" ]
    },
+   "content_scripts": [ {
+      "js": [ "js/common.js","js/jquery.min.js","js/content.js" ],
+      "css":["css/bootstrap.css"],
+      "matches": [ "http://*/*", "https://*/*"]
+   } ],
    "browser_action": {
       "default_icon": {
          "19": "images/icon19.png",
          "38": "images/icon38.png"
-      }
+      },
+      "default_title":"Advanced OneTab"
+      // ,"default_popup":"popup.html"
    },
    "commands": {
       "display-onetab": {
          "description": "Display OneTab",
          "suggested_key": {
-            "default": "Alt+Shift+D"
+            "default": "Ctrl+Shift+E"
          }
       },
       "send-tabs-on-the-left-to-onetab": {
          "description": "Send tabs on the left to OneTab",
          "suggested_key": {
-            "default": "Alt+Shift+Left"
+            "default": "Ctrl+Shift+Left"
          }
       },
       "send-tabs-on-the-right-to-onetab": {
          "description": "Send tabs on the right to OneTab",
          "suggested_key": {
-            "default": "Alt+Shift+Right"
+            "default": "Ctrl+Shift+Right"
          }
       },
       "send-all-tabs-except-this-to-onetab": {
          "description": "Send all tabs except this tab to OneTab",
          "suggested_key": {
-            "default": "Alt+Shift+Up"
+            "default": "Ctrl+Shift+Up"
          }
       },
       "send-current-tab-to-onetab": {
          "description": "Send the current tab to OneTab"
       }
    },
-   "content_scripts": [ {
-      "js": [ "ext-onetab-concatenated-sources-contentscript.js" ],
-      "matches": [ "http://*/*", "https://*/*" ]
-   } ],
    "content_security_policy": "script-src 'self' https://ssl.google-analytics.com; object-src 'self'",
-   "description": "Save up to 95% memory and reduce tab clutter",
+   "description": "A try to make a better version of Onetab",
    "icons": {
       "128": "images/extension-icon128.png",
       "16": "images/extension-icon16.png",
       "48": "images/extension-icon48.png"
    },
-   "key": "MIGfMA0GCSqGSIb3DQEBAQUAA4GNADCBiQKBgQDs2r/nSa4MRBoDT1pBx+Q9gI0JaTBaIrsD4uKT9oA4HUF2xboeOA1BDw3lmoJ4G8BL0tAbJTcEnxlkTsCY7C413MojaeDZy4pza3RJqkMAKiJisl8t8eiP+c0ox3l1syb1xmI7EEIouXIxlCX8LGoguB0AuWtunGLCjiLoM2vJLQIDAQAB",
+   // "key": "MIGfMA0GCSqGSIb3DQEBAQUAA4GNADCBiQKBgQDs2r/nSa4MRBoDT1pBx+Q9gI0JaTBaIrsD4uKT9oA4HUF2xboeOA1BDw3lmoJ4G8BL0tAbJTcEnxlkTsCY7C413MojaeDZy4pza3RJqkMAKiJisl8t8eiP+c0ox3l1syb1xmI7EEIouXIxlCX8LGoguB0AuWtunGLCjiLoM2vJLQIDAQAB",
    "manifest_version": 2,
-   "name": "OneTab",
+   "name": "Excited Gem",
    "options_page": "options.html",
-   "permissions": [ "tabs", "\u003Call_urls>", "webRequest", "webRequestBlocking", "contextMenus" ],
-   "update_url": "https://clients2.google.com/service/update2/crx",
-   "version": "1.7"
+   "permissions": [ "tabs","idle","<all_urls>","webRequest", "webRequestBlocking", "contextMenus","webNavigation","storage","notifications"],
+   "version": "0.7",
+    "web_accessible_resources": [
+    "../images/extension-icon48.png"
+  ]
 }

@@ -1,26 +1,114 @@
 <!doctype html>
 <html>
-  <head>
-    <title>OneTab Advanced</title>
 
-    <link href="onetab.css" rel="stylesheet" type="text/css" />
+<head>
+    <title>Excited Gem</title>
+    <link rel="stylesheet" href="css/bootstrap.css">
+    <link rel="stylesheet" href="css/bootstrap-theme.min.css">
+    <link rel="stylesheet" href="css/font-awesome.css">
+    <link href="css/onetab.css" rel="stylesheet" type="text/css" />
 
-    <script src="ext-onetab-concatenated-sources-onetab.js"></script>
+    <script src="js/jquery.min.js"></script>
+    <script src="js/main.js"></script>
+    <script src="js/content.js"></script>
+    <script src="js/bootstrap.min.js"></script>
+</head>
+<style>
+.tabGroupTitleText {
+    font-family: 'Open Sans', 'Helvetica Neue', Arial, sans-serif;
+    color: #444;
+}
+</style>
 
-  </head>
+<body class="eg">
+    <nav class="navbar navbar-default navbar-fixed-top">
+        <div class="container-fluid">
+            <!-- Brand and toggle get grouped for better mobile display -->
+            <div class="navbar-header">
+                <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1" aria-expanded="false">
+                    <span class="sr-only">Toggle navigation</span>
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                </button>
+                <a class="navbar-brand" href="#">Excited Gem</a>
+            </div>
+            <!-- Collect the nav links, forms, and other content for toggling -->
+            <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
+                <ul class="nav navbar-nav">
+                    <li class="active"><a href="#">Tabs<span class="sr-only">(current)</span></a></li>
+                    <li><a href="#">Suspended</a></li>
+                    <li><a href="query.html">Query</a></li>
+                    <li class="dropdown">
+                        <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Dropdown <span class="caret"></span></a>
+                        <ul class="dropdown-menu">
+                            <li><a href="#">Action</a></li>
+                            <li><a href="#">Another action</a></li>
+                            <li><a href="#">Something else here</a></li>
+                            <li role="separator" class="divider"></li>
+                            <li><a href="#">Separated link</a></li>
+                            <li role="separator" class="divider"></li>
+                            <li><a href="#">One more separated link</a></li>
+                        </ul>
+                    </li>
+                </ul>
+                <form class="navbar-form navbar-left">
+                    <div class="form-group">
+                        <input type="text" class="form-control" placeholder="Search">
+                    </div>
+                    <button type="submit" class="btn btn-default">Submit</button>
+                </form>
+                <ul class="nav navbar-nav navbar-right">
+                    <li><a href="#">Settings</a></li>
+                    <li class="dropdown">
+                        <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Dropdown <span class="caret"></span></a>
+                        <ul class="dropdown-menu">
+                            <li><a href="#">Action</a></li>
+                            <li><a href="#">Another action</a></li>
+                            <li><a href="#">Something else here</a></li>
+                            <li role="separator" class="divider"></li>
+                            <li><a href="#">Separated link</a></li>
+                        </ul>
+                    </li>
+                </ul>
+            </div>
+            <!-- /.navbar-collapse -->
+        </div>
+        <!-- /.container-fluid -->
+    </nav>
+    <div class="container-fluid">
+        <!--  <div class="page-header">
+            <h1>Excited Gem <small>Nitro For Chrome</small></h1>
+        </div> -->
 
-  <style>
-    .tabGroupTitleText {
-      font-family: 'Open Sans', 'Helvetica Neue', Arial, sans-serif;
-      color: #444;
-    }
-  </style>
+        <ul class="nav nav-tabs" role="tablist">
+            <li role="presentation" class="active">
+              <a href="#active-tabs" aria-controls="active-tabs" role="tab" data-toggle="tab">Active Tabs</a>
+            </li>
+            <li role="presentation">
+              <a href="#sleeping" aria-controls="sleeping" role="tab" data-toggle="tab">Sleeping Tabs</a>
+            </li>
+            <li role="presentation">
+              <a href="#tabslist" aria-controls="tabslist" role="tab" data-toggle="tab">Saved Tabs List</a>
+            </li>
+            <li role="presentation">
+              <a href="#settings" aria-controls="settings" role="tab" data-toggle="tab">Settings</a>
+            </li>
+        </ul>
+        <!-- Tab panes -->
+        <div class="tab-content">
+            <div role="tabpanel" class="tab-pane active" id="active-tabs">
+                <h2>Tabs :  <small>Current window (Not Including ignored group)</small></h2>
+                <div class="tabs-list-container">
+                </div>
+            </div>
+            <div role="tabpanel" class="tab-pane" id="sleeping">...</div>
+            <div role="tabpanel" class="tab-pane" id="tabs-list">...</div>
+            <div role="tabpanel" class="tab-pane" id="settings">...</div>
+        </div>
+    </div>
+   
 
-  <body style="margin:0; padding:0; font-family: 'Open Sans', 'Helvetica Neue', Arial, sans-serif; font-weight: 400; font-size:14px">
+</body>
 
-  <div id="settingsDiv"></div>
-  <div id="contentAreaDiv"></div>
-
-  </body>
 </html>
-

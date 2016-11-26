@@ -1,0 +1,11 @@
+{
+    "filesGlob": [
+        "**/*.ts",
+        "**/*.tsx",
+        "!node_modules/**"
+    ],
+    "compilerOptions": {
+        "noImplicitAny": true,
+        "target": "es3"
+    }
+}
