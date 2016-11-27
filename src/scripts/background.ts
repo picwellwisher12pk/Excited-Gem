@@ -17,29 +17,33 @@ let _development: Boolean = true;
  * @param  {[type]} sender) {               tabsList [description]
  * @return {[type]}         [description]
  */
-chrome.runtime.onMessage.addListener((request: any, sender: Function) => {
-	let url: String = chrome.extension.getURL("/onetab.html");
-    if(sender.url == url)
-    {
-    	chrome.tabs.remove(parseInt(request.closeTab),()=>{
-    		chrome.tabs.query({},
-		    	(tabs: Object[])=>{
-		    		allTabs = tabs;
-		    		refinedTabs = santizeTabs(tabs,ignoredUrlPatterns);
-		    });
-        });
-    }
-});
+// chrome.runtime.onMessage.addListener((request: any, sender: Function) => {
+// 	let url: String = chrome.extension.getURL("/onetab.html");
+//     if(sender.url == url)
+//     {
+//     	chrome.tabs.remove(parseInt(request.closeTab),()=>{
+//     		chrome.tabs.query({},
+// 		    	(tabs: Object[])=>{
+// 		    		allTabs = tabs;
+// 		    		refinedTabs = santizeTabs(tabs,ignoredUrlPatterns);
+// 		    });
+//         });
+//     }
+// });
+
 
 /**
  * Logging only for development environment
  * @param  {[type]} input  [description]
  * @param  {[type]} input2 [description]
  */
-function log(input: any,input2: any):void{
+function log(input: any,input2?: any):void{
 	if (_development) console.log(input,input2);
 }
-
+function focusTab(tabId: any){
+	tabId =  parseInt(tabId);
+	chrome.tabs.update(tabId, {selected: true});
+}
 /**
  * [saveData description]
  * @param  {String/Object/Array} data    [description]

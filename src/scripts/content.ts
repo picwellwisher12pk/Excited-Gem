@@ -2,6 +2,7 @@ let windowHeight: Number;
 let sidebar: any;
 let resultTable : any;
 let results: any;
+let sender: String = 'content';
 
 ///QUERY
 function query(queryString: String = 'table#searchResult tbody td'){
@@ -17,7 +18,7 @@ function createQueryResultaTable(){
         'position':'fixed', 'width': '400px', 'height': windowHeight, 'min-height': '700px',
         'background': 'white',
         'overflow-y': 'scroll',
-        'right':"0",
+        'right':"-400px",
         'top':'0',
         'box-shadow':'0 0 10px 0 #000',
         'z-index': '9999'
@@ -53,6 +54,9 @@ function manageQueryResultTable(results: any[]){
 
 
 ////TABS
+function tablinkClick(e){
+    console.log("tablinkClick",e);
+}
 function onRemove(e){
 		// let e = new Array(e);
 		e = e.target;
@@ -80,8 +84,12 @@ function requestCloseTab(data) {
 $(document).ready(function(){
     windowHeight = window.innerHeight || document.documentElement.clientHeight || document.body.clientHeight;
 	$('.tabs-list-container').on('click','.remove-tab',function(e){
-		onRemove(e);
-	    console.log("remove tab btn clicked");
+        onRemove(e);
+        console.log("remove tab btn clicked");
+    });
+    $('.tabs-list-container').on('click','.list-group-item a',function(e){
+        let data = $(e.target).attr('tab-id');
+		packageAndBroadcast(sender,"background","focusTab",data);
 	});
 
     createQueryResultaTable();
@@ -89,47 +97,47 @@ $(document).ready(function(){
 
 
 
-    $("html").on("contextmenu",function(e){
-               //prevent default context menu for right click
-               e.preventDefault();
+    // $("html").on("contextmenu",function(e){
+    //            //prevent default context menu for right click
+    //            // e.preventDefault();
 
-               var menu = $(".menu"); 
+    //            var menu = $(".menu"); 
 
-               //hide menu if already shown
-               menu.hide(); 
+    //            //hide menu if already shown
+    //            menu.hide(); 
                
-               //get x and y values of the click event
-               var pageX = e.pageX;
-               var pageY = e.pageY;
+    //            //get x and y values of the click event
+    //            var pageX = e.pageX;
+    //            var pageY = e.pageY;
 
-               //position menu div near mouse cliked area
-               menu.css({top: pageY , left: pageX});
+    //            //position menu div near mouse cliked area
+    //            menu.css({top: pageY , left: pageX});
 
-               var mwidth = menu.width();
-               var mheight = menu.height();
-               var screenWidth = $(window).width();
-               var screenHeight = $(window).height();
+    //            var mwidth = menu.width();
+    //            var mheight = menu.height();
+    //            var screenWidth = $(window).width();
+    //            var screenHeight = $(window).height();
 
-               //if window is scrolled
-               var scrTop = $(window).scrollTop();
+    //            //if window is scrolled
+    //            var scrTop = $(window).scrollTop();
 
-               //if the menu is close to right edge of the window
-               if(pageX+mwidth > screenWidth){
-                   menu.css({left:pageX-mwidth});
-               }
+    //            //if the menu is close to right edge of the window
+    //            if(pageX+mwidth > screenWidth){
+    //                menu.css({left:pageX-mwidth});
+    //            }
 
-               //if the menu is close to bottom edge of the window
-               if(pageY+mheight > screenHeight+scrTop){
-                   menu.css({top:pageY-mheight});
-               }
+    //            //if the menu is close to bottom edge of the window
+    //            if(pageY+mheight > screenHeight+scrTop){
+    //                menu.css({top:pageY-mheight});
+    //            }
 
-               //finally show the menu
-               menu.show();
-        }); 
+    //            //finally show the menu
+    //            menu.show();
+    //     }); 
         
-        $("html").on("click", function(){
-            $(".menu").hide();
-        });
+    //     $("html").on("click", function(){
+    //         $(".menu").hide();
+    //     });
 
 });
 ////////////////////////////////////////////////////////////////////
@@ -152,17 +160,17 @@ function enlistTabs(data) {
     let list = $("<ul/>");
     list.addClass('tabs-list list-group');
     $.each(data, function(index, value) {
-        options = $("<div class='options pull-right'></div>");
-        let pinned = $("<span class='disabled glyphicon glyphicon-pushpin' aria-hidden='true'></span>");
-        let audible = $("<span class='disabled glyphicon glyphicon-volume-off' aria-hidden='true'></span>");
-        img = $("<img src='" + value.favIconUrl + "'/>");
-        item = $("<li><a href='"+value.url+"' title='"+value.title+"' target='_blank'>" + value.title + "</a></li>")
-        if (value.pinned) pinned = $("<span class='glyphicon glyphicon-pushpin' aria-hidden='true'></span>");
-        if (value.audible) audible = $("<span class='glyphicon glyphicon-volume-up' aria-hidden='true'></span>");
-        remove = $("<span data-id='" + value.id + "' data-command='remove' class='remove-tab glyphicon glyphicon-remove' aria-hidden='true'></span>");
+        options = $(`<div class='options pull-right'></div>`);
+        let pinned = $(`<span class='disabled glyphicon glyphicon-pushpin' aria-hidden='true'></span>`);
+        let audible = $(`<span class='disabled glyphicon glyphicon-volume-off' aria-hidden='true'></span>`);
+        img = $(`<img src='${value.favIconUrl}'/>`);
+        item = $(`<li><a tab-id='${value.id}' title='${value.title}' target='_blank'>${value.title}</a></li>`)
+        if (value.pinned) pinned = $(`<span class='glyphicon glyphicon-pushpin' aria-hidden='true'></span>`);
+        if (value.audible) audible = $(`<span class='glyphicon glyphicon-volume-up' aria-hidden='true'></span>`);
+        remove = $(`<span data-id='${value.id}' data-command='remove' class='remove-tab glyphicon glyphicon-remove' aria-hidden='true'></span>`);
         options.prepend(remove);
         item.addClass('list-group-item');
-        item.prop({ "href": value.url, "target": "_blank", "draggable": true });
+        item.prop({ 'draggable': true });
         data2DOM(item, value);
         item.prepend(img);
         item.prepend(pinned);
