@@ -1,6 +1,9 @@
-# Citrex
+# Excited gem
 # @author Amir Hameed
-
+./js/*.js
+./*.html
+/js/*.js
+*.html
 
 ## Node.js
 lib-cov

@@ -16,6 +16,11 @@ var ignoredUrlPatterns = [
 var ignoredDataKeys = ['url','favIconUrl','title'];
 var _development = true;
 
+
+function focusTab(id: Number,callback?: Function): void{
+	chrome.tabs.update(id, {selected: true},callback);//If OneTab Page is opened ,brings focus to it.
+}
+
 /**
  * Messaging Beacon between content and Background js
  * @param  {[type]} request [description]

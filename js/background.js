@@ -15,17 +15,19 @@ var _development = true;
  * @param  {[type]} sender) {               tabsList [description]
  * @return {[type]}         [description]
  */
-chrome.runtime.onMessage.addListener(function (request, sender) {
-    var url = chrome.extension.getURL("/onetab.html");
-    if (sender.url == url) {
-        chrome.tabs.remove(parseInt(request.closeTab), function () {
-            chrome.tabs.query({}, function (tabs) {
-                allTabs = tabs;
-                refinedTabs = santizeTabs(tabs, ignoredUrlPatterns);
-            });
-        });
-    }
-});
+// chrome.runtime.onMessage.addListener((request: any, sender: Function) => {
+// 	let url: String = chrome.extension.getURL("/onetab.html");
+//     if(sender.url == url)
+//     {
+//     	chrome.tabs.remove(parseInt(request.closeTab),()=>{
+//     		chrome.tabs.query({},
+// 		    	(tabs: Object[])=>{
+// 		    		allTabs = tabs;
+// 		    		refinedTabs = santizeTabs(tabs,ignoredUrlPatterns);
+// 		    });
+//         });
+//     }
+// });
 /**
  * Logging only for development environment
  * @param  {[type]} input  [description]
@@ -35,6 +37,35 @@ function log(input, input2) {
     if (_development)
         console.log(input, input2);
 }
+function closeTab(tabId) {
+    chrome.tabs.remove(parseInt(tabId));
+}
+function focusTab(tabId) {
+    tabId = parseInt(tabId);
+    chrome.tabs.update(tabId, { highlighted: true });
+}
+function pinTab(tabId) {
+    tabId = parseInt(tabId);
+    chrome.tabs.update(tabId, { pinned: true });
+}
+function unpinTab(tabId) {
+    tabId = parseInt(tabId);
+    chrome.tabs.update(tabId, { pinned: false });
+}
+function muteTab(tabId) {
+    tabId = parseInt(tabId);
+    chrome.tabs.update(tabId, { muted: true });
+}
+function unmuteTab(tabId) {
+    tabId = parseInt(tabId);
+    chrome.tabs.update(tabId, { muted: false });
+}
+function muteAll(data) {
+}
+// function highlightTab(tabId: any):void{
+// 	tabId =  parseInt(tabId);
+// 	chrome.tabs.update(tabId, {active: true});
+// }
 /**
  * [saveData description]
  * @param  {String/Object/Array} data    [description]
