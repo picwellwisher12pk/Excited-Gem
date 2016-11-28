@@ -3,7 +3,7 @@
       "scripts": [ "js/common.js","js/jquery.min.js","js/background.js" ]
    },
    "content_scripts": [ {
-      "js": [ "js/common.js","js/jquery.min.js","js/content.js" ],
+      "js": [ "js/common.js","js/isotope.js","js/jquery.min.js","js/content.js" ],
       "css":["css/bootstrap.css"],
       "matches": [ "http://*/*", "https://*/*"]
    } ],
@@ -44,7 +44,7 @@
          "description": "Send the current tab to OneTab"
       }
    },
-   "content_security_policy": "script-src 'self' https://ssl.google-analytics.com; object-src 'self'",
+   "content_security_policy": "script-src 'self' https://ssl.google-analytics.com 'unsafe-eval'; object-src 'self'",
    "description": "A try to make a better version of Onetab",
    "icons": {
       "128": "images/extension-icon128.png",

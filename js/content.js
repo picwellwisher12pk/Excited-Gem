@@ -2,6 +2,9 @@ var windowHeight;
 var sidebar;
 var resultTable;
 var results;
+var sender = 'content';
+var $grid;
+var qsRegex;
 ///QUERY
 function query(queryString) {
     if (queryString === void 0) { queryString = 'table#searchResult tbody td'; }
@@ -50,31 +53,128 @@ function onRemove(e) {
     // let e = new Array(e);
     e = e.target;
     if (e != undefined) {
-        console.log("before", $(e).parents('ul').find('li'));
         var id = e.dataset.id;
         requestCloseTab(id);
         $(e).parents('.list-group-item').remove();
-        console.log($(e).parents('ul').find('li'));
     }
+}
+function requestCloseTab(data) {
+    var confirmation = window.confirm("Are you sure you want to close this tab");
+    if (confirmation)
+        packageAndBroadcast(sender, 'background', 'closeTab', data);
 }
 function hasClass(elem, className) {
     return elem.className.split(' ').indexOf(className) > -1;
 }
-function requestCloseTab(data) {
-    console.log("requestCloseTab");
-    var confirmation = window.confirm("Are you sure you want to close this tab");
-    if (confirmation)
-        chrome.runtime.sendMessage({ closeTab: data });
+function setUpIsotope() {
+    $grid = $('.list-group').isotope({
+        itemSelector: '.list-group-item',
+        layoutMode: 'vertical',
+        filter: function () {
+            return qsRegex ? $(this).text().match(qsRegex) : "*";
+        }
+    });
+    console.log("$grid", $grid);
+}
+function updateIsotope() {
+    var $quicksearch = $('.quicksearch-input');
+    qsRegex = new RegExp($quicksearch.val(), 'gi');
+    $grid.isotope();
 }
 //////////////////////////////////////////////////////////////////
 $(document).ready(function () {
     windowHeight = window.innerHeight || document.documentElement.clientHeight || document.body.clientHeight;
     $('.tabs-list-container').on('click', '.remove-tab', function (e) {
         onRemove(e);
-        console.log("remove tab btn clicked");
     });
+    $('.tabs-list-container').on('click', '.list-group-item a', function (e) {
+        var data = $(e.target).parents('li').attr('tab-id');
+        packageAndBroadcast(sender, "background", "focusTab", data);
+    });
+    $('.tabs-list-container').on('click', '.list-group-item span.pinned', function (e) {
+        var data = $(e.target).parents('li').attr('tab-id');
+        if ($(this).hasClass("disabled")) {
+            packageAndBroadcast(sender, "background", "pinTab", data);
+        }
+        else {
+            packageAndBroadcast(sender, "background", "unpinTab", data);
+        }
+        $(this).toggleClass("disabled");
+    });
+    $('.tabs-list-container').on('click', '.list-group-item span.audible', function (e) {
+        var data = $(e.target).parents('li').attr('tab-id');
+        if ($(this).hasClass("disabled")) {
+            packageAndBroadcast(sender, "background", "unmuteTab", data);
+        }
+        else {
+            packageAndBroadcast(sender, "background", "muteTab", data);
+        }
+        $(this).toggleClass("disabled");
+    });
+    // $('.tabs-list-container').on('click','.list-group-item span.pinned',function(e){
+    //     let data = $(e.target).parents('li').attr('tab-id');
+    //     packageAndBroadcast(sender,"background","unpinTab",data);
+    //     $(this).toggleClass("disabled");
+    // });
     createQueryResultaTable();
+    //     $('.list-group').isotope({
+    //     // options
+    //     itemSelector: '.list-group-item',
+    //     layoutMode: 'fitRows'
+    // });
+    // quick search regex
+    var qsRegex;
+    // init Isotope
+    // use value of search field to filter
+    $('.quicksearch-btn').click(function () {
+        updateIsotope();
+    });
+    // debounce so filtering doesn't happen every millisecond
+    function debounce(fn, threshold) {
+        var timeout;
+        return function debounced() {
+            if (timeout) {
+                clearTimeout(timeout);
+            }
+            function delayed() {
+                fn();
+                timeout = null;
+            }
+            timeout = setTimeout(delayed, threshold || 100);
+        };
+    }
     // manageQueryResultTable(results);
+    // $("html").on("contextmenu",function(e){
+    //            //prevent default context menu for right click
+    //            // e.preventDefault();
+    //            var menu = $(".menu"); 
+    //            //hide menu if already shown
+    //            menu.hide(); 
+    //            //get x and y values of the click event
+    //            var pageX = e.pageX;
+    //            var pageY = e.pageY;
+    //            //position menu div near mouse cliked area
+    //            menu.css({top: pageY , left: pageX});
+    //            var mwidth = menu.width();
+    //            var mheight = menu.height();
+    //            var screenWidth = $(window).width();
+    //            var screenHeight = $(window).height();
+    //            //if window is scrolled
+    //            var scrTop = $(window).scrollTop();
+    //            //if the menu is close to right edge of the window
+    //            if(pageX+mwidth > screenWidth){
+    //                menu.css({left:pageX-mwidth});
+    //            }
+    //            //if the menu is close to bottom edge of the window
+    //            if(pageY+mheight > screenHeight+scrTop){
+    //                menu.css({top:pageY-mheight});
+    //            }
+    //            //finally show the menu
+    //            menu.show();
+    //     }); 
+    //     $("html").on("click", function(){
+    //         $(".menu").hide();
+    //     });
 });
 ////////////////////////////////////////////////////////////////////
 // document.addEventListener('click', function(e) {
@@ -93,18 +193,18 @@ function enlistTabs(data) {
     list.addClass('tabs-list list-group');
     $.each(data, function (index, value) {
         options = $("<div class='options pull-right'></div>");
-        var pinned = $("<span class='disabled glyphicon glyphicon-pushpin' aria-hidden='true'></span>");
-        var audible = $("<span class='disabled glyphicon glyphicon-volume-off' aria-hidden='true'></span>");
+        var pinned = $("<span class='disabled glyphicon glyphicon-pushpin pinned' aria-hidden='true'></span>");
+        var audible = $("<span class='disabled glyphicon glyphicon-volume-off audible' aria-hidden='true'></span>");
         img = $("<img src='" + value.favIconUrl + "'/>");
-        item = $("<li><a href='" + value.url + "' title='" + value.title + "' target='_blank'>" + value.title + "</a></li>");
+        item = $("<li tab-id='" + value.id + "'><a title='" + value.title + "' target='_blank'>" + value.title + "</a></li>");
         if (value.pinned)
-            pinned = $("<span class='glyphicon glyphicon-pushpin' aria-hidden='true'></span>");
+            pinned = $("<span class='glyphicon glyphicon-pushpin pinned' aria-hidden='true'></span>");
         if (value.audible)
-            audible = $("<span class='glyphicon glyphicon-volume-up' aria-hidden='true'></span>");
+            audible = $("<span class='glyphicon glyphicon-volume-up audible' aria-hidden='true'></span>");
         remove = $("<span data-id='" + value.id + "' data-command='remove' class='remove-tab glyphicon glyphicon-remove' aria-hidden='true'></span>");
         options.prepend(remove);
         item.addClass('list-group-item');
-        item.prop({ "href": value.url, "target": "_blank", "draggable": true });
+        item.prop({ 'draggable': true });
         data2DOM(item, value);
         item.prepend(img);
         item.prepend(pinned);
@@ -113,6 +213,7 @@ function enlistTabs(data) {
         // remove.addEventListener('click',onRemove(event),false);
         list.append(item);
     });
+    setUpIsotope();
     return list;
 }
 /**

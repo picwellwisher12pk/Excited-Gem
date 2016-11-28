@@ -7,8 +7,9 @@
     <link rel="stylesheet" href="css/bootstrap-theme.min.css">
     <link rel="stylesheet" href="css/font-awesome.css">
     <link href="css/onetab.css" rel="stylesheet" type="text/css" />
-
     <script src="js/jquery.min.js"></script>
+    <script src="js/common.js"></script>
+    <script src="js/isotope.js"></script>
     <script src="js/main.js"></script>
     <script src="js/content.js"></script>
     <script src="js/bootstrap.min.js"></script>
@@ -80,25 +81,25 @@
         <!--  <div class="page-header">
             <h1>Excited Gem <small>Nitro For Chrome</small></h1>
         </div> -->
-
         <ul class="nav nav-tabs" role="tablist">
             <li role="presentation" class="active">
-              <a href="#active-tabs" aria-controls="active-tabs" role="tab" data-toggle="tab">Active Tabs</a>
+                <a href="#active-tabs" aria-controls="active-tabs" role="tab" data-toggle="tab">Active Tabs</a>
             </li>
             <li role="presentation">
-              <a href="#sleeping" aria-controls="sleeping" role="tab" data-toggle="tab">Sleeping Tabs</a>
+                <a href="#sleeping" aria-controls="sleeping" role="tab" data-toggle="tab">Sleeping Tabs</a>
             </li>
             <li role="presentation">
-              <a href="#tabslist" aria-controls="tabslist" role="tab" data-toggle="tab">Saved Tabs List</a>
+                <a href="#tabslist" aria-controls="tabslist" role="tab" data-toggle="tab">Saved Tabs List</a>
             </li>
             <li role="presentation">
-              <a href="#settings" aria-controls="settings" role="tab" data-toggle="tab">Settings</a>
+                <a href="#settings" aria-controls="settings" role="tab" data-toggle="tab">Settings</a>
             </li>
         </ul>
         <!-- Tab panes -->
         <div class="tab-content">
             <div role="tabpanel" class="tab-pane active" id="active-tabs">
-                <h2>Tabs :  <small>Current window (Not Including ignored group)</small></h2>
+                <input type="text" class="quicksearch-input">
+                <button type="button" class="quicksearch-btn">Search</button>
                 <div class="tabs-list-container">
                 </div>
             </div>
@@ -107,8 +108,6 @@
             <div role="tabpanel" class="tab-pane" id="settings">...</div>
         </div>
     </div>
-   
-
 </body>
 
 </html>

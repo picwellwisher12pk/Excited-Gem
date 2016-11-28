@@ -17,29 +17,63 @@ let _development: Boolean = true;
  * @param  {[type]} sender) {               tabsList [description]
  * @return {[type]}         [description]
  */
-chrome.runtime.onMessage.addListener((request: any, sender: Function) => {
-	let url: String = chrome.extension.getURL("/onetab.html");
-    if(sender.url == url)
-    {
-    	chrome.tabs.remove(parseInt(request.closeTab),()=>{
-    		chrome.tabs.query({},
-		    	(tabs: Object[])=>{
-		    		allTabs = tabs;
-		    		refinedTabs = santizeTabs(tabs,ignoredUrlPatterns);
-		    });
-        });
-    }
-});
+// chrome.runtime.onMessage.addListener((request: any, sender: Function) => {
+// 	let url: String = chrome.extension.getURL("/onetab.html");
+//     if(sender.url == url)
+//     {
+//     	chrome.tabs.remove(parseInt(request.closeTab),()=>{
+//     		chrome.tabs.query({},
+// 		    	(tabs: Object[])=>{
+// 		    		allTabs = tabs;
+// 		    		refinedTabs = santizeTabs(tabs,ignoredUrlPatterns);
+// 		    });
+//         });
+//     }
+// });
+
 
 /**
  * Logging only for development environment
  * @param  {[type]} input  [description]
  * @param  {[type]} input2 [description]
  */
-function log(input: any,input2: any):void{
+function log(input: any,input2?: any):void{
 	if (_development) console.log(input,input2);
 }
 
+function closeTab(tabId:Number):void{
+	chrome.tabs.remove(parseInt(tabId));
+}
+
+function focusTab(tabId: any):void{
+	tabId =  parseInt(tabId);
+	chrome.tabs.update(tabId, {highlighted: true});
+}
+function pinTab(tabId: any):void{
+	tabId =  parseInt(tabId);
+	chrome.tabs.update(tabId, {pinned: true});
+}
+function unpinTab(tabId: any):void{
+	tabId =  parseInt(tabId);
+	chrome.tabs.update(tabId, {pinned: false});
+}
+function muteTab(tabId: any):void{
+	tabId =  parseInt(tabId);
+	chrome.tabs.update(tabId, {muted: true});
+}
+function unmuteTab(tabId: any):void{
+	tabId =  parseInt(tabId);
+	chrome.tabs.update(tabId, {muted: false});
+}
+function muteAll(data: Number[]){
+	for (let i = 0; i<data.length;i++){
+		chrome.tabs.update(tabId, {muted: true});
+	}
+}
+// function highlightTab(tabId: any):void{
+// 	tabId =  parseInt(tabId);
+// 	chrome.tabs.update(tabId, {active: true});
+// }
 /**
  * [saveData description]
  * @param  {String/Object/Array} data    [description]
