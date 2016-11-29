@@ -4,8 +4,24 @@
         "**/*.tsx",
         "!node_modules/**"
     ],
+    // "files": [
+    //     "./src/scripts/components/index.tsx"
+    // ],
     "compilerOptions": {
+        // "sourceMap": true,
+        // "module": "commonjs",
         "noImplicitAny": true,
         "target": "es3"
-    }
+        // , "jsx": "react"
+    },
+    "typeroots": [
+            // add path to @types
+            "../node_modules/@types"
+         ],
+    "types": [
+            // add node as an option
+            "node",
+            "chrome",
+            "jquery"
+         ]
 }

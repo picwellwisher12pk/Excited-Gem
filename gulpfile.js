@@ -10,6 +10,8 @@ var minifyCSS = require('gulp-cssnano');
 var jshint = require('gulp-jshint');
 var ts = require("gulp-typescript");
 var tsProject = ts.createProject("tsconfig.json");
+var babel = require('gulp-babel');
+
 
 //General
 var gulp = require('gulp');
@@ -34,6 +36,7 @@ var src = {
     url    : "src",
     markup : "src/*.html",
     scripts: "src/scripts/*.js",
+    react  : "src/scripts/*.jsx",
     typescripts     : "src/scripts/*.ts",
     styles : "src/styles/*.scss",
     images : "src/images/*",
@@ -127,6 +130,16 @@ debugger;
     .js.pipe(gulp.dest(dest.scripts))
 });
 
+gulp.task("babel-react", function(){
+    return gulp.src(src.react)
+    .pipe(plumber())
+    .pipe(babel({
+            plugins: ['transform-react-jsx']
+        }))
+    .pipe(plumber())
+    .pipe(gulp.dest(dest.scripts));
+});
+
 gulp.task('start-browsersync', function() {
     browserSync.init({
         server: {
@@ -144,19 +157,19 @@ gulp.task('default', ['start-browsersync'
     ,'html'
     ,'css'
     // ,'js'
-    // ,'ts'
+    ,'babel-react'
+    ,'ts'
     ], function (e) {
     console.log('Default',e);
     gulp.watch(src.markup, ['html'],console.log("HTML running from watch"));
-    gulp.watch(src.styles, ['bs-reload','css'],console.log("CSS running from match"));
-    gulp.watch(src.scripts, ['js']);
-    gulp.watch(src.typescripts, ['ts']);
-    gulp.watch(src.images, ['img']);
-    gulp.watch([
-        dest.markup
-        ,dest.styles
-        ,dest.images
-        ,dest.scripts
-        ,dest.typescripts
-        ], ['bs-reload','bs-reload']);
+    gulp.watch(src.styles, ['bs-reload','css'],console.log("CSS running from watch"));
+    gulp.watch(src.react, ['babel-react']),console.log("scripts from watch");
+    // gulp.watch(src.scripts, ['js'],console.log("typescript from watch"));
+    gulp.watch(src.typescripts, ['ts'],console.log("typescript from watch"));
+    gulp.watch(src.images, ['img'],console.log("img from watch"));
+    gulp.watch(dest.markup , ['bs-reload','bs-reload']);
+    gulp.watch(dest.styles , ['bs-reload','bs-reload']);
+    gulp.watch(dest.images , ['bs-reload','bs-reload']);
+    gulp.watch(dest.scripts , ['bs-reload','bs-reload']);
+    gulp.watch(dest.typescripts, ['bs-reload','bs-reload']);
 });

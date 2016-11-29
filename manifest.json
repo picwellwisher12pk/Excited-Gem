@@ -44,7 +44,7 @@
          "description": "Send the current tab to OneTab"
       }
    },
-   "content_security_policy": "script-src 'self' https://ssl.google-analytics.com 'unsafe-eval'; object-src 'self'",
+   "content_security_policy": "script-src 'self' https://ssl.google-analytics.com http://localhost:3000 https://localhost:3000 'unsafe-eval'; object-src 'self'",
    "description": "A try to make a better version of Onetab",
    "icons": {
       "128": "images/extension-icon128.png",

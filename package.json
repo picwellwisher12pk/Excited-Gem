@@ -1,37 +1,52 @@
 {
-	"name": "excited-gem",
-	"version": "0.7.0",
-	"description": "A power set for Chrome",
-	"homepage": "https://github.com/picwellwisher12pk/onetab-advanced#readme",
-	"bugs": "{}",
-	"license": "MIT",
-	"author": "Amir Hameed",
-	"main": "gulpfile.js",
-	"repository": {
-		"type": "git",
-		"url": "git+https://github.com/picwellwisher12pk/onetab-advanced.git"
-	},
-	"scripts": {
-		"test": "echo \"Error: no test specified\" && exit 1"
-	},
-	"dependencies": {
-		"browser-sync": "^2.17.5",
-		"gulp": "^3.9.1",
-		"gulp-autoprefixer": "^3.1.1",
-		"gulp-cssnano": "^2.1.2",
-		"gulp-debug": "^3.0.0",
-		"gulp-filter": "^4.0.0",
-		"gulp-header": "^1.8.8",
-		"gulp-jshint": "^2.0.2",
-		"gulp-notify": "^2.2.0",
-		"gulp-plumber": "^1.1.0",
-		"gulp-pug": "^3.1.0",
-		"gulp-rename": "^1.2.2",
-		"gulp-rimraf": "^0.2.1",
-		"gulp-sass": "^2.3.2",
-		"gulp-typescript": "^3.1.2",
-		"gulp-util": "^3.0.7",
-		"react": "^15.3.2",
-		"typescript": "^2.0.9"
-	}
+  "name": "excited-gem",
+  "version": "0.7.0",
+  "description": "A power set for Chrome",
+  "homepage": "https://github.com/picwellwisher12pk/onetab-advanced#readme",
+  "bugs": "{}",
+  "license": "MIT",
+  "author": "Amir Hameed",
+  "main": "gulpfile.js",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/picwellwisher12pk/onetab-advanced.git"
+  },
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "dependencies": {
+    "@types/react": "^0.14.51",
+    "@types/react-dom": "^0.14.19",
+    "browser-sync": "^2.17.5",
+    "gulp": "^3.9.1",
+    "gulp-autoprefixer": "^3.1.1",
+    "gulp-cssnano": "^2.1.2",
+    "gulp-debug": "^3.0.0",
+    "gulp-filter": "^4.0.0",
+    "gulp-header": "^1.8.8",
+    "gulp-jshint": "^2.0.2",
+    "gulp-notify": "^2.2.0",
+    "gulp-plumber": "^1.1.0",
+    "gulp-pug": "^3.1.0",
+    "gulp-rename": "^1.2.2",
+    "gulp-rimraf": "^0.2.1",
+    "gulp-sass": "^2.3.2",
+    "gulp-typescript": "^3.1.2",
+    "gulp-util": "^3.0.7",
+    "react": "^15.4.1",
+    "react-dom": "^15.4.1",
+    "typescript": "^2.0.9"
+  },
+  "devDependencies": {
+    "@types/chrome": "0.0.35",
+    "@types/jquery": "^2.0.34",
+    "@types/node": "0.0.0",
+    "babel-cli": "^6.18.0",
+    "babel-preset-es2015": "^6.18.0",
+    "babel-preset-latest": "^6.16.0",
+    "babel-preset-react": "^6.16.0",
+    "gulp-babel": "^6.1.2",
+    "source-map-loader": "^0.1.5",
+    "ts-loader": "^1.2.2"
+  }
 }

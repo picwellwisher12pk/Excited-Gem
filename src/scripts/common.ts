@@ -1,4 +1,4 @@
-function packageData(sender:string,receiver:string,targetMethod:String,data: any): Object{
+function packageData(sender:String,receiver:String,targetMethod:String,data: any): Object{
 	let package :Object = {
 		sender: sender,
 		receiver: receiver,
@@ -8,8 +8,8 @@ function packageData(sender:string,receiver:string,targetMethod:String,data: any
  	return package;
 }
 
-function packageAndBroadcast(sender:string = sender,receiver:string,targetMethod:String,data: any){
-	chrome.runtime.sendMessage(packageData(sender,receiver,targetMethod,data));
+function packageAndBroadcast(senderName:String = sender,receiver:String,targetMethod:String, data: any){
+	chrome.runtime.sendMessage(packageData(senderName,receiver,targetMethod,data));
 }
 
 chrome.runtime.onMessage.addListener((request: any, sender: Function) => {

@@ -1,21 +1,21 @@
-let windowHeight: Number;
+let windowHeight: number;
 let sidebar: any;
 let resultTable : any;
 let results: any;
-let sender: String = 'content';
-let $grid: any;
-let qsRegex: RegExp;
+let sender: string = 'content';
+let jQuerygrid: any;
+// let qsRegex: RegExp;
+// let tabsList: any;
 
 ///QUERY
-function query(queryString: String = 'table#searchResult tbody td'){
-    console.log($(queryString));
-    $('.eg_results_table').empty();
-    return $(queryString);
+function query(queryString: string = 'table#searchResult tbody td'){
+    jQuery('.eg_results_table').empty();
+    return jQuery(queryString);
 }
 function createQueryResultaTable(){
-    let sidebar = $("<div/>");
+    let sidebar = jQuery("<div/>");
     sidebar.addClass('eg_sidebar');
-    $('body').append(sidebar);
+    jQuery('body').append(sidebar);
     sidebar.css({
         'position':'fixed', 'width': '400px', 'height': windowHeight, 'min-height': '700px',
         'background': 'white',
@@ -25,7 +25,7 @@ function createQueryResultaTable(){
         'box-shadow':'0 0 10px 0 #000',
         'z-index': '9999'
     });
-    let queryinput = $('<input type="text" placeholder="Insert your query here" class="query-input" style="width: 100%;padding: 10px; margin-bottom: 15px;"/>');
+    let queryinput = jQuery('<input type="text" placeholder="Insert your query here" class="query-input" style="width: 100%;padding: 10px; margin-bottom: 15px;"/>');
     sidebar.append(queryinput);
     queryinput.on('keyup',function(e){
         if (e.keyCode == 13){
@@ -34,18 +34,18 @@ function createQueryResultaTable(){
             manageQueryResultTable(results);
         }
     });
-    resultTable = $(`<table class="eg_results_table table table-bordered"></table>`);
+    resultTable = jQuery(`<table class="eg_results_table table table-bordered"></table>`);
     sidebar.append(resultTable);
     return resultTable;
 }
 
 function manageQueryResultTable(results: any[]){    
-    $.each(results,function(index,value){
-        // let name = $(value).find('.detName a').text();
-        // let url = $(value).find('> a').first().attr('href');
-        let tr = $('<tr/>');
+    jQuery.each(results,function(index,value){
+        // let name = jQuery(value).find('.detName a').text();
+        // let url = jQuery(value).find('> a').first().attr('href');
+        let tr = jQuery('<tr/>');
         resultTable.append(tr);
-        let tableRow = `<td>${index+1}</td><td>${value.outerHTML}</td>`;
+        let tableRow = `<td>jQuery{index+1}</td><td>jQuery{value.outerHTML}</td>`;
         tr.append(tableRow);
 
     });
@@ -62,112 +62,98 @@ function onRemove(e:any){
 		if(e != undefined) {
 	        let id = e.dataset.id;
 	        requestCloseTab(id);
-	        $(e).parents('.list-group-item').remove();
+            console.log(typeof id);
+	        jQuery(e).parents('.list-group-item').remove();
 	    }
 }
-function requestCloseTab(data) {
+function requestCloseTab(data:string) {
     let confirmation = window.confirm("Are you sure you want to close this tab");
     if (confirmation) packageAndBroadcast( sender ,'background','closeTab',data);
 }
-function hasClass(elem, className) {
+function hasClass(elem: HTMLElement, className: string) {
     return elem.className.split(' ').indexOf(className) > -1;
 }
-function setUpIsotope(){
-    $grid = $('.list-group').isotope({
-          itemSelector: '.list-group-item',
-          layoutMode: 'vertical',
-          filter: function() {
-            return qsRegex ? $(this).text().match( qsRegex ) : "*";
-          }
-        });
-    console.log("$grid",$grid);
-}
+// function setUpIsotope(){
+//     jQuerygrid = jQuery('.list-group').isotope({
+//           itemSelector: '.list-group-item',
+//           layoutMode: 'vertical',
+//           filter: function() {
+//             return qsRegex ? jQuery(this).text().match( qsRegex ) : "*";
+//           }
+//         });
+//     console.log("jQuerygrid",jQuerygrid);
+// }
 
 
-function updateIsotope(){
-    var $quicksearch = $('.quicksearch-input');
-      qsRegex = new RegExp( $quicksearch.val(), 'gi' );
-      $grid.isotope();
+// function updateIsotope(){
+//     var jQueryquicksearch = jQuery('.quicksearch-input');
+//       qsRegex = new RegExp( jQueryquicksearch.val(), 'gi' );
+//       jQuerygrid.isotope();
    
-}
+// }
 
 
 
 //////////////////////////////////////////////////////////////////
-$(document).ready(function(){
+jQuery(document).ready(function(){
     windowHeight = window.innerHeight || document.documentElement.clientHeight || document.body.clientHeight;
-	$('.tabs-list-container').on('click','.remove-tab',function(e){
+	jQuery('.tabs-list-container').on('click','.remove-tab',function(e){
         onRemove(e);
     });
-    $('.tabs-list-container').on('click','.list-group-item a',function(e){
-        let data = $(e.target).parents('li').attr('tab-id');
+    jQuery('.tabs-list-container').on('click','.list-group-item a',function(e){
+        let data = jQuery(e.target).parents('li').attr('tab-id');
 		packageAndBroadcast(sender,"background","focusTab",data);
 	});
-    $('.tabs-list-container').on('click','.list-group-item span.pinned',function(e){
-        let data = $(e.target).parents('li').attr('tab-id');
+    jQuery('.tabs-list-container').on('click','.list-group-item span.pinned',function(e){
+        let data = jQuery(e.target).parents('li').attr('tab-id');
         
-        if( $(this).hasClass("disabled"))
+        if( jQuery(this).hasClass("disabled"))
             {packageAndBroadcast(sender,"background","pinTab",data); }
         else
             {packageAndBroadcast(sender,"background","unpinTab",data); }
-        $(this).toggleClass("disabled");
+        jQuery(this).toggleClass("disabled");
     });
-    $('.tabs-list-container').on('click','.list-group-item span.audible',function(e){
-        let data = $(e.target).parents('li').attr('tab-id');
+    jQuery('.tabs-list-container').on('click','.list-group-item span.audible',function(e){
+        let data = jQuery(e.target).parents('li').attr('tab-id');
         
-        if( $(this).hasClass("disabled"))
+        if( jQuery(this).hasClass("disabled"))
             {packageAndBroadcast(sender,"background","unmuteTab",data); }
         else
             {packageAndBroadcast(sender,"background","muteTab",data); }
-        $(this).toggleClass("disabled");
+        jQuery(this).toggleClass("disabled");
     });
-    // $('.tabs-list-container').on('click','.list-group-item span.pinned',function(e){
-    //     let data = $(e.target).parents('li').attr('tab-id');
+    // jQuery('.tabs-list-container').on('click','.list-group-item span.pinned',function(e){
+    //     let data = jQuery(e.target).parents('li').attr('tab-id');
     //     packageAndBroadcast(sender,"background","unpinTab",data);
-    //     $(this).toggleClass("disabled");
+    //     jQuery(this).toggleClass("disabled");
     // });
 
     createQueryResultaTable();
 
-//     $('.list-group').isotope({
+//     jQuery('.list-group').isotope({
 //     // options
 //     itemSelector: '.list-group-item',
 //     layoutMode: 'fitRows'
 // });
 // quick search regex
-let qsRegex;
+// let qsRegex;
 
 // init Isotope
 
 // use value of search field to filter
-$('.quicksearch-btn').click(function(){
-        updateIsotope();
+jQuery('.quicksearch-btn').click(function(){
+        // updateIsotope();
 });
-
-// debounce so filtering doesn't happen every millisecond
-function debounce( fn, threshold ) {
-  var timeout;
-  return function debounced() {
-    if ( timeout ) {
-      clearTimeout( timeout );
-    }
-    function delayed() {
-      fn();
-      timeout = null;
-    }
-    timeout = setTimeout( delayed, threshold || 100 );
-  }
-}
 
     // manageQueryResultTable(results);
 
 
 
-    // $("html").on("contextmenu",function(e){
+    // jQuery("html").on("contextmenu",function(e){
     //            //prevent default context menu for right click
     //            // e.preventDefault();
 
-    //            var menu = $(".menu"); 
+    //            var menu = jQuery(".menu"); 
 
     //            //hide menu if already shown
     //            menu.hide(); 
@@ -181,11 +167,11 @@ function debounce( fn, threshold ) {
 
     //            var mwidth = menu.width();
     //            var mheight = menu.height();
-    //            var screenWidth = $(window).width();
-    //            var screenHeight = $(window).height();
+    //            var screenWidth = jQuery(window).width();
+    //            var screenHeight = jQuery(window).height();
 
     //            //if window is scrolled
-    //            var scrTop = $(window).scrollTop();
+    //            var scrTop = jQuery(window).scrollTop();
 
     //            //if the menu is close to right edge of the window
     //            if(pageX+mwidth > screenWidth){
@@ -201,8 +187,8 @@ function debounce( fn, threshold ) {
     //            menu.show();
     //     }); 
         
-    //     $("html").on("click", function(){
-    //         $(".menu").hide();
+    //     jQuery("html").on("click", function(){
+    //         jQuery(".menu").hide();
     //     });
 
 });
@@ -221,19 +207,19 @@ function debounce( fn, threshold ) {
  * @param  {[type]} data [description]
  * @return {HTML Entity}      [description]
  */
-function enlistTabs(data) {
+function enlistTabs(data: any) {
     console.log(data);
-    let list = $("<ul/>");
+    let list = jQuery("<ul/>");
     list.addClass('tabs-list list-group');
-    $.each(data, function(index, value) {
-        options = $(`<div class='options pull-right'></div>`);
-        let pinned = $(`<span class='disabled glyphicon glyphicon-pushpin pinned' aria-hidden='true'></span>`);
-        let audible = $(`<span class='disabled glyphicon glyphicon-volume-off audible' aria-hidden='true'></span>`);
-        img = $(`<img src='${value.favIconUrl}'/>`);
-        item = $(`<li tab-id='${value.id}'><a title='${value.title}' target='_blank'>${value.title}</a></li>`)
-        if (value.pinned) pinned = $(`<span class='glyphicon glyphicon-pushpin pinned' aria-hidden='true'></span>`);
-        if (value.audible) audible = $(`<span class='glyphicon glyphicon-volume-up audible' aria-hidden='true'></span>`);
-        remove = $(`<span data-id='${value.id}' data-command='remove' class='remove-tab glyphicon glyphicon-remove' aria-hidden='true'></span>`);
+    jQuery.each(data, function(index, value) {
+        let options = jQuery(`<div class='options pull-right'></div>`);
+        let pinned = jQuery(`<span class='disabled glyphicon glyphicon-pushpin pinned' aria-hidden='true'></span>`);
+        let audible = jQuery(`<span class='disabled glyphicon glyphicon-volume-off audible' aria-hidden='true'></span>`);
+        let img = jQuery(`<img src='jQuery{value.favIconUrl}'/>`);
+        let item = jQuery(`<li tab-id='jQuery{value.id}'><a title='jQuery{value.title}' target='_blank'>jQuery{value.title}</a></li>`)
+        let remove = jQuery(`<span data-id='jQuery{value.id}' data-command='remove' class='remove-tab glyphicon glyphicon-remove' aria-hidden='true'></span>`);
+        if (value.pinned) pinned = jQuery(`<span class='glyphicon glyphicon-pushpin pinned' aria-hidden='true'></span>`);
+        if (value.audible) audible = jQuery(`<span class='glyphicon glyphicon-volume-up audible' aria-hidden='true'></span>`);
         options.prepend(remove);
         item.addClass('list-group-item');
         item.prop({ 'draggable': true });
@@ -245,7 +231,6 @@ function enlistTabs(data) {
         // remove.addEventListener('click',onRemove(event),false);
         list.append(item);
     });
-    setUpIsotope();
     return list;
 
 }
@@ -254,8 +239,8 @@ function enlistTabs(data) {
  * @param  {Element} element [description]
  * @param  {Object} data    [description]
  */
-function data2DOM(el, data) {
-    ignoredKeys = ['url', 'favIconUrl', 'title'];
+function data2DOM(el: JQuery, data: Object[]) {
+    let ignoredKeys = ['url', 'favIconUrl', 'title'];
     for (let property in data) {
         if (property == ignoredKeys[0] || property == ignoredKeys[1] || property == ignoredKeys[2]) continue;
         if (data.hasOwnProperty(property)) {
@@ -264,13 +249,11 @@ function data2DOM(el, data) {
     }
 }
 chrome.runtime.onMessage.addListener(function(request, sender) {
-    url = chrome.extension.getURL("/_generated_background_page.html");
+    let url = chrome.extension.getURL("/_generated_background_page.html");
     if (sender.url == url) {
-        console.log(location);
-        console.log("getting from background", request, sender);
-        tabsList = request.tabsList;
+        let tabsList = request.tabsList;
         tabsList = enlistTabs(tabsList);
-        $('.tabs-list-container').html(tabsList);
+        jQuery('.tabs-list-container').html(tabsList);
         delete tabsList;
         
     } else {

@@ -1,14 +1,14 @@
-let _oneTabPageOpened: String = null; //Null or Id of OneTab Main Page
-let onetabURL: String  = chrome.extension.getURL("onetab.html");
-let allTabs: Array<Object>;//All tabs including Ignored Group
-let refinedTabs: Array<Object>;//Not including the Ignored Group
-let ignoredUrlPatterns: Array<string> = [
+let _oneTabPageOpened: string = null; //Null or Id of OneTab Main Page
+let onetabURL: string  = chrome.extension.getURL("onetab.html");
+let allTabs: any[];//All tabs including Ignored Group
+let refinedTabs: any[];//Not including the Ignored Group
+let ignoredUrlPatterns: string[] = [
 "chrome://*",
 "chrome-extension://*",
 "http(s)?://localhost*"
 ];
 
-let ignoredDataKeys: Array<String> = ['url','favIconUrl','title'];
+let ignoredDataKeys: string[] = ['url','favIconUrl','title'];
 let _development: Boolean = true;
 
 /**
@@ -18,12 +18,12 @@ let _development: Boolean = true;
  * @return {[type]}         [description]
  */
 // chrome.runtime.onMessage.addListener((request: any, sender: Function) => {
-// 	let url: String = chrome.extension.getURL("/onetab.html");
+// 	let url: string = chrome.extension.getURL("/onetab.html");
 //     if(sender.url == url)
 //     {
 //     	chrome.tabs.remove(parseInt(request.closeTab),()=>{
 //     		chrome.tabs.query({},
-// 		    	(tabs: Object[])=>{
+// 		    	(tabs: any[])=>{
 // 		    		allTabs = tabs;
 // 		    		refinedTabs = santizeTabs(tabs,ignoredUrlPatterns);
 // 		    });
@@ -41,7 +41,7 @@ function log(input: any,input2?: any):void{
 	if (_development) console.log(input,input2);
 }
 
-function closeTab(tabId:Number):void{
+function closeTab(tabId: any):void{
 	chrome.tabs.remove(parseInt(tabId));
 }
 
@@ -65,18 +65,18 @@ function unmuteTab(tabId: any):void{
 	tabId =  parseInt(tabId);
 	chrome.tabs.update(tabId, {muted: false});
 }
-function muteAll(data: Number[]){
-	for (let i = 0; i<data.length;i++){
-		chrome.tabs.update(tabId, {muted: true});
-	}
-}
+// function muteAll(data: number[]){
+// 	for (let i = 0; i<data.length;i++){
+// 		chrome.tabs.update(tabId, {muted: true});
+// 	}
+// }
 // function highlightTab(tabId: any):void{
 // 	tabId =  parseInt(tabId);
 // 	chrome.tabs.update(tabId, {active: true});
 // }
 /**
  * [saveData description]
- * @param  {String/Object/Array} data    [description]
+ * @param  {string/any/Array} data    [description]
  * @param  {String} message [description]
  */
 function saveData (data: any, message = "Data saved"):void {
@@ -86,7 +86,7 @@ function saveData (data: any, message = "Data saved"):void {
 	        iconUrl: '../images/extension-icon48.png',
 	        title: 'Data saved',
 	        message: message
-	     }, (notificationId: String)=> {});
+	     }, (notificationId: string)=> {});
     });
 }
 
@@ -96,16 +96,17 @@ function saveData (data: any, message = "Data saved"):void {
  */
 function openOneTabPage ():void {
 	if(_oneTabPageOpened == null){
-    	chrome.tabs.create({url: onetabURL, pinned: true},
-    		(tab: Object)=> {
+    	chrome.tabs.create({url: onetabURL , pinned: true},
+    		(tab: any)=> {
 	        	_oneTabPageOpened = tab.id;
-	        	chrome.tabs.onUpdated.addListener((tabId: Number , info: Object)=> {
+	        	chrome.tabs.onUpdated.addListener((tabId: number , info: any)=> {
 	        		if (info.status == "complete") sendTabsToContent();
 	    		});//onCreated
         	});//Create Tab
 	}
 	else {
-		chrome.tabs.update(_oneTabPageOpened, {selected: true},sendTabsToContent);//If OneTab Page is opened ,brings focus to it.
+		chrome.tabs.update(parseInt(_oneTabPageOpened), {selected: true}, 
+			sendTabsToContent);//If OneTab Page is opened ,brings focus to it.
 	}
 }
 /**
@@ -113,10 +114,10 @@ function openOneTabPage ():void {
  * @param {Integer} tabId     [description]
  * @param {Object} info [description]
  */
-function setTabCountInBadge(tabId: String , info: Object):void{
+function setTabCountInBadge():void{
 	chrome.tabs.query({
 	    currentWindow: true
-	}, (tabs: Object[])=>{
+	}, (tabs: any[])=>{
 		chrome.browserAction.setBadgeText({
 		text : String(tabs.length)
 		});
@@ -129,13 +130,13 @@ function setTabCountInBadge(tabId: String , info: Object):void{
  * @param  {String} returnType all | refined
  * @return {[type]}            [description]
  */
-function getAllTabs(windowId?: Number = chrome.windows.WINDOW_ID_CURRENT,returnType?: String = "all"):Object[]{
+function getAllTabs(windowId: number = chrome.windows.WINDOW_ID_CURRENT,returnType: string = "all"):any[]{
 	console.log("windowID",chrome.windows.WINDOW_ID_CURRENT);
     chrome.tabs.query(
     {
     	// windowId: windowId
     },
-    	(tabs: Object[])=> {
+    	(tabs: any[])=> {
     		allTabs = tabs;
     		refinedTabs = santizeTabs(tabs,ignoredUrlPatterns);
     });
@@ -144,11 +145,11 @@ function getAllTabs(windowId?: Number = chrome.windows.WINDOW_ID_CURRENT,returnT
 }
 /**
  * Remove tab objects from tab array based on ignore group
- * @param  {Array of Objects} tabs               [description]
+ * @param  {Array of objects} tabs               [description]
  * @param  {Array} ignoredUrlPatterns [description]
  * @return {Array of Object}   Returns neat array after removing ignored urls
  */
-function santizeTabs(tabs: Object[] , ignoredUrlPatterns: String[]):Object[]{
+function santizeTabs(tabs: any[] , ignoredUrlPatterns: string[]):any[]{
 	refinedTabs = tabs.filter((tab)=>{
 		let patLength =	ignoredUrlPatterns.length;
 		let url = tab.url;
@@ -164,16 +165,16 @@ function reSendTabsToContent () {
 	// sendToContent();
 	sendTabsToContent();
 }
-function sendTabsToContent (data = allTabs):void {
+function sendTabsToContent (tab: any = allTabs):void {
 	getAllTabs();
-	sendToContent("tabsList",data);
+	sendToContent("tabsList",tab);
 }
 /**
  * [listAllTabs description]
  * @return {[type]} [description]
  */
-function sendToContent (datavariable: String, data:Object[]):void {
-	let obj: Object = {};
+function sendToContent (datavariable: string, data: Tab):void {
+	let obj: any = {};
 	obj[datavariable] = data;
 	chrome.runtime.sendMessage(obj);
 }
@@ -181,7 +182,7 @@ function sendToContent (datavariable: String, data:Object[]):void {
 /**
  * Running setTabCountInBage when the Chrome Extension is installed ,a tab is created, removed , attached or detached.
  */
-function onUpdate (functions: Function) {
+function onUpdate (functions: () => void):void {
 	chrome.runtime.onInstalled.addListener(functions)
 	chrome.tabs.onCreated.addListener(functions);
 	chrome.tabs.onRemoved.addListener(functions);
@@ -197,27 +198,26 @@ chrome.runtime.onInstalled.addListener(()=>{
 /**
  * On clicking extension button
  */
-chrome.browserAction.onClicked.addListener((tab: Object)=> {
+chrome.browserAction.onClicked.addListener((tab: any)=> {
     openOneTabPage();
 });
 chrome.idle.setDetectionInterval(30);
-chrome.idle.onStateChanged.addListener((newState: String)=>{
+chrome.idle.onStateChanged.addListener((newState: string)=>{
 	if(newState == 'idle'){
 		console.log("idle");
 	}
 });
-function tabToList (tabId: Number):void {
-	chrome.tabs.query({
-    active: true,
-    lastFocusedWindow: true
-}, (tabs: Object[])=> {
-    // and use that tab to fill in out title and url
-    let tab = tabs[0];
-    sendToContent("tabsList",tab);
-});
-}
-function runQuery(query){
-	let query = 'table#searchResult tbody td';
+// function tabToList (tabId: number):void {
+// 	chrome.tabs.query({
+//     active: true,
+//     lastFocusedWindow: true
+// }, (tabs: any[])=> {
+//     // and use that tab to fill in out title and url
+//     let tab = tabs[0];
+//     sendToContent("tabsList",tab);
+// });
+// }
+function runQuery(query: string = 'table#searchResult tbody td'){
 	chrome.runtime.sendMessage(query);
 	return query;
 }
@@ -228,10 +228,10 @@ chrome.contextMenus.create({
     "title": "Refresh Main Page",
     "onclick" : reSendTabsToContent ,
   });
-chrome.contextMenus.create({
-    "title": "Send Current tab to list",
-    "onclick" : tabToList ,
-  });
+// chrome.contextMenus.create({
+//     "title": "Send Current tab to list",
+//     "onclick" : tabToList() ,
+//   });
 // chrome.contextMenus.create({
 //     "title": "Refresh Main Page including Ignored",
 //     "onclick" : sendToContent(true),
@@ -240,7 +240,7 @@ chrome.contextMenus.create({
     "title": "Show Excited Gem Page",
     "onclick" : openOneTabPage,
   });
-chrome.contextMenus.create({
-    "title": "Run Query",
-    "onclick" : runQuery,
-  });
+// chrome.contextMenus.create({
+//     "title": "Run Query",
+//     "onclick" : runQuery(),
+//   });
