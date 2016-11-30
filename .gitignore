@@ -3,6 +3,7 @@
 ./js/*.js
 ./*.html
 /js/*.js
+/css
 *.html
 
 ## Node.js
