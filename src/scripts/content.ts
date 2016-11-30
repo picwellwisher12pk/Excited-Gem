@@ -4,7 +4,6 @@ let resultTable : any;
 let results: any;
 let sender: String = 'content';
 let $grid: any;
-let qsRegex: RegExp;
 
 ///QUERY
 function query(queryString: String = 'table#searchResult tbody td'){
@@ -72,24 +71,6 @@ function requestCloseTab(data) {
 function hasClass(elem, className) {
     return elem.className.split(' ').indexOf(className) > -1;
 }
-function setUpIsotope(){
-    $grid = $('.list-group').isotope({
-          itemSelector: '.list-group-item',
-          layoutMode: 'vertical',
-          filter: function() {
-            return qsRegex ? $(this).text().match( qsRegex ) : "*";
-          }
-        });
-    console.log("$grid",$grid);
-}
-
-
-function updateIsotope(){
-    var $quicksearch = $('.quicksearch-input');
-      qsRegex = new RegExp( $quicksearch.val(), 'gi' );
-      $grid.isotope();
-   
-}
 
 
 
@@ -128,36 +109,6 @@ $(document).ready(function(){
     // });
 
     createQueryResultaTable();
-
-//     $('.list-group').isotope({
-//     // options
-//     itemSelector: '.list-group-item',
-//     layoutMode: 'fitRows'
-// });
-// quick search regex
-let qsRegex;
-
-// init Isotope
-
-// use value of search field to filter
-$('.quicksearch-btn').click(function(){
-        updateIsotope();
-});
-
-// debounce so filtering doesn't happen every millisecond
-function debounce( fn, threshold ) {
-  var timeout;
-  return function debounced() {
-    if ( timeout ) {
-      clearTimeout( timeout );
-    }
-    function delayed() {
-      fn();
-      timeout = null;
-    }
-    timeout = setTimeout( delayed, threshold || 100 );
-  }
-}
 
     // manageQueryResultTable(results);
 
@@ -245,7 +196,6 @@ function enlistTabs(data) {
         // remove.addEventListener('click',onRemove(event),false);
         list.append(item);
     });
-    setUpIsotope();
     return list;
 
 }
