@@ -7,6 +7,8 @@
     <link rel="stylesheet" href="css/font-awesome.css">
     <link href="css/onetab.css" rel="stylesheet" type="text/css" />
     <script src="js/jquery.min.js"></script>
+    <script src="/node_modules/react/dist/react.js"></script>
+    <script src="/node_modules/react-dom/dist/react-dom.js"></script>
     <script src="js/common.js"></script>
     <script src="js/main.js"></script>
     <script src="js/content.js"></script>
@@ -98,7 +100,7 @@
             <div role="tabpanel" class="tab-pane active" id="active-tabs">
                 <input type="text" class="quicksearch-input">
                 <button type="button" class="quicksearch-btn">Search</button>
-                <div class="tabs-list-container">
+                <div class="tabs-list-container" id="active-tabs-list-container">
                 </div>
             </div>
             <div role="tabpanel" class="tab-pane" id="sleeping">...</div>
@@ -106,6 +108,7 @@
             <div role="tabpanel" class="tab-pane" id="settings">...</div>
         </div>
     </div>
+    <div id="react-container"></div>
 </body>
 
 </html>

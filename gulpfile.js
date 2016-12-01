@@ -34,7 +34,7 @@ var src = {
     url    : "src",
     markup : "src/*.html",
     scripts: "src/scripts/*.js",
-    typescripts     : "src/scripts/*.ts",
+    typescripts     : "src/scripts/*.tsx",
     styles : "src/styles/*.scss",
     images : "src/images/*",
     fonts  : "src/fonts/*"

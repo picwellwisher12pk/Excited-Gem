@@ -5,7 +5,11 @@
         "!node_modules/**"
     ],
     "compilerOptions": {
+    	"module":"commonjs",
         "noImplicitAny": true,
-        "target": "es3"
-    }
+        "target": "es5",
+        "jsx": "react"
+    },
+    "typeroots":["../node_modules/@types"],
+    "types":["node","chrome","jquery"] 
 }
