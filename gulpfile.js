@@ -11,7 +11,7 @@ var jshint = require('gulp-jshint');
 var ts = require("gulp-typescript");
 var tsProject = ts.createProject("tsconfig.json");
 
-//General
+//
 var gulp = require('gulp');
 var browserSync = require('browser-sync');
 var header  = require('gulp-header');
@@ -32,7 +32,7 @@ var config = {
 };
 var src = {
     url    : "src",
-    markup : "src/*.html",
+    markup : "./src/*.html",
     scripts: "src/scripts/*.js",
     typescripts     : "src/scripts/*.tsx",
     styles : "src/styles/*.scss",
@@ -41,6 +41,7 @@ var src = {
 };
 var dest = {
     url   : ".",
+    markup: "./*.html",
     index : "onetab.html",
     scripts: "js/",
     styles: "css/",
@@ -121,16 +122,20 @@ gulp.task('js',function(){
     .pipe(browserSync.reload({stream:true}));
 });
 gulp.task('ts',function(){
-debugger;
-    return tsProject.src()
+    return gulp.src(src.typescripts)
     .pipe(tsProject())
-    .js.pipe(gulp.dest(dest.scripts))
+    .pipe(gulp.dest(dest.scripts))
 });
 
 gulp.task('start-browsersync', function() {
     browserSync.init({
         server: {
             baseDir: ".",
+            middleware: function (req, res, next) {
+            res.setHeader('Accept', '*/*');            
+            res.setHeader('Access-Control-Allow-Origin', '*');
+            next();
+            },
             index: "onetab.html"
         },
         online:true
@@ -139,24 +144,19 @@ gulp.task('start-browsersync', function() {
 gulp.task('bs-reload', function () {
     browserSync.reload();
 });
-// 
-gulp.task('default', ['start-browsersync'
-    ,'html'
-    ,'css'
-    // ,'js'
-    // ,'ts'
-    ], function (e) {
-    console.log('Default',e);
-    gulp.watch(src.markup, ['html'],console.log("HTML running from watch"));
-    gulp.watch(src.styles, ['bs-reload','css'],console.log("CSS running from match"));
+gulp.task('watch',function(){
+    gulp.watch("./src/*.html",  function(event) {
+      console.log('File ' + event.path + ' was ' + event.type + ', running tasks...');
+      gulp.run('html')});
+    gulp.watch(src.styles, ['bs-reload','css']);
     gulp.watch(src.scripts, ['js']);
     gulp.watch(src.typescripts, ['ts']);
     gulp.watch(src.images, ['img']);
     gulp.watch([
-        dest.markup
+        dest.markup //error here
         ,dest.styles
         ,dest.images
         ,dest.scripts
-        ,dest.typescripts
-        ], ['bs-reload','bs-reload']);
-});
+        ], ['bs-reload']);
+})
+gulp.task('default', ['watch','html','css','js','ts','start-browsersync']);
