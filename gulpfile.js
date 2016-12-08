@@ -11,7 +11,7 @@ var jshint = require('gulp-jshint');
 var ts = require("gulp-typescript");
 var tsProject = ts.createProject("tsconfig.json");
 
-//General
+//
 var gulp = require('gulp');
 var browserSync = require('browser-sync');
 var header  = require('gulp-header');
@@ -19,7 +19,7 @@ var rename = require('gulp-rename');
 var notify = require("gulp-notify");
 var gutil = require('gulp-util');
 var filter = require('gulp-filter');
-var plumber = require('gulp-plumber');
+// var plumber = require('gulp-plumber');
 var debug = require('gulp-debug');
 var rm = require('gulp-rimraf');
 var package = require('./package.json');
@@ -32,15 +32,16 @@ var config = {
 };
 var src = {
     url    : "src",
-    markup : "src/*.html",
+    markup : "./src/*.html",
     scripts: "src/scripts/*.js",
-    typescripts     : "src/scripts/*.ts",
+    typescripts     : "src/scripts/*.tsx",
     styles : "src/styles/*.scss",
     images : "src/images/*",
     fonts  : "src/fonts/*"
 };
 var dest = {
     url   : ".",
+    markup: "./*.html",
     index : "onetab.html",
     scripts: "js/",
     styles: "css/",
@@ -64,14 +65,16 @@ gulp.task('html', function () {
     debugger;
     console.log(src.markup,dest.url);
     return gulp.src(src.markup)
-    .pipe(plumber())
+    .on('error',console.error.bind(console))
+    .pipe(debug({title: 'HTML:'}))
     .pipe(gulp.dest(dest.url))
     .pipe(notify({title: package.name+' Message',message: "HTML loaded"}))
     .pipe(browserSync.reload({stream:true}));
 });
 gulp.task('img', function () {
     return gulp.src(src.images)
-    .pipe(plumber())
+    .on('error',console.error.bind(console))
+    .pipe(debug({title: 'IMG:'}))
     // .pipe(gzip(config))
     .pipe(gulp.dest(dest.images))
     .pipe(browserSync.reload({stream:true}));
@@ -79,7 +82,7 @@ gulp.task('img', function () {
 gulp.task('css', function () {
     console.log("CSS");
     return gulp.src(src.styles)
-    .pipe(plumber())
+    .on('error',console.error.bind(console))
     .pipe(debug({title: 'CSS:'}))
     // .pipe(sourcemaps.init())
     .pipe(sass({
@@ -89,7 +92,7 @@ gulp.task('css', function () {
             outputStyle: 'nested',
             // outputStyle: 'expanded',
             precision: 10
-     }).on('error', sass.logError))
+     }).on('error', gutil.log))
     // .pipe(sourcemaps.write({includeContent: false}))
     .pipe(autoprefixer('last 4 version', '> 1%', 'safari 4', 'ie 7', 'ie 8', 'ie 9', 'opera 12.1', 'ios 6', 'android 4'))
     .pipe(gulp.dest(dest.styles)).on('error', gutil.log)
@@ -108,9 +111,9 @@ gulp.task('css', function () {
 
 gulp.task('js',function(){
     return gulp.src(src.scripts)
-    .pipe(plumber())
+    .on('error',console.error.bind(console))
     .pipe(debug({title: 'JS:'}))
-    .pipe(jshint('.jshintrc'))
+    .pipe(jshint('.jshintrc').on('error', gutil.log))
     .pipe(jshint.reporter('default'))
     .pipe(header(banner, { package : package }))
     .pipe(gulp.dest(dest.scripts))
@@ -121,16 +124,21 @@ gulp.task('js',function(){
     .pipe(browserSync.reload({stream:true}));
 });
 gulp.task('ts',function(){
-debugger;
-    return tsProject.src()
+    return gulp.src(src.typescripts)
+    .pipe(debug({title: 'Typescript:'}))
     .pipe(tsProject())
-    .js.pipe(gulp.dest(dest.scripts))
+    .pipe(gulp.dest(dest.scripts))
 });
 
 gulp.task('start-browsersync', function() {
     browserSync.init({
         server: {
             baseDir: ".",
+            middleware: function (req, res, next) {
+            res.setHeader('Accept', '*/*');            
+            res.setHeader('Access-Control-Allow-Origin', '*');
+            next();
+            },
             index: "onetab.html"
         },
         online:true
@@ -139,24 +147,19 @@ gulp.task('start-browsersync', function() {
 gulp.task('bs-reload', function () {
     browserSync.reload();
 });
-// 
-gulp.task('default', ['start-browsersync'
-    ,'html'
-    ,'css'
-    // ,'js'
-    // ,'ts'
-    ], function (e) {
-    console.log('Default',e);
-    gulp.watch(src.markup, ['html'],console.log("HTML running from watch"));
-    gulp.watch(src.styles, ['bs-reload','css'],console.log("CSS running from match"));
+gulp.task('watch',function(){
+    gulp.watch("./src/*.html",  function(event) {
+      console.log('File ' + event.path + ' was ' + event.type + ', running tasks...');
+      gulp.run('html')});
+    gulp.watch(src.styles, ['bs-reload','css']);
     gulp.watch(src.scripts, ['js']);
     gulp.watch(src.typescripts, ['ts']);
     gulp.watch(src.images, ['img']);
     gulp.watch([
-        dest.markup
+        dest.markup //error here
         ,dest.styles
         ,dest.images
         ,dest.scripts
-        ,dest.typescripts
-        ], ['bs-reload','bs-reload']);
-});
+        ], ['bs-reload']);
+})
+gulp.task('default', ['watch','html','css','js','ts','start-browsersync']);

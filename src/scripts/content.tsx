@@ -1,12 +1,17 @@
-let windowHeight: Number;
+// let  $ = require('jquery');
+// import React from 'react';
+// import * as React from "react";
+// import * as ReactDOM from "react-dom";
+// import {Board} from 'activetabs';
+let windowHeight: number;
 let sidebar: any;
 let resultTable : any;
 let results: any;
-let sender: String = 'content';
+let sender: string = 'content';
 let $grid: any;
-
+let ActiveTabs;
 ///QUERY
-function query(queryString: String = 'table#searchResult tbody td'){
+function query(queryString: string = 'table#searchResult tbody td'){
     console.log($(queryString));
     $('.eg_results_table').empty();
     return $(queryString);
@@ -38,7 +43,7 @@ function createQueryResultaTable(){
     return resultTable;
 }
 
-function manageQueryResultTable(results: any[]){    
+function manageQueryResultTable(results: any[]){
     $.each(results,function(index,value){
         // let name = $(value).find('.detName a').text();
         // let url = $(value).find('> a').first().attr('href');
@@ -49,11 +54,6 @@ function manageQueryResultTable(results: any[]){
 
     });
 }
-
-
-
-
-
 ////TABS
 function onRemove(e:any){
 		// let e = new Array(e);
@@ -73,20 +73,19 @@ function hasClass(elem, className) {
 }
 
 
-
 //////////////////////////////////////////////////////////////////
 $(document).ready(function(){
+
+     ActiveTabs = ReactDOM.render(<ActiveTabs />,
+            document.getElementById('active-tabs-list-container'));
+
     windowHeight = window.innerHeight || document.documentElement.clientHeight || document.body.clientHeight;
 	$('.tabs-list-container').on('click','.remove-tab',function(e){
         onRemove(e);
     });
-    $('.tabs-list-container').on('click','.list-group-item a',function(e){
-        let data = $(e.target).parents('li').attr('tab-id');
-		packageAndBroadcast(sender,"background","focusTab",data);
-	});
     $('.tabs-list-container').on('click','.list-group-item span.pinned',function(e){
         let data = $(e.target).parents('li').attr('tab-id');
-        
+
         if( $(this).hasClass("disabled"))
             {packageAndBroadcast(sender,"background","pinTab",data); }
         else
@@ -95,7 +94,7 @@ $(document).ready(function(){
     });
     $('.tabs-list-container').on('click','.list-group-item span.audible',function(e){
         let data = $(e.target).parents('li').attr('tab-id');
-        
+
         if( $(this).hasClass("disabled"))
             {packageAndBroadcast(sender,"background","unmuteTab",data); }
         else
@@ -118,11 +117,11 @@ $(document).ready(function(){
     //            //prevent default context menu for right click
     //            // e.preventDefault();
 
-    //            var menu = $(".menu"); 
+    //            var menu = $(".menu");
 
     //            //hide menu if already shown
-    //            menu.hide(); 
-               
+    //            menu.hide();
+
     //            //get x and y values of the click event
     //            var pageX = e.pageX;
     //            var pageY = e.pageY;
@@ -150,8 +149,8 @@ $(document).ready(function(){
 
     //            //finally show the menu
     //            menu.show();
-    //     }); 
-        
+    //     });
+
     //     $("html").on("click", function(){
     //         $(".menu").hide();
     //     });
@@ -162,43 +161,9 @@ $(document).ready(function(){
 // document.addEventListener('click', function(e) {
 //     if (hasClass(e.target, 'remove-tab')) {
 //         console.log(e.target);
-        
+
 //     }
 // }, false);
-
-
-/**
- * Makes a HTML list of given data (Mainly for Tabs)
- * @param  {[type]} data [description]
- * @return {HTML Entity}      [description]
- */
-function enlistTabs(data) {
-    console.log(data);
-    let list = $("<ul/>");
-    list.addClass('tabs-list list-group');
-    $.each(data, function(index, value) {
-        options = $(`<div class='options pull-right'></div>`);
-        let pinned = $(`<span class='disabled glyphicon glyphicon-pushpin pinned' aria-hidden='true'></span>`);
-        let audible = $(`<span class='disabled glyphicon glyphicon-volume-off audible' aria-hidden='true'></span>`);
-        img = $(`<img src='${value.favIconUrl}'/>`);
-        item = $(`<li tab-id='${value.id}'><a title='${value.title}' target='_blank'>${value.title}</a></li>`)
-        if (value.pinned) pinned = $(`<span class='glyphicon glyphicon-pushpin pinned' aria-hidden='true'></span>`);
-        if (value.audible) audible = $(`<span class='glyphicon glyphicon-volume-up audible' aria-hidden='true'></span>`);
-        remove = $(`<span data-id='${value.id}' data-command='remove' class='remove-tab glyphicon glyphicon-remove' aria-hidden='true'></span>`);
-        options.prepend(remove);
-        item.addClass('list-group-item');
-        item.prop({ 'draggable': true });
-        data2DOM(item, value);
-        item.prepend(img);
-        item.prepend(pinned);
-        item.prepend(audible);
-        item.append(options);
-        // remove.addEventListener('click',onRemove(event),false);
-        list.append(item);
-    });
-    return list;
-
-}
 /**
  * Will attach data from Chrome tabs to HTML nodes to retreive later
  * @param  {Element} element [description]
@@ -213,18 +178,8 @@ function data2DOM(el, data) {
         }
     }
 }
-chrome.runtime.onMessage.addListener(function(request, sender) {
-    url = chrome.extension.getURL("/_generated_background_page.html");
-    if (sender.url == url) {
-        console.log(location);
-        console.log("getting from background", request, sender);
-        tabsList = request.tabsList;
-        tabsList = enlistTabs(tabsList);
-        $('.tabs-list-container').html(tabsList);
-        delete tabsList;
-        
-    } else {
-        // Content script code
-    }
+function drawTabs(data){
+  console.info("Drawing Tabs");
+  ActiveTabs.setState({data: data.tabsList});
 
-});
+}
