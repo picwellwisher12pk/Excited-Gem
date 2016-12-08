@@ -76,7 +76,7 @@ function hasClass(elem, className) {
 //////////////////////////////////////////////////////////////////
 $(document).ready(function(){
 
-     ActiveTabs = ReactDOM.render(<ActiveTab />,
+     ActiveTabs = ReactDOM.render(<ActiveTabs />,
             document.getElementById('active-tabs-list-container'));
 
     windowHeight = window.innerHeight || document.documentElement.clientHeight || document.body.clientHeight;
@@ -181,5 +181,5 @@ function data2DOM(el, data) {
 function drawTabs(data){
   console.info("Drawing Tabs");
   ActiveTabs.setState({data: data.tabsList});
-  
+
 }

@@ -1,15 +1,42 @@
-class ActiveTab extends React.Component {
+class ActiveTabs extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-        data: this.props.data,
-        pinned:false,
-        audible:false
+        data: this.props.data
     };
-  }
+   }
 
     handleClick() {
         console.log(this); // null
+    }
+    
+    render() {
+        let _this = this;
+        let activeTabs = this.state.data;
+        return (<ul className="tabs-list list-group">
+                {activeTabs.map(function(value) {
+                    return <Tab key={value.id} id={value.id} pinned={value.pinned} audible={value.audible} position={value.index} url={value.url} title={value.title} favIconUrl={value.favIconUrl} />
+                })}
+            </ul>);
+  }
+}
+ActiveTabs.propTypes = {
+ data: React.PropTypes.array.isRequired
+};
+ActiveTabs.defaultProps= {
+        data: []
+};
+class Tab extends React.Component{
+   constructor(props) {
+    super(props);
+    this.state = {
+        url: this.props.url,
+        title: this.props.title,
+        pinned: this.props.pinned,
+        position: this.props.position,
+        favicon: this.props.favIconUrl,
+        audible: this.props.audible
+        }; 
     }
     focusTab(id){
 
@@ -19,36 +46,31 @@ class ActiveTab extends React.Component {
     pinTab(id,pinned){
         console.info(id,pinned);
         pinned ? packageAndBroadcast(sender,"background","unpinTab",id) : packageAndBroadcast(sender,"background","pinTab",id)
-        // this.setState({pinned:!pinned});
+        this.setState({pinned:!pinned});
     }
     muteTab(id,audible){
         audible ? packageAndBroadcast(sender,"background","muteTab",id) : packageAndBroadcast(sender,"background","unmuteTab",id)
         this.setState({audible:!audible});
     }
-    render() {
+    componentWillReceiveProps(){
+        console.log(this.props)
+    }
+    render(){
+        console.log(this.props.id);
         let _this = this;
-        let activeTabs = this.state.data;
-        return (<ul className="tabs-list list-group">
-                {activeTabs.map(function(value) {
-                    return <li key={value.id} data-id={value.id} className="list-group-item">
-                            <span className = {`glyphicon glyphicon-pushpin pinned`+(value.pinned ? ` `: ` disabled`)} onClick={_this.pinTab.bind(_this,value.id,value.pinned)} aria-hidden='true'></span>
-                            <span className = {`glyphicon glyphicon-volume-off audible`+(value.audible ? ` `: ` disabled`)} onClick={_this.muteTab.bind(_this,value.id,value.audible)} aria-hidden='true'></span>
-                            <img src={value.favIconUrl}/>
-                            <span title={value.title} onClick={_this.focusTab.bind(null,value.id)}>{value.title}</span>
-                            <div className="options pull-right">
-                                <span data-id={value.id} data-command='remove' className='remove-tab glyphicon glyphicon-remove' aria-hidden='true'></span>
-                            </div>
-                           </li>
-                })}
-            </ul>);
-  }
+        return (
+            <li key={_this.props.id} data-id={_this.props.id} className="list-group-item">
+                <span className = {`clickable glyphicon glyphicon-pushpin pinned`+(_this.state.pinned ? ` `: ` disabled`)} onClick={_this.pinTab.bind(_this,_this.props.id,_this.state.pinned)} aria-hidden='true'></span>
+                <span className = {`clickable glyphicon glyphicon-volume-off audible`+(_this.state.audible ? ` `: ` disabled`)} onClick={_this.muteTab.bind(_this,_this.props.id,_this.state.audible)} aria-hidden='true'></span>
+                <img src={_this.state.favicon}/>
+                <span className="clickable" title={_this.state.title} onClick={_this.focusTab.bind(null,_this.props.id)}>{_this.state.title}</span>
+                <div className="options pull-right">
+                    <span data-id={_this.props.id} data-command='remove' className='clickable remove-tab glyphicon glyphicon-remove' aria-hidden='true'></span>
+                </div>
+           </li>
+            )
+    }
 }
-ActiveTab.propTypes = {
- data: React.PropTypes.array.isRequired
-};
-ActiveTab.defaultProps= {
-        data: []
-};
 
 
     let Note = React.createClass({
