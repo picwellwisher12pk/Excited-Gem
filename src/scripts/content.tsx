@@ -9,6 +9,7 @@ let resultTable : any;
 let results: any;
 let sender: string = 'content';
 let $grid: any;
+let tabsList;
 let ActiveTabs;
 ///QUERY
 function query(queryString: string = 'table#searchResult tbody td'){
@@ -80,33 +81,15 @@ $(document).ready(function(){
             document.getElementById('active-tabs-list-container'));
 
     windowHeight = window.innerHeight || document.documentElement.clientHeight || document.body.clientHeight;
-	$('.tabs-list-container').on('click','.remove-tab',function(e){
-        onRemove(e);
-    });
-    $('.tabs-list-container').on('click','.list-group-item span.pinned',function(e){
-        let data = $(e.target).parents('li').attr('tab-id');
-
-        if( $(this).hasClass("disabled"))
-            {packageAndBroadcast(sender,"background","pinTab",data); }
-        else
-            {packageAndBroadcast(sender,"background","unpinTab",data); }
-        $(this).toggleClass("disabled");
-    });
-    $('.tabs-list-container').on('click','.list-group-item span.audible',function(e){
-        let data = $(e.target).parents('li').attr('tab-id');
-
-        if( $(this).hasClass("disabled"))
-            {packageAndBroadcast(sender,"background","unmuteTab",data); }
-        else
-            {packageAndBroadcast(sender,"background","muteTab",data); }
-        $(this).toggleClass("disabled");
-    });
-    // $('.tabs-list-container').on('click','.list-group-item span.pinned',function(e){
-    //     let data = $(e.target).parents('li').attr('tab-id');
-    //     packageAndBroadcast(sender,"background","unpinTab",data);
-    //     $(this).toggleClass("disabled");
-    // });
-
+	
+    let tempList;
+    $('.quicksearch-input').on('keyup',(e)=>{
+        tempList = tabsList.filter((tab)=>{
+            return tab.title.indexOf(e.target.value) >= 0;}
+        console.log(tempList);
+        ActiveTabs.setState({data:tempList});
+        });
+    })
     createQueryResultaTable();
 
     // manageQueryResultTable(results);
@@ -179,6 +162,7 @@ function data2DOM(el, data) {
     }
 }
 function drawTabs(data){
+    tabsList = data.tabsList;
   console.info("Drawing Tabs");
   ActiveTabs.setState({data: data.tabsList});
 
