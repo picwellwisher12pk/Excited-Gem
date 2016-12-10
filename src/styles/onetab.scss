@@ -6,6 +6,29 @@ body {
     cursor:pointer;
 }
 
+.tabs-list-container.header .list-group-item {
+    border: none;
+    background: yellowgreen;
+    border-radius: 0;
+    /* box-shadow: 0 0 3px 0 #000; */
+    color: white;
+}
+.eg .list-group-item:first-child {
+    border-top-right-radius: 0;
+    border-top-left-radius: 0;
+}
+.eg .quicksearch-input.form-control{
+    transition:all 0.3s;
+    width: 80%;
+    display: inline-block;
+    border: none;
+    box-shadow: 0 0 2px 0 rgba(0,0,0,0.1);
+}
+.eg .quicksearch-input.form-control:hover,
+.eg .quicksearch-input.form-control:focus
+{
+    box-shadow: 0 2px 8px 0 rgba(0,0,0,0.3);
+}
 .list-group-item{
     transition: all 0.4s;
 }

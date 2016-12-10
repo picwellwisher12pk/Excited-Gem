@@ -7,8 +7,8 @@
     <link rel="stylesheet" href="css/font-awesome.css">
     <link href="css/onetab.css" rel="stylesheet" type="text/css" />
     <script src="js/jquery.min.js"></script>
-    <script src="/node_modules/react/dist/react.js"></script>
-    <script src="/node_modules/react-dom/dist/react-dom.js"></script>
+    <script src="js/react/dist/react.js"></script>
+    <script src="js/react-dom/dist/react-dom.js"></script>
     <script src="js/common.js"></script>
     <script src="js/main.js"></script>
     <script src="js/activetabs.js"></script>
@@ -58,10 +58,10 @@
                     <div class="form-group">
                         <input type="text" class="form-control" placeholder="Search">
                     </div>
-                    <button type="submit" class="btn btn-default">Submit</button>
+                    <button type="button" class="btn btn-default">Submit</button>
                 </form>
                 <ul class="nav navbar-nav navbar-right">
-                    <li><a href="#">Settings</a></li>
+                    <li><button type="button" class="btn" id="go-to-options" style="padding: 15px 7px;">Settings</button></li>
                     <li class="dropdown">
                         <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Dropdown <span class="caret"></span></a>
                         <ul class="dropdown-menu">
@@ -99,8 +99,22 @@
         <!-- Tab panes -->
         <div class="tab-content">
             <div role="tabpanel" class="tab-pane active" id="active-tabs">
-                <input type="text" class="quicksearch-input">
-                <button type="button" class="quicksearch-btn">Search</button>
+                <div class="row">
+                    <div class="col-xs-12">
+                    </div>
+                </div>
+                <div class="tabs-list-container header">
+                    <div class="list-group-item">
+                    <span class="clickable glyphicon glyphicon-pushpin pinned " aria-hidden="true"></span>
+                    <span class="clickable glyphicon glyphicon-volume-off audible" aria-hidden="true"></span>
+                    <!-- <img src=""> -->
+                    <span >
+                        <input id="quicksearch-input" type="text" class="quicksearch-input form-control" placeholder="Filter Tabs"></span>
+                        <div class="options pull-right">
+                            <span data-command="remove" class="clickable remove-tab glyphicon glyphicon-remove" aria-hidden="true"></span>
+                        </div>
+                    </div>
+                </div>
                 <div class="tabs-list-container" id="active-tabs-list-container">
                 </div>
             </div>
