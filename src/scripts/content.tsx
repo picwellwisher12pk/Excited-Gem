@@ -97,18 +97,13 @@ $(document).ready(function(){
     let tempList;
 
     $('#quicksearch-input').on('keyup',(e)=>{
-        console.log(tabsList,filterType);
         tempList = tabsList.filter((tab)=>
         {
-            console.log("filtering");
             if(filterType === "regex"){
-                console.log("this is regex");
                 let regex = new RegExp(e.target.value,filterCase?"i":"");
-                console.log("result:",regex.test(tab.title),regex,tab.title);
                 return regex.test(tab.title);
             }
             else{
-                console.log("plain search")
                 return tab.title.indexOf(e.target.value) >= 0;
             }
         });
