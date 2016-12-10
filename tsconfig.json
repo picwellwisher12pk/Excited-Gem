@@ -12,4 +12,3 @@
     },
     "typeroots":["../node_modules/@types"],
     "types":["node","chrome","jquery","react"] 
-}

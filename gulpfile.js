@@ -11,7 +11,7 @@ var jshint = require('gulp-jshint');
 var ts = require("gulp-typescript");
 var tsProject = ts.createProject("tsconfig.json");
 
-//
+//General
 var gulp = require('gulp');
 var browserSync = require('browser-sync');
 var header  = require('gulp-header');
@@ -40,13 +40,13 @@ var src = {
     fonts  : "src/fonts/*"
 };
 var dest = {
-    url   : ".",
-    markup: "./*.html",
-    index : "onetab.html",
-    scripts: "js/",
-    styles: "css/",
-    images: "images/",
-    fonts : "fonts/"
+    url   : "build/",
+    markup: "build/*.html",
+    index : "build/onetab.html",
+    scripts: "build/js/",
+    styles: "build/css/",
+    images: "buildimages/",
+    fonts : "build/fonts/"
 };
 
 var banner = [
@@ -139,7 +139,7 @@ gulp.task('start-browsersync', function() {
             res.setHeader('Access-Control-Allow-Origin', '*');
             next();
             },
-            index: "onetab.html"
+            index: "build/onetab.html"
         },
         online:true
     });
@@ -148,9 +148,7 @@ gulp.task('bs-reload', function () {
     browserSync.reload();
 });
 gulp.task('watch',function(){
-    gulp.watch("./src/*.html",  function(event) {
-      console.log('File ' + event.path + ' was ' + event.type + ', running tasks...');
-      gulp.run('html')});
+    gulp.watch(src.markup,  ['html']);
     gulp.watch(src.styles, ['bs-reload','css']);
     gulp.watch(src.scripts, ['js']);
     gulp.watch(src.typescripts, ['ts']);
@@ -163,3 +161,4 @@ gulp.task('watch',function(){
         ], ['bs-reload']);
 })
 gulp.task('default', ['watch','html','css','js','ts','start-browsersync']);
+

@@ -238,3 +238,4 @@ chrome.contextMenus.create({
     "title": "Run Query",
     "onclick" : runQuery,
   });
+

@@ -9,7 +9,20 @@ let resultTable : any;
 let results: any;
 let sender: string = 'content';
 let $grid: any;
-let ActiveTabs;
+let tabsList;
+let ActiveTabs :[] ;
+let filterType :string;
+let filterType :boolean;
+
+function restore_options() {
+    chrome.storage.sync.get("pref", function (items) {
+        filterType = items.pref.filterType;
+        filterCase = items.pref.filterCase;
+    });
+}
+document.addEventListener('DOMContentLoaded', restore_options);
+
+
 ///QUERY
 function query(queryString: string = 'table#searchResult tbody td'){
     console.log($(queryString));
@@ -80,35 +93,33 @@ $(document).ready(function(){
             document.getElementById('active-tabs-list-container'));
 
     windowHeight = window.innerHeight || document.documentElement.clientHeight || document.body.clientHeight;
-	$('.tabs-list-container').on('click','.remove-tab',function(e){
-        onRemove(e);
-    });
-    $('.tabs-list-container').on('click','.list-group-item span.pinned',function(e){
-        let data = $(e.target).parents('li').attr('tab-id');
+	
+    let tempList;
 
-        if( $(this).hasClass("disabled"))
-            {packageAndBroadcast(sender,"background","pinTab",data); }
-        else
-            {packageAndBroadcast(sender,"background","unpinTab",data); }
-        $(this).toggleClass("disabled");
-    });
-    $('.tabs-list-container').on('click','.list-group-item span.audible',function(e){
-        let data = $(e.target).parents('li').attr('tab-id');
-
-        if( $(this).hasClass("disabled"))
-            {packageAndBroadcast(sender,"background","unmuteTab",data); }
-        else
-            {packageAndBroadcast(sender,"background","muteTab",data); }
-        $(this).toggleClass("disabled");
-    });
-    // $('.tabs-list-container').on('click','.list-group-item span.pinned',function(e){
-    //     let data = $(e.target).parents('li').attr('tab-id');
-    //     packageAndBroadcast(sender,"background","unpinTab",data);
-    //     $(this).toggleClass("disabled");
-    // });
-
+    $('#quicksearch-input').on('keyup',(e)=>{
+        tempList = tabsList.filter((tab)=>
+        {
+            if(filterType === "regex"){
+                let regex = new RegExp(e.target.value,filterCase?"i":"");
+                return regex.test(tab.title);
+            }
+            else{
+                return tab.title.indexOf(e.target.value) >= 0;
+            }
+        });
+            ActiveTabs.setState({data:tempList});
+        });
+    // })
     createQueryResultaTable();
-
+document.querySelector('#go-to-options').addEventListener('click',function() {
+  if (chrome.runtime.openOptionsPage) {
+    // New way to open options pages, if supported (Chrome 42+).
+    chrome.runtime.openOptionsPage();
+  } else {
+    // Reasonable fallback.
+    window.open(chrome.runtime.getURL('options.html'));
+  }
+});
     // manageQueryResultTable(results);
 
 
@@ -179,6 +190,7 @@ function data2DOM(el, data) {
     }
 }
 function drawTabs(data){
+    tabsList = data.tabsList;
   console.info("Drawing Tabs");
   ActiveTabs.setState({data: data.tabsList});
 
