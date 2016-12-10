@@ -11,7 +11,7 @@ var jshint = require('gulp-jshint');
 var ts = require("gulp-typescript");
 var tsProject = ts.createProject("tsconfig.json");
 
-//
+//General
 var gulp = require('gulp');
 var browserSync = require('browser-sync');
 var header  = require('gulp-header');
@@ -161,3 +161,4 @@ gulp.task('watch',function(){
         ], ['bs-reload']);
 })
 gulp.task('default', ['watch','html','css','js','ts','start-browsersync']);
+
