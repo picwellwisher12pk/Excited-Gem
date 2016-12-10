@@ -10,7 +10,19 @@ let results: any;
 let sender: string = 'content';
 let $grid: any;
 let tabsList;
-let ActiveTabs;
+let ActiveTabs :[] ;
+let filterType :string;
+let filterType :boolean;
+
+function restore_options() {
+    chrome.storage.sync.get("pref", function (items) {
+        filterType = items.pref.filterType;
+        filterCase = items.pref.filterCase;
+    });
+}
+document.addEventListener('DOMContentLoaded', restore_options);
+
+
 ///QUERY
 function query(queryString: string = 'table#searchResult tbody td'){
     console.log($(queryString));
@@ -83,15 +95,36 @@ $(document).ready(function(){
     windowHeight = window.innerHeight || document.documentElement.clientHeight || document.body.clientHeight;
 	
     let tempList;
-    $('.quicksearch-input').on('keyup',(e)=>{
-        tempList = tabsList.filter((tab)=>{
-            return tab.title.indexOf(e.target.value) >= 0;}
-        console.log(tempList);
-        ActiveTabs.setState({data:tempList});
-        });
-    })
-    createQueryResultaTable();
 
+    $('#quicksearch-input').on('keyup',(e)=>{
+        console.log(tabsList,filterType);
+        tempList = tabsList.filter((tab)=>
+        {
+            console.log("filtering");
+            if(filterType === "regex"){
+                console.log("this is regex");
+                let regex = new RegExp(e.target.value,filterCase?"i":"");
+                console.log("result:",regex.test(tab.title),regex,tab.title);
+                return regex.test(tab.title);
+            }
+            else{
+                console.log("plain search")
+                return tab.title.indexOf(e.target.value) >= 0;
+            }
+        });
+            ActiveTabs.setState({data:tempList});
+        });
+    // })
+    createQueryResultaTable();
+document.querySelector('#go-to-options').addEventListener('click',function() {
+  if (chrome.runtime.openOptionsPage) {
+    // New way to open options pages, if supported (Chrome 42+).
+    chrome.runtime.openOptionsPage();
+  } else {
+    // Reasonable fallback.
+    window.open(chrome.runtime.getURL('options.html'));
+  }
+});
     // manageQueryResultTable(results);
 
 

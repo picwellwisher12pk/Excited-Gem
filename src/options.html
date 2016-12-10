@@ -1,49 +1,45 @@
+<!DOCTYPE html>
 <html>
 <head>
-  <title>OneTab options</title>
-
-  <link href='//fonts.googleapis.com/css?family=Open+Sans:400,600,300,700' rel='stylesheet' type='text/css'>
-
+  <title>My Test Extension Options</title>
   <style>
-
-    input[type='radio'] {
-      margin:0;
-      padding:0;
-      outline:none;
-      font-family:inherit; box-sizing:border-box
-    }
-
-    input[type="radio"],
-    input[type="checkbox"] {
-        position: absolute; left: -999em;
-    }
-
-    input[type="radio"] + label:before,
-    input[type="checkbox"] + label:before {
-      content:'';
-      display: inline-block;
-      position:relative;
-      top:7px;
-      left:-5px;
-      width:25px;
-      height:25px;
-      background-image:url(images/checkboxradiosprite.png);
-    }
-
-    input[type="checkbox"] + label:before { background-position: 0 -25px;} input[type="checkbox"]:checked + label:before {background-position: 0 0 ; }
-    input[type="radio"] + label:before { background-position: -25px -25px;} input[type="radio"]:checked + label:before { background-position: -25px 0;}
-
+    body: { padding: 10px; }
   </style>
-
+<!--     <link rel="stylesheet" href="css/bootstrap.css">
+    <link rel="stylesheet" href="css/font-awesome.css">
+    <link href="css/onetab.css" rel="stylesheet" type="text/css" />
+    <script src="js/jquery.min.js"></script>
+    <script src="js/react/dist/react.js"></script>
+    <script src="js/react-dom/dist/react-dom.js"></script>
+    <script src="js/common.js"></script>
+    <script src="js/main.js"></script>
+    <script src="js/activetabs.js"></script>
+    <script src="js/content.js"></script>
+    <script src="js/bootstrap.js"></script> -->
 </head>
 
-<body style="margin:0; padding:0; font-family: 'Open Sans', 'Helvetica Neue', Arial, sans-serif; font-weight: 400; font-size:14px">
+<body>
+<div class="panel panel-default">
+  <div class="panel-heading">
+    <h3 class="panel-title">Panel title</h3>
+  </div>
+  Filter Type:
+  <div class="panel-body">
+     <select id="filter-type-option-id" class="form-control">
+   <option value="normal">Normal</option>
+   <option value="regex">Regular Expression</option>
+  </select>
+  <br>
+  <label for="case"><input type="checkbox" name="case" id="filterCase-option-id">Case Insensitive?</label>
+  </div>
+</div>
+  
+ 
 
-  <div style="padding:50px 50px 10px 50px" id="contentAreaDiv"></div>
 
+  <div id="status"></div>
+  <button id="save">Save</button>
 
-  <!-- <script src="ext-onetab-concatenated-sources-options.js"></script> -->
-
+  <script src="js/options.js"></script>
 </body>
-
 </html>
