@@ -21,7 +21,7 @@ The Active Tabs list keep changing , every time the tabs are either moved , remo
 The total number of tabs for current window is shown on the extension icon (top right next to address bar).
 
 ### Filtering
-![Normal](./Designs/Screenshots/main-filter.jpg)
+![Filtering](./Designs/Screenshots/main-filter.JPG)
 Currently this extension support two types of filtering for Active Tabs.  
 1. Normal (String/text search)
 2. Regex/Regular Expressions
