@@ -14,7 +14,6 @@
     <script src="js/activetabs.js"></script>
     <script src="js/content.js"></script>
     <script src="js/bootstrap.js"></script>
-
 </head>
 <style>
 .tabGroupTitleText {
@@ -40,9 +39,9 @@
             <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
                 <ul class="nav navbar-nav">
                     <li class="active"><a href="#">Tabs<span class="sr-only">(current)</span></a></li>
-                    <li><a href="#">Suspended</a></li>
+                    <!-- <li><a href="#">Suspended</a></li> -->
                     <li><a href="query.html">Query</a></li>
-                    <li class="dropdown">
+                    <!-- <li class="dropdown">
                         <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Dropdown <span class="caret"></span></a>
                         <ul class="dropdown-menu">
                             <li><a href="#">Action</a></li>
@@ -53,17 +52,19 @@
                             <li role="separator" class="divider"></li>
                             <li><a href="#">One more separated link</a></li>
                         </ul>
-                    </li>
+                    </li> -->
                 </ul>
                 <form class="navbar-form navbar-left">
                     <div class="form-group">
                         <input type="text" class="form-control" placeholder="Search">
                     </div>
-                    <button type="button" class="btn btn-default">Submit</button>
+                    <button type="button" class="btn btn-default"><i class="fa fa-search"></i></button>
                 </form>
                 <ul class="nav navbar-nav navbar-right">
-                    <li><button type="button" class="btn" id="go-to-options" style="padding: 15px 7px;">Settings</button></li>
-                    <li class="dropdown">
+                    <li>
+                        <button type="button" class="btn" id="go-to-options" style="padding: 15px 7px;">Settings</button>
+                    </li>
+                    <!-- <li class="dropdown">
                         <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Dropdown <span class="caret"></span></a>
                         <ul class="dropdown-menu">
                             <li><a href="#">Action</a></li>
@@ -72,7 +73,7 @@
                             <li role="separator" class="divider"></li>
                             <li><a href="#">Separated link</a></li>
                         </ul>
-                    </li>
+                    </li> -->
                 </ul>
             </div>
             <!-- /.navbar-collapse -->
@@ -106,13 +107,27 @@
                 </div>
                 <div class="tabs-list-container header">
                     <div class="list-group-item">
-                    <span class="clickable glyphicon glyphicon-pushpin pinned " aria-hidden="true"></span>
-                    <span class="clickable glyphicon glyphicon-volume-off audible" aria-hidden="true"></span>
-                    <!-- <img src=""> -->
-                    <span >
-                        <input id="quicksearch-input" type="text" class="quicksearch-input form-control" placeholder="Filter Tabs"></span>
-                        <div class="options pull-right">
-                            <span data-command="remove" class="clickable remove-tab glyphicon glyphicon-remove" aria-hidden="true"></span>
+                        <div class="row">
+                            <div class="col-sm-1">
+                                <span class="clickable glyphicon glyphicon-pushpin pinned " aria-hidden="true"></span>
+                                <span class="clickable glyphicon glyphicon-volume-off audible" aria-hidden="true"></span>
+                            </div>
+                            <div class="col-sm-10">
+                                <div class="input-group">
+                                    <input id="quicksearch-input" type="text" class="quicksearch-input form-control regex" placeholder="Filter Tabs" aria-label="...">
+                                    <span class="input-group-addon">
+                                        <input type="checkbox" aria-label="..."> Regex
+                                    </span>
+                                    <span class="input-group-addon">
+                                        <input type="checkbox" aria-label="..."> Case Sensitive
+                                    </span>
+                                </div>
+                            </div>                        
+                                                   <div class="col-sm-1">
+                                <div class="options pull-right">
+                                   <span data-command="remove" class="clickable remove-tab glyphicon glyphicon-remove" aria-hidden="true"></span>
+                               </div>
+                                                   </div>
                         </div>
                     </div>
                 </div>
@@ -125,7 +140,6 @@
         </div>
     </div>
     <div id="react-container"></div>
-
 </body>
 
 </html>
