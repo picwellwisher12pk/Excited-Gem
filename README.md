@@ -14,6 +14,7 @@ So I decided to make something useful and also learn something new while making 
 ### Main
 In the Following screen you can see all the tabs that have been opened in the current browser window. The Active Tabs list show you not only the currently opened tabs but also their attributes like whether it is pinned or not, whether it is audible or not.
 You can make a tab pinned or mute a tab, or go to a tab by clicking on its link(name).
+
 ![Normal](./Designs/Screenshots/main-normal.JPG)  
 
 The Active Tabs list keep changing , every time the tabs are either moved , removed or created, pinned or muted.
@@ -21,7 +22,9 @@ The Active Tabs list keep changing , every time the tabs are either moved , remo
 The total number of tabs for current window is shown on the extension icon (top right next to address bar).
 
 ### Filtering
+
 ![Filtering](./Designs/Screenshots/main-filter.JPG)
+
 Currently this extension support two types of filtering for Active Tabs.  
 1. Normal (String/text search)
 2. Regex/Regular Expressions
