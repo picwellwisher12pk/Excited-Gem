@@ -1,8 +1,3 @@
-// let  $ = require('jquery');
-// import React from 'react';
-// import * as React from "react";
-// import * as ReactDOM from "react-dom";
-// import {Board} from 'activetabs';
 let windowHeight: number;
 let sidebar: any;
 let resultTable : any;
