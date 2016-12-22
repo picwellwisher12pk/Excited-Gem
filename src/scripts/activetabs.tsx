@@ -13,11 +13,17 @@ class ActiveTabs extends React.Component {
     render() {
         let _this = this;
         let activeTabs = this.state.data;
+        // console.group("Rendering");
+        console.log("rendering",activeTabs.length,"items",activeTabs);
+        
         return (<ul className="tabs-list list-group">
                 {activeTabs.map(function(value) {
-                    return <Tab key={value.id} id={value.id} pinned={value.pinned} audible={value.audible} position={value.index} url={value.url} title={value.title} favIconUrl={value.favIconUrl} />
+                    // console.log("rendering li",value.title);
+                    return <Tab key={value.id} id={value.id} pinned={value.pinned} audible={value.audible} position={value.index} url={value.url} title={value.title} favIconUrl={value.favIconUrl} status={value.status}/>
                 })}
-            </ul>);
+
+            </ul>
+            );
   }
 }
 ActiveTabs.propTypes = {
@@ -35,7 +41,8 @@ class Tab extends React.Component{
         pinned: this.props.pinned,
         position: this.props.position,
         favicon: this.props.favIconUrl,
-        audible: this.props.audible
+        audible: this.props.audible,
+        status: this.props.status
         }; 
     }
     focusTab(id){
@@ -53,22 +60,29 @@ class Tab extends React.Component{
         this.setState({audible:!audible});
     }
     componentWillReceiveProps(){
-        console.log(this.props)
+        // console.log(this.props)
+    }
+    closeTab(id,title){
+        if(confirm(`Are you sure you want to close the following tab\n`+(title)))
+            {packageAndBroadcast(sender,"background","closeTab",id);}
     }
     render(){
-        console.log(this.props.id);
+        
+        
         let _this = this;
         return (
             <li key={_this.props.id} data-id={_this.props.id} className="list-group-item">
                 <span className = {`clickable glyphicon glyphicon-pushpin pinned`+(_this.state.pinned ? ` `: ` disabled`)} onClick={_this.pinTab.bind(_this,_this.props.id,_this.state.pinned)} aria-hidden='true'></span>
                 <span className = {`clickable glyphicon glyphicon-volume-off audible`+(_this.state.audible ? ` `: ` disabled`)} onClick={_this.muteTab.bind(_this,_this.props.id,_this.state.audible)} aria-hidden='true'></span>
                 <img src={_this.state.favicon}/>
-                <span className="clickable" title={_this.state.title} onClick={_this.focusTab.bind(null,_this.props.id)}>{_this.state.title}</span>
+                <strong className="clickable" title={_this.state.title} onClick={_this.focusTab.bind(null,_this.props.id)}>{_this.state.title}</strong>
+                <span>{_this.state.status}</span>
                 <div className="options pull-right">
-                    <span data-id={_this.props.id} data-command='remove' className='clickable remove-tab glyphicon glyphicon-remove' aria-hidden='true'></span>
+                    <span data-id={_this.props.id} onClick={_this.closeTab.bind(null,_this.props.id,_this.state.title)} data-command='remove' className='clickable remove-tab glyphicon glyphicon-remove' aria-hidden='true'></span>
                 </div>
            </li>
             )
+        
     }
 }
 

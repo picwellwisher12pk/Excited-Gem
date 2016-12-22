@@ -1,3 +1,19 @@
+function packageData(sender:string,receiver:string,targetMethod:String,data: any): Object{
+    let package :Object = {
+        sender: sender,
+        receiver: receiver,
+        targetMethod:targetMethod,
+        data: data
+    };
+     return package;
+}
+
+function packageAndBroadcast(sender:string = sender,receiver:string,targetMethod:String,data: any){
+        chrome.runtime.sendMessage(packageData(sender,receiver,targetMethod,data));
+}
+
+
+
 let windowHeight: number;
 let sidebar: any;
 let resultTable : any;
@@ -9,12 +25,15 @@ let ActiveTabs :[] ;
 let filterType :string;
 let filterType :boolean;
 
+
+
 function restore_options() {
     chrome.storage.sync.get("pref", function (items) {
         filterType = items.pref.filterType;
         filterCase = items.pref.filterCase;
     });
 }
+
 document.addEventListener('DOMContentLoaded', restore_options);
 
 
@@ -62,16 +81,7 @@ function manageQueryResultTable(results: any[]){
 
     });
 }
-////TABS
-function onRemove(e:any){
-		// let e = new Array(e);
-		e = e.target;
-		if(e != undefined) {
-	        let id = e.dataset.id;
-	        requestCloseTab(id);
-	        $(e).parents('.list-group-item').remove();
-	    }
-}
+
 function requestCloseTab(data) {
     let confirmation = window.confirm("Are you sure you want to close this tab");
     if (confirmation) packageAndBroadcast( sender ,'background','closeTab',data);
@@ -83,7 +93,15 @@ function hasClass(elem, className) {
 
 //////////////////////////////////////////////////////////////////
 $(document).ready(function(){
+    packageAndBroadcast( sender ,'background','sendTabsToContent',null);
 
+    chrome.runtime.onMessage.addListener((request: any, sender: Function) => {
+    console.log(request);
+    if(request.receiver == "content") {
+        eval(request.targetMethod)(request.data);
+    }
+    return true;
+});
      ActiveTabs = ReactDOM.render(<ActiveTabs />,
             document.getElementById('active-tabs-list-container'));
 
@@ -186,7 +204,7 @@ function data2DOM(el, data) {
 }
 function drawTabs(data){
     tabsList = data.tabsList;
-  console.info("Drawing Tabs");
+  // console.info("Drawing Tabs");
   ActiveTabs.setState({data: data.tabsList});
 
 }
