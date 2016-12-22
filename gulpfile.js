@@ -31,16 +31,17 @@ var config = {
   threshold: '1kb'
 };
 var src = {
-    url    : "src",
+    root    : "src",
     markup : "./src/*.html",
     scripts: "src/scripts/*.js",
+    json: "src/*.json",
     typescripts     : "src/scripts/*.tsx",
     styles : "src/styles/*.scss",
     images : "src/images/*",
     fonts  : "src/fonts/*"
 };
 var dest = {
-    url   : "build/",
+    root   : "build/",
     markup: "build/*.html",
     index : "build/onetab.html",
     scripts: "build/js/",
@@ -63,11 +64,10 @@ var banner = [
 
 gulp.task('html', function () {
     debugger;
-    console.log(src.markup,dest.url);
     return gulp.src(src.markup)
     .on('error',console.error.bind(console))
     .pipe(debug({title: 'HTML:'}))
-    .pipe(gulp.dest(dest.url))
+    .pipe(gulp.dest(dest.root))
     .pipe(notify({title: package.name+' Message',message: "HTML loaded"}))
     .pipe(browserSync.reload({stream:true}));
 });
@@ -123,6 +123,10 @@ gulp.task('js',function(){
     .pipe(gulp.dest(src.scripts))
     .pipe(browserSync.reload({stream:true}));
 });
+gulp.task('json',function(){
+    return gulp.src(src.json).pipe(gulp.dest(dest.root));
+
+});
 gulp.task('ts',function(){
     return gulp.src(src.typescripts)
     .pipe(debug({title: 'Typescript:'}))
@@ -138,8 +142,8 @@ gulp.task('start-browsersync', function() {
             res.setHeader('Accept', '*/*');            
             res.setHeader('Access-Control-Allow-Origin', '*');
             next();
-            },
-            index: "build/onetab.html"
+            }
+            , index: "build/onetab.html"
         },
         online:true
     });
@@ -153,6 +157,7 @@ gulp.task('watch',function(){
     gulp.watch(src.scripts, ['js']);
     gulp.watch(src.typescripts, ['ts']);
     gulp.watch(src.images, ['img']);
+    gulp.watch(src.json, ['json']);
     gulp.watch([
         dest.markup //error here
         ,dest.styles
@@ -160,5 +165,5 @@ gulp.task('watch',function(){
         ,dest.scripts
         ], ['bs-reload']);
 })
-gulp.task('default', ['watch','html','css','js','ts','start-browsersync']);
+gulp.task('default', ['watch','json','html','css','js','ts','start-browsersync']);
 
