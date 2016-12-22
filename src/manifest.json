@@ -7,6 +7,7 @@
    "content_scripts": [ {
       "js": [ "js/react/dist/react.js","js/react-dom/dist/react-dom.js","js/activetabs.js","js/jquery.min.js","js/content.js" ]
       , "matches": [ "http://localhost/*"]
+
    } ],
    "browser_action": {
       "default_icon": {
@@ -18,12 +19,14 @@
    "commands": {
       "display-onetab": {
          "description": "Display Excited Gem",
+
          "suggested_key": {
             "default": "Ctrl+Shift+E"
          }
       },
       "send-tabs-on-the-left-to-onetab": {
          "description": "Send tabs on the left to Excited Gem",
+
          "suggested_key": {
             "default": "Ctrl+Shift+Left"
          }
@@ -62,7 +65,6 @@
     "images/extension-icon48.png",
     "options.html",
     "manifest.json"
-
   ],
   "externally_connectable":{
     "matches": ["*://localhost/*","*://127.0.0.1/*"],
