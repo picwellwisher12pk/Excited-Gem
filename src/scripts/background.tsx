@@ -1,3 +1,27 @@
+function packageData(sender:string,receiver:string,targetMethod:String,data: any): Object{
+	let package :Object = {
+		sender: sender,
+		receiver: receiver,
+		targetMethod:targetMethod,
+		data: data
+	};
+ 	return package;
+}
+
+function packageAndBroadcast(sender:string = sender,receiver:string,targetMethod:String,data: any){
+		chrome.tabs.query({active: true, currentWindow: true}, function(tabs) {
+					// chrome.runtime.sendMessage());
+                    chrome.tabs.sendMessage(tabs[0].id, packageData(sender,receiver,targetMethod,data);
+        });
+		
+}
+chrome.runtime.onMessage.addListener((request: any, sender: Function) => {
+	console.log(request,sender);
+	if(request.receiver == "background" && request.targetMethod == "none") {
+		 eval(request.targetMethod)(request.data);
+	});	
+});
+
 let _oneTabPageOpened: String = null; //Null or Id of OneTab Main Page
 let onetabURL: String  = chrome.extension.getURL("onetab.html");
 let allTabs: Array<Object>;//All tabs including Ignored Group
@@ -30,27 +54,19 @@ function focusTab(tabId: any):void{
 	chrome.tabs.update(tabId, {selected: true});
 }
 function pinTab(tabId: any):void{
-	log("pinTab: (Raw data received):",tabId);
 	tabId =  parseInt(tabId);
-	log("pinTab: (Data after conversion):",tabId);
 	chrome.tabs.update(tabId, {pinned: true});
 }
 function unpinTab(tabId: any):void{
-	log("unpinTab: (Raw data received):",tabId);
 	tabId =  parseInt(tabId);
-	log("unpinTab: (Data after conversion):",tabId);
 	chrome.tabs.update(tabId, {pinned: false});
 }
 function muteTab(tabId: any):void{
-	log("muteTab: (Raw data received):",tabId);
 	tabId =  parseInt(tabId);
-	log("muteTab: (Data after conversion):",tabId);
 	chrome.tabs.update(tabId, {muted: true});
 }
 function unmuteTab(tabId: any):void{
-	log("unmuteTab: (Raw data received):",tabId);
 	tabId =  parseInt(tabId);
-	log("unmuteTab: (Data after conversion):",tabId);
 	chrome.tabs.update(tabId, {muted: false});
 }
 function muteAll(data: Number[]){
@@ -123,10 +139,26 @@ function getAllTabs(windowId?: Number = chrome.windows.WINDOW_ID_CURRENT,returnT
     	// windowId: windowId
     },
     	(tabs: Object[])=> {
-    		allTabs = tabs;
-    		refinedTabs = santizeTabs(tabs,ignoredUrlPatterns);
+    		let stillLoading: bolean;
+    		stillLoading = false;
+    		for (let tab of tabs) {
+			  if(tab.status == 'loading'){
+			  	stillLoading = true;
+			  	break;
+			  }
+			}
+			if(stillLoading) {
+				setTimeout(function(){
+					getAllTabs(windowId, returnType);
+				},1000);
+			}
+			else{
+				allTabs = tabs;
+    			refinedTabs = santizeTabs(tabs,ignoredUrlPatterns);
+			}
+    		
     });
-    console.log("getAllTabs Return:", allTabs,refinedTabs);
+    // console.log("getAllTabs Return:", allTabs,refinedTabs);
    	if(returnType == "all") {return allTabs;} else {return refinedTabs;}
 }
 /**
@@ -146,14 +178,9 @@ function santizeTabs(tabs: Object[] , ignoredUrlPatterns: String[]):Object[]{
 	});
 	return refinedTabs;
 }
-function reSendTabsToContent () {
-	getAllTabs();
-	// sendToContent();
-	sendTabsToContent();
-}
-function sendTabsToContent (data = allTabs):void {
-	getAllTabs();
-	sendToContent("tabsList",data);
+
+function sendTabsToContent ():void {
+	sendToContent("tabsList",getAllTabs());
 }
 /**
  * [listAllTabs description]
@@ -165,7 +192,7 @@ function sendToContent (datavariable: String, data:Object[]):void {
 	packageAndBroadcast(sender,"content","drawTabs",obj);
 }
 chrome.runtime.onInstalled.addListener(()=>console.log("onInstalled")));
-chrome.tabs.onCreated.addListener(()=>console.log("onCreated"));
+// chrome.tabs.onCreated.addListener(()=>console.log("onCreated"));
 chrome.tabs.onRemoved.addListener(()=>console.log("onRemoved"));
 chrome.tabs.onDetached.addListener(()=>console.log("onDetached"));
 chrome.tabs.onAttached.addListener(()=>console.log("onAttached"));
@@ -175,15 +202,19 @@ chrome.tabs.onUpdated.addListener(()=>console.log("onUpdated"));
  */
 function onUpdate (functions: Function) {
 	chrome.runtime.onInstalled.addListener(functions)
-	chrome.tabs.onCreated.addListener(functions);
+	// chrome.tabs.onCreated.addListener(functions);
 	chrome.tabs.onRemoved.addListener(functions);
 	chrome.tabs.onDetached.addListener(functions);
 	chrome.tabs.onAttached.addListener(functions);
 	chrome.tabs.onUpdated.addListener(functions);
 }
+// onUpdate(()=>{
+// 	if(_oneTabPageOpened)
+// 		chrome.tabs.reload(_oneTabPageOpened);
+// })
 onUpdate(setTabCountInBadge);
 onUpdate(getAllTabs);
-onUpdate(reSendTabsToContent);
+onUpdate(sendTabsToContent);
 chrome.runtime.onInstalled.addListener(()=>{
 	getAllTabs();
 	sendTabsToContent();
@@ -220,22 +251,31 @@ function runQuery(query){
  */
 chrome.contextMenus.create({
     "title": "Refresh Main Page",
-    "onclick" : reSendTabsToContent ,
-  });
-chrome.contextMenus.create({
-    "title": "Send Current tab to list",
-    "onclick" : tabToList ,
-  });
+    "onclick" : sendTabsToContent
+});
+// chrome.contextMenus.create({
+//     "title": "Send Current tab to list",
+//     "onclick" : tabToList ,
+//   });
 // chrome.contextMenus.create({
 //     "title": "Refresh Main Page including Ignored",
 //     "onclick" : sendToContent(true),
 //   });
 chrome.contextMenus.create({
     "title": "Show Excited Gem Page",
-    "onclick" : openOneTabPage,
+    "onclick" : openOneTabPage
   });
-chrome.contextMenus.create({
-    "title": "Run Query",
-    "onclick" : runQuery,
-  });
+// chrome.contextMenus.create({
+//     "title": "Run Query",
+//     "onclick" : runQuery,
+//   });
 
+
+chrome.tabs.onUpdated.addListener((tabId: Number , info: Object)=> {
+    if (info.status == "complete") {
+    	log(tabId.title,"complete");
+    	// updateTabs()
+    	sendTabsToContent();
+
+    }
+});//onCreated
