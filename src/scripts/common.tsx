@@ -1,3 +1,8 @@
+function isFunction(functionToCheck) {
+ var getType = {};
+ return functionToCheck && getType.toString.call(functionToCheck) === '[object Function]';
+}
+
 function packageData(sender:string,receiver:string,targetMethod:String,data: any): Object{
 	let package :Object = {
 		sender: sender,
@@ -9,11 +14,5 @@ function packageData(sender:string,receiver:string,targetMethod:String,data: any
 }
 
 function packageAndBroadcast(sender:string = sender,receiver:string,targetMethod:String,data: any){
-	chrome.runtime.sendMessage(packageData(sender,receiver,targetMethod,data));
-	console.log("commonjs","Sending data:",data,"Sender:",sender,"targetMethod:",targetMethod);
+		chrome.runtime.sendMessage(packageData(sender,receiver,targetMethod,data));
 }
-
-chrome.runtime.onMessage.addListener((request: any, sender: Function) => {
-	console.log("commonjs","request coming:",request,"Sender:",sender)
-	eval(request.targetMethod)(request.data);
-});

@@ -15,16 +15,41 @@ function packageAndBroadcast(sender:string = sender,receiver:string,targetMethod
         });
 		
 }
+// let portName ;
+// chrome.runtime.onConnect.addListener(function(port){
+//         console.assert(port.name == "ActiveTabsConnection");
+//         if (port.name == "ActiveTabsConnection") {
+//             port.postMessage({tabs : getAllTabs});
+//         }
+//     });
+function streamTabs(port){
+	if(port == undefined) return;
+	port.postMessage({tabs : getAllTabs()});
+	console.log(getAllTabs(),port);
+}
+let ActiveTabsConnection;
+function documentready(){
+	chrome.tabs.query({currentWindow: true, active: true}, function(tabArray) {
+	    let TabId = tabArray[0].id;
+	    let port = chrome.tabs.connect(TabId, {name: "ActiveTabsConnection"});
+	    ActiveTabsConnection = port;
+	    console.log("documentready",tabArray[0],port);
+	    streamTabs(port);
+	    
+	});
+
+}
+
 chrome.runtime.onMessage.addListener((request: any, sender: Function) => {
 	console.log(request,sender);
-	if(request.receiver == "background" && request.targetMethod == "none") {
+	if(request.receiver == "background") {
 		 eval(request.targetMethod)(request.data);
 	});	
 });
 
 let _oneTabPageOpened: String = null; //Null or Id of OneTab Main Page
 let onetabURL: String  = chrome.extension.getURL("onetab.html");
-let allTabs: Array<Object>;//All tabs including Ignored Group
+let allTabs: Array<Object>; //All tabs including Ignored Group
 let refinedTabs: Array<Object>;//Not including the Ignored Group
 let ignoredUrlPatterns: Array<string> = [
 "chrome://*",
@@ -109,7 +134,9 @@ function openOneTabPage ():void {
         	});//Create Tab
 	}
 	else {
-		chrome.tabs.update(_oneTabPageOpened, {selected: true},sendTabsToContent);//If OneTab Page is opened ,brings focus to it.
+		chrome.tabs.update(_oneTabPageOpened, {selected: true},function(){
+			streamTabs(ActiveTabsConnection);
+		});//If OneTab Page is opened ,brings focus to it.
 	}
 }
 /**
@@ -212,12 +239,12 @@ function onUpdate (functions: Function) {
 // 	if(_oneTabPageOpened)
 // 		chrome.tabs.reload(_oneTabPageOpened);
 // })
+onUpdate(function(){
+	streamTabs(ActiveTabsConnection);
+})
 onUpdate(setTabCountInBadge);
-onUpdate(getAllTabs);
-onUpdate(sendTabsToContent);
 chrome.runtime.onInstalled.addListener(()=>{
-	getAllTabs();
-	sendTabsToContent();
+	streamTabs(ActiveTabsConnection);
 })
 /**
  * On clicking extension button
@@ -251,7 +278,7 @@ function runQuery(query){
  */
 chrome.contextMenus.create({
     "title": "Refresh Main Page",
-    "onclick" : sendTabsToContent
+    "onclick" : function(){streamTabs(ActiveTabsConnection);}
 });
 // chrome.contextMenus.create({
 //     "title": "Send Current tab to list",
@@ -270,12 +297,11 @@ chrome.contextMenus.create({
 //     "onclick" : runQuery,
 //   });
 
-
 chrome.tabs.onUpdated.addListener((tabId: Number , info: Object)=> {
     if (info.status == "complete") {
     	log(tabId.title,"complete");
-    	// updateTabs()
-    	sendTabsToContent();
+    	streamTabs(ActiveTabsConnection);
+    	// sendTabsToContent();
 
     }
 });//onCreated

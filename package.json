@@ -33,8 +33,13 @@
     "typescript": "^2.0.9"
   },
   "devDependencies": {
+    "del": "^2.2.2",
+    "gulp": "^3.9.1",
+    "gulp-cleanhtml": "^1.0.1",
+    "gulp-crx-pack": "^1.0.1",
     "gulp-jshint": "^2.0.4",
+    "gulp-strip-debug": "^1.1.0",
+    "gulp-zip": "^3.2.0",
     "jshint": "^2.9.4"
   }
-
 }
