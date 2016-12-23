@@ -11,9 +11,16 @@ function packageData(sender:string,receiver:string,targetMethod:String,data: any
 function packageAndBroadcast(sender:string = sender,receiver:string,targetMethod:String,data: any){
         chrome.runtime.sendMessage(packageData(sender,receiver,targetMethod,data));
 }
-
-
-
+chrome.runtime.onConnect.addListener(function(port){
+        
+        console.assert(port.name == "ActiveTabsConnection");
+        if (port.name == "ActiveTabsConnection") {
+            port.onMessage.addListener(function(msg) {
+                console.log("msg",msg);
+                 ActiveTabs.setState({data: msg.tabs});
+            });
+        }
+    });
 let windowHeight: number;
 let sidebar: any;
 let resultTable : any;
@@ -93,7 +100,10 @@ function hasClass(elem, className) {
 
 //////////////////////////////////////////////////////////////////
 $(document).ready(function(){
-    packageAndBroadcast( sender ,'background','sendTabsToContent',null);
+    // packageAndBroadcast( sender ,'background','sendTabsToContent',null);
+    packageAndBroadcast(sender,'background','documentready',null);
+    // chrome.runtime.connect({name: "ActiveTabsConnection"});
+
 
     chrome.runtime.onMessage.addListener((request: any, sender: Function) => {
     console.log(request);
@@ -202,6 +212,7 @@ function data2DOM(el, data) {
         }
     }
 }
+
 function drawTabs(data){
     tabsList = data.tabsList;
   // console.info("Drawing Tabs");
