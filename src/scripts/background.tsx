@@ -231,7 +231,7 @@ function onUpdate (functions: Function) {
 	chrome.runtime.onInstalled.addListener(functions)
 	// chrome.tabs.onCreated.addListener(functions);
 	chrome.tabs.onRemoved.addListener(functions);
-	chrome.tabs.onDetached.addListener(functions);
+	// chrome.tabs.onDetached.addListener(functions);
 	chrome.tabs.onAttached.addListener(functions);
 	chrome.tabs.onUpdated.addListener(functions);
 }
@@ -239,6 +239,30 @@ function onUpdate (functions: Function) {
 // 	if(_oneTabPageOpened)
 // 		chrome.tabs.reload(_oneTabPageOpened);
 // })
+chrome.tabs.onMoved.addListener(function(tabId, removeInfo){
+	chrome.windows.getCurrent({populate:true}, function(window){
+		log(window);
+		ActiveTabsConnection.postMessage({tabs : window.tabs});
+	});
+});
+chrome.tabs.onUpdated.addListener(function(tabId, removeInfo){
+	chrome.windows.getCurrent({populate:true}, function(window){
+		log(window);
+		ActiveTabsConnection.postMessage({tabs : window.tabs});
+	});
+});
+chrome.tabs.onDetached.addListener(function(tabId, removeInfo){
+	chrome.windows.getCurrent({populate:true}, function(window){
+		log(window);
+		ActiveTabsConnection.postMessage({tabs : window.tabs});
+	});
+});
+chrome.tabs.onAttached.addListener(function(tabId, removeInfo){
+	chrome.windows.getCurrent({populate:true}, function(window){
+		log(window);
+		ActiveTabsConnection.postMessage({tabs : window.tabs});
+	});
+});
 onUpdate(function(){
 	streamTabs(ActiveTabsConnection);
 })
