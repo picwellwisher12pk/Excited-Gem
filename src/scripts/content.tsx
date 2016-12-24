@@ -17,7 +17,10 @@ chrome.runtime.onConnect.addListener(function(port){
         if (port.name == "ActiveTabsConnection") {
             port.onMessage.addListener(function(msg) {
                 console.log("msg",msg);
-                 ActiveTabs.setState({data: msg.tabs});
+                if(!jQuery.isEmptyObject(msg))
+                 {
+                     ActiveTabs.setState({data: msg.tabs});
+                 }
             });
         }
     });

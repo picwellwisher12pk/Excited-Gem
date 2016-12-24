@@ -76,7 +76,7 @@ class Tab extends React.Component{
                 <span className = {`clickable glyphicon glyphicon-volume-off audible`+(_this.state.audible ? ` `: ` disabled`)} onClick={_this.muteTab.bind(_this,_this.props.id,_this.state.audible)} aria-hidden='true'></span>
                 <img src={_this.state.favicon}/>
                 <strong className="clickable" title={_this.state.title} onClick={_this.focusTab.bind(null,_this.props.id)}>{_this.state.title}</strong>
-                <span>{_this.state.status}</span>
+                <span>{_this.state.url}</span>
                 <div className="options pull-right">
                     <span data-id={_this.props.id} onClick={_this.closeTab.bind(null,_this.props.id,_this.state.title)} data-command='remove' className='clickable remove-tab glyphicon glyphicon-remove' aria-hidden='true'></span>
                 </div>
