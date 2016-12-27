@@ -117,6 +117,8 @@ $(document).ready(function(){
 });
      ActiveTabs = ReactDOM.render(<ActiveTabs />,
             document.getElementById('active-tabs-list-container'));
+     InfoModal = ReactDOM.render(<InfoModal />,
+            document.getElementById('infoModal'));
 
     windowHeight = window.innerHeight || document.documentElement.clientHeight || document.body.clientHeight;
 	
