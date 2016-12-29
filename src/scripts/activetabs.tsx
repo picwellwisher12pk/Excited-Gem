@@ -82,7 +82,7 @@ class Tab extends React.Component{
         
         let _this = this;
         return (
-            <li key={_this.props.id} data-id={_this.props.id} className="list-group-item">
+            <li key={_this.props.id} data-id={_this.props.id} className="list-group-item horizontal-block">
                 <span className = {`clickable glyphicon glyphicon-pushpin pinned`+(_this.state.pinned ? ` `: ` disabled`)} onClick={_this.pinTab.bind(_this,_this.props.id,_this.state.pinned)} aria-hidden='true'></span>
                 <span className = {`clickable glyphicon glyphicon-volume-off audible`+(_this.state.audible ? ` `: ` disabled`)} onClick={_this.muteTab.bind(_this,_this.props.id,_this.state.audible)} aria-hidden='true'></span>
                 <img src={_this.state.favicon}/>

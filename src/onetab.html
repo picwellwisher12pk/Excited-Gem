@@ -21,6 +21,7 @@
     color: #444;
 }
 </style>
+
 <body class="eg">
     <nav class="navbar navbar-default navbar-fixed-top">
         <div class="container-fluid">
@@ -102,10 +103,11 @@
             <div role="tabpanel" class="tab-pane active" id="active-tabs">
                 <div class="row">
                     <div class="col-xs-12">
+                        
                     </div>
                 </div>
                 <div class="tabs-list-container header">
-                    <div class="list-group-item">
+                    <div class="horizontal-block search">
                         <div class="row">
                             <div class="col-sm-1">
                                 <span class="clickable glyphicon glyphicon-pushpin pinned " aria-hidden="true"></span>
@@ -121,13 +123,20 @@
                                         <input type="checkbox" aria-label="..."> Case Sensitive
                                     </span>
                                 </div>
-                            </div>                        
+                            </div>
                             <div class="col-sm-1">
                                 <div class="options pull-right">
-                                   <span data-command="remove" class="clickable remove-tab glyphicon glyphicon-remove" aria-hidden="true"></span>
-                               </div>
+                                    <span data-command="remove" class="clickable remove-tab glyphicon glyphicon-remove" aria-hidden="true"></span>
+                                </div>
                             </div>
                         </div>
+                    </div>
+                    <div class="horizontal-block context-actions">
+                        <ul class="nav nav-pills">
+                           
+                            <li role="presentation"><a href="#" id="rearrange-btn">Rearrange</a></li>
+                            
+                        </ul>
                     </div>
                 </div>
                 <div class="tabs-list-container" id="active-tabs-list-container">
@@ -140,10 +149,8 @@
     </div>
     <div id="react-container"></div>
     <!-- Small modal -->
-
-<div class="modal bs-example-modal-sm" tabindex="-1" role="dialog" aria-labelledby="mySmallModalLabel" id="infoModal">
-  
-</div>
+    <div class="modal bs-example-modal-sm" tabindex="-1" role="dialog" aria-labelledby="mySmallModalLabel" id="infoModal">
+    </div>
 </body>
 
 </html>

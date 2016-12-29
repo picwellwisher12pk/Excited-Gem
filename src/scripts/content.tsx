@@ -11,6 +11,15 @@ function packageData(sender:string,receiver:string,targetMethod:String,data: any
 function packageAndBroadcast(sender:string = sender,receiver:string,targetMethod:String,data: any){
         chrome.runtime.sendMessage(packageData(sender,receiver,targetMethod,data));
 }
+let windowHeight: number;
+let sidebar: any;
+let resultTable : any;
+let results: any;
+let sender: string = 'content';
+let tabsList;
+let ActiveTabs :[] ;
+let filterType :boolean;
+
 chrome.runtime.onConnect.addListener(function(port){
         
         console.assert(port.name == "ActiveTabsConnection");
@@ -19,21 +28,12 @@ chrome.runtime.onConnect.addListener(function(port){
                 console.log("msg",msg);
                 if(!jQuery.isEmptyObject(msg))
                  {
+                     tabsList = msg.tabs;
                      ActiveTabs.setState({data: msg.tabs});
                  }
             });
         }
     });
-let windowHeight: number;
-let sidebar: any;
-let resultTable : any;
-let results: any;
-let sender: string = 'content';
-let $grid: any;
-let tabsList;
-let ActiveTabs :[] ;
-let filterType :string;
-let filterType :boolean;
 
 
 
@@ -99,10 +99,26 @@ function requestCloseTab(data) {
 function hasClass(elem, className) {
     return elem.className.split(' ').indexOf(className) > -1;
 }
-
+function compare(a,b) {
+  if (a.url < b.url)
+    return -1;
+  if (a.url > b.url)
+    return 1;
+  return 0;
+}
 
 //////////////////////////////////////////////////////////////////
 $(document).ready(function(){
+    $("#rearrange-btn").on('click',function(){
+        tabsList.sort(compare);
+        // ActiveTabs.setState({data: tabsList});
+        for(let i=0;i<tabsList.length;i++)
+        {
+             data = { 'position': i, "tabId": tabsList[i].id }
+            packageAndBroadcast(sender,'background','moveTab',data);
+        }
+        
+    });
     // packageAndBroadcast( sender ,'background','sendTabsToContent',null);
     packageAndBroadcast(sender,'background','documentready',null);
     // chrome.runtime.connect({name: "ActiveTabsConnection"});

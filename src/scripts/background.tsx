@@ -99,6 +99,12 @@ function muteAll(data: Number[]){
 		chrome.tabs.update(tabId, {muted: true});
 	}
 }
+function moveTab(data){
+	tabId =  parseInt(data.tabId);
+	position =  parseInt(data.position);
+	chrome.tabs.move(tabId, {index: position});
+	
+}
 // function highlightTab(tabId: any):void{
 // 	tabId =  parseInt(tabId);
 // 	chrome.tabs.update(tabId, {active: true});
