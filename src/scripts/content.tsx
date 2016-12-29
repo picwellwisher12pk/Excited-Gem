@@ -1,3 +1,14 @@
+let windowHeight: number;
+let sidebar: any;
+let resultTable : any;
+let results: any;
+let sender: string = 'content';
+let tabsList;
+let ActiveTabs :[] ;
+let pref = {
+    filterType : '',
+    filterCase : false
+}
 function packageData(sender:string,receiver:string,targetMethod:String,data: any): Object{
     let package :Object = {
         sender: sender,
@@ -11,6 +22,7 @@ function packageData(sender:string,receiver:string,targetMethod:String,data: any
 function packageAndBroadcast(sender:string = sender,receiver:string,targetMethod:String,data: any){
         chrome.runtime.sendMessage(packageData(sender,receiver,targetMethod,data));
 }
+
 chrome.runtime.onConnect.addListener(function(port){
         
         console.assert(port.name == "ActiveTabsConnection");
@@ -19,34 +31,32 @@ chrome.runtime.onConnect.addListener(function(port){
                 console.log("msg",msg);
                 if(!jQuery.isEmptyObject(msg))
                  {
+                     tabsList = msg.tabs;
                      ActiveTabs.setState({data: msg.tabs});
                  }
             });
         }
     });
-let windowHeight: number;
-let sidebar: any;
-let resultTable : any;
-let results: any;
-let sender: string = 'content';
-let $grid: any;
-let tabsList;
-let ActiveTabs :[] ;
-let filterType :string;
-let filterType :boolean;
+
+
 
 
 
 function restore_options() {
     chrome.storage.sync.get("pref", function (items) {
-        filterType = items.pref.filterType;
-        filterCase = items.pref.filterCase;
+        pref.filterType = items.pref.filterType;
+        pref.filterCase = items.pref.filterCase;
+        $(".option-case-sensitive input").prop("checked":pref.filterCase);
+        
+        if(pref.filterType =="regex"){
+            $(".option-regex input").prop("checked":true);
+        }
+        else{
+            $(".option-regex input").prop("checked":false);
+        }
     });
 }
-
-document.addEventListener('DOMContentLoaded', restore_options);
-
-
+// document.addEventListener('DOMContentLoaded', );
 ///QUERY
 function query(queryString: string = 'table#searchResult tbody td'){
     console.log($(queryString));
@@ -99,10 +109,47 @@ function requestCloseTab(data) {
 function hasClass(elem, className) {
     return elem.className.split(' ').indexOf(className) > -1;
 }
-
+function compare(a,b) {
+  if (a.url < b.url)
+    return -1;
+  if (a.url > b.url)
+    return 1;
+  return 0;
+}
 
 //////////////////////////////////////////////////////////////////
 $(document).ready(function(){
+    $( ".sortable" ).sortable();
+    $( ".sortable" ).disableSelection();
+    restore_options();
+    $('#filter-type-option-id').on('change',function(){
+        if($(this).prop('checked')){
+            pref.filterType = "regex";
+        }else{
+            pref.filterType = "normal";            
+        }
+       
+         chrome.storage.sync.set({pref: pref}, function (){
+             console.log('saving');
+         })
+    });
+    $('#filterCase-option-id').on('change',function(){
+        pref.filterCase = $(this).prop('checked');
+       
+        chrome.storage.sync.set({pref: pref}, function (){
+             console.log('saving');
+         })
+    });
+    $("#rearrange-btn").on('click',function(){
+        tabsList.sort(compare);
+        // ActiveTabs.setState({data: tabsList});
+        for(let i=0;i<tabsList.length;i++)
+        {
+             data = { 'position': i, "tabId": tabsList[i].id }
+            packageAndBroadcast(sender,'background','moveTab',data);
+        }
+        
+    });
     // packageAndBroadcast( sender ,'background','sendTabsToContent',null);
     packageAndBroadcast(sender,'background','documentready',null);
     // chrome.runtime.connect({name: "ActiveTabsConnection"});
@@ -127,8 +174,8 @@ $(document).ready(function(){
     $('#quicksearch-input').on('keyup',(e)=>{
         tempList = tabsList.filter((tab)=>
         {
-            if(filterType === "regex"){
-                let regex = new RegExp(e.target.value,filterCase?"i":"");
+            if(pref.filterType === "regex"){
+                let regex = new RegExp(e.target.value,pref.filterCase?"i":"");
                 return regex.test(tab.title);
             }
             else{

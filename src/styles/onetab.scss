@@ -9,22 +9,43 @@ body {
     cursor:pointer;
 }
 
-.tabs-list-container.header .list-group-item {
-    border: none;
-    background: yellowgreen;
-    border-radius: 0;
-    /* box-shadow: 0 0 3px 0 #000; */
-    color: white;
+.eg .tabs-list-container.header .horizontal-block{
+    &.search{
+        border: none;
+        background: yellowgreen;
+        border-radius: 0;
+        padding: 10px 15px;
+        color: white;
+        span.clickable{
+            height: 34px;
+            padding: 6px 5px;
+            font-size: 14px;
+            line-height: 1.428571429;
+        }
+    }
+
+    &.context-actions{
+      background-color: #bcf34d;
+      li a{
+        color:#638e0c;
+        // padding: 0;
+        &:hover{
+            color:#000;
+            background-color: transparent;
+        }
+      }
+    }
 }
-.eg .list-group-item:first-child {
+.eg .horizontal-block:first-child {
     border-top-right-radius: 0;
     border-top-left-radius: 0;
 }
 .eg .quicksearch-input.form-control{
     transition:all 0.3s;
-    width: 80%;
+    width: 95%;
     display: inline-block;
     border: none;
+    border-radius: 4px !important;
     box-shadow: 0 0 2px 0 rgba(0,0,0,0.1);
 }
 .eg .quicksearch-input.form-control:hover,
@@ -32,26 +53,29 @@ body {
 {
     box-shadow: 0 2px 8px 0 rgba(0,0,0,0.3);
 }
-.list-group-item{
+.horizontal-block{
     transition: all 0.4s;
 }
-.list-group-item:hover{
+.list-group-item.horizontal-block:hover{
     background-color: #eee;
+    -webkit-box-shadow: inset 0px 2px 5px 0px rgba(0,0,0,0.2);
+-moz-box-shadow: inset 0px 2px 5px 0px rgba(0,0,0,0.2);
+box-shadow: inset 0px 2px 5px 0px rgba(0,0,0,0.2);
     /*cursor: pointer;*/
 }
-.list-group-item>img{
+.horizontal-block>img{
     width: 16px;
     height: 16px;
     margin: 0 5px;
 }
-.list-group-item>span{
+.horizontal-block>span{
     padding-left: 15px;
 }
-.list-group-item .glyphicon{
+.horizontal-block .glyphicon{
     padding-left: 5px;
     padding-right: 5px;
 }
-.list-group-item .glyphicon.disabled{
+.horizontal-block .glyphicon.disabled{
     color:#aaa;
 }
 input[type=text] {

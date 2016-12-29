@@ -5,9 +5,9 @@
       "scripts": [ "js/jquery.min.js","js/background.js" ]
    },
    "content_scripts": [ {
-      "js": [ "js/react/dist/react.js","js/react-dom/dist/react-dom.js","js/activetabs.js","js/jquery.min.js","js/bootstrap.js","js/content.js" ]
-      , "matches": [ "http://localhost/*"]
 
+      "js": [ "js/react/dist/react.js","js/react-dom/dist/react-dom.js","js/activetabs.js","js/jquery.min.js","js/jquery-ui.js","js/bootstrap.js","js/content.js" ]
+      , "matches": [ "http://localhost/*"]
    } ],
    "browser_action": {
       "default_icon": {
@@ -15,18 +15,17 @@
          "38": "images/icon38.png"
       },
       "default_title":"Excited Gem"
+
    },
    "commands": {
       "display-onetab": {
          "description": "Display Excited Gem",
-
          "suggested_key": {
             "default": "Ctrl+Shift+E"
          }
       },
       "send-tabs-on-the-left-to-onetab": {
          "description": "Send tabs on the left to Excited Gem",
-
          "suggested_key": {
             "default": "Ctrl+Shift+Left"
          }
@@ -54,10 +53,12 @@
       "16": "images/extension-icon16.png",
       "48": "images/extension-icon48.png"
    },
+
+
    "manifest_version": 2,
   "options_ui": {
     "page": "options.html",
-    "chrome_style": true,
+    // "chrome_style": true,
     "open_in_tab": true
    },
    "version": "0.7",

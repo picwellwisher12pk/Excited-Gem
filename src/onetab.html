@@ -13,6 +13,7 @@
     <script src="js/bootstrap.js"></script>
     <script src="js/activetabs.js"></script>
     <script src="js/content.js"></script>
+    <script src="js/jquery-ui.js"></script>
     <!-- <script src="js/common.js"></script> -->
 </head>
 <style>
@@ -105,7 +106,7 @@
                     </div>
                 </div>
                 <div class="tabs-list-container header">
-                    <div class="list-group-item">
+                    <div class="horizontal-block search">
                         <div class="row">
                             <div class="col-sm-1">
                                 <span class="clickable glyphicon glyphicon-pushpin pinned " aria-hidden="true"></span>
@@ -114,20 +115,34 @@
                             <div class="col-sm-10">
                                 <div class="input-group">
                                     <input id="quicksearch-input" type="text" class="quicksearch-input form-control regex" placeholder="Filter Tabs" aria-label="...">
-                                    <span class="input-group-addon">
-                                        <input type="checkbox" aria-label="..."> Regex
+
+                                   <!--  <div class="btn-group" data-toggle="buttons">
+                                        <label class="btn btn-primary">
+                                            <input type="checkbox" autocomplete="off"> Cas Sensitive
+                                        </label>
+                                        <label class="btn btn-primary">
+                                            <input type="checkbox" autocomplete="off"> Regex
+                                        </label>
+                                    </div> -->
+                                    <span class="input-group-addon option-regex">
+                                        <input type="checkbox" aria-label="..." id='filter-type-option-id'> Regex
                                     </span>
-                                    <span class="input-group-addon">
-                                        <input type="checkbox" aria-label="..."> Case Sensitive
+                                    <span class="input-group-addon option-case-sensitive">
+                                        <input type="checkbox" aria-label="..." id='filterCase-option-id'> Case Sensitive
                                     </span>
                                 </div>
-                            </div>                        
+                            </div>
                             <div class="col-sm-1">
                                 <div class="options pull-right">
-                                   <span data-command="remove" class="clickable remove-tab glyphicon glyphicon-remove" aria-hidden="true"></span>
-                               </div>
+                                    <span data-command="remove" class="clickable remove-tab glyphicon glyphicon-remove" aria-hidden="true"></span>
+                                </div>
                             </div>
                         </div>
+                    </div>
+                    <div class="horizontal-block context-actions">
+                        <ul class="nav nav-pills">
+                            <li role="presentation"><a href="#" id="rearrange-btn">Rearrange</a></li>
+                        </ul>
                     </div>
                 </div>
                 <div class="tabs-list-container" id="active-tabs-list-container">
@@ -141,9 +156,8 @@
     <div id="react-container"></div>
     <!-- Small modal -->
 
-<div class="modal bs-example-modal-sm" tabindex="-1" role="dialog" aria-labelledby="mySmallModalLabel" id="infoModal">
-  
-</div>
+    <div class="modal bs-example-modal-sm" tabindex="-1" role="dialog" aria-labelledby="mySmallModalLabel" id="infoModal">
+    </div>
 </body>
 
 </html>
