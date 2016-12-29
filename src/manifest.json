@@ -5,7 +5,7 @@
       "scripts": [ "js/jquery.min.js","js/background.js" ]
    },
    "content_scripts": [ {
-      "js": [ "js/react/dist/react.js","js/react-dom/dist/react-dom.js","js/activetabs.js","js/jquery.min.js","js/bootstrap.js","js/content.js" ]
+      "js": [ "js/react/dist/react.js","js/react-dom/dist/react-dom.js","js/activetabs.js","js/jquery.min.js","js/jquery-ui.js","js/bootstrap.js","js/content.js" ]
       , "matches": [ "http://localhost/*"]
    } ],
    "browser_action": {
@@ -60,7 +60,7 @@
    "manifest_version": 2,
   "options_ui": {
     "page": "options.html",
-    "chrome_style": true,
+    // "chrome_style": true,
     "open_in_tab": true
    },
    "version": "0.7",

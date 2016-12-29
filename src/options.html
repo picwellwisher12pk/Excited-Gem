@@ -5,32 +5,61 @@
   <style>
     body: { padding: 10px; }
   </style>
-<!--     <link rel="stylesheet" href="css/bootstrap.css">
+    <link rel="stylesheet" href="css/bootstrap.css">
     <link rel="stylesheet" href="css/font-awesome.css">
     <link href="css/onetab.css" rel="stylesheet" type="text/css" />
     <script src="js/jquery.min.js"></script>
-    <script src="js/react/dist/react.js"></script>
-    <script src="js/react-dom/dist/react-dom.js"></script>
-    <script src="js/common.js"></script>
-    <script src="js/main.js"></script>
-    <script src="js/activetabs.js"></script>
-    <script src="js/content.js"></script>
-    <script src="js/bootstrap.js"></script> -->
+    <!-- <script src="js/react/dist/react.js"></script> -->
+    <!-- <script src="js/react-dom/dist/react-dom.js"></script> -->
+    <!-- <script src="js/common.js"></script> -->
+    <!-- <script src="js/main.js"></script> -->
+    <!-- <script src="js/activetabs.js"></script> -->
+    <!-- <script src="js/content.js"></script> -->
+    <script src="js/bootstrap.js"></script>
+
 </head>
 
-<body>
+<body class="eg">
+<div class="alert alert-success" role="alert" id="status" style="display: none;">
+  <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+  <span></span>
+</div>
 <div class="panel panel-default">
   <div class="panel-heading">
-    <h3 class="panel-title">Panel title</h3>
+    <h3 class="panel-title">Search/Filter</h3>
   </div>
-  Filter Type:
+
   <div class="panel-body">
-     <select id="filter-type-option-id" class="form-control">
+
+    <form>
+  <div class="form-group">
+    <label for="filter-type-option-id">Filter Type:</label>
+    <select id="filter-type-option-id" class="form-control">
    <option value="normal">Normal</option>
    <option value="regex">Regular Expression</option>
   </select>
-  <br>
-  <label for="case"><input type="checkbox" name="case" id="filterCase-option-id">Case Insensitive?</label>
+  </div>
+ <!--  <div class="form-group">
+    <label for="exampleInputPassword1">Password</label>
+    <input type="password" class="form-control" id="exampleInputPassword1" placeholder="Password">
+  </div>
+  <div class="form-group">
+    <label for="exampleInputFile">File input</label>
+    <input type="file" id="exampleInputFile">
+    <p class="help-block">Example block-level help text here.</p>
+  </div> -->
+  <div class="checkbox">
+    <label>
+      <input type="checkbox" id="filterCase-option-id"> Case Insensitive?
+    </label>
+  </div>
+  <button type="button" class="btn btn-default" id="save">Save</button>
+  
+</form>
+    
+     
+
+  <!-- <label for="case"><input type="checkbox" name="case" id="filterCase-option-id"></label> -->
   </div>
 </div>
   
@@ -38,7 +67,6 @@
 
 
   <div id="status"></div>
-  <button id="save">Save</button>
 
   <script src="js/options.js"></script>
 </body>

@@ -18,7 +18,7 @@ class ActiveTabs extends React.Component {
         // console.group("Rendering");
         console.log("rendering",activeTabs.length,"items",activeTabs);
         
-        return (<ul className="tabs-list list-group">
+        return (<ul className="tabs-list list-group sortable">
                 {activeTabs.map(function(value) {
                     // console.log("rendering li",value.title);
                     return <Tab key={value.id} id={value.id} pinned={value.pinned} audible={value.audible} position={value.index} url={value.url} title={value.title} favIconUrl={value.favIconUrl} status={value.status} data={value}/>
@@ -89,7 +89,7 @@ class Tab extends React.Component{
                 <strong className="clickable" title={_this.state.title} onClick={_this.focusTab.bind(null,_this.props.id)}>{_this.state.title}</strong>
                 <div className="options pull-right">
 
-                    <span className="glyphicon glyphicon-option-vertical" onClick={_this.infoModal.bind(null,_this.state.data)} ></span>
+                    <span className="glyphicon glyphicon-option-vertical clickable" onClick={_this.infoModal.bind(null,_this.state.data)} ></span>
                     <span data-id={_this.props.id} onClick={_this.closeTab.bind(null,_this.props.id,_this.state.title)} data-command='remove' className='clickable remove-tab glyphicon glyphicon-remove' aria-hidden='true'></span>
                 </div>
            </li>

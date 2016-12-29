@@ -27,7 +27,7 @@ body {
     &.context-actions{
       background-color: #bcf34d;
       li a{
-        color:#fff;
+        color:#638e0c;
         // padding: 0;
         &:hover{
             color:#000;
@@ -56,8 +56,11 @@ body {
 .horizontal-block{
     transition: all 0.4s;
 }
-.horizontal-block:hover{
+.list-group-item.horizontal-block:hover{
     background-color: #eee;
+    -webkit-box-shadow: inset 0px 2px 5px 0px rgba(0,0,0,0.2);
+-moz-box-shadow: inset 0px 2px 5px 0px rgba(0,0,0,0.2);
+box-shadow: inset 0px 2px 5px 0px rgba(0,0,0,0.2);
     /*cursor: pointer;*/
 }
 .horizontal-block>img{
