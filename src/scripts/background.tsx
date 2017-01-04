@@ -222,7 +222,7 @@ function sendTabsToContent ():void {
 function sendToContent (datavariable: String, data:Object[]):void {
 	let obj: Object = {};
 	obj[datavariable] = data;
-	packageAndBroadcast(sender,"content","drawTabs",obj);
+	// packageAndBroadcast(sender,"content","drawTabs",obj);
 }
 chrome.runtime.onInstalled.addListener(()=>console.log("onInstalled")));
 // chrome.tabs.onCreated.addListener(()=>console.log("onCreated"));
@@ -276,6 +276,14 @@ onUpdate(setTabCountInBadge);
 chrome.runtime.onInstalled.addListener(()=>{
 	streamTabs(ActiveTabsConnection);
 })
+
+chrome.runtime.onInstalled.addListener(function(){
+
+	 chrome.storage.sync.get("readinglists", function (items) {
+        readinglists = items.readinglists;
+        createReadingListMenu(readinglists);
+    }
+} )
 /**
  * On clicking extension button
  */
@@ -303,9 +311,35 @@ function runQuery(query){
 	chrome.runtime.sendMessage(query);
 	return query;
 }
+
+
 /**
  * Creating Context Menus
  */
+chrome.contextMenus.removeAll();
+
+function createReadingListMenu(data){
+	for(let i=0;i<data.length; i++){
+		let id = String(data[i].id);
+		let name = data[i].name;
+		console.log("id:",id,'name:',name);
+		chrome.contextMenus.create({
+			"parentId": "showreadinglists",
+			"id":  id,
+		    "title": name,
+		    "onclick" : function(){}
+		});
+		chrome.contextMenus.create({
+			"parentId": "addreadinglists",
+			"id": id+"create",
+		    "title": name,
+		    "onclick" : function(){}
+		});
+	}
+	
+	console.log("menu",data);
+}
+
 chrome.contextMenus.create({
     "title": "Refresh Main Page",
     "onclick" : function(){streamTabs(ActiveTabsConnection);}
@@ -322,6 +356,15 @@ chrome.contextMenus.create({
     "title": "Show Excited Gem Page",
     "onclick" : openOneTabPage
   });
+chrome.contextMenus.create({
+    "title": "Add to Reading Lists",
+    "id": "addreadinglists"
+  });
+chrome.contextMenus.create({
+    "title": "Show Reading Lists",
+    "id": "showreadinglists"
+  });
+
 // chrome.contextMenus.create({
 //     "title": "Run Query",
 //     "onclick" : runQuery,
