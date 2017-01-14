@@ -203,6 +203,9 @@ $(document).ready(function(){
              console.log('saving');
          })
     });
+    $('#refreshActiveTabs').on('click',function(){
+        packageAndBroadcast(sender,'background','getTabsInRequestedWindowAndPost',null);
+    });
 
     $("#rearrange-btn").on('click',function(){
         tabsList.sort(compare);
