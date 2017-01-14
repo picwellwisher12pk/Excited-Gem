@@ -8,7 +8,25 @@ body {
 .clickable {
     cursor:pointer;
 }
+.eg .list-group-item{
+    padding: 0;
+    
+    .btn-default{
+        &:first-child{
+            border-left: none;
+        }
+        &:last-child{
+            border-right: none;
+        }
+        border-bottom: none;
+        border-top: none;
+        &.site-name{
+            max-width:1100px;
+            overflow: hidden;
+        }
+    }
 
+}
 .eg .tabs-list-container.header .horizontal-block{
     &.search{
         border: none;
@@ -28,7 +46,7 @@ body {
       background-color: #bcf34d;
       li a{
         color:#638e0c;
-        // padding: 0;
+        padding: 5px;
         &:hover{
             color:#000;
             background-color: transparent;
@@ -58,12 +76,12 @@ body {
 }
 .list-group-item.horizontal-block:hover{
     background-color: #eee;
-    -webkit-box-shadow: inset 0px 2px 5px 0px rgba(0,0,0,0.2);
--moz-box-shadow: inset 0px 2px 5px 0px rgba(0,0,0,0.2);
-box-shadow: inset 0px 2px 5px 0px rgba(0,0,0,0.2);
+//     -webkit-box-shadow: inset 0px 2px 5px 0px rgba(0,0,0,0.2);
+// -moz-box-shadow: inset 0px 2px 5px 0px rgba(0,0,0,0.2);
+// box-shadow: inset 0px 2px 5px 0px rgba(0,0,0,0.2);
     /*cursor: pointer;*/
 }
-.horizontal-block>img{
+.horizontal-block img{
     width: 16px;
     height: 16px;
     margin: 0 5px;

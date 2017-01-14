@@ -82,15 +82,24 @@ class Tab extends React.Component{
         
         
         let _this = this;
+        let url = _this.state.url;
         return (
             <li key={_this.props.id} data-id={_this.props.id} className="list-group-item horizontal-block">
-                <span className = {`clickable glyphicon glyphicon-pushpin pinned`+(_this.state.pinned ? ` `: ` disabled`)} onClick={_this.pinTab.bind(_this,_this.props.id,_this.state.pinned)} aria-hidden='true'></span>
-                <span className = {`clickable glyphicon glyphicon-volume-off audible`+(_this.state.audible ? ` `: ` disabled`)} onClick={_this.muteTab.bind(_this,_this.props.id,_this.state.audible)} aria-hidden='true'></span>
-                <img src={_this.state.favicon}/>
-                <strong className="clickable" title={_this.state.title} onClick={_this.focusTab.bind(null,_this.props.id)}>{_this.state.title}</strong>
-                <div className="options pull-right">
-                    <span className="glyphicon glyphicon-option-vertical clickable" onClick={_this.infoModal.bind(null,_this.state.data)} ></span>
-                    <span data-id={_this.props.id} onClick={_this.closeTab.bind(null,_this.props.id,_this.state.title)} data-command='remove' className='clickable remove-tab glyphicon glyphicon-remove' aria-hidden='true'></span>
+                <div className="btn-group"  role="toolbar" aria-label="site">
+                    <button type="button" className={`btn btn-default clickable glyphicon glyphicon-pushpin pinned`+(_this.state.pinned ? ` `: ` disabled`)} onClick={_this.pinTab.bind(_this,_this.props.id,_this.state.pinned)} aria-hidden='true' role="group" aria-label="pinned">
+                    </button>
+                    <button type="button" role="group" aria-label="audible"className = {`btn btn-default clickable glyphicon glyphicon-volume-off audible`+(_this.state.audible ? ` `: ` disabled`)} onClick={_this.muteTab.bind(_this,_this.props.id,_this.state.audible)} aria-hidden='true'>
+                    </button>
+                    <div type="button" className="btn btn-default" role="group" aria-label="favicon">
+                        <img src={_this.state.favicon}/>
+                    </div>
+                    <button type="button" role="group" aria-label="title" title={url} className="btn btn-default clickable site-name" onClick={_this.focusTab.bind(null,_this.props.id)}>
+                        {_this.state.title}
+                    </button>
+                </div>
+                <div className="options pull-right btn-group" role="group" aria-label="options">
+                    <div className="btn btn-default glyphicon glyphicon-option-vertical clickable" onClick={_this.infoModal.bind(null,_this.state.data)} ></div>
+                    <div className='btn btn-default clickable remove-tab glyphicon glyphicon-remove' data-id={_this.props.id} onClick={_this.closeTab.bind(null,_this.props.id,_this.state.title)} data-command='remove' aria-hidden='true'></div>
                 </div>
            </li>
             )
