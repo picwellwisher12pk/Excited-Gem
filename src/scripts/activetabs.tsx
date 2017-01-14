@@ -128,7 +128,7 @@ class InfoModal extends React.Component {
                     <div className="modal-dialog modal-lg" role="document">
                         <div className="modal-content">
                            <div className="modal-header">
-                            <button type="button" className="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                            <button type="button" className="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true" className="glyphicon glyphicon-remove"></span></button>
                             <h4 className="modal-title" id="myModalLabel">
                                 <img src={_this.state.data.favIconUrl}/> 
                                 {this.state.data.title}

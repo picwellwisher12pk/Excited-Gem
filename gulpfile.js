@@ -20,7 +20,7 @@ var rename = require('gulp-rename');
 var notify = require("gulp-notify");
 var gutil = require('gulp-util');
 var filter = require('gulp-filter');
-// var plumber = require('gulp-plumber');
+var plumber = require('gulp-plumber');
 var debug = require('gulp-debug');
 var rm = require('gulp-rimraf');
 
@@ -56,6 +56,7 @@ var dest = {
     images: "buildimages/",
     fonts : "build/fonts/"
 };
+// var excludeHTML = 
 
 var banner = [
   '/*!\n' +
@@ -106,6 +107,7 @@ gulp.task('img', function () {
 gulp.task('css', function () {
     console.log("CSS");
     return gulp.src(src.styles)
+    .pipe(plumber())
     .on('error',console.error.bind(console))
     .pipe(debug({title: 'CSS:'}))
     // .pipe(sourcemaps.init())
