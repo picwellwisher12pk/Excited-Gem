@@ -26,6 +26,7 @@ let ActiveTabs :[] ; //React Component
                     if(!jQuery.isEmptyObject(msg))
                      {
                          tabsList = msg.tabs;
+                         $('.active-tab-count').html(msg.tabs.length);
                          ActiveTabs.setState({data: msg.tabs});
                      }
                 });
