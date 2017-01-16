@@ -179,7 +179,7 @@ gulp.task('bs-reload', function () {
 });
 gulp.task('watch',function(){
     gulp.watch(src.markup,  ['html','crx','zip']);
-    gulp.watch(src.styles, ['css','crx','zip']);
+    gulp.watch(src.styles, ['css']);
     gulp.watch(src.scripts, ['js','crx','zip']);
     gulp.watch(src.typescripts, ['ts','crx','zip']);
     gulp.watch(src.images, ['img','crx','zip']);

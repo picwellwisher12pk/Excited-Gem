@@ -34,6 +34,7 @@
   },
   "devDependencies": {
     "del": "^2.2.2",
+    "eslint-plugin-compat": "^1.0.0",
     "fs": "0.0.1-security",
     "gulp": "^3.9.1",
     "gulp-cleanhtml": "^1.0.1",

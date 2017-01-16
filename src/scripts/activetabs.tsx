@@ -90,7 +90,7 @@ class Tab extends React.Component{
                     </button>
                     <button type="button" role="group" aria-label="audible"className = {`btn btn-default clickable glyphicon glyphicon-volume-off audible`+(_this.state.audible ? ` `: ` disabled`)} onClick={_this.muteTab.bind(_this,_this.props.id,_this.state.audible)} aria-hidden='true'>
                     </button>
-                    <div type="button" className="btn btn-default" role="group" aria-label="favicon">
+                    <div className="btn btn-default favicon" role="group" aria-label="favicon">
                         <img src={_this.state.favicon}/>
                     </div>
                     <button type="button" role="group" aria-label="title" title={url} className="btn btn-default clickable site-name" onClick={_this.focusTab.bind(null,_this.props.id)}>

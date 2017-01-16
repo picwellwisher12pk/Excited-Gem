@@ -47,14 +47,41 @@ body {
         border-radius: 0;
         padding: 10px 15px;
         color: white;
+
         span.clickable{
             height: 34px;
             padding: 6px 5px;
             font-size: 14px;
             line-height: 1.428571429;
         }
-    }
 
+        .input-group-addon.option-regex{
+            border-radius:4px 0 0 4px;
+        }
+        .filter-tabs{
+            background-color: #FFF;
+            overflow: hidden;
+            transition:all 0.3s;
+            width: 100%;
+            border: none;
+            border-radius: 4px !important;
+            box-shadow: 0 0 2px 0 rgba(0,0,0,0.1);
+            &:hover ,&:focus{
+                    box-shadow: 0 2px 8px 0 rgba(0,0,0,0.3);
+            }
+            .input-group-addon{
+                border: none;
+                background: none;
+            }
+            .quicksearch-input.form-control{
+                background-color: transparent;
+                border: none;
+                
+            }
+        }
+
+    }
+    
     &.context-actions{
       background-color: #bcf34d;
       li a{
@@ -71,21 +98,19 @@ body {
     border-top-right-radius: 0;
     border-top-left-radius: 0;
 }
-.eg .quicksearch-input.form-control{
-    transition:all 0.3s;
-    width: 95%;
-    display: inline-block;
-    border: none;
-    border-radius: 4px !important;
-    box-shadow: 0 0 2px 0 rgba(0,0,0,0.1);
-}
-.eg .quicksearch-input.form-control:hover,
-.eg .quicksearch-input.form-control:focus
-{
-    box-shadow: 0 2px 8px 0 rgba(0,0,0,0.3);
-}
+
+
 .horizontal-block{
     transition: all 0.4s;
+}
+.list-group-item.horizontal-block{
+    .btn.favicon{
+        cursor: default;
+        &:hover{
+            background-color: #FFF;
+            // border-color:inherit;
+        }
+    }
 }
 .list-group-item.horizontal-block:hover{
     background-color: #eee;
