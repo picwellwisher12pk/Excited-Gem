@@ -1,9 +1,41 @@
+////MESSAGING AND COMMUNICATION
+    function packageData(sender:string,receiver:string,targetMethod:String,data: any): Object{
+        let package :Object = {
+            sender: sender,
+            receiver: receiver,
+            targetMethod:targetMethod,
+            data: data
+        };
+         return package;
+    }
+
+    function packageAndBroadcast(sender:string = sender,receiver:string,targetMethod:String,data: any){
+            chrome.runtime.sendMessage(packageData(sender,receiver,targetMethod,data));
+    }
+    chrome.runtime.onConnect.addListener(function(port){
+            
+            console.assert(port.name == "ActiveTabsConnection");
+            if (port.name == "ActiveTabsConnection") {
+                port.onMessage.addListener(function(msg) {
+                    console.log("msg",msg);
+                    if(!jQuery.isEmptyObject(msg))
+                     {
+                         tabsList = msg.tabs;
+                         $('.active-tab-count').html(msg.tabs.length);
+                         ActiveTabs.setState({data: msg.tabs});
+                     }
+                });
+            }
+    });
+
+
 // Saves options to chrome.storage.sync.
 function save_options(e) {
-     e.preventDefault();
+    e.preventDefault();
       let pref = {};
     pref.filterType = $('#filter-type-option-id').val();
     pref.filterCase = $('#filterCase-option-id').prop('checked');
+    pref.sortAnimation = $('#sort-animation-option-id').val();
     console.log(pref)
     chrome.storage.sync.set({
         pref: pref
@@ -27,9 +59,14 @@ function restore_options() {
     chrome.storage.sync.get("pref", function (items) {
         console.log(items);
        $('#filter-type-option-id').val(items.pref.filterType)
+       $('#sort-animation-option-id').val(items.pref.sortAnimation)
        $('#filterCase-option-id').prop('checked': items.pref.filterCase)
     });
 }
 document.addEventListener('DOMContentLoaded', restore_options);
 // document.getElementById('save').addEventListener('click', save_options);
 $('#save').on('click',save_options);
+$('#go-to-tabs').on('click',function(){
+    packageAndBroadcast('options','background','openExcitedGemPage',null); 
+});
+        
