@@ -1,10 +1,8 @@
 # Excited gem
 # @author Amir Hameed
 ./js/*.js
-./*.html
 /js/*.js
 /css
-*.html
 
 ## Node.js
 lib-cov
