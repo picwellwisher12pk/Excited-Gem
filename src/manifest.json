@@ -18,36 +18,37 @@
 
    },
    "commands": {
-      "display-onetab": {
-         "description": "Display Excited Gem",
+      "_execute_browser_action": {
+         "description": "Display ActiveTabs Page",
+         "global": true,
          "suggested_key": {
-            "default": "Ctrl+Shift+E"
+            "windows": "Ctrl+Shift+X"
          }
       },
-      "send-tabs-on-the-left-to-onetab": {
+      "send-tabs-on-the-left-to-excitedgem": {
          "description": "Send tabs on the left to Excited Gem",
          "suggested_key": {
             "default": "Ctrl+Shift+Left"
          }
       },
-      "send-tabs-on-the-right-to-onetab": {
+      "send-tabs-on-the-right-to-excitedgem": {
          "description": "Send tabs on the right to Excited Gem",
          "suggested_key": {
             "default": "Ctrl+Shift+Right"
          }
       },
-      "send-all-tabs-except-this-to-onetab": {
+      "send-all-tabs-except-this-to-excitedgem": {
          "description": "Send all tabs except this tab to Excited Gem",
          "suggested_key": {
             "default": "Ctrl+Shift+Up"
          }
       },
-      "send-current-tab-to-onetab": {
+      "send-current-tab-to-excitedgem": {
          "description": "Send the current tab to Excited Gem"
       }
    },
    "content_security_policy": "script-src 'self' https://ssl.google-analytics.com http://localhost http://127.0.0.1 'unsafe-eval'; object-src 'self'",
-   "description": "A try to make a better version of Onetab",
+   "description": "A Chrome tabs management extension.",
    "icons": {
       "128": "images/extension-icon128.png",
       "16": "images/extension-icon16.png",
