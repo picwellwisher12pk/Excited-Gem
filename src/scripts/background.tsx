@@ -48,7 +48,7 @@ chrome.runtime.onMessage.addListener((request: any, sender: Function) => {
 });
 
 let _oneTabPageOpened: String = null; //Null or Id of OneTab Main Page
-let onetabURL: String  = chrome.extension.getURL("onetab.html");
+let onetabURL: String  = chrome.extension.getURL("excited_gem_tabs.html");
 let allTabs: Array<Object>; //All tabs including Ignored Group
 let refinedTabs: Array<Object>;//Not including the Ignored Group
 let ignoredUrlPatterns: Array<string> = [
@@ -129,7 +129,7 @@ function saveData (data: any, message = "Data saved"):void {
 /**
  * Opens OneTab Main Page
  */
-function openOneTabPage ():void {
+function openExcitedGemPage ():void {
 	if(_oneTabPageOpened == null){
     	chrome.tabs.create({url: onetabURL, pinned: true},
     		(tab: Object)=> {
@@ -283,7 +283,7 @@ chrome.runtime.onInstalled.addListener(function(){
  * On clicking extension button
  */
 chrome.browserAction.onClicked.addListener((tab: Object)=> {
-    openOneTabPage();
+    openExcitedGemPage();
 });
 chrome.idle.setDetectionInterval(30);
 chrome.idle.onStateChanged.addListener((newState: String)=>{
@@ -349,7 +349,7 @@ chrome.contextMenus.create({
 //   });
 chrome.contextMenus.create({
     "title": "Show Excited Gem Page",
-    "onclick" : openOneTabPage
+    "onclick" : openExcitedGemPage
   });
 chrome.contextMenus.create({
     "title": "Add to Reading Lists",
@@ -373,3 +373,7 @@ chrome.tabs.onUpdated.addListener((tabId: Number , info: Object)=> {
 
     }
 });//onCreated
+
+ chrome.commands.onCommand.addListener(function(command) {
+        console.log('Command:', command);
+      });
