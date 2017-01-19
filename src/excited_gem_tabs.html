@@ -1,0 +1,189 @@
+<!doctype html>
+<html>
+
+<head>
+    <title>Excited Gem</title>
+    <link rel="stylesheet" href="css/bootstrap.css">
+    <!-- <link rel="stylesheet" href="css/font-awesome.css"> -->
+    <link href="css/eg.css" rel="stylesheet" type="text/css" />
+    <script src="js/jquery.min.js"></script>
+    <script src="js/react/dist/react.js"></script>
+    <script src="js/react-dom/dist/react-dom.js"></script>
+    <!-- <script src="js/main.js"></script> -->
+    <script src="js/bootstrap.js"></script>
+    <script src="js/activetabs.js"></script>
+    <script src="js/readinglist.js"></script>
+    <script src="js/content.js"></script>
+    <script src="js/jquery-ui.js"></script>
+    <!-- <script src="js/common.js"></script> -->
+</head>
+<style>
+.tabGroupTitleText {
+    font-family: 'Open Sans', 'Helvetica Neue', Arial, sans-serif;
+    color: #444;
+}
+</style>
+
+<body class="eg">
+    <nav class="navbar navbar-default navbar-fixed-top">
+        <div class="container-fluid">
+            <!-- Brand and toggle get grouped for better mobile display -->
+            <div class="navbar-header">
+                <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1" aria-expanded="false">
+                    <span class="sr-only">Toggle navigation</span>
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                </button>
+                <a class="navbar-brand" href="#">Excited Gem</a>
+            </div>
+            <!-- Collect the nav links, forms, and other content for toggling -->
+            <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
+                <ul class="nav navbar-nav">
+                    <li class="active"><a href="#" id="go-to-tabs">Tabs<span class="sr-only">(current)</span></a></li>
+                    <!-- <li><a href="#">Suspended</a></li> -->
+                    <!-- <li><a href="query.html">Query</a></li> -->
+                    <li class="dropdown">
+                        <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Reading List <span class="caret"></span></a>                        
+                        <ul class="dropdown-menu">
+                            <li><a href="#" id="create-new-readinglist">Creat New</a></li>
+                            <li role="separator" class="divider"></li>
+                            <!-- <li><a href="#">Another action</a></li>
+                            <li><a href="#">Something else here</a></li>
+                            <li><a href="#">Separated link</a></li> -->
+                        </ul>
+                    </li>
+                    <!-- <li class="dropdown">
+                        <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Dropdown <span class="caret"></span></a>
+                        <ul class="dropdown-menu">
+                            <li><a href="#">Action</a></li>
+                            <li><a href="#">Another action</a></li>
+                            <li><a href="#">Something else here</a></li>
+                            <li role="separator" class="divider"></li>
+                            <li><a href="#">Separated link</a></li>
+                            <li role="separator" class="divider"></li>
+                            <li><a href="#">One more separated link</a></li>
+                        </ul>
+                    </li> -->
+                </ul>
+             <!--    <form class="navbar-form navbar-left">
+                    <div class="form-group">
+                        <input type="text" class="form-control" placeholder="Search">
+                    </div>
+                    <button type="button" class="btn btn-default"><i class="fa fa-search"></i></button>
+                </form> -->
+                <ul class="nav navbar-nav navbar-right">
+                    <li>
+                        <a class="btn" id="go-to-options" >Settings</a>
+                    </li>
+                    
+                </ul>
+            </div>
+            <!-- /.navbar-collapse -->
+        </div>
+        <!-- /.container-fluid -->
+    </nav>
+    <div class="container-fluid">
+        <!--  <div class="page-header">
+            <h1>Excited Gem <small>Nitro For Chrome</small></h1>
+        </div> -->
+        <ul class="nav nav-tabs" role="tablist" id="tablist">
+            <li role="presentation" class="active">
+                <a href="#active-tabs" aria-controls="active-tabs" role="tab" data-toggle="tab">Active Tabs (<span class="active-tab-count"></span>)</a>
+            </li>
+            <li role="presentation">
+                <a href="#sleeping" aria-controls="sleeping" role="tab" data-toggle="tab">Sleeping Tabs</a>
+            </li>
+            <li role="presentation">
+                <a href="#readinglists-tab" aria-controls="readinglists-tab" role="tab" data-toggle="tab">Reading Lists</a>
+            </li>
+        </ul>
+        <!-- Tab panes -->
+        <div class="tab-content">
+            <div role="tabpanel" class="tab-pane active" id="active-tabs">
+                <div class="row">
+                    <div class="col-xs-12">
+                    </div>
+                </div>
+                <div class="tabs-list-container header" data-spy="affix" data-offset-top="60" data-offset-bottom="200">
+                    <div class="horizontal-block search">
+                        <div class="row">
+                            <div class="col-sm-1">
+                                <span class="clickable glyphicon glyphicon-pushpin pinned" title="Pin All" aria-hidden="true"></span>
+                                <span class="clickable glyphicon glyphicon-volume-off audible" title="Mute All" aria-hidden="true"></span>
+                            </div>
+                            <div class="col-sm-10">
+                                <div class="input-group filter-tabs">
+                                    <input id="quicksearch-input" type="text" class="quicksearch-input form-control regex" placeholder="Filter Tabs by Title" aria-label="...">
+                                    <span class="input-group-addon option-regex">
+                                        <input type="checkbox" aria-label="..." id='filter-type-option-id'> Regex
+                                    </span>
+                                    <span class="input-group-addon option-case-sensitive">
+                                        <input type="checkbox" aria-label="..." id='filterCase-option-id'> Case Sensitive
+                                    </span>
+                                </div>
+                            </div>
+                            <div class="col-sm-1">
+                                <div class="options pull-right">
+                                    <span data-command="remove" class="clickable remove-tab glyphicon glyphicon-remove" aria-hidden="true"></span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="horizontal-block context-actions">
+                        <ul class="nav nav-pills">
+                            <li role="presentation">
+                                <a href="#" id="refreshActiveTabs" title="Refresh Active Tabs">
+                                    <span class="glyphicon glyphicon-refresh" aria-hidden="true"></span>
+                                    Refresh
+                                </a>
+                            </li>
+                            <li role="presentation" class="dropdown">
+                                <a class="dropdown-toggle" data-toggle="dropdown" href="#" role="button" aria-haspopup="true" aria-expanded="false" title="Rearrange/Sort Tabs">
+                                  <span class="glyphicon glyphicon-sort-by-alphabet" aria-hidden="true"></span>
+                                  Rearrange by
+                                  <span class="caret"></span>
+                                </a>
+                                <ul class="dropdown-menu">
+                                  <li>
+                                      <a href="#" id="rearrange-url-btn" title="Rearrange with respect of URL">
+                                          URL
+                                      </a>
+                                  </li>
+                                  <li>
+                                      <a href="#" id="rearrange-title-btn" title="Rearrange with respect of Title">
+                                          Title
+                                      </a>
+                                  </li>
+                                </ul>
+                                
+                            </li>
+                           <!--  <li role="presentation" class="dropdown">
+                                <a class="dropdown-toggle" data-toggle="dropdown" href="#" role="button" aria-haspopup="true" aria-expanded="false">
+                                    Reading List
+                                    <span class="caret"> </span>
+                                </a>
+                                <ul class="dropdown-menu">
+                                    <li role="presentation"><a href="#">Create New</a></li>
+                                </ul>
+                            </li> -->
+                        </ul>
+                    </div>
+                </div>
+                <div class="tabs-list-container" id="active-tabs-list-container">
+                </div>
+            </div>
+            <div role="tabpanel" class="tab-pane" id="sleeping">...</div>
+            <div role="tabpanel" class="tab-pane" id="readinglists-tab">
+                <!-- //Reading List TAB BODY
+                ///////////////////////////////////-->
+               
+        </div>
+    </div>
+    <div id="react-container"></div>
+    <!-- Small modal -->
+    <div class="modal bs-example-modal-sm" tabindex="-1" role="dialog" aria-labelledby="mySmallModalLabel" id="infoModal">
+    </div>
+</body>
+
+</html>
