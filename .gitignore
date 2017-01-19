@@ -44,3 +44,6 @@ ehthumbs.db
 Desktop.ini
 $RECYCLE.BIN/
 build/
+bower_components/
+.vscode/launch.json
+certs/key.pem
