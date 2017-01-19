@@ -66,12 +66,14 @@ let ActiveTabs :[] ; //React Component
 ////GENERAL OPTIONS/CONFIGURATIONS
     let pref = {
         filterType : '',
-        filterCase : false
+        filterCase : false,
+        sortAnimation : 250;
     }
     function get_options() {
         chrome.storage.sync.get("pref", function (items) {
             pref.filterType = items.pref.filterType;
             pref.filterCase = items.pref.filterCase;
+            pref.sortAnimation = items.pref.sortAnimation;
             $(".option-case-sensitive input").prop("checked":pref.filterCase);
             
             if(pref.filterType =="regex"){
@@ -138,14 +140,107 @@ let ActiveTabs :[] ; //React Component
     function hasClass(elem, className) {
         return elem.className.split(' ').indexOf(className) > -1;
     }
-    function compare(a,b) {
+    function compareURL(a,b) {
       if (a.url < b.url)
         return -1;
       if (a.url > b.url)
         return 1;
       return 0;
     }
+    function compareTitle(a,b) {
+      if (a.title.toLowerCase() < b.title.toLowerCase())
+        return -1;
+      if (a.title.toLowerCase() > b.title.toLowerCase())
+        return 1;
+      return 0;
+    }
+    // Warn if overriding existing method
+if(Array.prototype.equals)
+    console.warn("Overriding existing Array.prototype.equals. Possible causes: New API defines the method, there's a framework conflict or you've got double inclusions in your code.");
+// attach the .equals method to Array's prototype to call it on any array
+Array.prototype.equals = function (array) {
+    // if the other array is a falsy value, return
+    if (!array)
+        return false;
 
+    // compare lengths - can save a lot of time 
+    if (this.length != array.length)
+        return false;
+
+    for (var i = 0, l=this.length; i < l; i++) {
+        // Check if we have nested arrays
+        if (this[i] instanceof Array && array[i] instanceof Array) {
+            // recurse into the nested arrays
+            if (!this[i].equals(array[i]))
+                return false;       
+        }           
+        else if (this[i] != array[i]) { 
+            // Warning - two different object instances will never be equal: {x:20} != {x:20}
+            return false;   
+        }           
+    }       
+    return true;
+}
+
+function arraysAreIdentical(arr1, arr2){
+    if (arr1.length !== arr2.length) return false;
+    for (var i = 0, len = arr1.length; i < len; i++){
+        if (arr1[i] !== arr2[i]){
+            return false;
+        }
+    }
+    return true; 
+}
+//Takes an array of object and make an plain array out of for a given property
+function propertyToArray(array, property):array{
+    let newArray = [];
+    for(let i=0;i<array.length;i++){
+        newArray.push(array[i][property]);
+    }
+    return newArray;
+}
+// Hide method from for-in loops
+Object.defineProperty(Array.prototype, "equals", {enumerable: false});
+    function sortTabs (head,type) {
+        let type = type;
+        let head = head;
+        let prevTabs = tabsList;
+        let prevTabsArray;
+        let tabsListArray;
+        let loopFinished: boolean;
+           setTimeout(function () {    
+            if(type == 'url') tabsList.sort(compareURL);
+            if(type == 'title') tabsList.sort(compareTitle);
+            // console.log(tabsList[i].title);
+            data = { 'position': head, "tabId": tabsList[head].id }
+            packageAndBroadcast(sender,'background','moveTab',data);
+             if(type == 'url') {
+                 tabsListArray = propertyToArray(tabsList,'url');
+                 prevTabsArray = propertyToArray(prevTabs,'url');
+             }
+             if(type == 'title') {
+                 tabsListArray = propertyToArray(tabsList,'title');
+                 prevTabsArray = propertyToArray(prevTabs,'title');
+             }
+              head++;                     
+              if (head < tabsList.length) {
+                 sortTabs(head,type);
+              }  
+              loopFinished = true; 
+              let sameArray =  arraysAreIdentical(prevTabsArray,tabsListArray);
+
+              if(sameArray) {
+                  console.log(sameArray,prevTabsArray,tabsListArray);
+                  return;}
+
+              if(!sameArray && loopFinished){
+                  console.log(sameArray,"=",tabsListArray,'=',prevTabsArray);
+                  head = 0;
+                  sortTabs(head,type);
+              }                     
+           }, pref.sortAnimation)
+
+        }
 //////////////////////////////////////////////////////////////////
 $(document).ready(function(){
     packageAndBroadcast(sender,'background','documentready',null); //Tells background page when front-page's DOM is ready to start communication
@@ -157,8 +252,9 @@ $(document).ready(function(){
     ReadingLists.setState({data:itemGroup});
    
     
-    $( ".sortable" ).sortable();
-    $( ".sortable" ).disableSelection();
+    // $( ".sortable" ).sortable();
+    // $( ".selectable" ).selectable();
+    // $( ".sortable" ).disableSelection();
 
     $('a[data-toggle="tab"]').on('shown.bs.tab', function (e) {
       e.target // newly activated tab
@@ -207,16 +303,13 @@ $(document).ready(function(){
     $('#refreshActiveTabs').on('click',function(){
         packageAndBroadcast(sender,'background','getTabsInRequestedWindowAndPost',null);
     });
-
-    $("#rearrange-btn").on('click',function(){
-        tabsList.sort(compare);
-        // ActiveTabs.setState({data: tabsList});
-        for(let i=0;i<tabsList.length;i++)
-        {
-             data = { 'position': i, "tabId": tabsList[i].id }
-            packageAndBroadcast(sender,'background','moveTab',data);
-        }
-        
+    $("#rearrange-title-btn").on('click',function(){
+        var i = 0;                    
+        sortTabs(i,'title');
+    });
+    $("#rearrange-url-btn").on('click',function(){
+        var i = 0;                    
+        sortTabs(i,'url');        
     });
    
 
@@ -259,6 +352,7 @@ $(document).ready(function(){
         window.open(chrome.runtime.getURL('options.html'));
       }
     });
+    
    
 
 });
