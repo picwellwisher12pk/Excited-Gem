@@ -19,7 +19,7 @@ class ActiveTabs extends React.Component {
         console.log("rendering",activeTabs.length,"items",activeTabs);
         
 
-        return (<ul className="tabs-list list-group sortable">
+        return (<ul className="tabs-list list-group sortable selectable">
                 {activeTabs.map(function(value) {
                     // console.log("rendering li",value.title);
                     return <Tab key={value.id} id={value.id} pinned={value.pinned} audible={value.audible} position={value.index} url={value.url} title={value.title} favIconUrl={value.favIconUrl} status={value.status} data={value}/>
@@ -84,7 +84,7 @@ class Tab extends React.Component{
         let _this = this;
         let url = _this.state.url;
         return (
-            <li key={_this.props.id} data-id={_this.props.id} className="list-group-item horizontal-block">
+            <li key={_this.props.id} data-id={_this.props.id} className="ui-widget-content list-group-item horizontal-block">
                 <div className="btn-group"  role="toolbar" aria-label="site">
                     <button type="button" className={`btn btn-default clickable glyphicon glyphicon-pushpin pinned`+(_this.state.pinned ? ` `: ` disabled`)} onClick={_this.pinTab.bind(_this,_this.props.id,_this.state.pinned)} aria-hidden='true' role="group" aria-label="pinned">
                     </button>
