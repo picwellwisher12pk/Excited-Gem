@@ -50,7 +50,7 @@ var src = {
 var dest = {
     root   : "build/",
     markup: "build/*.html",
-    index : "build/onetab.html",
+    index : "build/excited_gem_tabs.html",
     scripts: "build/js/",
     styles: "build/css/",
     images: "buildimages/",
@@ -163,13 +163,8 @@ gulp.task('ts',function(){
 gulp.task('start-browsersync', function() {
     browserSync.init({
         server: {
-            baseDir: ".",
-            middleware: function (req, res, next) {
-            res.setHeader('Accept', '*/*');            
-            res.setHeader('Access-Control-Allow-Origin', '*');
-            next();
-            }
-            , index: "build/onetab.html"
+            baseDir: "build"           
+            , index: "excited_gem_tabs.html"
         },
         online:true
     });
