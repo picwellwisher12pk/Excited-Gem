@@ -15,13 +15,14 @@ function packageAndBroadcast(sender:string = sender,receiver:string,targetMethod
         });
 		
 }
-// let portName ;
-// chrome.runtime.onConnect.addListener(function(port){
-//         console.assert(port.name == "ActiveTabsConnection");
-//         if (port.name == "ActiveTabsConnection") {
-//             port.postMessage({tabs : getAllTabs});
-//         }
-//     });
+chrome.runtime.onMessageExternal.addListener(
+  function(request, sender, sendResponse) {
+   
+    if (request.openUrlInEditor)
+     sendResponse({msg: getAllTabs()});
+      console.log("external/",request.openUrlInEditor);
+  });
+
 function streamTabs(port){
 	if(port == undefined) return;
 	port.postMessage({tabs : getAllTabs()});
