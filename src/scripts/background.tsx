@@ -377,3 +377,22 @@ chrome.tabs.onUpdated.addListener((tabId: Number , info: Object)=> {
  chrome.commands.onCommand.addListener(function(command) {
         console.log('Command:', command);
       });
+
+
+function saveSession(data) {
+    e.preventDefault();
+      let session = {};
+    session.last = data;
+    chrome.storage.sync.set({
+        session: session
+    }, function () {
+        
+    });
+  
+}
+ chrome.windows.onRemoved.addListener(function(windowId){
+	chrome.windows.get(windowId,{populate:true,windowTypes:['normal']}, function(window){
+		// ActiveTabsConnection.postMessage({tabs : window.tabs});
+		saveSession(window.tabs);
+	});
+ });

@@ -4,156 +4,161 @@ let tabsList;
 let ActiveTabs :[] ; //React Component
 
 ////MESSAGING AND COMMUNICATION
-    function packageData(sender:string,receiver:string,targetMethod:String,data: any): Object{
-        let package :Object = {
-            sender: sender,
-            receiver: receiver,
-            targetMethod:targetMethod,
-            data: data
-        };
-         return package;
-    }
+  function packageData(sender:string,receiver:string,targetMethod:String,data: any): Object{
+      let package :Object = {
+          sender: sender,
+          receiver: receiver,
+          targetMethod:targetMethod,
+          data: data
+      };
+       return package;
+  }
 
-    function packageAndBroadcast(sender:string = sender,receiver:string,targetMethod:String,data: any){
-            chrome.runtime.sendMessage(packageData(sender,receiver,targetMethod,data));
-    }
-    chrome.runtime.onConnect.addListener(function(port){
-            
-            console.assert(port.name == "ActiveTabsConnection");
-            if (port.name == "ActiveTabsConnection") {
-                port.onMessage.addListener(function(msg) {
-                    console.log("msg",msg);
-                    if(!jQuery.isEmptyObject(msg))
-                     {
-                         tabsList = msg.tabs;
-                         $('.active-tab-count').html(msg.tabs.length);
-                         ActiveTabs.setState({data: msg.tabs});
-                     }
-                });
-            }
-    });
+  function packageAndBroadcast(sender:string = sender,receiver:string,targetMethod:String,data: any){
+          chrome.runtime.sendMessage(packageData(sender,receiver,targetMethod,data));
+  }
+  chrome.runtime.onConnect.addListener(function(port){
+          
+          console.assert(port.name == "ActiveTabsConnection");
+          if (port.name == "ActiveTabsConnection") {
+              port.onMessage.addListener(function(msg) {
+                  console.log("msg",msg);
+                  if(!jQuery.isEmptyObject(msg))
+                   {
+                       tabsList = msg.tabs;
+                       $('.active-tab-count').html(msg.tabs.length);
+                       ActiveTabs.setState({data: msg.tabs});
+                   }
+              });
+          }
+  });
 
 ////READING LISTS
-    let itemGroup : []; //variable to stores data for React Component
-    let ReadingLists : []; //React Component
-    let readinglistsCounter: number;
+  let itemGroup : []; //variable to stores data for React Component
+  let ReadingLists : []; //React Component
+  let readinglistsCounter: number;
 
-    function get_readinglists(){
-        chrome.storage.sync.get("readinglists", function (items) {
-            console.log("Getting Reading list",items);
-            itemGroup = items.readinglists;
-            if(items.readinglists == undefined){
-                 itemGroup = [];
-                 readinglistsCounter = 0;
-            }else{
-                itemGroup = items.readinglists;
-                readinglistsCounter = items.readinglists.length;
-            }
-            return items.readinglists;
-            ReadingLists.setState({data:itemGroup});
-        }
-    }
-    get_readinglists();
-    console.log("after getting readinglist",itemGroup);
-    function set_readinglists(data){
-         chrome.storage.sync.set({readinglists: data}, function (){
-             console.log('Saving readinglists');
-             readinglistsCounter++;
-             ReadingLists.setState({data:itemGroup});
-         });
-    }
+  function get_readinglists(){
+      chrome.storage.sync.get("readinglists", function (items) {
+          console.log("Getting Reading list",items);
+          itemGroup = items.readinglists;
+          if(items.readinglists == undefined){
+               itemGroup = [];
+               readinglistsCounter = 0;
+          }else{
+              itemGroup = items.readinglists;
+              readinglistsCounter = items.readinglists.length;
+          }
+          return items.readinglists;
+          ReadingLists.setState({data:itemGroup});
+      }
+  }
+  get_readinglists();
+  console.log("after getting readinglist",itemGroup);
+  function set_readinglists(data){
+       chrome.storage.sync.set({readinglists: data}, function (){
+           console.log('Saving readinglists');
+           readinglistsCounter++;
+           ReadingLists.setState({data:itemGroup});
+       });
+  }
 
 ////GENERAL OPTIONS/CONFIGURATIONS
-    let pref = {
-        filterType : '',
-        filterCase : false,
-        sortAnimation : 250;
-    }
-    function get_options() {
-        chrome.storage.sync.get("pref", function (items) {
-            pref.filterType = items.pref.filterType;
-            pref.filterCase = items.pref.filterCase;
-            pref.sortAnimation = items.pref.sortAnimation;
-            $(".option-case-sensitive input").prop("checked":pref.filterCase);
-            
-            if(pref.filterType =="regex"){
-                $(".option-regex input").prop("checked":true);
-            }
-            else{
-                $(".option-regex input").prop("checked":false);
-            }
-        });
-    }
+  let pref = {
+      filterType : '',
+      filterCase : false,
+      sortAnimation : 250;
+  }
+  function getOptions() {
+      chrome.storage.sync.get("pref", function (items) {
+          pref.filterType = items.pref.filterType;
+          pref.filterCase = items.pref.filterCase;
+          pref.sortAnimation = items.pref.sortAnimation;
+          $(".option-case-sensitive input").prop("checked":pref.filterCase);
+          
+          if(pref.filterType =="regex"){
+              $(".option-regex input").prop("checked":true);
+          }
+          else{
+              $(".option-regex input").prop("checked":false);
+          }
+      });
+  }
+  function getLastSession(){
+      chrome.storage.sync.get("session", function (items) {
+          console.log(items.session);
+      });
+  }
 
 ////QUERY
-    let sidebar: any;
-    let resultTable : any;
-    let results: any;
-    function query(queryString: string = 'table#searchResult tbody td'){
-        console.log($(queryString));
-        $('.eg_results_table').empty();
-        return $(queryString);
-    }
-    function createQueryResultaTable(){
-        let sidebar = $("<div/>");
-        sidebar.addClass('eg_sidebar');
-        $('body').append(sidebar);
-        sidebar.css({
-            'position':'fixed', 'width': '400px', 'height': windowHeight, 'min-height': '700px',
-            'background': 'white',
-            'overflow-y': 'scroll',
-            'right':"-400px",
-            'top':'0',
-            'box-shadow':'0 0 10px 0 #000',
-            'z-index': '9999'
-        });
-        let queryinput = $('<input type="text" placeholder="Insert your query here" class="query-input" style="width: 100%;padding: 10px; margin-bottom: 15px;"/>');
-        sidebar.append(queryinput);
-        queryinput.on('keyup',function(e){
-            if (e.keyCode == 13){
-                let queryString = queryinput.val();
-                results = query(queryString);
-                manageQueryResultTable(results);
-            }
-        });
-        resultTable = $(`<table class="eg_results_table table table-bordered"></table>`);
-        sidebar.append(resultTable);
-        return resultTable;
-    }
+  let sidebar: any;
+  let resultTable : any;
+  let results: any;
+  function query(queryString: string = 'table#searchResult tbody td'){
+      console.log($(queryString));
+      $('.eg_results_table').empty();
+      return $(queryString);
+  }
+  function createQueryResultaTable(){
+      let sidebar = $("<div/>");
+      sidebar.addClass('eg_sidebar');
+      $('body').append(sidebar);
+      sidebar.css({
+          'position':'fixed', 'width': '400px', 'height': windowHeight, 'min-height': '700px',
+          'background': 'white',
+          'overflow-y': 'scroll',
+          'right':"-400px",
+          'top':'0',
+          'box-shadow':'0 0 10px 0 #000',
+          'z-index': '9999'
+      });
+      let queryinput = $('<input type="text" placeholder="Insert your query here" class="query-input" style="width: 100%;padding: 10px; margin-bottom: 15px;"/>');
+      sidebar.append(queryinput);
+      queryinput.on('keyup',function(e){
+          if (e.keyCode == 13){
+              let queryString = queryinput.val();
+              results = query(queryString);
+              manageQueryResultTable(results);
+          }
+      });
+      resultTable = $(`<table class="eg_results_table table table-bordered"></table>`);
+      sidebar.append(resultTable);
+      return resultTable;
+  }
 
-    function manageQueryResultTable(results: any[]){
-        $.each(results,function(index,value){
-            // let name = $(value).find('.detName a').text();
-            // let url = $(value).find('> a').first().attr('href');
-            let tr = $('<tr/>');
-            resultTable.append(tr);
-            let tableRow = `<td>${index+1}</td><td>${value.outerHTML}</td>`;
-            tr.append(tableRow);
+  function manageQueryResultTable(results: any[]){
+      $.each(results,function(index,value){
+          // let name = $(value).find('.detName a').text();
+          // let url = $(value).find('> a').first().attr('href');
+          let tr = $('<tr/>');
+          resultTable.append(tr);
+          let tableRow = `<td>${index+1}</td><td>${value.outerHTML}</td>`;
+          tr.append(tableRow);
 
-        });
-    }
+      });
+  }
 
-    function requestCloseTab(data) {
-        let confirmation = window.confirm("Are you sure you want to close this tab");
-        if (confirmation) packageAndBroadcast( sender ,'background','closeTab',data);
-    }
-    function hasClass(elem, className) {
-        return elem.className.split(' ').indexOf(className) > -1;
-    }
-    function compareURL(a,b) {
-      if (a.url < b.url)
-        return -1;
-      if (a.url > b.url)
-        return 1;
-      return 0;
-    }
-    function compareTitle(a,b) {
-      if (a.title.toLowerCase() < b.title.toLowerCase())
-        return -1;
-      if (a.title.toLowerCase() > b.title.toLowerCase())
-        return 1;
-      return 0;
-    }
+  function requestCloseTab(data) {
+      let confirmation = window.confirm("Are you sure you want to close this tab");
+      if (confirmation) packageAndBroadcast( sender ,'background','closeTab',data);
+  }
+  function hasClass(elem, className) {
+      return elem.className.split(' ').indexOf(className) > -1;
+  }
+  function compareURL(a,b) {
+    if (a.url < b.url)
+      return -1;
+    if (a.url > b.url)
+      return 1;
+    return 0;
+  }
+  function compareTitle(a,b) {
+    if (a.title.toLowerCase() < b.title.toLowerCase())
+      return -1;
+    if (a.title.toLowerCase() > b.title.toLowerCase())
+      return 1;
+    return 0;
+  }
     // Warn if overriding existing method
 if(Array.prototype.equals)
     console.warn("Overriding existing Array.prototype.equals. Possible causes: New API defines the method, there's a framework conflict or you've got double inclusions in your code.");
@@ -244,7 +249,8 @@ Object.defineProperty(Array.prototype, "equals", {enumerable: false});
 //////////////////////////////////////////////////////////////////
 $(document).ready(function(){
     packageAndBroadcast(sender,'background','documentready',null); //Tells background page when front-page's DOM is ready to start communication
-    get_options();
+    getOptions();
+    getLastSession();
     get_readinglists();
     ReadingLists = ReactDOM.render(<ReadingLists />, document.getElementById('readinglists-tab');
     ActiveTabs = ReactDOM.render(<ActiveTabs />,document.getElementById('active-tabs-list-container'));
