@@ -69,7 +69,7 @@ var dest = {
     index: "build/excited_gem_tabs.html",
     scripts: "build/js/",
     styles: "build/css/",
-    images: "buildimages/",
+    images: "build/images/",
     fonts: "build/fonts/"
 };
 // var excludeHTML = 
