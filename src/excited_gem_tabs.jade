@@ -10,6 +10,7 @@ html(lang="en")
     script(src="js/react-dom/dist/react-dom.js")
     script(src="js/bootstrap.js")
     script(src="js/activetabs.js")
+    script(src="js/sessions.js")
     script(src="js/readinglist.js")
     script(src="js/content.js")
     script(src="js/contentext.js")
@@ -94,6 +95,8 @@ html(lang="en")
           a(href='#sleeping', aria-controls='sleeping', role='tab', data-toggle='tab') Sleeping Tabs
         li(role='presentation')
           a(href='#readinglists-tab', aria-controls='readinglists-tab', role='tab', data-toggle='tab') Reading Lists
+        li(role='presentation')
+          a(href='#sessions-tab', aria-controls='sessions-tab', role='tab', data-toggle='tab') Sessions
       // Tab panes
       .tab-content
         #active-tabs.tab-pane.active(role='tabpanel')
@@ -151,6 +154,48 @@ html(lang="en")
           //
             //Reading List TAB BODY
             ///////////////////////////////////
+        #sessions-tab
+          .tabs-list-container.header
+            //- .horizontal-block.search
+              .row
+                .col-sm-1
+                  span.clickable.glyphicon.glyphicon-pushpin.pinned(title='Pin All', aria-hidden='true')
+                  span.clickable.glyphicon.glyphicon-volume-off.audible(title='Mute All', aria-hidden='true')
+                .col-sm-10
+                  .input-group.filter-tabs
+                    input#quicksearch-input.quicksearch-input.form-control.regex(type='text', placeholder='Filter Tabs by Title', aria-label='...')
+                    span.input-group-addon.option-regex
+                      input#filter-type-option-id(type='checkbox', aria-label='...')
+                      |  Regex
+                    span.input-group-addon.option-case-sensitive
+                      input#filterCase-option-id(type='checkbox', aria-label='...')
+                      |  Case Sensitive
+                .col-sm-1
+                  .options.pull-right
+                    span.clickable.remove-tab.glyphicon.glyphicon-remove(data-command='remove', aria-hidden='true')
+            .horizontal-block.context-actions
+              ul.nav.nav-pills
+                li(role='presentation')
+                  a#saveSessions-btn(href='#', title='Save Active Tabs opened in all Chrome windows')
+                    span.glyphicon.glyphicon-save(aria-hidden='true')
+                    |                                     Save Session
+                li(role='presentation')
+                  a#saveSessionsAndClose-btn(href='#', title='Save Active Tabs opened in all Chrome windows and close Chrome')
+                    span.glyphicon.glyphicon-save(aria-hidden='true')
+                    |                                     Save Session and Close Chrome
+                //- li.dropdown(role='presentation')
+                  a.dropdown-toggle(data-toggle='dropdown', href='#', role='button', aria-haspopup='true', aria-expanded='false', title='Rearrange/Sort Tabs')
+                    span.glyphicon.glyphicon-sort-by-alphabet(aria-hidden='true')
+                    |                                   Rearrange by
+                    span.caret
+                  ul.dropdown-menu
+                    li
+                      a#rearrange-url-btn(href='#', title='Rearrange with respect of URL')
+                        | URL
+                    li
+                      a#rearrange-title-btn(href='#', title='Rearrange with respect of Title')
+                        | Title
+          #all-sessions
       #react-container
       // Small modal
       #infoModal.modal.bs-example-modal-sm(tabindex='-1', role='dialog', aria-labelledby='mySmallModalLabel')

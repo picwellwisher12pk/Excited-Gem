@@ -47,6 +47,9 @@ chrome.runtime.onMessage.addListener((request: any, sender: Function) => {
 	});	
 });
 
+let allSessions = {
+	sessions : []
+};
 let _oneTabPageOpened: String = null; //Null or Id of OneTab Main Page
 let onetabURL: String  = chrome.extension.getURL("excited_gem_tabs.html");
 let allTabs: Array<Object>; //All tabs including Ignored Group
@@ -115,7 +118,7 @@ function moveTab(data){
  * @param  {String} message [description]
  */
 function saveData (data: any, message = "Data saved"):void {
-	chrome.storage.sync.set(data, ()=> {
+	chrome.storage.local.set(data, ()=> {
     	chrome.notifications.create('reminder', {
 	        type: 'basic',
 	        iconUrl: '../images/extension-icon48.png',
@@ -274,7 +277,7 @@ chrome.runtime.onInstalled.addListener(()=>{
 
 chrome.runtime.onInstalled.addListener(function(){
 
-	 chrome.storage.sync.get("readinglists", function (items) {
+	 chrome.storage.local.get("readinglists", function (items) {
         readinglists = items.readinglists;
         createReadingListMenu(readinglists);
     }
@@ -378,21 +381,31 @@ chrome.tabs.onUpdated.addListener((tabId: Number , info: Object)=> {
         console.log('Command:', command);
       });
 
-
-function saveSession(data) {
-    e.preventDefault();
-      let session = {};
-    session.last = data;
-    chrome.storage.sync.set({
-        session: session
-    }, function () {
-        
-    });
+//Use timestamp as names to save sessions. and before saving look if tabs in current sessions are already saved in last session
+//if yes then don't save session. and alert. Tabs from curent session already exist in previously saved session.
+function saveSessions() {
+   chrome.windows.getAll({populate:true}, function(windows){
+	   	let session = {
+			   created : + new Date(),
+			   modified : null,
+			   name : '',
+			   windows : []
+		   };
+		
+		for(var i=0;i<windows.length;i++){
+			session.windows[i] = windows[i].tabs;
+		}
+		allSessions.sessions.push(session);
+		chrome.storage.local.set(allSessions, ()=> {
+    		chrome.notifications.create('reminder', {
+				type: 'basic',
+				iconUrl: '../images/extension-icon48.png',
+				title: 'Data saved',
+				message: "Session Saved"
+				}, (notificationId: String)=> {});
+    	});
+	   console.log("window tabs in saveSessionsbackground", session);
+		packageAndBroadcast(sender,'content','get_sessions',windows.tabs)
+	});
   
 }
- chrome.windows.onRemoved.addListener(function(windowId){
-	chrome.windows.get(windowId,{populate:true,windowTypes:['normal']}, function(window){
-		// ActiveTabsConnection.postMessage({tabs : window.tabs});
-		saveSession(window.tabs);
-	});
- });

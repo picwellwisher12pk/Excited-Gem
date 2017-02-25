@@ -39,7 +39,7 @@ let ActiveTabs :[] ; //React Component
   let readinglistsCounter: number;
 
   function get_readinglists(){
-      chrome.storage.sync.get("readinglists", function (items) {
+      chrome.storage.local.get("readinglists", function (items) {
           console.log("Getting Reading list",items);
           itemGroup = items.readinglists;
           if(items.readinglists == undefined){
@@ -53,10 +53,18 @@ let ActiveTabs :[] ; //React Component
           ReadingLists.setState({data:itemGroup});
       }
   }
+  let allSessions;
+   function get_sessions(){
+      chrome.storage.local.get("sessions", function (items) {
+          allSessions = items.sessions;
+          console.log("get all sessions",allSessions);
+          Sessions.setState({data:allSessions});
+          return items.sessions;
+      }
+  }
   get_readinglists();
-  console.log("after getting readinglist",itemGroup);
   function set_readinglists(data){
-       chrome.storage.sync.set({readinglists: data}, function (){
+       chrome.storage.local.set({readinglists: data}, function (){
            console.log('Saving readinglists');
            readinglistsCounter++;
            ReadingLists.setState({data:itemGroup});
@@ -70,7 +78,7 @@ let ActiveTabs :[] ; //React Component
       sortAnimation : 250;
   }
   function getOptions() {
-      chrome.storage.sync.get("pref", function (items) {
+      chrome.storage.local.get("pref", function (items) {
           pref.filterType = items.pref.filterType;
           pref.filterCase = items.pref.filterCase;
           pref.sortAnimation = items.pref.sortAnimation;
@@ -85,7 +93,7 @@ let ActiveTabs :[] ; //React Component
       });
   }
   function getLastSession(){
-      chrome.storage.sync.get("session", function (items) {
+      chrome.storage.local.get("session", function (items) {
           console.log(items.session);
       });
   }
@@ -255,8 +263,9 @@ $(document).ready(function(){
     ReadingLists = ReactDOM.render(<ReadingLists />, document.getElementById('readinglists-tab');
     ActiveTabs = ReactDOM.render(<ActiveTabs />,document.getElementById('active-tabs-list-container'));
     InfoModal = ReactDOM.render(<InfoModal />,document.getElementById('infoModal'));
+    Sessions = ReactDOM.render(<Sessions />,document.getElementById('all-sessions'));
     ReadingLists.setState({data:itemGroup});
-   
+    get_sessions();
     
     // $( ".sortable" ).sortable();
     // $( ".selectable" ).selectable();
@@ -294,7 +303,7 @@ $(document).ready(function(){
             pref.filterType = "normal";            
         }
        
-         chrome.storage.sync.set({pref: pref}, function (){
+         chrome.storage.local.set({pref: pref}, function (){
              console.log('saving');
          })
     });
@@ -302,7 +311,7 @@ $(document).ready(function(){
     $('#filterCase-option-id').on('change',function(){
         pref.filterCase = $(this).prop('checked');
        
-        chrome.storage.sync.set({pref: pref}, function (){
+        chrome.storage.local.set({pref: pref}, function (){
              console.log('saving');
          })
     });
@@ -316,6 +325,13 @@ $(document).ready(function(){
     $("#rearrange-url-btn").on('click',function(){
         var i = 0;                    
         sortTabs(i,'url');        
+    });
+    $("#saveSessions-btn").on('click',function(e){
+        e.preventDefault();
+        packageAndBroadcast(sender,'background','saveSessions',null);
+    });
+    $("#saveSessionsAndClose-btn").on('click',function(){
+        packageAndBroadcast(sender,'background','saveSessionsAndClose',null);
     });
    
 
