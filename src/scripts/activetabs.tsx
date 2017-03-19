@@ -16,7 +16,7 @@ class ActiveTabs extends React.Component {
         let _this = this;
         let activeTabs = this.state.data;
         // console.group("Rendering");
-        console.log("rendering",activeTabs.length,"items",activeTabs);
+        // console.log("rendering",activeTabs.length,"items",activeTabs);
         
 
         return (<ul className="tabs-list list-group sortable selectable">
