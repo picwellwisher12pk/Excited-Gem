@@ -17,7 +17,7 @@ let ActiveTabs :[] ; //React Component
   function packageAndBroadcast(sender:string = sender,receiver:string,targetMethod:String,data: any){
           chrome.runtime.sendMessage(packageData(sender,receiver,targetMethod,data));
   }
-  chrome.runtime.onConnect.addListener(function(port){
+  if(window.location.pathname.indexOf('tabs') > -1) chrome.runtime.onConnect.addListener(function(port){
           
           console.assert(port.name == "ActiveTabsConnection");
           if (port.name == "ActiveTabsConnection") {
@@ -27,7 +27,9 @@ let ActiveTabs :[] ; //React Component
                    {
                        tabsList = msg.tabs;
                        $('.active-tab-count').html(msg.tabs.length);
-                       ActiveTabs.setState({data: msg.tabs});
+                       
+                         ActiveTabs.setState({data: msg.tabs});
+                       
                    }
               });
           }
@@ -53,6 +55,7 @@ let ActiveTabs :[] ; //React Component
           ReadingLists.setState({data:itemGroup});
       }
   }
+
   let allSessions;
    function get_sessions(){
       chrome.storage.local.get("sessions", function (items) {
@@ -256,21 +259,24 @@ Object.defineProperty(Array.prototype, "equals", {enumerable: false});
         }
 //////////////////////////////////////////////////////////////////
 $(document).ready(function(){
+    let currentPage = "";
+    let currentURL = window.location.pathname;
+    if(currentURL.indexOf('session') > -1){
+        currentPage = "sessions";
+    }
+    if(currentURL.indexOf('options') > -1){
+        currentPage = "options";
+    } 
+    if(currentURL.indexOf('tabs') > -1){
+        currentPage = "tabs";
+    }     
     packageAndBroadcast(sender,'background','documentready',null); //Tells background page when front-page's DOM is ready to start communication
-    getOptions();
+
     getLastSession();
     get_readinglists();
-    ReadingLists = ReactDOM.render(<ReadingLists />, document.getElementById('readinglists-tab');
-    ActiveTabs = ReactDOM.render(<ActiveTabs />,document.getElementById('active-tabs-list-container'));
-    InfoModal = ReactDOM.render(<InfoModal />,document.getElementById('infoModal'));
-    Sessions = ReactDOM.render(<Sessions />,document.getElementById('all-sessions'));
-    ReadingLists.setState({data:itemGroup});
-    get_sessions();
+   
+    let tempList;
     
-    // $( ".sortable" ).sortable();
-    // $( ".selectable" ).selectable();
-    // $( ".sortable" ).disableSelection();
-
     $('a[data-toggle="tab"]').on('shown.bs.tab', function (e) {
       e.target // newly activated tab
       e.relatedTarget // previous active tab
@@ -278,8 +284,35 @@ $(document).ready(function(){
             get_readinglists();
           console.log("tab activated",e.target);
       }
-    })
+    });
+    $('#quicksearch-input').on('keyup',(e)=>{
+        tempList = tabsList.filter((tab)=>
+        {
+            if(pref.filterType === "regex"){
+                let regex = new RegExp(e.target.value,pref.filterCase?"i":"");
+                return regex.test(tab.title);
+            }
+            else{
+                return tab.title.indexOf(e.target.value) >= 0;
+            }
+        });
+            ActiveTabs.setState({data:tempList});
+    });
+    if (currentPage == "tabs") {
+      ActiveTabs = ReactDOM.render(<ActiveTabs />,document.getElementById('active-tabs-list-container'));
+      InfoModal = ReactDOM.render(<InfoModal />,document.getElementById('infoModal'));
+      $("ul.nav.navbar-nav li.tabs").toggleClass('active');
+    }
+    if (currentPage == "sessions") {
+      get_sessions();
+      Sessions = ReactDOM.render(<Sessions />,document.getElementById('all-sessions'));
+      $("ul.nav.navbar-nav li.sessions").toggleClass('active');
+    }
 
+    if (currentPage == "options") {
+      getOptions();
+      $("ul.nav.navbar-nav li.options").toggleClass('active');
+    }
     $('#create-new-readinglist').on('click',function(){
         readlinglistname = prompt("Enter name for your reading list");
         console.log(readlinglistname);
@@ -295,7 +328,6 @@ $(document).ready(function(){
         }
 
     });
-
     $('#filter-type-option-id').on('change',function(){
         if($(this).prop('checked')){
             pref.filterType = "regex";
@@ -333,59 +365,37 @@ $(document).ready(function(){
     $("#saveSessionsAndClose-btn").on('click',function(){
         packageAndBroadcast(sender,'background','saveSessionsAndClose',null);
     });
-   
-
-
     chrome.runtime.onMessage.addListener((request: any, sender: Function) => {
     console.log(request);
     if(request.receiver == "content") {
         eval(request.targetMethod)(request.data);
     }
+
     return true;
 });
 
     windowHeight = window.innerHeight || document.documentElement.clientHeight || document.body.clientHeight;
 	
-    let tempList;
 
-    $('#quicksearch-input').on('keyup',(e)=>{
-        tempList = tabsList.filter((tab)=>
-        {
-            if(pref.filterType === "regex"){
-                let regex = new RegExp(e.target.value,pref.filterCase?"i":"");
-                return regex.test(tab.title);
-            }
-            else{
-                return tab.title.indexOf(e.target.value) >= 0;
-            }
-        });
-            ActiveTabs.setState({data:tempList});
-        });
 
     // })
     createQueryResultaTable();
 
-    document.querySelector('#go-to-options').addEventListener('click',function() {
-      if (chrome.runtime.openOptionsPage) {
-        // New way to open options pages, if supported (Chrome 42+).
-        chrome.runtime.openOptionsPage();
-      } else {
-        // Reasonable fallback.
-        window.open(chrome.runtime.getURL('options.html'));
-      }
-    });
+    // document.querySelector('#go-to-options').addEventListener('click',function() {
+    //   if (chrome.runtime.openOptionsPage) {
+    //     // New way to open options pages, if supported (Chrome 42+).
+    //     chrome.runtime.openOptionsPage();
+    //   } else {
+    //     // Reasonable fallback.
+    //     window.open(chrome.runtime.getURL('options.html'));
+    //   }
+    // });
     
    
 
 });
 ////////////////////////////////////////////////////////////////////
 
-// document.addEventListener('click', function(e) {
-//     if (hasClass(e.target, 'remove-tab')) {
-//         console.log(e.target);
-
-//     }
-// }, false);
 /**
  * Will attach data from Chrome tabs to HTML nodes to retreive later
  * @param  {Element} element [description]
@@ -400,10 +410,3 @@ function data2DOM(el, data) {
         }
     }
 }
-
-// function drawTabs(data){
-//     tabsList = data.tabsList;
-//   // console.info("Drawing Tabs");
-//   ActiveTabs.setState({data: data.tabsList});
-
-// }
