@@ -10,71 +10,12 @@ html
     link(rel='stylesheet', href='css/font-awesome.css')
     link(href='css/onetab.css', rel='stylesheet', type='text/css')
     script(src='js/jquery.min.js')
-    // <script src="js/react/dist/react.js"></script>
-    // <script src="js/react-dom/dist/react-dom.js"></script>
-    // <script src="js/common.js"></script>
-    // <script src="js/main.js"></script>
-    // <script src="js/activetabs.js"></script>
-    // <script src="js/content.js"></script>
     script(src='js/bootstrap.js')
+    script(src='js/content.js')
   body.eg
-    nav.navbar.navbar-default.navbar-fixed-top
-      .container-fluid
-        // Brand and toggle get grouped for better mobile display
-        .navbar-header
-          button.navbar-toggle.collapsed(type='button', data-toggle='collapse', data-target='#bs-example-navbar-collapse-1', aria-expanded='false')
-            span.sr-only Toggle navigation
-            span.icon-bar
-            span.icon-bar
-            span.icon-bar
-          a.navbar-brand(href='#') Excited Gem
-        // Collect the nav links, forms, and other content for toggling
-        #bs-example-navbar-collapse-1.collapse.navbar-collapse
-          ul.nav.navbar-nav
-            li
-              a#go-to-tabs(href='#') Tabs
-            // <li><a href="#">Suspended</a></li>
-            // <li><a href="query.html">Query</a></li>
-            li.dropdown
-              a.dropdown-toggle(href='#', data-toggle='dropdown', role='button', aria-haspopup='true', aria-expanded='false')
-                | Reading List 
-                span.caret
-              ul.dropdown-menu
-                li
-                  a#create-new-readinglist(href='#') Creat New
-                li.divider(role='separator')
-                //
-                  <li><a href="#">Another action</a></li>
-                  <li><a href="#">Something else here</a></li>
-                  <li><a href="#">Separated link</a></li>
-            //
-              <li class="dropdown">
-              <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Dropdown <span class="caret"></span></a>
-              <ul class="dropdown-menu">
-              <li><a href="#">Action</a></li>
-              <li><a href="#">Another action</a></li>
-              <li><a href="#">Something else here</a></li>
-              <li role="separator" class="divider"></li>
-              <li><a href="#">Separated link</a></li>
-              <li role="separator" class="divider"></li>
-              <li><a href="#">One more separated link</a></li>
-              </ul>
-              </li>
-          //
-            <form class="navbar-form navbar-left">
-            <div class="form-group">
-            <input type="text" class="form-control" placeholder="Search">
-            </div>
-            <button type="button" class="btn btn-default"><i class="fa fa-search"></i></button>
-            </form>
-          ul.nav.navbar-nav.navbar-right
-            li.active
-              a#go-to-options.btn
-                | Settings
-                span.sr-only (current)
-        // /.navbar-collapse
-      // /.container-fluid
+    include _navigation
     .container
+      h1 Options
       #status.alert.alert-success(role='alert', style='display: none;')
         button.close(type='button', data-dismiss='alert', aria-label='Close')
           span(aria-hidden='true') ×
