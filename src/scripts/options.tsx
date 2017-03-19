@@ -37,7 +37,7 @@ function save_options(e) {
     pref.filterCase = $('#filterCase-option-id').prop('checked');
     pref.sortAnimation = $('#sort-animation-option-id').val();
     console.log(pref)
-    chrome.storage.sync.set({
+    chrome.storage.local.set({
         pref: pref
     }, function () {
         // Update status to let user know options were saved.
@@ -56,7 +56,7 @@ function save_options(e) {
 // Restores select box and checkbox state using the preferences
 // stored in chrome.storage.
 function restore_options() {
-    chrome.storage.sync.get("pref", function (items) {
+    chrome.storage.local.get("pref", function (items) {
         console.log(items);
        $('#filter-type-option-id').val(items.pref.filterType)
        $('#sort-animation-option-id').val(items.pref.sortAnimation)
