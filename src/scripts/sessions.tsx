@@ -98,8 +98,8 @@ class SessionsTabs extends React.Component{
                         <div className="btn btn-default favicon" role="group" aria-label="favicon">
                         <img src={value.favIconUrl}/>
                     </div>
-                        <button type="button" className="btn btn-default">
-                        {value.title}</button>
+                        <a href={value.url} className="btn btn-default">
+                        {value.title}</a>
                         </li>
                   })}
              </ul>
