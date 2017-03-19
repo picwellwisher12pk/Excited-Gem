@@ -99,14 +99,14 @@ gulp.task('crx', function() {
         .pipe(gulp.dest('./dist'));
 });
 gulp.task('zip', function() {
-    return gulp.src(['build/*', 'certs/key.pem'])
+    return gulp.src(['build/**/*', 'certs/key.pem'])
         .pipe(zip(manifest.name + '.zip'))
         .pipe(gulp.dest('./dist'));
 });
 gulp.task('html', function() {
     debugger;
     return gulp.src(src.markup)
-        .pipe(newer(dest.root))
+        // .pipe(newer(dest.root))
         .pipe(jade({
             pretty: true
         }).on('error', gutil.log))
