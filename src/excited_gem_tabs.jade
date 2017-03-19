@@ -11,10 +11,10 @@ html(lang="en")
     script(src="js/bootstrap.js")
     script(src="js/activetabs.js")
     script(src="js/sessions.js")
-    script(src="js/readinglist.js")
+    //- script(src="js/readinglist.js")
     script(src="js/content.js")
-    script(src="js/contentext.js")
-    script(src="js/jquery-ui.js")
+    //- script(src="js/contentext.js")
+    //- script(src="js/jquery-ui.js")
 
     style.
       .tabGroupTitleText {
@@ -24,82 +24,12 @@ html(lang="en")
 
 
   body.eg
-    nav.navbar.navbar-default.navbar-fixed-top
-      .container-fluid
-        // Brand and toggle get grouped for better mobile display
-        .navbar-header
-          button.navbar-toggle.collapsed(type='button', data-toggle='collapse', data-target='#bs-example-navbar-collapse-1', aria-expanded='false')
-            span.sr-only Toggle navigation
-            span.icon-bar
-            span.icon-bar
-            span.icon-bar
-          a.navbar-brand(href='#') Excited Gem
-        // Collect the nav links, forms, and other content for toggling
-        #bs-example-navbar-collapse-1.collapse.navbar-collapse
-          ul.nav.navbar-nav
-            li.active
-              a#go-to-tabs(href='#')
-                | Tabs
-                span.sr-only (current)
-            // <li><a href="#">Suspended</a></li>
-            // <li><a href="query.html">Query</a></li>
-            li.dropdown
-              a.dropdown-toggle(href='#', data-toggle='dropdown', role='button', aria-haspopup='true', aria-expanded='false')
-                | Reading List 
-                span.caret
-              ul.dropdown-menu
-                li
-                  a#create-new-readinglist(href='#') Creat New
-                li.divider(role='separator')
-                //
-                  <li><a href="#">Another action</a></li>
-                  <li><a href="#">Something else here</a></li>
-                  <li><a href="#">Separated link</a></li>
-            //
-              <li class="dropdown">
-              <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Dropdown <span class="caret"></span></a>
-              <ul class="dropdown-menu">
-              <li><a href="#">Action</a></li>
-              <li><a href="#">Another action</a></li>
-              <li><a href="#">Something else here</a></li>
-              <li role="separator" class="divider"></li>
-              <li><a href="#">Separated link</a></li>
-              <li role="separator" class="divider"></li>
-              <li><a href="#">One more separated link</a></li>
-              </ul>
-              </li>
-          //
-            <form class="navbar-form navbar-left">
-            <div class="form-group">
-            <input type="text" class="form-control" placeholder="Search">
-            </div>
-            <button type="button" class="btn btn-default"><i class="fa fa-search"></i></button>
-            </form>
-          ul.nav.navbar-nav.navbar-right
-            li
-              a#go-to-options.btn Settings
+    include _navigation
         // /.navbar-collapse
       // /.container-fluid
     .container-fluid
-      //
-        <div class="page-header">
-        <h1>Excited Gem <small>Nitro For Chrome</small></h1>
-        </div>
-      ul#tablist.nav.nav-tabs(role='tablist')
-        li.active(role='presentation')
-          a(href='#active-tabs', aria-controls='active-tabs', role='tab', data-toggle='tab')
-            | Active Tabs (
-            span.active-tab-count
-            | )
-        li(role='presentation')
-          a(href='#sleeping', aria-controls='sleeping', role='tab', data-toggle='tab') Sleeping Tabs
-        li(role='presentation')
-          a(href='#readinglists-tab', aria-controls='readinglists-tab', role='tab', data-toggle='tab') Reading Lists
-        li(role='presentation')
-          a(href='#sessions-tab', aria-controls='sessions-tab', role='tab', data-toggle='tab') Sessions
-      // Tab panes
-      .tab-content
-        #active-tabs.tab-pane.active(role='tabpanel')
+      h1 Tabs
+      #active-tabs.active(role='tabpanel')
           .row
             .col-xs-12
           .tabs-list-container.header(data-spy='affix', data-offset-top='60', data-offset-bottom='200')
@@ -138,64 +68,10 @@ html(lang="en")
                     li
                       a#rearrange-title-btn(href='#', title='Rearrange with respect of Title')
                         | Title
-                //
-                  <li role="presentation" class="dropdown">
-                  <a class="dropdown-toggle" data-toggle="dropdown" href="#" role="button" aria-haspopup="true" aria-expanded="false">
-                  Reading List
-                  <span class="caret"> </span>
-                  </a>
-                  <ul class="dropdown-menu">
-                  <li role="presentation"><a href="#">Create New</a></li>
-                  </ul>
-                  </li>
+               
           #active-tabs-list-container.tabs-list-container
-        #sleeping.tab-pane(role='tabpanel') ...
-        #readinglists-tab.tab-pane(role='tabpanel')
-          //
-            //Reading List TAB BODY
-            ///////////////////////////////////
-        #sessions-tab
-          .tabs-list-container.header
-            //- .horizontal-block.search
-              .row
-                .col-sm-1
-                  span.clickable.glyphicon.glyphicon-pushpin.pinned(title='Pin All', aria-hidden='true')
-                  span.clickable.glyphicon.glyphicon-volume-off.audible(title='Mute All', aria-hidden='true')
-                .col-sm-10
-                  .input-group.filter-tabs
-                    input#quicksearch-input.quicksearch-input.form-control.regex(type='text', placeholder='Filter Tabs by Title', aria-label='...')
-                    span.input-group-addon.option-regex
-                      input#filter-type-option-id(type='checkbox', aria-label='...')
-                      |  Regex
-                    span.input-group-addon.option-case-sensitive
-                      input#filterCase-option-id(type='checkbox', aria-label='...')
-                      |  Case Sensitive
-                .col-sm-1
-                  .options.pull-right
-                    span.clickable.remove-tab.glyphicon.glyphicon-remove(data-command='remove', aria-hidden='true')
-            .horizontal-block.context-actions
-              ul.nav.nav-pills
-                li(role='presentation')
-                  a#saveSessions-btn(href='#', title='Save Active Tabs opened in all Chrome windows')
-                    span.glyphicon.glyphicon-save(aria-hidden='true')
-                    |                                     Save Session
-                li(role='presentation')
-                  a#saveSessionsAndClose-btn(href='#', title='Save Active Tabs opened in all Chrome windows and close Chrome')
-                    span.glyphicon.glyphicon-save(aria-hidden='true')
-                    |                                     Save Session and Close Chrome
-                //- li.dropdown(role='presentation')
-                  a.dropdown-toggle(data-toggle='dropdown', href='#', role='button', aria-haspopup='true', aria-expanded='false', title='Rearrange/Sort Tabs')
-                    span.glyphicon.glyphicon-sort-by-alphabet(aria-hidden='true')
-                    |                                   Rearrange by
-                    span.caret
-                  ul.dropdown-menu
-                    li
-                      a#rearrange-url-btn(href='#', title='Rearrange with respect of URL')
-                        | URL
-                    li
-                      a#rearrange-title-btn(href='#', title='Rearrange with respect of Title')
-                        | Title
-          #all-sessions
+
+          //- #all-sessions
       #react-container
       // Small modal
       #infoModal.modal.bs-example-modal-sm(tabindex='-1', role='dialog', aria-labelledby='mySmallModalLabel')
