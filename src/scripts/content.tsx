@@ -3,6 +3,7 @@ let sender: string = 'content';
 let tabsList;
 let ActiveTabs :[] ; //React Component
 let activeTabsCount;
+let selectedTabIndex;
 
 ////MESSAGING AND COMMUNICATION
   function packageData(sender:string,receiver:string,targetMethod:String,data: any): Object{
@@ -32,11 +33,20 @@ let activeTabsCount;
                        $('.active-tab-count').html(msg.tabs.length);
 
                          ActiveTabs.setState({data: msg.tabs});
+                         selectTab(1);
 
                    }
               });
           }
   });
+///Selection
+
+  function selectTab(number){
+    if(number < 0) number = 0;
+    $('.eg .tabs-list.list-group li.list-group-item').removeClass('selected');
+    $('.eg .tabs-list.list-group').find('li.list-group-item:nth('+number+')').addClass('selected');
+    selectedTabIndex = number;
+  }
 
 ////READING LISTS
   let itemGroup : []; //variable to stores data for React Component
@@ -275,6 +285,40 @@ $(document).ready(function(){
     }
     packageAndBroadcast(sender,'background','documentready',null); //Tells background page when front-page's DOM is ready to start communication
     $('.active-tab-counter').text(activeTabsCount);
+    $(document).keyup('.eg .tabs-list li.list-group-item button.site-name',function(e){
+      packageAndBroadcast(sender,"background","focusTab",$(this).parent().attr('id'));
+    })
+    //Section responsible for selecting tab based on up and down arrow key press
+    $(document).keydown(function(e){
+      console.log(e.key,e.which,e.code);
+      if(e.which == 40){
+        console.log(selectedTabIndex,$('.eg .tabs-list li').length);
+        if(selectedTabIndex >= $('.eg .tabs-list li').length) {
+          selectTab($('.eg .tabs-list li').length-1);
+        }else if (selectedTabIndex < $('.eg .tabs-list li').length-1)
+        {
+          selectTab(selectedTabIndex+1);
+        }
+      }
+      if(e.which == 36){ //Home
+        selectTab(0);
+      }
+      if(e.which == 35){ //End
+        selectTab($('.eg .tabs-list li').length-1);
+      }
+      if(e.which == 38){
+        selectTab(selectedTabIndex-1);
+      }
+      if(e.which == 13){ //focus tab on Enter
+        let id = $('.eg .tabs-list li.list-group-item:nth('+selectedTabIndex+')').attr('data-id');
+        packageAndBroadcast(sender,"background","focusTab",id);
+      }
+      if (e.which == 46) {
+        let id = $('.eg .tabs-list li.list-group-item:nth('+selectedTabIndex+')').attr('data-id');
+        if(confirm('Are you sure you want to close the following this Tab'))
+            {packageAndBroadcast(sender,"background","closeTab",id);}
+      }
+    }
     getLastSession();
     get_readinglists();
    // Instance the tour

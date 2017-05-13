@@ -11,7 +11,9 @@ body {
 }
 .eg .list-group-item{
     padding: 0;
-    
+    &.selected {
+        background-color: #acd8fb;
+    }
     .btn-default{
         &:first-child{
             border-left: none;
@@ -80,12 +82,12 @@ body {
                     box-shadow:none;
                     outline:none;
                 }
-                
+
             }
         }
 
     }
-    
+
     &.context-actions{
       background-color: #bcf34d;
       li a{
