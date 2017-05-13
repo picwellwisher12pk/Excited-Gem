@@ -9,12 +9,12 @@ html(lang="en")
     script(src="js/react/dist/react.js")
     script(src="js/react-dom/dist/react-dom.js")
     script(src="js/bootstrap.js")
-    script(src="js/activetabs.js")
+    //- script(src="js/activetabs.js")
     script(src="js/sessions.js")
     //- script(src="js/readinglist.js")
     script(src="js/content.js")
     //- script(src="js/contentext.js")
-    script(src="js/jquery-ui.js")
+    //- script(src="js/jquery-ui.js")
 
     style.
       .tabGroupTitleText {
@@ -24,8 +24,8 @@ html(lang="en")
 
 
   body.eg
-    include _navigation
-    .container-fluid
+    include navigation
+    .container-fluid.sessions
       h1 Sessions
       #sessions-tab.tab-pane(role='tabpanel')
         .tabs-list-container.header

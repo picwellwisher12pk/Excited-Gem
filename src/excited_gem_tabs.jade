@@ -15,20 +15,20 @@ html(lang="en")
     script(src="js/content.js")
     //- script(src="js/contentext.js")
     //- script(src="js/jquery-ui.js")
-
     style.
       .tabGroupTitleText {
       font-family: 'Open Sans', 'Helvetica Neue', Arial, sans-serif;
       color: #444;
       }
-
-
   body.eg
-    include _navigation
+    include navigation
         // /.navbar-collapse
       // /.container-fluid
     .container-fluid
-      h1 Tabs
+      h1
+        | Tabs
+        small.active-tab-counter  (69)
+
       #active-tabs.active(role='tabpanel')
           .row
             .col-xs-12
@@ -39,7 +39,7 @@ html(lang="en")
                   span.clickable.glyphicon.glyphicon-pushpin.pinned(title='Pin All', aria-hidden='true')
                   span.clickable.glyphicon.glyphicon-volume-off.audible(title='Mute All', aria-hidden='true')
                 .col-sm-10
-                  .input-group.filter-tabs
+                  .input-group.filter-tabs#filter-tabs
                     input#quicksearch-input.quicksearch-input.form-control.regex(type='text', placeholder='Filter Tabs by Title', aria-label='...')
                     span.input-group-addon.option-regex
                       input#filter-type-option-id(type='checkbox', aria-label='...')
@@ -68,7 +68,7 @@ html(lang="en")
                     li
                       a#rearrange-title-btn(href='#', title='Rearrange with respect of Title')
                         | Title
-               
+
           #active-tabs-list-container.tabs-list-container
 
           //- #all-sessions

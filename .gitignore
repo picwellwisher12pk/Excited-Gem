@@ -45,3 +45,6 @@ build/
 bower_components/
 .vscode/launch.json
 certs/key.pem
+dist/
+.vscode/settings.json
+excited-gem.sublime-workspace

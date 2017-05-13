@@ -22,6 +22,34 @@ function packageAndBroadcast(sender:string = sender,receiver:string,targetMethod
 //             port.postMessage({tabs : getAllTabs});
 //         }
 //     });
+function setIncStorage( storagekey , newdata , arrayName ) {
+  chrome.storage.local.get([storagekey], function(result) {
+        var object = result[storagekey]?result[storagekey]:[];
+
+        object.push(newdata);
+
+        var jsonObj = {};
+        jsonObj[storagekey] = object;
+        chrome.storage.local.set(jsonObj, function() {
+            console.log("Saved a new array item");
+        });
+    });
+}
+function matchKeys(property,keysToRemove){
+  for(let i = 0;i<keysToRemove.length; i++){
+        if(property == keysToRemove[i]) return true;
+  }
+}
+function removeKeys(keysToRemove,object){
+  tempObject = new Object();
+  for(let property in object){
+    if(matchKeys(property,keysToRemove)) continue;
+    tempObject[property] = object[property];
+  }
+  // console.log(tempObject);
+  return tempObject;
+
+}
 function streamTabs(port){
 	if(port == undefined) return;
 	port.postMessage({tabs : getAllTabs()});
@@ -50,17 +78,20 @@ chrome.runtime.onMessage.addListener((request: any, sender: Function) => {
 let allSessions = {
 	sessions : []
 };
-let _oneTabPageOpened: String = null; //Null or Id of OneTab Main Page
+let _oneTabPageOpened: String = null; 
 let onetabURL: String  = chrome.extension.getURL("excited_gem_tabs.html");
-let allTabs: Array<Object>; //All tabs including Ignored Group
-let refinedTabs: Array<Object>;//Not including the Ignored Group
+let allTabs: Array<Object> ; 
+
+let refinedTabs: Array<Object> ; 
+
 let ignoredUrlPatterns: Array<string> = [
 "chrome://*",
 "chrome-extension://*",
 "http(s)?://localhost*"
 ];
 
-let ignoredDataKeys: Array<String> = ['url','favIconUrl','title'];
+// let ignoredDataKeys: Array<String> = ['url','favIconUrl','title'];
+let ignoredDataKeys: Array<String> = ['active',"autoDiscardable", "discarded", "height", "highlighted", "id", "index", "selected", "status", "width", "windowId"];
 let _development: Boolean = true;
 let sender: string="background";
 
@@ -386,26 +417,32 @@ chrome.tabs.onUpdated.addListener((tabId: Number , info: Object)=> {
 function saveSessions() {
    chrome.windows.getAll({populate:true}, function(windows){
 	   	let session = {
-			   created : + new Date(),
+			   created : new Date(),
 			   modified : null,
 			   name : '',
 			   windows : []
 		   };
 		
 		for(var i=0;i<windows.length;i++){
-			session.windows[i] = windows[i].tabs;
+      console.log("saveSession background",windows[i].tabs); //Array of Objects
+      let windowsTab = [];
+      for (let j =0; j< windows[i].tabs.length;j++){
+              windowsTab.push(removeKeys(ignoredDataKeys,windows[i].tabs[j]));
+      }
+			session.windows[i] = windowsTab;
 		}
-		allSessions.sessions.push(session);
-		chrome.storage.local.set(allSessions, ()=> {
-    		chrome.notifications.create('reminder', {
-				type: 'basic',
-				iconUrl: '../images/extension-icon48.png',
-				title: 'Data saved',
-				message: "Session Saved"
-				}, (notificationId: String)=> {});
-    	});
-	   console.log("window tabs in saveSessionsbackground", session);
-		packageAndBroadcast(sender,'content','get_sessions',windows.tabs)
+		setIncStorage('sessions',session,"sessions");
+		// chrome.storage.local.set(allSessions, ()=> {
+  //   		chrome.notifications.create('reminder', {
+		// 		type: 'basic',
+		// 		iconUrl: '../images/extension-icon48.png',
+		// 		title: 'Data saved',
+		// 		message: "Session Saved"
+		// 		}, (notificationId: String)=> {});
+  //   	});
+    
+
+		packageAndBroadcast(sender,'content','get_sessions',null)
 	});
   
 }

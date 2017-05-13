@@ -2,6 +2,7 @@ let windowHeight: number;
 let sender: string = 'content';
 let tabsList;
 let ActiveTabs :[] ; //React Component
+let activeTabsCount;
 
 ////MESSAGING AND COMMUNICATION
   function packageData(sender:string,receiver:string,targetMethod:String,data: any): Object{
@@ -18,18 +19,20 @@ let ActiveTabs :[] ; //React Component
           chrome.runtime.sendMessage(packageData(sender,receiver,targetMethod,data));
   }
   if(window.location.pathname.indexOf('tabs') > -1) chrome.runtime.onConnect.addListener(function(port){
-          
+
           console.assert(port.name == "ActiveTabsConnection");
           if (port.name == "ActiveTabsConnection") {
               port.onMessage.addListener(function(msg) {
                   console.log("msg",msg);
+                  activeTabsCount = msg.tabs.length;
+                  $('.active-tab-counter').text("("+activeTabsCount+")");
                   if(!jQuery.isEmptyObject(msg))
                    {
                        tabsList = msg.tabs;
                        $('.active-tab-count').html(msg.tabs.length);
-                       
+
                          ActiveTabs.setState({data: msg.tabs});
-                       
+
                    }
               });
           }
@@ -86,7 +89,7 @@ let ActiveTabs :[] ; //React Component
           pref.filterCase = items.pref.filterCase;
           pref.sortAnimation = items.pref.sortAnimation;
           $(".option-case-sensitive input").prop("checked":pref.filterCase);
-          
+
           if(pref.filterType =="regex"){
               $(".option-regex input").prop("checked":true);
           }
@@ -179,7 +182,7 @@ Array.prototype.equals = function (array) {
     if (!array)
         return false;
 
-    // compare lengths - can save a lot of time 
+    // compare lengths - can save a lot of time
     if (this.length != array.length)
         return false;
 
@@ -188,13 +191,13 @@ Array.prototype.equals = function (array) {
         if (this[i] instanceof Array && array[i] instanceof Array) {
             // recurse into the nested arrays
             if (!this[i].equals(array[i]))
-                return false;       
-        }           
-        else if (this[i] != array[i]) { 
+                return false;
+        }
+        else if (this[i] != array[i]) {
             // Warning - two different object instances will never be equal: {x:20} != {x:20}
-            return false;   
-        }           
-    }       
+            return false;
+        }
+    }
     return true;
 }
 
@@ -205,7 +208,7 @@ function arraysAreIdentical(arr1, arr2){
             return false;
         }
     }
-    return true; 
+    return true;
 }
 //Takes an array of object and make an plain array out of for a given property
 function propertyToArray(array, property):array{
@@ -224,7 +227,7 @@ Object.defineProperty(Array.prototype, "equals", {enumerable: false});
         let prevTabsArray;
         let tabsListArray;
         let loopFinished: boolean;
-           setTimeout(function () {    
+           setTimeout(function () {
             if(type == 'url') tabsList.sort(compareURL);
             if(type == 'title') tabsList.sort(compareTitle);
             // console.log(tabsList[i].title);
@@ -238,11 +241,11 @@ Object.defineProperty(Array.prototype, "equals", {enumerable: false});
                  tabsListArray = propertyToArray(tabsList,'title');
                  prevTabsArray = propertyToArray(prevTabs,'title');
              }
-              head++;                     
+              head++;
               if (head < tabsList.length) {
                  sortTabs(head,type);
-              }  
-              loopFinished = true; 
+              }
+              loopFinished = true;
               let sameArray =  arraysAreIdentical(prevTabsArray,tabsListArray);
 
               if(sameArray) {
@@ -253,7 +256,7 @@ Object.defineProperty(Array.prototype, "equals", {enumerable: false});
                   console.log(sameArray,"=",tabsListArray,'=',prevTabsArray);
                   head = 0;
                   sortTabs(head,type);
-              }                     
+              }
            }, pref.sortAnimation)
 
         }
@@ -266,17 +269,18 @@ $(document).ready(function(){
     }
     if(currentURL.indexOf('options') > -1){
         currentPage = "options";
-    } 
+    }
     if(currentURL.indexOf('tabs') > -1){
         currentPage = "tabs";
-    }     
+    }
     packageAndBroadcast(sender,'background','documentready',null); //Tells background page when front-page's DOM is ready to start communication
-
+    $('.active-tab-counter').text(activeTabsCount);
     getLastSession();
     get_readinglists();
-   
+   // Instance the tour
+
     let tempList;
-    
+
     $('a[data-toggle="tab"]').on('shown.bs.tab', function (e) {
       e.target // newly activated tab
       e.relatedTarget // previous active tab
@@ -285,6 +289,7 @@ $(document).ready(function(){
           console.log("tab activated",e.target);
       }
     });
+    //Search/Filter
     $('#quicksearch-input').on('keyup',(e)=>{
         tempList = tabsList.filter((tab)=>
         {
@@ -298,6 +303,27 @@ $(document).ready(function(){
         });
             ActiveTabs.setState({data:tempList});
     });
+     $('#filter-type-option-id').on('change',function(){
+        if($(this).prop('checked')){
+            pref.filterType = "regex";
+        }else{
+            pref.filterType = "normal";
+        }
+
+         chrome.storage.local.set({pref: pref}, function (){
+             console.log('saving');
+         })
+    });
+
+    $('#filterCase-option-id').on('change',function(){
+        pref.filterCase = $(this).prop('checked');
+
+        chrome.storage.local.set({pref: pref}, function (){
+             console.log('saving');
+         })
+    });
+
+    //Page Detection
     if (currentPage == "tabs") {
       ActiveTabs = ReactDOM.render(<ActiveTabs />,document.getElementById('active-tabs-list-container'));
       InfoModal = ReactDOM.render(<InfoModal />,document.getElementById('infoModal'));
@@ -313,6 +339,8 @@ $(document).ready(function(){
       getOptions();
       $("ul.nav.navbar-nav li.options").toggleClass('active');
     }
+
+    //Reading List
     $('#create-new-readinglist').on('click',function(){
         readlinglistname = prompt("Enter name for your reading list");
         console.log(readlinglistname);
@@ -324,39 +352,21 @@ $(document).ready(function(){
         if(readlinglistname) {
            set_readinglists(itemGroup);
            $('#tablist a[href="#readinglists"]').tab('show');
-            
+
         }
 
     });
-    $('#filter-type-option-id').on('change',function(){
-        if($(this).prop('checked')){
-            pref.filterType = "regex";
-        }else{
-            pref.filterType = "normal";            
-        }
-       
-         chrome.storage.local.set({pref: pref}, function (){
-             console.log('saving');
-         })
-    });
 
-    $('#filterCase-option-id').on('change',function(){
-        pref.filterCase = $(this).prop('checked');
-       
-        chrome.storage.local.set({pref: pref}, function (){
-             console.log('saving');
-         })
-    });
     $('#refreshActiveTabs').on('click',function(){
         packageAndBroadcast(sender,'background','getTabsInRequestedWindowAndPost',null);
     });
     $("#rearrange-title-btn").on('click',function(){
-        var i = 0;                    
+        var i = 0;
         sortTabs(i,'title');
     });
     $("#rearrange-url-btn").on('click',function(){
-        var i = 0;                    
-        sortTabs(i,'url');        
+        var i = 0;
+        sortTabs(i,'url');
     });
     $("#saveSessions-btn").on('click',function(e){
         e.preventDefault();
@@ -375,7 +385,7 @@ $(document).ready(function(){
 });
 
     windowHeight = window.innerHeight || document.documentElement.clientHeight || document.body.clientHeight;
-	
+
 
 
     // })
@@ -390,8 +400,8 @@ $(document).ready(function(){
     //     window.open(chrome.runtime.getURL('options.html'));
     //   }
     // });
-    
-   
+
+
 
 });
 ////////////////////////////////////////////////////////////////////

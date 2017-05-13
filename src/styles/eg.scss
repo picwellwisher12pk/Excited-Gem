@@ -123,6 +123,15 @@ body {
 // box-shadow: inset 0px 2px 5px 0px rgba(0,0,0,0.2);
     /*cursor: pointer;*/
 }
+.list-group-item.horizontal-block .btn-default{
+    background-color: transparent;
+}
+.list-group-item.horizontal-block .btn.disabled{
+    cursor: default;
+}
+.list-group-item.horizontal-block .site-name:hover{
+    color:blue;
+}
 .horizontal-block img{
     width: 16px;
     height: 16px;
@@ -209,3 +218,30 @@ li{
   #selectable .ui-selected { background: #F39814; color: white; }
   #selectable { list-style-type: none; margin: 0; padding: 0; width: 60%; }
   #selectable li { margin: 3px; padding: 0.4em; font-size: 1.4em; height: 18px; }
+
+.eg .sessions{
+  .panel-group{
+    .panel-heading{
+      .session-name button.btn{
+        display: none;
+      }
+      .session-name:hover button.btn.btn-primary{
+        display: block;
+        position: absolute;
+        right: 0;
+        top: 0;
+        border-radius: 50%;
+        width: 20px;
+        height: 20px;
+        padding: 0;
+        font-size: 9px
+      }
+
+      input.form-control[readOnly]{
+        transition:all 0.4s;
+        border: none;
+        box-shadow:none;
+      }
+    }
+  }
+}

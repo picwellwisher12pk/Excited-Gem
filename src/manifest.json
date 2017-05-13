@@ -1,6 +1,6 @@
 {
     "name": "Excited Gem",
-    "version": "0.7.2",
+    "version": "0.7.3",
     "permissions": ["tabs", "idle", "<all_urls>", "contextMenus", "storage", "notifications"],
     "background": {
         "scripts": ["js/jquery.min.js", "js/background.js"]
