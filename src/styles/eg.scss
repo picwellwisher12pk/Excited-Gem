@@ -105,15 +105,23 @@ body {
     border-top-left-radius: 0;
 }
 
-
+.eg .btn-default.disabled:hover{
+  background-color: transparent;
+}
 .horizontal-block{
     transition: all 0.4s;
+    .btn-group .btn{
+      border:none;
+    }
+    .btn.clickable{
+      cursor: pointer;
+    }
 }
 .list-group-item.horizontal-block{
     .btn.favicon{
         cursor: default;
         &:hover{
-            background-color: #FFF;
+            // background-color: #FFF;
             // border-color:inherit;
         }
     }
