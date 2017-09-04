@@ -73,7 +73,8 @@ let selectedTabIndex;
    function get_sessions(){
       chrome.storage.local.get("sessions", function (items) {
           allSessions = items.sessions;
-          console.log("get all sessions",allSessions);
+          console.log("content.js get all sessions",allSessions);
+        //   Sessions.setState({data:allSessions[0].windows[0]});
           Sessions.setState({data:allSessions});
           return items.sessions;
       }
@@ -374,8 +375,9 @@ $(document).ready(function(){
       $("ul.nav.navbar-nav li.tabs").toggleClass('active');
     }
     if (currentPage == "sessions") {
+    Sessions = ReactDOM.render(<Sessions />,document.getElementById('all-sessions'));
       get_sessions();
-      Sessions = ReactDOM.render(<Sessions />,document.getElementById('all-sessions'));
+    //   console.log(all-sessions)
       $("ul.nav.navbar-nav li.sessions").toggleClass('active');
     }
 
@@ -413,6 +415,7 @@ $(document).ready(function(){
         sortTabs(i,'url');
     });
     $("#saveSessions-btn").on('click',function(e){
+        // let created = new Date();
         e.preventDefault();
         packageAndBroadcast(sender,'background','saveSessions',null);
     });

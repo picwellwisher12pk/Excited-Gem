@@ -25,20 +25,18 @@ html(lang="en")
 
   body.eg
     include navigation
-    .container-fluid.sessions
-      h1 Sessionss
-      #sessions-tab.tab-pane(role='tabpanel')
-        .tabs-list-container.header
-          .horizontal-block.context-actions
-            ul.nav.nav-pills
-              li(role='presentation')
-                a#saveSessions-btn(href='#', title='Save Active Tabs opened in all Chrome windows')
-                  span.glyphicon.glyphicon-save(aria-hidden='true')
-                  |                                     Save Session
-              li(role='presentation')
-                a#saveSessionsAndClose-btn(href='#', title='Save Active Tabs opened in all Chrome windows and close Chrome')
-                  span.glyphicon.glyphicon-save(aria-hidden='true')
-                  |                                     Save Session and Close Chrome
+    #sessions-tab.tab-pane(role='tabpanel')
+      .tabs-list-container.header
+        .horizontal-block.context-actions
+          ul.nav.nav-pills
+            li(role='presentation')
+              a#saveSessions-btn(href='#', title='Save Active Tabs opened in all Chrome windows')
+                span.glyphicon.glyphicon-save(aria-hidden='true')
+                |                                     Save Session
+            li(role='presentation')
+              a#saveSessionsAndClose-btn(href='#', title='Save Active Tabs opened in all Chrome windows and close Chrome')
+                span.glyphicon.glyphicon-save(aria-hidden='true')
+                |                                     Save Session and Close Chrome
         #all-sessions
     #react-container
     // Small modal

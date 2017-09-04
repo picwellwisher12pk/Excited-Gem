@@ -27,9 +27,10 @@ function setIncStorage( storagekey , newdata , arrayName ) {
         var object = result[storagekey]?result[storagekey]:[];
 
         object.push(newdata);
-
-        var jsonObj = {};
-        jsonObj[storagekey] = object;
+			console.log("background newdata before jsonify",newdata)
+			var jsonObj = {};
+			jsonObj[storagekey] = object;
+			console.log("background newdata after jsonify",jsonObj)
         chrome.storage.local.set(jsonObj, function() {
             console.log("Saved a new array item");
         });
@@ -416,9 +417,11 @@ chrome.tabs.onUpdated.addListener((tabId: Number , info: Object)=> {
 //if yes then don't save session. and alert. Tabs from curent session already exist in previously saved session.
 function saveSessions() {
    chrome.windows.getAll({populate:true}, function(windows){
+			 let date = + new Date(); 
+			//  date.toString();
 	   	let session = {
-			   created : new Date(),
-			   modified : null,
+			   created_at : date ,
+			   modified_at : null,
 			   name : '',
 			   windows : []
 		   };
