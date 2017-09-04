@@ -85,27 +85,40 @@ class Tab extends React.Component{
         let url = _this.state.url;
         return (
             <li key={_this.props.id} data-id={_this.props.id} className="ui-widget-content list-group-item horizontal-block">
-                <div className="btn-group"  role="toolbar" aria-label="site">
-                    <button type="button" className={`btn btn-default clickable glyphicon glyphicon-pushpin pinned`+(_this.state.pinned ? ` `: ` disabled`)} onClick={_this.pinTab.bind(_this,_this.props.id,_this.state.pinned)} aria-hidden='true' role="group" aria-label="pinned">
-                    </button>
-                    <button type="button" role="group" aria-label="audible"className = {`btn btn-default clickable glyphicon glyphicon-volume-off audible`+(_this.state.audible ? ` `: ` disabled`)} onClick={_this.muteTab.bind(_this,_this.props.id,_this.state.audible)} aria-hidden='true'>
-                    </button>
-                    <div className="btn btn-default favicon" role="group" aria-label="favicon">
-                        <img src={_this.state.favicon}/>
+                <div className="container-fluid">
+                    <div className="btn-group"  role="toolbar" aria-label="site">
+                        {/* <button type="button" className={`btn btn-default clickable glyphicon glyphicon-pushpin pinned`+(_this.state.pinned ? ` `: ` disabled`)} onClick={_this.pinTab.bind(_this,_this.props.id,_this.state.pinned)} aria-hidden='true' role="group" aria-label="pinned">
+                        </button>
+                        <button type="button" role="group" aria-label="audible"className = {`btn btn-default clickable glyphicon glyphicon-volume-off audible`+(_this.state.audible ? ` `: ` disabled`)} onClick={_this.muteTab.bind(_this,_this.props.id,_this.state.audible)} aria-hidden='true'>
+                        </button> */}
+                        <span className="favicon" role="group" aria-label="favicon">
+                            <img src={_this.state.favicon}/>
+                        </span>
+                        <a type="button" role="group" aria-label="title" title={url} className="clickable site-name" onClick={_this.focusTab.bind(null,_this.props.id)}>
+                            {_this.state.title}
+                        </a>
                     </div>
-                    <button type="button" role="group" aria-label="title" title={url} className="btn btn-default clickable site-name" onClick={_this.focusTab.bind(null,_this.props.id)}>
-                        {_this.state.title}
-                    </button>
-                </div>
-                <div className="options pull-right btn-group" role="group" aria-label="options">
-                    <div className="btn btn-default glyphicon glyphicon-option-vertical clickable" onClick={_this.infoModal.bind(null,_this.state.data)} ></div>
-                    <div className='btn btn-default clickable remove-tab glyphicon glyphicon-remove' data-id={_this.props.id} onClick={_this.closeTab.bind(null,_this.props.id,_this.state.title)} data-command='remove' aria-hidden='true'></div>
+                    <ul className="nav nav-pills options pull-right btn-group tabs-context-buttons" role="group" aria-label="options">
+                        <li title="Tab Information"  className=" clickable" onClick={_this.infoModal.bind(null,_this.state.data)} >
+                            <img src="images/info-icon.svg" alt="" />
+                        </li>
+                        <li title="Un/Pin Tab" className={`clickable`+(_this.state.pinned ? ` active`: ` disabled`)} onClick={_this.pinTab.bind(_this,_this.props.id,_this.state.pinned)} aria-hidden='true' role="group" aria-label="pinned" >
+                            <img src="images/pin-icon.svg" alt="" />
+                        </li>
+                        <li title="Un/Mute Tab" className=" clickable" onClick={_this.muteTab.bind(_this,_this.props.id,_this.state.audible)} aria-hidden='true' >
+                            <img src="images/sound-icon.svg" alt="" />
+                        </li>
+                        <li title="Close Tab" className=' clickable remove-tab' data-id={_this.props.id} onClick={_this.closeTab.bind(null,_this.props.id,_this.state.title)} data-command='remove' aria-hidden='true'>
+                            <img src= 'images/close-icon.svg' />
+                        </li>
+                    </div>
                 </div>
            </li>
             )
         
     }
 }
+
 class InfoModal extends React.Component {
   constructor(props) {
     super(props);
@@ -164,133 +177,3 @@ InfoModal.propTypes = {
 InfoModal.defaultProps= {
         data: []
 };
-
-
-    let Note = React.createClass({
-        getInitialState: ()=>{
-            return {editing: false}
-        },
-        componentWillMount: ()=>{
-            this.style = {
-                right: this.randomBetween(0, window.innerWidth - 150) + 'px',
-                top: this.randomBetween(0, window.innerHeight - 150) + 'px',
-                transform: 'rotate(' + this.randomBetween(-15, 15) + 'deg)'
-            };
-        },
-        componentDidMount: ()=>{
-            $(this.getDOMNode()).draggable();
-        },
-        randomBetween: (min, max)=>{
-            return (min + Math.ceil(Math.random() * max));
-        },
-        edit: ()=>{
-            this.setState({editing: true});
-        },
-        save: ()=>{
-            this.props.onChange(this.refs.newText.getDOMNode().value, this.props.index);
-            this.setState({editing: false});
-        },
-        remove: ()=>{
-            this.props.onRemove(this.props.index);
-        },
-        renderDisplay: ()=>{
-            return (
-                <div className="note"
-                    style={this.style}>
-                    <p>{this.props.children}</p>
-                    <span>
-                        <button onClick={this.edit}
-                                className="btn btn-primary glyphicon glyphicon-pencil"/>
-                        <button onClick={this.remove}
-                                className="btn btn-danger glyphicon glyphicon-trash"/>
-                    </span>
-                </div>
-                );
-        },
-        renderForm: ()=>{
-            return (
-                <div className="note" style={this.style}>
-                <textarea ref="newText" defaultValue={this.props.children}
-                className="form-control"></textarea>
-                <button onClick={this.save} className="btn btn-success btn-sm glyphicon glyphicon-floppy-disk" />
-                </div>
-                )
-        },
-        render: ()=>{
-            if (this.state.editing) {
-                return this.renderForm();
-            }
-            else {
-                return this.renderDisplay();
-            }
-        }
-    });
-
-    let Board = React.createClass({
-        propTypes: {
-            count: function(props, propName) {
-                if (typeof props[propName] !== "number"){
-                    return new Error('The count property must be a number');
-                }
-                if (props[propName] > 100) {
-                    return new Error("Creating " + props[propName] + " notes is ridiculous");
-                }
-            }
-        },
-        getInitialState: function() {
-            return {
-                notes: []
-            };
-        },
-        nextId: function() {
-            this.uniqueId = this.uniqueId || 0;
-            return this.uniqueId++;
-        },
-        // componentWillMount: function() {
-        //     let self = this;
-        //     if(this.props.count) {
-        //         $.getJSON("http://baconipsum.com/api/?type=all-meat&sentences=" +
-        //             this.props.count + "&start-with-lorem=1&callback=?", function(results){
-        //                 results[0].split('. ').forEach(function(sentence){
-        //                     self.add(sentence.substring(0,40));
-        //                 });
-        //             });
-        //     }
-        // },
-        add: function(text) {
-            let arr = this.state.notes;
-            arr.push({
-                id: this.nextId(),
-                note: text
-            });
-            this.setState({notes: arr});
-        },
-        update: function(newText, i) {
-            let arr = this.state.notes;
-            arr[i].note = newText;
-            this.setState({notes:arr});
-        },
-        remove: function(i) {
-            let arr = this.state.notes;
-            arr.splice(i, 1);
-            this.setState({notes: arr});
-        },
-        eachNote: function(note, i) {
-            return (
-                    <Note key={note.id}
-                        index={i}
-                        onChange={this.update}
-                        onRemove={this.remove}
-                    >{note.note}</Note>
-                );
-        },
-        render: function() {
-            return (<div className="board">
-                        {this.state.notes.map(this.eachNote)}
-                        <button className="btn btn-sm btn-success glyphicon glyphicon-plus"
-                                onClick={this.add.bind(null, "New Note")}/>
-                </div>
-
-            );
-        }
-        });

@@ -15,50 +15,36 @@ html(lang="en")
     script(src="js/content.js")
     //- script(src="js/contentext.js")
     //- script(src="js/jquery-ui.js")
-    style
-      .tabGroupTitleText {
-      font-family: 'Open Sans', 'Helvetica Neue', Arial, sans-serif;
-      color: #444;
-      }
   body.eg
     include navigation
         // /.navbar-collapse
       // /.container-fluid
-    .container-fluid
-      h1
-        | Tabs
-        small.active-tab-counter  (0)
+    div
+      //- h1
+      //-   | Tabs
+      //-   small.active-tab-counter  (0)
 
-      #active-tabs.active(role='tabpanel')
-          .row
-            .col-xs-12
-          .tabs-list-container.header(data-spy='affix', data-offset-top='60', data-offset-bottom='200')
-            .horizontal-block.search
-              .row
-                .col-sm-1
-                  span.clickable.glyphicon.glyphicon-pushpin.pinned(title='Pin All', aria-hidden='true')
-                  span.clickable.glyphicon.glyphicon-volume-off.audible(title='Mute All', aria-hidden='true')
-                .col-sm-10
-                  .input-group.filter-tabs#filter-tabs
-                    input#quicksearch-input.quicksearch-input.form-control.regex(type='text', placeholder='Filter Tabs by Title', aria-label='...')
-                    span.input-group-addon.option-regex
-                      input#filter-type-option-id(type='checkbox', aria-label='...')
-                      |  Regex
-                    span.input-group-addon.option-case-sensitive
-                      input#filterCase-option-id(type='checkbox', aria-label='...')
-                      |  Case Sensitive
-                .col-sm-1
-                  .options.pull-right
-                    span.clickable.remove-tab.glyphicon.glyphicon-remove(data-command='remove', aria-hidden='true')
-            .horizontal-block.context-actions
-              ul.nav.nav-pills
+      #active-tabs
+          header.tabs-list-container.header(data-spy='affix', data-offset-top='60', data-offset-bottom='200')
+            section.horizontal-block.search.container-fluid
+              .input-group.filter-tabs#filter-tabs
+                input#quicksearch-input.quicksearch-input.form-control.regex(type='text', placeholder='Filter Tabs by Title', aria-label='...')
+                span.input-group-addon.option-regex
+                  input#filter-type-option-id(type='checkbox', aria-label='...')
+                  |  Regex
+                span.input-group-addon.option-case-sensitive
+                  input#filterCase-option-id(type='checkbox', aria-label='...')
+                  |  Case Sensitive
+
+            section.horizontal-block.context-actions.container-fluid
+              ul.nav.nav-pills.pull-left
                 li(role='presentation')
                   a#refreshActiveTabs(href='#', title='Refresh Active Tabs')
-                    span.glyphicon.glyphicon-refresh(aria-hidden='true')
+                    img(src="images/reload-icon.svg", alt="")
                     |                                     Refresh
                 li.dropdown(role='presentation')
                   a.dropdown-toggle(data-toggle='dropdown', href='#', role='button', aria-haspopup='true', aria-expanded='false', title='Rearrange/Sort Tabs')
-                    span.glyphicon.glyphicon-sort-by-alphabet(aria-hidden='true')
+                    img(src="images/arrange.svg", alt="")
                     |                                   Rearrange by
                     span.caret
                   ul.dropdown-menu
@@ -68,7 +54,16 @@ html(lang="en")
                     li
                       a#rearrange-title-btn(href='#', title='Rearrange with respect of Title')
                         | Title
-
+              ul.nav.nav-pills.pull-right
+                li
+                  a(href="#")
+                    img(src="images/pin-icon.svg", alt="")
+                li
+                  a(href="#")
+                    img(src="images/sound-icon.svg", alt="")
+                li
+                  a(href="#")
+                    img(src="images/close-icon.svg", alt="")
           #active-tabs-list-container.tabs-list-container
 
           //- #all-sessions

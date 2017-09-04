@@ -7,13 +7,13 @@ let selectedTabIndex;
 
 ////MESSAGING AND COMMUNICATION
   function packageData(sender:string,receiver:string,targetMethod:String,data: any): Object{
-      let package :Object = {
+      let packages :Object = {
           sender: sender,
           receiver: receiver,
           targetMethod:targetMethod,
           data: data
       };
-       return package;
+       return packages;
   }
 
   function packageAndBroadcast(sender:string = sender,receiver:string,targetMethod:String,data: any){

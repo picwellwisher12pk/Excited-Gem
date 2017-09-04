@@ -51,6 +51,7 @@
     "jshint": "^2.9.4",
     "postcss-assets": "^4.1.0",
     "react": "^15.3.2",
+    "sc5-styleguide": "^2.0.4",
     "typescript": "^2.0.9"
   }
 }

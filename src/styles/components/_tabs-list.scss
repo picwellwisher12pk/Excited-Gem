@@ -1,0 +1,38 @@
+.list-group-item {
+    padding: 7px 0;
+    &.selected {
+        background-color: #acd8fb;
+    }
+    .btn-default {
+        &:first-child {
+            border-left: none;
+        }
+        &:last-child {
+            border-right: none;
+        }
+        border-bottom: none;
+        border-top: none;
+        &.site-name {
+            max-width: 1100px;
+            overflow: hidden;
+        }
+    }
+    .tabs-context-buttons li {
+        visibility: hidden;
+        opacity: 0.5;
+    }
+    &:hover .tabs-context-buttons li {
+        visibility: visible;
+    }
+    .tabs-context-buttons li.active {
+        visibility: visible;
+        opacity: 1;
+    }
+    .tabs-context-buttons li:hover {
+        opacity: 1;
+    }
+}
+
+.favicon {
+    margin-right: 15px;
+}

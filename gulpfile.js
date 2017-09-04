@@ -1,51 +1,52 @@
 let
-  env_dev = true,
-  env_debug = false,
+    env_dev = true,
+    env_debug = false,
 
-  //CSS
-  sass = require('gulp-sass'),
-  // autoprefixer = require('gulp-autoprefixer'),
-  autoprefixer = require('autoprefixer'),
-  minifyCSS = require('gulp-cssnano'),
-  postcss = require('gulp-postcss'),
-  sourcemaps   = require('gulp-sourcemaps'),
-  assets = require('postcss-assets'),
-  mqpacker = require('css-mqpacker'),
-  cssnano = require('cssnano'),
+    //CSS
+    sass = require('gulp-sass'),
+    // autoprefixer = require('gulp-autoprefixer'),
+    autoprefixer = require('autoprefixer'),
+    minifyCSS = require('gulp-cssnano'),
+    postcss = require('gulp-postcss'),
+    sourcemaps = require('gulp-sourcemaps'),
+    assets = require('postcss-assets'),
+    mqpacker = require('css-mqpacker'),
+    cssnano = require('cssnano'),
+    styleguide = require('sc5-styleguide'),
 
-  //JS
-  jshint = require('gulp-jshint'),
-  ts = require("gulp-typescript"),
-  tsProject = ts.createProject("tsconfig.json"),
+    //JS
+    jshint = require('gulp-jshint'),
+    ts = require("gulp-typescript"),
+    tsProject = ts.createProject("tsconfig.json"),
 
-  //HTML
-  jade = require('gulp-jade'),
-  cleanhtml = require('gulp-cleanhtml'),
+    //HTML
+    jade = require('gulp-jade'),
+    cleanhtml = require('gulp-cleanhtml'),
 
-  //General
-  gulp = require('gulp'),
-  strip= require('gulp-strip-debug'),
-  fs = require('fs'),
-  newer = require('gulp-newer'),
-  browserSync = require('browser-sync'),
-  header = require('gulp-header'),
-  rename = require('gulp-rename'),
-  notify = require("gulp-notify"),
-  gutil = require('gulp-util'),
-  filter = require('gulp-filter'),
-  plumber = require('gulp-plumber'),
-  debug = require('gulp-debug'),
-  rm = require('gulp-rimraf'),
-  size = require('gulp-size'),
+    //General
+    gulp = require('gulp'),
+    strip = require('gulp-strip-debug'),
+    fs = require('fs'),
+    newer = require('gulp-newer'),
+    browserSync = require('browser-sync'),
+    header = require('gulp-header'),
+    rename = require('gulp-rename'),
+    notify = require("gulp-notify"),
+    gutil = require('gulp-util'),
+    filter = require('gulp-filter'),
+    plumber = require('gulp-plumber'),
+    debug = require('gulp-debug'),
+    rm = require('gulp-rimraf'),
+    size = require('gulp-size'),
 
-  //Packaging
-  crx = require('gulp-crx-pack'),
-  zip = require('gulp-zip'),
-  manifest = require('./build/manifest.json'),
+    //Packaging
+    crx = require('gulp-crx-pack'),
+    zip = require('gulp-zip'),
+    manifest = require('./build/manifest.json'),
 
 
-  devBuild = (process.env.NODE_ENV !== 'development'),
-  package = require('./package.json');
+    devBuild = (process.env.NODE_ENV !== 'development'),
+    package = require('./package.json');
 module.exports = gulp;
 //////////////////////////////////////////////////////////////////
 
@@ -69,10 +70,13 @@ var dest = {
     index: "build/excited_gem_tabs.html",
     scripts: "build/js/",
     styles: "build/css/",
-    images: "buildimages/",
-    fonts: "build/fonts/"
+    images: "build/images/",
+    fonts: "build/fonts/",
+    styleguide: "build/styleguide"
+
 };
-// var excludeHTML = 
+var outputPath = dest.styleguide;
+
 
 var banner = [
     '/*!\n' +
@@ -128,13 +132,13 @@ gulp.task('img', function() {
 gulp.task('css', function() {
     console.log("CSS");
     var postCssOpts = [
-  // assets({ loadPaths: ['images/'] }),
-  autoprefixer({ browsers: ['last 4 version', '> 1%', 'safari 4', 'ie 7', 'ie 8', 'ie 9', 'opera 12.1', 'ios 6', 'android 4'] }),
-  mqpacker
-  ];
-  if (!devBuild) {
-    postCssOpts.push(cssnano);
-  }
+        // assets({ loadPaths: ['images/'] }),
+        autoprefixer({ browsers: ['last 4 version', '> 1%', 'safari 4', 'ie 7', 'ie 8', 'ie 9', 'opera 12.1', 'ios 6', 'android 4'] }),
+        mqpacker
+    ];
+    if (!devBuild) {
+        postCssOpts.push(cssnano);
+    }
     return gulp.src(src.styles)
         .pipe(plumber())
         .on('error', console.error.bind(console))
@@ -148,7 +152,7 @@ gulp.task('css', function() {
             // outputStyle: 'expanded',
             precision: 10
         }).on('error', gutil.log))
-        .pipe(sourcemaps.write({includeContent: false}))
+        .pipe(sourcemaps.write({ includeContent: false }))
         .pipe(postcss(postCssOpts))
         .pipe(gulp.dest(dest.styles)).on('error', gutil.log)
         .pipe(notify({ title: package.name + ' message', message: "CSS loaded" })).on('error', gutil.log)
@@ -180,7 +184,33 @@ gulp.task('ts', function() {
         .pipe(tsProject())
         .pipe(gulp.dest(dest.scripts))
 });
+gulp.task('styleguide:generate', function() {
+    return gulp.src("src/styles/eg.scss")
+        .pipe(styleguide.generate({
+            title: 'My Styleguide',
+            server: true,
+            rootPath: outputPath,
+            overviewPath: 'README.md'
+        }))
+        .pipe(gulp.dest(outputPath));
+});
 
+gulp.task('styleguide:applystyles', function() {
+    return gulp.src('main.scss')
+        .pipe(sass({
+            errLogToConsole: true
+        }))
+        .pipe(styleguide.applyStyles())
+        .pipe(gulp.dest(outputPath));
+});
+
+gulp.task('watch', ['styleguide'], function() {
+    // Start watching changes and update styleguide whenever changes are detected
+    // Styleguide automatically detects existing server instance
+    gulp.watch(['*.scss'], ['styleguide']);
+});
+
+gulp.task('styleguide', ['styleguide:generate', 'styleguide:applystyles']);
 gulp.task('start-browsersync', function() {
     browserSync.init({
         server: {
@@ -194,15 +224,15 @@ gulp.task('bs-reload', function() {
     browserSync.reload();
 });
 gulp.task('watch', function() {
-    gulp.watch(src.markup, ['html', 'crx', 'zip']);
+    gulp.watch(src.markup, ['html']);
     gulp.watch(src.styles, ['css']);
-    gulp.watch(src.scripts, ['js', 'crx', 'zip']);
-    gulp.watch(src.typescripts, ['ts', 'crx', 'zip']);
-    gulp.watch(src.images, ['img', 'crx', 'zip']);
-    gulp.watch(src.json, ['json', 'crx', 'zip']);
+    gulp.watch(src.scripts, ['js']);
+    gulp.watch(src.typescripts, ['ts']);
+    gulp.watch(src.images, ['img']);
+    gulp.watch(src.json, ['json']);
     gulp.watch([
         dest.markup //error here
         , dest.styles, dest.images, dest.scripts
     ], ['bs-reload']);
 })
-gulp.task('default', ['watch', 'json', 'crx', 'zip', 'html', 'css', 'js', 'ts', 'start-browsersync']);
+gulp.task('default', ['watch', 'json', 'html', 'css', 'js', 'ts', 'start-browsersync']);
