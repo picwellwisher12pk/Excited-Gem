@@ -1,12 +1,12 @@
 @import url('https://fonts.googleapis.com/css?family=Open+Sans:300,400,600,700');
+$brand-primary-color: #59C50F;
+$brand-secondary-color: #D1335B;
 @import 'components/generics';
 @import 'components/selectable';
 @import 'components/buttons';
 @import 'components/search';
 @import 'components/tabs-list';
 @import 'components/forms';
-$brand-primary-color: #59C50F;
-$brand-secondary-color: #D1335B;
 .eg .tabs-list-container.header.affix {
     position: fixed;
     top: 35px;

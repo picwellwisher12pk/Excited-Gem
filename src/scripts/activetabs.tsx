@@ -109,7 +109,9 @@ class Tab extends React.Component{
                             <img src="images/sound-icon.svg" alt="" />
                         </li>
                         <li title="Close Tab" className=' clickable remove-tab' data-id={_this.props.id} onClick={_this.closeTab.bind(null,_this.props.id,_this.state.title)} data-command='remove' aria-hidden='true'>
-                            <img src= 'images/close-icon.svg' />
+                            <svg stroke-linejoin="round" clip-rule="evenodd" fill-rule="evenodd" height="16" width="16" stroke-miterlimit="1.4142"viewBox="0 0 16 17">
+                                <path id="Close-Circle-Icon" d="m8 16.678c-4.418 0-8-3.581-8-8 0-4.418 3.582-8 8-8s8 3.582 8 8c0 4.419-3.582 8-8 8zm2.831-10.843c-0.388-0.388-1.017-0.388-1.405 0l-1.432 1.432-1.433-1.432c-0.388-0.388-1.017-0.388-1.405 0s-0.388 1.017 0 1.405l1.433 1.432-1.433 1.433c-0.388 0.387-0.388 1.017 0 1.405s1.017 0.388 1.405 0l1.433-1.433 1.432 1.433c0.388 0.388 1.017 0.388 1.405 0s0.388-1.018 0-1.405l-1.433-1.433 1.433-1.432c0.388-0.388 0.388-1.017 0-1.405z" />
+                            </svg>
                         </li>
                     </div>
                 </div>

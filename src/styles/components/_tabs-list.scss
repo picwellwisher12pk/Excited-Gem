@@ -31,6 +31,9 @@
     .tabs-context-buttons li:hover {
         opacity: 1;
     }
+    .tabs-context-buttons li.remove-tab:hover svg path {
+        fill: $brand-secondary-color;
+    }
 }
 
 .favicon {
