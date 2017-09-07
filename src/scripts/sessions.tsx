@@ -122,11 +122,19 @@ class SessionsTabs extends React.Component{
              <ul className="list-group"> 
                   {tab.map(function(value,index) {
                     return <li className="ui-widget-content list-group-item horizontal-block" key={index} id={value.id}>
-                        <span className="favicon" role="group" aria-label="favicon">
-                        <img src={value.favIconUrl}/>
-                    </span>
-                        <a href={value.url} className="">
-                        {value.title}</a>
+                            <span className="favicon" role="group" aria-label="favicon">
+                                <img src={value.favIconUrl}/>
+                            </span>
+                            <a href={value.url} className="">
+                                {value.title}
+                            </a>
+                            <ul className="nav nav-pills options pull-right btn-group tabs-context-buttons" role="group" aria-label="options">
+                                <li title="Close Tab" className=' clickable remove-tab' data-id={_this.props.id}  data-command='remove' aria-hidden='true'>
+                                    <svg stroke-linejoin="round" clip-rule="evenodd" fill-rule="evenodd" height="16" width="16" stroke-miterlimit="1.4142"viewBox="0 0 16 17">
+                                        <path id="Close-Circle-Icon" d="m8 16.678c-4.418 0-8-3.581-8-8 0-4.418 3.582-8 8-8s8 3.582 8 8c0 4.419-3.582 8-8 8zm2.831-10.843c-0.388-0.388-1.017-0.388-1.405 0l-1.432 1.432-1.433-1.432c-0.388-0.388-1.017-0.388-1.405 0s-0.388 1.017 0 1.405l1.433 1.432-1.433 1.433c-0.388 0.387-0.388 1.017 0 1.405s1.017 0.388 1.405 0l1.433-1.433 1.432 1.433c0.388 0.388 1.017 0.388 1.405 0s0.388-1.018 0-1.405l-1.433-1.433 1.433-1.432c0.388-0.388 0.388-1.017 0-1.405z" />
+                                    </svg>
+                                </li>
+                            </ul>
                         </li>
                   })}
              </ul>
