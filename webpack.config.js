@@ -70,9 +70,17 @@ var options = {
     },
     resolve: {
         alias: alias,
-        extensions: fileExtensions.map(extension => ("." + extension)).concat([".jsx", ".js", ".css"])
+        extensions: fileExtensions.map(extension => ("." + extension)).concat([".jsx", ".js", ".css"]),
+        modules: [path.resolve(__dirname, 'src'), 'node_modules', path.resolve(__dirname, 'build')],
+        descriptionFiles: ['package.json'],
+        moduleExtensions: ['-loader'],
     },
+
     plugins: [
+        new webpack.ProvidePlugin({
+            $: "jquery",
+            jQuery: "jquery"
+        }),
         new ExtractTextPlugin({
             filename: "css/[name].css"
         }),
@@ -85,11 +93,13 @@ var options = {
         //     filename: "tabs.html",
         //     chunks: ["tabs"]
         // }),
+
         new HtmlWebpackPlugin({
             template: path.join(__dirname, "src", "tabs.html"),
             filename: "tabs.html",
             chunks: ["tabs"]
         }),
+
         // new HtmlWebpackPlugin({
         //     template: path.join(__dirname, "src", "options.html"),
         //     filename: "options.html",
@@ -105,8 +115,9 @@ var options = {
     ]
 };
 
-if (env.NODE_ENV === "development") {
-    options.devtool = "cheap-module-eval-source-map";
-}
+// if (env.NODE_ENV === "development") {
+//     options.devtool = "cheap-module-eval-source-map";
+// }
+options.devtool = "cheap-source-map";
 
 module.exports = options;

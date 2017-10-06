@@ -1,5 +1,5 @@
 //Scripts and Modules
-import $ from 'jquery';
+require( 'jquery');
 require('bootstrap');
 import packagedAndBroadcast from "./components/communications.jsx";
 import ActiveTabs from "./react-components/activetabs.jsx";
