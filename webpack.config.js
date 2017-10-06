@@ -11,6 +11,8 @@ var alias = {};
 
 var secretsPath = path.join(__dirname, ("secrets." + env.NODE_ENV + ".js"));
 
+var images = ["jpg", "jpeg", "png", "gif"];
+var fonts = ["eot", "otf", "svg", "ttf", "woff", "woff2"];
 var fileExtensions = ["jpg", "jpeg", "png", "gif", "eot", "otf", "svg", "ttf", "woff", "woff2"];
 
 if (fileSystem.existsSync(secretsPath)) {
@@ -19,7 +21,7 @@ if (fileSystem.existsSync(secretsPath)) {
 
 var options = {
     entry: {
-        tabs: path.join(__dirname, "src", "scripts", "app.js"),
+        tabs: path.join(__dirname, "src", "scripts", "app.jsx"),
         // options: path.join(__dirname, "src", "js", "options.js"),
         // background: path.join(__dirname, "src", "js", "background.js")
     },
@@ -43,8 +45,13 @@ var options = {
                 exclude: /node_modules/
             },
             {
-                test: new RegExp('\.(' + fileExtensions.join('|') + ')$'),
-                loader: "file-loader?name=[name].[ext]",
+                test: new RegExp('\.(' + images.join('|') + ')$'),
+                loader: "file-loader?name=images/[name].[ext]",
+                exclude: /node_modules/
+            },
+            {
+                test: new RegExp('\.(' + fonts.join('|') + ')$'),
+                loader: "file-loader?name=css/fonts/[name].[ext]",
                 exclude: /node_modules/
             },
             {
