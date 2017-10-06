@@ -10,6 +10,11 @@ import "../styles/bootstrap.scss";
 import "../styles/eg.scss";
 // require("../styles/eg.scss");
 
+import "../images/extension-icon16.png";
+import "../images/extension-icon48.png";
+import "../images/extension-icon128.png";
+import "../images/icon38.png";
+import "../images/icon19.png";
 //Declarations
 let windowHeight;
 const sender = "content";
