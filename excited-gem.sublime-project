@@ -1,15 +1,25 @@
 {
-  "folders":
-  [
-    {
-      "folder_exclude_patterns":
-      [
-        ".vscode",
-        "stylesheets",
-        "Designs",
-        "certs"
-      ],
-      "path": "."
-    }
-  ]
+	"folders":
+	[
+		{
+			"folder_exclude_patterns":
+			[
+				".vscode",
+				"stylesheets",
+				"Designs",
+				"certs",
+				"node_modules"
+			],
+			"path": "."
+		},
+		{
+			"path": "D:\\xampp\\htdocs\\webpack\\original-project"
+		},
+		{
+			"path": "D:\\xampp\\htdocs\\webpack\\chrome-extension-webpack-boilerplate"
+		},
+		{
+			"path": "D:\\xampp\\htdocs\\hrtech\\hr-teck-world"
+		}
+	]
 }

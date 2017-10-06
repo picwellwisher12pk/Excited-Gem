@@ -1,6 +1,6 @@
 import $ from "jquery";
 import React from "react";
-import packageAndBroadcast from "../components/communications";
+import packageAndBroadcast from "../components/communications.jsx";
 class Tab extends React.Component{
    constructor(props) {
     super(props);

@@ -1,13 +1,14 @@
 //Scripts and Modules
-// import $ from 'jquery';
-import "../../node_modules/bootstrap-sass/assets/javascripts/bootstrap.js";
-import packageAndBroadcast from "./components/communications";
-import ActiveTabs from "./react-components/activetabs";
-import {getReadingLists,setReadingLists} from "./components/readingList";
+import $ from 'jquery';
+require('bootstrap');
+import packagedAndBroadcast from "./components/communications.jsx";
+import ActiveTabs from "./react-components/activetabs.jsx";
+import { getReadingLists, setReadingLists } from "./components/readingList.jsx";
 
 //Styles
-import "bootstrap";
+import "../styles/bootstrap.scss";
 import "../styles/eg.scss";
+// require("../styles/eg.scss");
 
 //Declarations
 let windowHeight;
@@ -16,15 +17,15 @@ let tabsList;
 let activeTabsCount;
 let selectedTabIndex;
 let currentPage = "";
-let currentURL ;
+let currentURL;
 
 
 
 
 $(document).ready(function() {
-  getReadingLists();
-  currentURL = window.location.pathname;
-  getCurrentURL();
-  packageAndBroadcast(sender, 'background', 'documentready', null); //Tells background page when front-page's DOM is ready to start communication
-  $('.active-tab-counter').text(activeTabsCount);
+    getReadingLists();
+    currentURL = window.location.pathname;
+    getCurrentURL();
+    packagedAndBroadcast(sender, 'background', 'documentready', null); //Tells background page when front-page's DOM is ready to start communication
+    $('.active-tab-counter').text(activeTabsCount);
 });

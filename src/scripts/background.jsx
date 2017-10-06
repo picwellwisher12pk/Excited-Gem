@@ -1,19 +1,19 @@
-function packageData(sender:string,receiver:string,targetMethod:String,data: any): Object{
-	let package :Object = {
+function packagedData(sender,receiver,targetMethod,data){
+	let packaged  = {
 		sender: sender,
 		receiver: receiver,
 		targetMethod:targetMethod,
 		data: data
 	};
- 	return package;
+ 	return packaged;
 }
 
-function packageAndBroadcast(sender:string = sender,receiver:string,targetMethod:String,data: any){
+function packagedAndBroadcast(sender = sender,receiver,targetMethod,data){
 		chrome.tabs.query({active: true, currentWindow: true}, function(tabs) {
-					// chrome.runtime.sendMessage());
-                    chrome.tabs.sendMessage(tabs[0].id, packageData(sender,receiver,targetMethod,data);
+                    chrome.tabs.sendMessage(tabs[0].id,
+                                            packagedData(sender,receiver,targetMethod,data));
         });
-		
+
 }
 // let portName ;
 // chrome.runtime.onConnect.addListener(function(port){
@@ -24,7 +24,7 @@ function packageAndBroadcast(sender:string = sender,receiver:string,targetMethod
 //     });
 function setIncStorage( storagekey , newdata , arrayName ) {
   chrome.storage.local.get([storagekey], function(result) {
-        var object = result[storagekey]?result[storagekey]:[];
+        var object = result[storagekey] ? result[storagekey] : null;
 
         object.push(newdata);
 
@@ -63,28 +63,26 @@ function documentready(){
 	    ActiveTabsConnection = port;
 	    console.log("documentready",tabArray[0],port);
 	    streamTabs(port);
-	    
+
 	});
 
 }
 
-chrome.runtime.onMessage.addListener((request: any, sender: Function) => {
-	console.log(request,sender);
-	if(request.receiver == "background") {
-		 eval(request.targetMethod)(request.data);
-	});	
+chrome.runtime.onMessage.addListener((request, sender) => {
+	log(request,sender);
+	if(request.receiver == "background") eval(request.targetMethod)(request.data);
 });
 
 let allSessions = {
-	sessions : []
+	sessions
 };
-let _oneTabPageOpened: String = null; 
-let onetabURL: String  = chrome.extension.getURL("excited_gem_tabs.html");
-let allTabs: Array<Object> ; 
+let _oneTabPageOpened = null;
+let onetabURL  = chrome.extension.getURL("excited_gem_tabs.html");
+let allTabs;
 
-let refinedTabs: Array<Object> ; 
+let refinedTabs ;
 
-let ignoredUrlPatterns: Array<string> = [
+let ignoredUrlPatterns = [
 "chrome://*",
 "chrome-extension://*",
 "http(s)?://localhost*"
@@ -93,42 +91,42 @@ let ignoredUrlPatterns: Array<string> = [
 // let ignoredDataKeys: Array<String> = ['url','favIconUrl','title'];
 let ignoredDataKeys: Array<String> = ['active',"autoDiscardable", "discarded", "height", "highlighted", "id", "index", "selected", "status", "width", "windowId"];
 let _development: Boolean = true;
-let sender: string="background";
+let sender="background";
 
 /**
  * Logging only for development environment
  * @param  {[type]} input  [description]
  * @param  {[type]} input2 [description]
  */
-function log(input: any,input2?: any):void{
+function log(input,input2?){
 	if (_development) console.log(input,input2);
 }
 
-function closeTab(tabId:Number):void{
+function closeTab(tabId){
 	chrome.tabs.remove(parseInt(tabId));
 }
 
-function focusTab(tabId: any):void{
+function focusTab(tabId){
 	tabId =  parseInt(tabId);
 	chrome.tabs.update(tabId, {selected: true});
 }
-function pinTab(tabId: any):void{
+function pinTab(tabId){
 	tabId =  parseInt(tabId);
 	chrome.tabs.update(tabId, {pinned: true});
 }
-function unpinTab(tabId: any):void{
+function unpinTab(tabId){
 	tabId =  parseInt(tabId);
 	chrome.tabs.update(tabId, {pinned: false});
 }
-function muteTab(tabId: any):void{
+function muteTab(tabId){
 	tabId =  parseInt(tabId);
 	chrome.tabs.update(tabId, {muted: true});
 }
-function unmuteTab(tabId: any):void{
+function unmuteTab(tabId){
 	tabId =  parseInt(tabId);
 	chrome.tabs.update(tabId, {muted: false});
 }
-function muteAll(data: Number[]){
+function muteAll(data){
 	for (let i = 0; i<data.length;i++){
 		chrome.tabs.update(tabId, {muted: true});
 	}
@@ -137,9 +135,9 @@ function moveTab(data){
 	tabId =  parseInt(data.tabId);
 	position =  parseInt(data.position);
 	chrome.tabs.move(tabId, {index: position});
-	
+
 }
-// function highlightTab(tabId: any):void{
+// function highlightTab(tabId){
 // 	tabId =  parseInt(tabId);
 // 	chrome.tabs.update(tabId, {active: true});
 // }
@@ -148,14 +146,14 @@ function moveTab(data){
  * @param  {String/Object/Array} data    [description]
  * @param  {String} message [description]
  */
-function saveData (data: any, message = "Data saved"):void {
+function saveData (data, message = "Data saved") {
 	chrome.storage.local.set(data, ()=> {
     	chrome.notifications.create('reminder', {
 	        type: 'basic',
 	        iconUrl: '../images/extension-icon48.png',
 	        title: 'Data saved',
 	        message: message
-	     }, (notificationId: String)=> {});
+	     }, (notificationId)=> {});
     });
 }
 
@@ -163,12 +161,12 @@ function saveData (data: any, message = "Data saved"):void {
 /**
  * Opens OneTab Main Page
  */
-function openExcitedGemPage ():void {
+function openExcitedGemPage () {
 	if(_oneTabPageOpened == null){
     	chrome.tabs.create({url: onetabURL, pinned: true},
-    		(tab: Object)=> {
+    		(tab)=> {
 	        	_oneTabPageOpened = tab.id;
-	        	chrome.tabs.onUpdated.addListener((tabId: Number , info: Object)=> {
+	        	chrome.tabs.onUpdated.addListener((tabId , info)=> {
 	        		if (info.status == "complete") sendTabsToContent();
 	    		});//onCreated
         	});//Create Tab
@@ -184,12 +182,12 @@ function openExcitedGemPage ():void {
  * @param {Integer} tabId     [description]
  * @param {Object} info [description]
  */
-function setTabCountInBadge(tabId: String , info: Object):void{
+function setTabCountInBadge(tabId , info){
 	chrome.tabs.query({
 	    currentWindow: true
-	}, (tabs: Object[])=>{
+	}, (tabs)=>{
 		chrome.browserAction.setBadgeText({
-		text : String(tabs.length)
+		text : tabs.length
 		});
 	});
 }
@@ -200,12 +198,12 @@ function setTabCountInBadge(tabId: String , info: Object):void{
  * @param  {String} returnType all | refined
  * @return {[type]}            [description]
  */
-function getAllTabs(windowId?: Number = chrome.windows.WINDOW_ID_CURRENT,returnType?: String = "all"):Object[]{
+function getAllTabs(windowId? = chrome.windows.WINDOW_ID_CURRENT,returnType? = "all"){
     chrome.tabs.query(
     {
     	// windowId: windowId
     },
-    	(tabs: Object[])=> {
+    	(tabs)=> {
     		let stillLoading: bolean;
     		stillLoading = false;
     		for (let tab of tabs) {
@@ -223,7 +221,7 @@ function getAllTabs(windowId?: Number = chrome.windows.WINDOW_ID_CURRENT,returnT
 				allTabs = tabs;
     			refinedTabs = santizeTabs(tabs,ignoredUrlPatterns);
 			}
-    		
+
     });
     // console.log("getAllTabs Return:", allTabs,refinedTabs);
    	if(returnType == "all") {return allTabs;} else {return refinedTabs;}
@@ -234,7 +232,7 @@ function getAllTabs(windowId?: Number = chrome.windows.WINDOW_ID_CURRENT,returnT
  * @param  {Array} ignoredUrlPatterns [description]
  * @return {Array of Object}   Returns neat array after removing ignored urls
  */
-function santizeTabs(tabs: Object[] , ignoredUrlPatterns: String[]):Object[]{
+function santizeTabs(tabs , ignoredUrlPatterns){
 	refinedTabs = tabs.filter((tab)=>{
 		let patLength =	ignoredUrlPatterns.length;
 		let url = tab.url;
@@ -246,19 +244,21 @@ function santizeTabs(tabs: Object[] , ignoredUrlPatterns: String[]):Object[]{
 	return refinedTabs;
 }
 
-function sendTabsToContent ():void {
+function sendTabsToContent () {
 	sendToContent("tabsList",getAllTabs());
 }
 /**
  * [listAllTabs description]
  * @return {[type]} [description]
  */
-function sendToContent (datavariable: String, data:Object[]):void {
-	let obj: Object = {};
+function sendToContent (datavariable, data) {
+	let obj = {};
 	obj[datavariable] = data;
-	// packageAndBroadcast(sender,"content","drawTabs",obj);
+	// packagedAndBroadcast(sender,"content","drawTabs",obj);
 }
-chrome.runtime.onInstalled.addListener(()=>console.log("onInstalled")));
+chrome.runtime.onInstalled.addListener(
+                                       ()=>console.log("onInstalled")
+);
 // chrome.tabs.onCreated.addListener(()=>console.log("onCreated"));
 chrome.tabs.onRemoved.addListener(()=>console.log("onRemoved"));
 chrome.tabs.onDetached.addListener(()=>console.log("onDetached"));
@@ -267,7 +267,7 @@ chrome.tabs.onUpdated.addListener(()=>console.log("onUpdated"));
 /**
  * Running setTabCountInBage when the Chrome Extension is installed ,a tab is created, removed , attached or detached.
  */
-function onUpdate (functions: Function) {
+function onUpdate (functions) {
 	chrome.runtime.onInstalled.addListener(functions)
 	// chrome.tabs.onCreated.addListener(functions);
 	chrome.tabs.onRemoved.addListener(functions);
@@ -307,39 +307,41 @@ chrome.runtime.onInstalled.addListener(()=>{
 })
 
 chrome.runtime.onInstalled.addListener(function(){
-
-	 chrome.storage.local.get("readinglists", function (items) {
-        readinglists = items.readinglists;
-        createReadingListMenu(readinglists);
-    }
-} )
+	 chrome.storage.local.get(
+        "readinglists",
+        function (items) {
+          readinglists = items.readinglists;
+          createReadingListMenu(readinglists);
+        }
+    );
+});
 /**
  * On clicking extension button
  */
-chrome.browserAction.onClicked.addListener((tab: Object)=> {
+chrome.browserAction.onClicked.addListener((tab)=> {
     openExcitedGemPage();
 });
 chrome.idle.setDetectionInterval(30);
-chrome.idle.onStateChanged.addListener((newState: String)=>{
+chrome.idle.onStateChanged.addListener((newState)=>{
 	if(newState == 'idle'){
 		console.log("idle");
 	}
 });
-function tabToList (tabId: Number):void {
+function tabToList (tabId) {
 	chrome.tabs.query({
     active: true,
     lastFocusedWindow: true
-}, (tabs: Object[])=> {
+}, (tabs)=> {
     // and use that tab to fill in out title and url
     let tab = tabs[0];
     sendToContent("tabsList",tab);
 });
 }
-function runQuery(query){
+/*function runQuery(query){
 	let query = 'table#searchResult tbody td';
 	chrome.runtime.sendMessage(query);
 	return query;
-}
+}*/
 
 
 /**
@@ -356,22 +358,22 @@ function createReadingListMenu(data){
 			"parentId": "showreadinglists",
 			"id":  id,
 		    "title": name,
-		    "onclick" : function(){}
+		    "onclick" (){}
 		});
 		chrome.contextMenus.create({
 			"parentId": "addreadinglists",
 			"id": id+"create",
 		    "title": name,
-		    "onclick" : function(){}
+		    "onclick" (){}
 		});
 	}
-	
+
 	console.log("menu",data);
 }
 
 chrome.contextMenus.create({
     "title": "Refresh Main Page",
-    "onclick" : function(){streamTabs(ActiveTabsConnection);}
+    "onclick" (){streamTabs(ActiveTabsConnection);}
 });
 // chrome.contextMenus.create({
 //     "title": "Send Current tab to list",
@@ -399,7 +401,7 @@ chrome.contextMenus.create({
 //     "onclick" : runQuery,
 //   });
 
-chrome.tabs.onUpdated.addListener((tabId: Number , info: Object)=> {
+chrome.tabs.onUpdated.addListener((tabId , info)=> {
     if (info.status == "complete") {
     	log(tabId.title,"complete");
     	streamTabs(ActiveTabsConnection);
@@ -422,7 +424,7 @@ function saveSessions() {
 			   name : '',
 			   windows : []
 		   };
-		
+
 		for(var i=0;i<windows.length;i++){
       console.log("saveSession background",windows[i].tabs); //Array of Objects
       let windowsTab = [];
@@ -438,11 +440,11 @@ function saveSessions() {
 		// 		iconUrl: '../images/extension-icon48.png',
 		// 		title: 'Data saved',
 		// 		message: "Session Saved"
-		// 		}, (notificationId: String)=> {});
+		// 		}, (notificationId)=> {});
   //   	});
-    
 
-		packageAndBroadcast(sender,'content','get_sessions',null)
+
+		packagedAndBroadcast(sender,'content','get_sessions',null)
 	});
-  
+
 }

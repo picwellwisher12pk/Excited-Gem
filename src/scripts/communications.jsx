@@ -1,4 +1,4 @@
-  function packageData(sender:string,receiver:string,targetMethod:String,data: any): Object{
+  function packagedData(sender,receiver,targetMethod,data): Object{
       let pack :Object = {
           sender: sender,
           receiver: receiver,
@@ -8,6 +8,6 @@
        return pack;
   }
 
-  function packageAndBroadcast(sender:string = sender,receiver:string,targetMethod:String,data: any){
-          chrome.runtime.sendMessage(packageData(sender,receiver,targetMethod,data));
+  function packagedAndBroadcast(sender = sender,receiver,targetMethod,data){
+          chrome.runtime.sendMessage(packagedData(sender,receiver,targetMethod,data));
   }
