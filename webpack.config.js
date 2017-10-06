@@ -2,6 +2,7 @@ var webpack = require("webpack"),
     path = require("path"),
     fileSystem = require("fs"),
     env = require("./utils/env"),
+    webpackValidator = require('webpack-validator'),
     HtmlWebpackPlugin = require("html-webpack-plugin"),
     ExtractTextPlugin = require('extract-text-webpack-plugin'),
     WriteFilePlugin = require("write-file-webpack-plugin");
@@ -20,6 +21,7 @@ if (fileSystem.existsSync(secretsPath)) {
 }
 
 var options = {
+    context: __dirname,
     entry: {
         tabs: path.join(__dirname, "src", "scripts", "app.jsx"),
         // options: path.join(__dirname, "src", "js", "options.js"),
@@ -27,7 +29,7 @@ var options = {
     },
     output: {
         path: path.join(__dirname, "build"),
-        filename: "[name].bundle.js"
+        filename: "js/[name].bundle.js"
     },
     module: {
         rules: [
@@ -51,7 +53,7 @@ var options = {
             },
             {
                 test: new RegExp('\.(' + fonts.join('|') + ')$'),
-                loader: "file-loader?name=css/fonts/[name].[ext]",
+                loader: "file-loader?name=/fonts/[name].[ext]",
                 exclude: /node_modules/
             },
             {
