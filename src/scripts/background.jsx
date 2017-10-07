@@ -74,10 +74,10 @@ chrome.runtime.onMessage.addListener((request, sender) => {
 });
 
 let allSessions = {
-	sessions
+	// sessions
 };
 let _oneTabPageOpened = null;
-let onetabURL  = chrome.extension.getURL("excited_gem_tabs.html");
+let onetabURL  = chrome.extension.getURL("tabs.html");
 let allTabs;
 
 let refinedTabs ;
