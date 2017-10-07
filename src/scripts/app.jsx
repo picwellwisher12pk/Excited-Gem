@@ -15,6 +15,13 @@ import "../images/extension-icon48.png";
 import "../images/extension-icon128.png";
 import "../images/icon38.png";
 import "../images/icon19.png";
+import "../images/arrange.svg";
+import "../images/close-icon.svg";
+import "../images/info-icon.svg";
+import "../images/pin-icon.svg";
+import "../images/reload-icon.svg";
+import "../images/search-icon.svg";
+import "../images/sound-icon.svg";
 //Declarations
 let windowHeight;
 const sender = "content";
