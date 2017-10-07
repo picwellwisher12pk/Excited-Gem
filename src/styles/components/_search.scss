@@ -1,0 +1,26 @@
+// Search Bar
+//
+// :hover             - Subtle hover highlight.
+// .star-given        - A highlight indicating you've already given a star.
+// .star-given:hover  - Subtle hover highlight on top of star-given styling.
+// .disabled          - Dims the button to indicate it cannot be used.
+//
+// Styleguide 2.1.3.
+.search {
+    padding: 0;
+    .form-control {
+        transition: all 0.3s;
+        padding-left: 45px;
+        box-shadow: none;
+        background-image: url('../images/search-icon.svg');
+        background-position: 15px center;
+        background-repeat: no-repeat;
+        background-size: 16px;
+        &:hover,
+        &:focus,
+        &:active {
+            background-position: 20px center;
+            background-size: 18px;
+        }
+    }
+}
