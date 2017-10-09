@@ -5,6 +5,7 @@ import React from "react";
 import ReactDOM from "react-dom";
 import packagedAndBroadcast from "./components/communications.js";
 import * as general from "./components/general.js";
+import selectTab from "./components/tabSelection.js";
 // require("./components/general.js");
 import ActiveTabs from "./react-components/activetabs.jsx";
 // import { getReadingLists, setReadingLists } from "./components/readingList.jsx";
