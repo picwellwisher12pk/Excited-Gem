@@ -1,6 +1,7 @@
 import $ from "jquery";
 import React from "react";
-import packageAndBroadcast from "../components/communications.js";
+import packagedAndBroadcast from "../components/communications.js";
+const sender = "content";
 export default class Tab extends React.Component{
    constructor(props) {
     super(props);
@@ -16,16 +17,16 @@ export default class Tab extends React.Component{
         };
     }
     focusTab(id){
-        console.log("inside open",id);
-        packageAndBroadcast(sender,"background","focusTab",id);
+        console.info("opening ID: ",id);
+        packagedAndBroadcast(sender,"background","focusTab",id);
     }
     pinTab(id,pinned){
         console.info(id,pinned);
-        pinned ? packageAndBroadcast(sender,"background","unpinTab",id) : packageAndBroadcast(sender,"background","pinTab",id)
+        pinned ? packagedAndBroadcast(sender,"background","unpinTab",id) : packagedAndBroadcast(sender,"background","pinTab",id)
         this.setState({pinned:!pinned});
     }
     muteTab(id,audible){
-        audible ? packageAndBroadcast(sender,"background","muteTab",id) : packageAndBroadcast(sender,"background","unmuteTab",id)
+        audible ? packagedAndBroadcast(sender,"background","muteTab",id) : packagedAndBroadcast(sender,"background","unmuteTab",id)
         this.setState({audible:!audible});
     }
     componentWillReceiveProps(){
@@ -33,7 +34,7 @@ export default class Tab extends React.Component{
     }
     closeTab(id,title){
         if(confirm(`Are you sure you want to close the following tab\n`+(title)))
-            {packageAndBroadcast(sender,"background","closeTab",id);}
+            {packagedAndBroadcast(sender,"background","closeTab",id);}
     }
     infoModal(dataV){
         console.log("trigger infoModal",this,dataV);
