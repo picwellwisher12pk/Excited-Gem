@@ -1,9 +1,13 @@
 //Scripts and Modules
 require( 'jquery');
 require('bootstrap');
-import packagedAndBroadcast from "./components/communications.jsx";
+import React from "react";
+import ReactDOM from "react-dom";
+import packagedAndBroadcast from "./components/communications.js";
+import * as general from "./components/general.js";
+// require("./components/general.js");
 import ActiveTabs from "./react-components/activetabs.jsx";
-import { getReadingLists, setReadingLists } from "./components/readingList.jsx";
+// import { getReadingLists, setReadingLists } from "./components/readingList.jsx";
 
 //Styles
 import "../styles/bootstrap.scss";
@@ -26,18 +30,44 @@ import "../images/sound-icon.svg";
 let windowHeight;
 const sender = "content";
 let tabsList;
+let Tabs;
 let activeTabsCount;
 let selectedTabIndex;
 let currentPage = "";
-let currentURL;
-
 
 
 
 $(document).ready(function() {
-    getReadingLists();
-    currentURL = window.location.pathname;
-    getCurrentURL();
+    // getReadingLists();
+    
+    currentPage = general.getCurrentURL();
     packagedAndBroadcast(sender, 'background', 'documentready', null); //Tells background page when front-page's DOM is ready to start communication
     $('.active-tab-counter').text(activeTabsCount);
+    if (currentPage == "tabs") {
+      Tabs = ReactDOM.render(<ActiveTabs />,document.getElementById('active-tabs-list-container'));
+    //   InfoModal = ReactDOM.render(<InfoModal />,document.getElementById('infoModal'));
+      $("ul.nav.navbar-nav li.tabs").toggleClass('active');
+    }
+    if(window.location.pathname.indexOf('tabs') > -1) chrome.runtime.onConnect.addListener(function(port){
+
+          console.assert(port.name == "ActiveTabsConnection");
+          if (port.name == "ActiveTabsConnection") {
+              port.onMessage.addListener(function(msg) {
+                  console.log("msg",msg);
+                  activeTabsCount = msg.tabs.length;
+                  $('.active-tab-counter').text("("+activeTabsCount+")");
+                  if(!jQuery.isEmptyObject(msg))
+                   {
+                       tabsList = msg.tabs;
+                       $('.active-tab-count').html(msg.tabs.length);
+
+                         Tabs.setState({data: msg.tabs});
+                         selectTab(1);
+
+                   }
+              });
+          }
+  });
+
+    
 });

@@ -12,8 +12,8 @@ var alias = {};
 
 var secretsPath = path.join(__dirname, ("secrets." + env.NODE_ENV + ".js"));
 
-var images = ["jpg", "jpeg", "png", "gif"];
-var fonts = ["eot", "otf", "svg", "ttf", "woff", "woff2"];
+var images = ["jpg", "jpeg", "png", "gif", "svg"];
+var fonts = ["eot", "otf", "ttf", "woff", "woff2"];
 var fileExtensions = ["jpg", "jpeg", "png", "gif", "eot", "otf", "svg", "ttf", "woff", "woff2"];
 
 if (fileSystem.existsSync(secretsPath)) {
@@ -24,12 +24,12 @@ var options = {
     context: __dirname,
     entry: {
         tabs: path.join(__dirname, "src", "scripts", "app.jsx"),
-        // options: path.join(__dirname, "src", "js", "options.js"),
-        // background: path.join(__dirname, "src", "js", "background.js")
+        // options: path.join(__dirname, "src", "scripts", "options.jsx"),
+        background: path.join(__dirname, "src", "scripts", "background.jsx")
     },
     output: {
         path: path.join(__dirname, "build"),
-        filename: "js/[name].bundle.js"
+        filename: "js/[name].js"
     },
     module: {
         rules: [
@@ -100,11 +100,11 @@ var options = {
             chunks: ["tabs"]
         }),
 
-        // new HtmlWebpackPlugin({
-        //     template: path.join(__dirname, "src", "options.html"),
-        //     filename: "options.html",
-        //     chunks: ["options"]
-        // }),
+        new HtmlWebpackPlugin({
+            template: path.join(__dirname, "src", "options.html"),
+            filename: "options.html",
+            chunks: ["options"]
+        }),
         // new HtmlWebpackPlugin({
         //     template: path.join(__dirname, "src", "background.html"),
         //     filename: "background.html",

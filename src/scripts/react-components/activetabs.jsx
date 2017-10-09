@@ -1,9 +1,9 @@
 import $ from "jquery";
 import React from "react";
-import packageAndBroadcast from "../components/communications.jsx";
+import packagedAndBroadcast from "../components/communications.js";
 import Tab from "./tabListItem.jsx";
 import InfoModal from "./infomodal.jsx";
-class ActiveTabs extends React.Component {
+export default class ActiveTabs extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
@@ -18,6 +18,7 @@ class ActiveTabs extends React.Component {
     render() {
         let _this = this;
         let activeTabs = this.state.data;
+        console.log(activeTabs);
         return (<ul className="tabs-list list-group sortable selectable">
                 {activeTabs.map(function(value) {
                     return <Tab key={value.id} id={value.id} pinned={value.pinned} audible={value.audible} position={value.index} url={value.url} title={value.title} favIconUrl={value.favIconUrl} status={value.status} data={value}/>

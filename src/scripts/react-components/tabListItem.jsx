@@ -1,6 +1,6 @@
 import $ from "jquery";
 import React from "react";
-import packageAndBroadcast from "../components/communications.jsx";
+import packageAndBroadcast from "../components/communications.js";
 export default class Tab extends React.Component{
    constructor(props) {
     super(props);
@@ -49,21 +49,35 @@ export default class Tab extends React.Component{
         let url = _this.state.url;
         return (
             <li key={_this.props.id} data-id={_this.props.id} className="ui-widget-content list-group-item horizontal-block">
-                <div className="btn-group"  role="toolbar" aria-label="site">
-                    <button type="button" className={`btn btn-default clickable glyphicon glyphicon-pushpin pinned`+(_this.state.pinned ? ` `: ` disabled`)} onClick={_this.pinTab.bind(_this,_this.props.id,_this.state.pinned)} aria-hidden='true' role="group" aria-label="pinned">
-                    </button>
-                    <button type="button" role="group" aria-label="audible"className = {`btn btn-default clickable glyphicon glyphicon-volume-off audible`+(_this.state.audible ? ` `: ` disabled`)} onClick={_this.muteTab.bind(_this,_this.props.id,_this.state.audible)} aria-hidden='true'>
-                    </button>
-                    <div className="btn btn-default favicon" role="group" aria-label="favicon">
-                        <img src={_this.state.favicon}/>
+                <div className="container-fluid">
+                    <div className="btn-group"  role="toolbar" aria-label="site">
+                        {/* <button type="button" className={`btn btn-default clickable glyphicon glyphicon-pushpin pinned`+(_this.state.pinned ? ` `: ` disabled`)} onClick={_this.pinTab.bind(_this,_this.props.id,_this.state.pinned)} aria-hidden='true' role="group" aria-label="pinned">
+                        </button>
+                        <button type="button" role="group" aria-label="audible"className = {`btn btn-default clickable glyphicon glyphicon-volume-off audible`+(_this.state.audible ? ` `: ` disabled`)} onClick={_this.muteTab.bind(_this,_this.props.id,_this.state.audible)} aria-hidden='true'>
+                        </button> */}
+                        <span className="favicon" role="group" aria-label="favicon">
+                            <img src={_this.state.favicon}/>
+                        </span>
+                        <a type="button" role="group" aria-label="title" title={url} className="clickable site-name" onClick={_this.focusTab.bind(null,_this.props.id)}>
+                            {_this.state.title}
+                        </a>
                     </div>
-                    <button type="button" role="group" aria-label="title" title={url} className="btn btn-default clickable site-name" onClick={_this.focusTab.bind(null,_this.props.id)}>
-                        {_this.state.title}
-                    </button>
-                </div>
-                <div className="options pull-right btn-group" role="group" aria-label="options">
-                    <div className="btn btn-default glyphicon glyphicon-option-vertical clickable" onClick={_this.infoModal.bind(null,_this.state.data)} ></div>
-                    <div className='btn btn-default clickable remove-tab glyphicon glyphicon-remove' data-id={_this.props.id} onClick={_this.closeTab.bind(null,_this.props.id,_this.state.title)} data-command='remove' aria-hidden='true'></div>
+                    <ul className="nav nav-pills options pull-right btn-group tabs-context-buttons" role="group" aria-label="options">
+                        <li title="Tab Information"  className=" clickable" onClick={_this.infoModal.bind(null,_this.state.data)} >
+                            <img src="images/info-icon.svg" alt="" />
+                        </li>
+                        <li title="Un/Pin Tab" className={`clickable`+(_this.state.pinned ? ` active`: ` disabled`)} onClick={_this.pinTab.bind(_this,_this.props.id,_this.state.pinned)} aria-hidden='true' role="group" aria-label="pinned" >
+                            <img src="images/pin-icon.svg" alt="" />
+                        </li>
+                        <li title="Un/Mute Tab" className=" clickable" onClick={_this.muteTab.bind(_this,_this.props.id,_this.state.audible)} aria-hidden='true' >
+                            <img src="images/sound-icon.svg" alt="" />
+                        </li>
+                        <li title="Close Tab" className=' clickable remove-tab' data-id={_this.props.id} onClick={_this.closeTab.bind(null,_this.props.id,_this.state.title)} data-command='remove' aria-hidden='true'>
+                            <svg stroke-linejoin="round" clip-rule="evenodd" fill-rule="evenodd" height="16" width="16" stroke-miterlimit="1.4142"viewBox="0 0 16 17">
+                                <path id="Close-Circle-Icon" d="m8 16.678c-4.418 0-8-3.581-8-8 0-4.418 3.582-8 8-8s8 3.582 8 8c0 4.419-3.582 8-8 8zm2.831-10.843c-0.388-0.388-1.017-0.388-1.405 0l-1.432 1.432-1.433-1.432c-0.388-0.388-1.017-0.388-1.405 0s-0.388 1.017 0 1.405l1.433 1.432-1.433 1.433c-0.388 0.387-0.388 1.017 0 1.405s1.017 0.388 1.405 0l1.433-1.433 1.432 1.433c0.388 0.388 1.017 0.388 1.405 0s0.388-1.018 0-1.405l-1.433-1.433 1.433-1.432c0.388-0.388 0.388-1.017 0-1.405z" />
+                            </svg>
+                        </li>
+                    </ul>
                 </div>
            </li>
             )

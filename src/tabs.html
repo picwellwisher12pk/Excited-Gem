@@ -3,8 +3,10 @@
 
 <head>
     <title>Excited Gem</title>
-    <!-- <script src="/src/scripts/app.js"></script> -->
-    <style></style>
+    <link rel="stylesheet" href="css/bootstrap.css">
+    <link rel="stylesheet" href="css/eg.css">
+    <script src="js/sessions.js"></script>
+    <script src="js/content.js"></script>
 </head>
 
 <body class="eg">
@@ -18,7 +20,8 @@
             <!-- Collect the nav links, forms, and other content for toggling-->
             <div id="bs-example-navbar-collapse-1" class="collapse navbar-collapse">
                 <ul class="nav navbar-nav">
-                    <li class="tabs"><a id="go-to-tabs" href="excited_gem_tabs.html">Tabs<span class="sr-only">(current)</span></a></li>
+                    <li class="tabs"><a id="go-to-tabs" href="excited_gem_tabs.html">
+                          Tabs<span class="sr-only">(current)</span></a></li>
                     <li class="sessions"><a href="sessions.html">Sessions</a></li>
                 </ul>
                 <ul class="nav navbar-nav navbar-right">
@@ -27,40 +30,46 @@
             </div>
         </div>
     </nav>
-    <div class="container-fluid">
-        <h1>Tabs<small class="active-tab-counter"> (0)</small></h1>
-        <div id="active-tabs" role="tabpanel" class="active">
-            <div class="row">
-                <div class="col-xs-12"></div>
-            </div>
-            <div data-spy="affix" data-offset-top="60" data-offset-bottom="200" class="tabs-list-container header">
-                <div class="horizontal-block search">
-                    <div class="row">
-                        <div class="col-sm-1"><span title="Pin All" aria-hidden="true" class="clickable glyphicon glyphicon-pushpin pinned"></span><span title="Mute All" aria-hidden="true" class="clickable glyphicon glyphicon-volume-off audible"></span></div>
-                        <div class="col-sm-10">
-                            <div id="filter-tabs" class="input-group filter-tabs">
-                                <input id="quicksearch-input" type="text" placeholder="Filter Tabs by Title" aria-label="..." class="quicksearch-input form-control regex"><span class="input-group-addon option-regex">
-                    <input id="filter-type-option-id" type="checkbox" aria-label="..."> Regex</span><span class="input-group-addon option-case-sensitive">
-                    <input id="filterCase-option-id" type="checkbox" aria-label="..."> Case Sensitive</span>
-                            </div>
-                        </div>
-                        <div class="col-sm-1">
-                            <div class="options pull-right"><span data-command="remove" aria-hidden="true" class="clickable remove-tab glyphicon glyphicon-remove"></span></div>
-                        </div>
+    <div>
+        <div id="active-tabs">
+            <header data-spy="affix" data-offset-top="60" data-offset-bottom="200" class="tabs-list-container header">
+                <section class="horizontal-block search container-fluid">
+                    <div id="filter-tabs" class="input-group filter-tabs">
+                        <input id="quicksearch-input" type="text" placeholder="Filter Tabs by Title" aria-label="..." class="quicksearch-input form-control regex"><span class="input-group-addon option-regex">
+                <input id="filter-type-option-id" type="checkbox" aria-label="..."> Regex</span><span class="input-group-addon option-case-sensitive">
+                <input id="filterCase-option-id" type="checkbox" aria-label="..."> Case Sensitive</span>
                     </div>
-                </div>
-                <div class="horizontal-block context-actions">
-                    <ul class="nav nav-pills">
-                        <li role="presentation"><a id="refreshActiveTabs" href="#" title="Refresh Active Tabs"><span aria-hidden="true" class="glyphicon glyphicon-refresh"></span>                                    Refresh</a></li>
-                        <li role="presentation" class="dropdown"><a data-toggle="dropdown" href="#" role="button" aria-haspopup="true" aria-expanded="false" title="Rearrange/Sort Tabs" class="dropdown-toggle"><span aria-hidden="true" class="glyphicon glyphicon-sort-by-alphabet"></span>                                  Rearrange by<span class="caret"></span></a>
+                </section>
+                <section class="horizontal-block context-actions container-fluid">
+                    <ul class="nav nav-pills pull-left">
+                        <li role="presentation">
+                            <a id="refreshActiveTabs" href="#" title="Refresh Active Tabs"><img src="images/reload-icon.svg" alt=""> Refresh</a>
+                        </li>
+                        <li role="presentation" class="dropdown">
+                            <a data-toggle="dropdown" href="#" role="button" aria-haspopup="true" aria-expanded="false" title="Rearrange/Sort Tabs" class="dropdown-toggle"><img src="images/arrange.svg" alt=""> Rearrange by<span class="caret"></span></a>
                             <ul class="dropdown-menu">
                                 <li><a id="rearrange-url-btn" href="#" title="Rearrange with respect of URL">URL</a></li>
                                 <li><a id="rearrange-title-btn" href="#" title="Rearrange with respect of Title">Title</a></li>
                             </ul>
                         </li>
                     </ul>
-                </div>
-            </div>
+                    <ul class="nav nav-pills pull-right">
+                        <li>
+                            <a href="#"><img src="images/pin-icon.svg" alt=""></a>
+                        </li>
+                        <li>
+                            <a href="#"><img src="images/sound-icon.svg" alt=""></a>
+                        </li>
+                        <li>
+                            <a href="#">
+                                <svg stroke-linejoin="round" xmlns="http://www.w3.org/2000/svg" clip-rule="evenodd" fill-rule="evenodd" xml:space="preserve" height="16" width="16" version="1.1" xmlns:serif="http://www.serif.com/" stroke-miterlimit="1.4142" xmlns:xlink="http://www.w3.org/1999/xlink"
+                                    viewbox="0 0 16 17">
+                    <path id="Close-Circle-Icon" serif:id="Close Circle Icon" fill="#374355" d="m8 16.678c-4.418 0-8-3.581-8-8 0-4.418 3.582-8 8-8s8 3.582 8 8c0 4.419-3.582 8-8 8zm2.831-10.843c-0.388-0.388-1.017-0.388-1.405 0l-1.432 1.432-1.433-1.432c-0.388-0.388-1.017-0.388-1.405 0s-0.388 1.017 0 1.405l1.433 1.432-1.433 1.433c-0.388 0.387-0.388 1.017 0 1.405s1.017 0.388 1.405 0l1.433-1.433 1.432 1.433c0.388 0.388 1.017 0.388 1.405 0s0.388-1.018 0-1.405l-1.433-1.433 1.433-1.432c0.388-0.388 0.388-1.017 0-1.405z"></path>
+                  </svg></a>
+                        </li>
+                    </ul>
+                </section>
+            </header>
             <div id="active-tabs-list-container" class="tabs-list-container"></div>
         </div>
         <div id="react-container"></div>
