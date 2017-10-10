@@ -33,3 +33,10 @@ $(document).keydown(function(e) {
         if (confirm('Are you sure you want to close the following this Tab')) { packageAndBroadcast(sender, "background", "closeTab", id); }
     }
 });
+//Prevents scrolling with Down arrow key
+document.addEventListener("keydown", function(e) {
+    if ([37, 38, 39, 40].indexOf(e.keyCode) > -1) {
+        e.preventDefault();
+        // Do whatever else you want with the keydown event (i.e. your navigation).
+    }
+}, false);
