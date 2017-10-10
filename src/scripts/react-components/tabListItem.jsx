@@ -48,6 +48,8 @@ export default class Tab extends React.Component{
 
         let _this = this;
         let url = _this.state.url;
+        let length = 80;
+        let trimmedURL = url.substring(0, length);
         return (
             <li key={_this.props.id} data-id={_this.props.id} className="ui-widget-content list-group-item horizontal-block">
                 <div className="container-fluid">
@@ -60,8 +62,9 @@ export default class Tab extends React.Component{
                             <img src={_this.state.favicon}/>
                         </span>
                         <a type="button" role="group" aria-label="title" title={url} className="clickable site-name" onClick={_this.focusTab.bind(null,_this.props.id)}>
-                            {_this.state.title}
+                        {_this.state.title}
                         </a>
+                        <span className="url trimmed dimmed">{trimmedURL}...</span>
                     </div>
                     <ul className="nav nav-pills options pull-right btn-group tabs-context-buttons" role="group" aria-label="options">
                         <li title="Tab Information"  className=" clickable" onClick={_this.infoModal.bind(null,_this.state.data)} >
