@@ -1,4 +1,18 @@
 .list-group-item {
+    .clickable {
+        color: #000;
+        &:hover {
+            color: #000;
+            text-decoration: none;
+        }
+    }
+    .dimmed {
+        color: #aebdd0;
+    }
+    .trimmed {
+        width: 80%;
+        margin-left: 15px;
+    }
     padding: 7px 0;
     &.selected {
         background-color: #acd8fb;

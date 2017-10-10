@@ -146,6 +146,9 @@ $brand-secondary-color: #D1335B;
 
 .navbar-default {
     background-color: #EBEBEB;
+    li.active a {
+        color: $brand-secondary-color;
+    }
 }
 
 .navbar {
