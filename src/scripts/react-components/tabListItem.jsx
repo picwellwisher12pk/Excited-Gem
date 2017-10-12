@@ -1,7 +1,10 @@
 import $ from "jquery";
 import React from "react";
+import ReactDOM from "react-dom";
 import packagedAndBroadcast from "../components/communications.js";
+import InfoModal from "./infomodal.jsx";
 const sender = "content";
+let info = ReactDOM.render(<InfoModal />,document.getElementById('infoModal'));
 export default class Tab extends React.Component{
    constructor(props) {
     super(props);
@@ -38,7 +41,7 @@ export default class Tab extends React.Component{
     }
     infoModal(dataV){
         console.log("trigger infoModal",this,dataV);
-        InfoModal.setState({
+        info.setState({
             data:dataV
         });
         jQuery('#infoModal').modal('show');

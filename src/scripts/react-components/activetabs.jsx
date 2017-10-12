@@ -2,7 +2,7 @@ import $ from "jquery";
 import React from "react";
 import packagedAndBroadcast from "../components/communications.js";
 import Tab from "./tabListItem.jsx";
-import InfoModal from "./infomodal.jsx";
+
 export default class ActiveTabs extends React.Component {
   constructor(props) {
     super(props);
