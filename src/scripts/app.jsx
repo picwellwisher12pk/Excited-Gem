@@ -42,7 +42,9 @@ let Tabs;
 let infoModal;
 let activeTabsCount;
 let currentPage = "";
-
+let pref = {
+    filterType : "regex"
+};
 
 
 $(document).ready(function() {
@@ -56,6 +58,19 @@ $(document).ready(function() {
       let infoModal = ReactDOM.render(<InfoModal />,document.getElementById('infoModal'));
       $("ul.nav.navbar-nav li.tabs").toggleClass('active');
     }
+    $('#quicksearch-input').on('keyup',(e)=>{
+        let tempList = tabsList.filter((tab)=>
+        {
+            if(pref.filterType === "regex"){
+                let regex = new RegExp(e.target.value,pref.filterCase?"i":"");
+                return regex.test(tab.title);
+            }
+            else{
+                return tab.title.indexOf(e.target.value) >= 0;
+            }
+        });
+            Tabs.setState({data:tempList});
+    });
     if(window.location.pathname.indexOf('tabs') > -1) chrome.runtime.onConnect.addListener(function(port){
 
           console.assert(port.name == "ActiveTabsConnection");
