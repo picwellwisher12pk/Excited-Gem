@@ -102,7 +102,7 @@ function sortTabs(head, type) {
     let prevTabs = tabsList;
     let prevTabsArray;
     let tabsListArray;
-    let loopFinished: boolean;
+    let loopFinished;
     setTimeout(function() {
         if (type == 'url') tabsList.sort(compareURL);
         if (type == 'title') tabsList.sort(compareTitle);
