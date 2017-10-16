@@ -31,7 +31,7 @@ function sortTabs(head, type) {
     let prevTabs = tabsList;
     let prevTabsArray;
     let tabsListArray;
-    let loopFinished: boolean;
+    let loopFinished;
     setTimeout(function() {
       if (type == 'url') tabsList.sort(compareURL);
       if (type == 'title') tabsList.sort(compareTitle);
@@ -64,9 +64,4 @@ function sortTabs(head, type) {
         sortTabs(head, type);
       }
     }, pref.sortAnimation)
-
   }
-function requestCloseTab(data) {
-    let confirmation = window.confirm("Are you sure you want to close this tab");
-    if (confirmation) packageAndBroadcast(sender, 'background', 'closeTab', data);
-}
