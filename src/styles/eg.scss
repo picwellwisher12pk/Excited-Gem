@@ -92,8 +92,8 @@ $brand-secondary-color: #D1335B;
     .btn.favicon {
         cursor: default;
         &:hover {
-            // background-color: #FFF;
-            // border-color:inherit;
+            background-color: #FFF;
+            border-color: inherit;
         }
     }
 }
@@ -151,17 +151,21 @@ $brand-secondary-color: #D1335B;
         color: #3D4D65;
         font-family: "Roboto", Arial, Helvetica, sans-serif;
         font-weight: 300;
+        margin-right: 30px;
         strong {
             font-weight: 700;
             color: $brand-primary-color;
         }
     }
-    .navbar-nav li a {
-        font-size: 16px;
-    }
-    .navbar-nav li.active a {
-        color: $brand-secondary-color;
-        background-color: transparent;
+    .navbar-nav li {
+        margin-right: 15px;
+        a {
+            font-size: 16px;
+        }
+        &.active a {
+            color: $brand-secondary-color;
+            background-color: transparent;
+        }
     }
 }
 
