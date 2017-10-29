@@ -76,7 +76,7 @@ export default class Tab extends React.Component{
                         <li title="Un/Pin Tab" className={`clickable`+(_this.state.pinned ? ` active`: ` disabled`)} onClick={_this.pinTab.bind(_this,_this.props.id,_this.state.pinned)} aria-hidden='true' role="group" aria-label="pinned" >
                             <img src="images/pin-icon.svg" alt="" />
                         </li>
-                        <li title="Un/Mute Tab" className=" clickable" onClick={_this.muteTab.bind(_this,_this.props.id,_this.state.audible)} aria-hidden='true' >
+                        <li title="Un/Mute Tab" className={`clickable`+(_this.state.audible ? ` active`: ` disabled`)} onClick={_this.muteTab.bind(_this,_this.props.id,_this.state.audible)} aria-hidden='true' >
                             <img src="images/sound-icon.svg" alt="" />
                         </li>
                         <li title="Close Tab" className=' clickable remove-tab' data-id={_this.props.id} onClick={_this.closeTab.bind(null,_this.props.id,_this.state.title)} data-command='remove' aria-hidden='true'>
