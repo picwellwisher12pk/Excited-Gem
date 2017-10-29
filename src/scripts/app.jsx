@@ -59,12 +59,15 @@ $(document).ready(function() {
       let infoModal = ReactDOM.render(<InfoModal />,document.getElementById('infoModal'));
       $("ul.nav.navbar-nav li.tabs").toggleClass('active');
     }
+
+    //Seach/Filter
     $('#quicksearch-input').on('keyup',(e)=>{
         let filteredTabs = tabsList.filter((tab)=>
         {
             if(pref.filterType === "regex"){
                 let regex = new RegExp(e.target.value,pref.filterCase?"i":"");
-                return regex.test(tab.title);
+                if(regex.test(tab.title)) return true;
+                if(regex.test(tab.url)) return true;
             }
             else{
                 return tab.title.indexOf(e.target.value) >= 0;
