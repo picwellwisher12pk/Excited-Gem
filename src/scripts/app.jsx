@@ -51,13 +51,13 @@ let pref = {
 $(document).ready(function() {
     // getReadingLists();
     
+    general.highlightCurrentNavLink();
     currentPage = general.getCurrentURL();
     packagedAndBroadcast(sender, 'background', 'documentready', null); //Tells background page when front-page's DOM is ready to start communication
     $('.active-tab-counter').text(activeTabsCount);
     if (currentPage == "tabs") {
       Tabs = ReactDOM.render(<ActiveTabs />,document.getElementById('active-tabs-list-container'));
       let infoModal = ReactDOM.render(<InfoModal />,document.getElementById('infoModal'));
-      $("ul.nav.navbar-nav li.tabs").toggleClass('active');
     }
 
     //Seach/Filter
