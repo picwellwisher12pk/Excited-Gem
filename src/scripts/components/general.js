@@ -93,6 +93,14 @@ export function getCurrentURL() {
         return "tabs";
     }
 }
+
+export function highlightCurrentNavLink() {
+    var currentPage = getCurrentURL();
+    if (currentPage == "tabs") $("ul.nav.navbar-nav li.tabs").toggleClass('active');
+    if (currentPage == "options") $("ul.nav.navbar-nav li.options").toggleClass('active');
+    if (currentPage == "sessions") $("ul.nav.navbar-nav li.sessions").toggleClass('active');
+}
+
 // Hide method from for-in loops
 Object.defineProperty(Array.prototype, "equals", { enumerable: false });
 
