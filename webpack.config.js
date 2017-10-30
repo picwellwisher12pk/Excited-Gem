@@ -24,7 +24,7 @@ var options = {
     context: __dirname,
     entry: {
         tabs: path.join(__dirname, "src", "scripts", "app.jsx"),
-        // options: path.join(__dirname, "src", "scripts", "options.jsx"),
+        options: path.join(__dirname, "src", "scripts", "components", "options.jsx"),
         background: path.join(__dirname, "src", "scripts", "background.jsx")
     },
     output: {
