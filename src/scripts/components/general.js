@@ -1,8 +1,15 @@
+let _development = true;
+export let homepageURL = chrome.extension.getURL("tabs.html");
+let allTabs;
+let refinedTabs;
+let allSessions = {
+    // sessions
+};
+let ignoredUrlPatterns = ["chrome://*", "chrome-extension://*", "http(s)?://localhost*"];
+let ignoredDataKeys = ['active', "autoDiscardable", "discarded", "height", "highlighted", "id", "index", "selected", "status", "width", "windowId"];
 export function compareURL(a, b) {
-    if (a.url < b.url)
-        return -1;
-    if (a.url > b.url)
-        return 1;
+    if (a.url < b.url) return -1;
+    if (a.url > b.url) return 1;
     return 0;
 }
 
@@ -14,6 +21,35 @@ export function compareTitle(a, b) {
     return 0;
 }
 
+export function matchKeys(property, keysToRemove) {
+    for (let i = 0; i < keysToRemove.length; i++) {
+        if (property == keysToRemove[i]) return true;
+    }
+}
+export function removeKeys(keysToRemove, object) {
+    var tempObject = new Object();
+    for (let property in object) {
+        if (matchKeys(property, keysToRemove)) continue;
+        tempObject[property] = object[property];
+    }
+    return tempObject;
+}
+
+/**
+ * [saveData description]
+ * @param  {String/Object/Array} data    [description]
+ * @param  {String} message [description]
+ */
+export function saveData(data, message = "Data saved") {
+    chrome.storage.local.set(data, () => {
+        chrome.notifications.create('reminder', {
+            type: 'basic',
+            iconUrl: '../images/extension-icon48.png',
+            title: 'Data saved',
+            message: message
+        }, (notificationId) => {});
+    });
+}
 // Warn if overriding existing method
 if (Array.prototype.equals)
     console.warn("Overriding existing Array.prototype.equals. Possible causes: New API defines the method, there's a framework conflict or you've got double inclusions in your code.");
@@ -93,7 +129,9 @@ export function getCurrentURL() {
         return "tabs";
     }
 }
-
+export function log(input, input2 ? ) {
+    if (_development) console.log(input, input2);
+}
 export function highlightCurrentNavLink() {
     var currentPage = getCurrentURL();
     if (currentPage == "tabs") $("ul.nav.navbar-nav li.tabs").toggleClass('active');
@@ -101,10 +139,16 @@ export function highlightCurrentNavLink() {
     if (currentPage == "sessions") $("ul.nav.navbar-nav li.sessions").toggleClass('active');
 }
 
+export function timeConverter(UNIX_timestamp) {
+    var date = new Date(UNIX_timestamp);
+    return date;
+}
+
+
 // Hide method from for-in loops
 Object.defineProperty(Array.prototype, "equals", { enumerable: false });
 
-function sortTabs(head, type) {
+export function sortTabs(head, type) {
     var type = type;
     var head = head;
     let prevTabs = tabsList;
@@ -144,4 +188,100 @@ function sortTabs(head, type) {
         }
     }, pref.sortAnimation)
 
+}
+/*function runQuery(query){
+  let query = 'table#searchResult tbody td';
+  chrome.runtime.sendMessage(query);
+  return query;
+}*/
+export function tabToList(tabId) {
+    chrome.tabs.query({
+        active: true,
+        lastFocusedWindow: true
+    }, (tabs) => {
+        // and use that tab to fill in out title and url
+        let tab = tabs[0];
+        sendToContent("tabsList", tab);
+    });
+}
+
+export function sendTabsToContent() {
+    sendToContent("tabsList", getAllTabs());
+}
+/**
+ * [listAllTabs description]
+ * @return {[type]} [description]
+ */
+function sendToContent(datavariable, data) {
+    let obj = {};
+    obj[datavariable] = data;
+    // packagedAndBroadcast(sender,"content","drawTabs",obj);
+}
+
+function tabToList(tabId) {
+    chrome.tabs.query({
+        active: true,
+        lastFocusedWindow: true
+    }, (tabs) => {
+        // and use that tab to fill in out title and url
+        let tab = tabs[0];
+        sendToContent("tabsList", tab);
+    });
+}
+
+/**
+ * Remove tab objects from tab array based on ignore group
+ * @param  {Array of Objects} tabs               [description]
+ * @param  {Array} ignoredUrlPatterns [description]
+ * @return {Array of Object}   Returns neat array after removing ignored urls
+ */
+export function santizeTabs(tabs, ignoredUrlPatterns) {
+    refinedTabs = tabs.filter((tab) => {
+        let patLength = ignoredUrlPatterns.length;
+        let url = tab.url;
+        let pattern = new RegExp(ignoredUrlPatterns.join("|"), "i");
+        let matched = url.match(pattern) == null;
+        // log(url,pattern,matched);
+        return (matched);
+    });
+    return refinedTabs;
+}
+
+
+/**
+ * [getAllTabs description]
+ * @param  {Number} windowId   [Default to current window id -2]
+ * @param  {String} returnType all | refined
+ * @return {[type]}            [description]
+ */
+export function getAllTabs(homepageOpened, returnType = "all") {
+    chrome.tabs.query({
+            windowId: homepageOpened.windowId
+        },
+        (tabs) => {
+            let stillLoading = false;
+            for (let tab of tabs) {
+                if (tab.status == 'loading') {
+                    stillLoading = true;
+                    break;
+                }
+            }
+            if (stillLoading) {
+                setTimeout(function() {
+                    getAllTabs(homepageOpened, returnType);
+                }, 1000);
+            } else {
+                allTabs = tabs;
+                refinedTabs = santizeTabs(tabs, ignoredUrlPatterns);
+            }
+
+        });
+    // log("getAllTabs Return:", allTabs,refinedTabs);
+    if (returnType == "all") { return allTabs; } else { return refinedTabs; }
+}
+
+export function streamTabs(homepageOpened, port) {
+    if (port == undefined) return;
+    port.postMessage({ tabs: getAllTabs(homepageOpened) });
+    log(getAllTabs(homepageOpened), port);
 }

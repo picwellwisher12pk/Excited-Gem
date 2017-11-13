@@ -64,4 +64,4 @@ function sortTabs(head, type) {
         sortTabs(head, type);
       }
     }, pref.sortAnimation)
-  }
+   }

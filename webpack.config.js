@@ -25,6 +25,7 @@ var options = {
     entry: {
         tabs: path.join(__dirname, "src", "scripts", "app.jsx"),
         options: path.join(__dirname, "src", "scripts", "components", "options.jsx"),
+        sessions: path.join(__dirname, "src", "scripts", "sessions.jsx"),
         background: path.join(__dirname, "src", "scripts", "background.jsx")
     },
     output: {
@@ -104,6 +105,11 @@ var options = {
             template: path.join(__dirname, "src", "options.html"),
             filename: "options.html",
             chunks: ["options"]
+        }),
+        new HtmlWebpackPlugin({
+            template: path.join(__dirname, "src", "sessions.html"),
+            filename: "sessions.html",
+            chunks: ["sessions"]
         }),
         // new HtmlWebpackPlugin({
         //     template: path.join(__dirname, "src", "background.html"),
