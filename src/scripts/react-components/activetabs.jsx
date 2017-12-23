@@ -19,7 +19,7 @@ export default class ActiveTabs extends React.Component {
         let _this = this;
         let activeTabs = this.state.data;
         console.log(activeTabs);
-        return (<ul className="tabs-list list-group sortable selectable">
+        return (<ul className="tabs-list sortable selectable">
                 {activeTabs.map(function(value) {
                     return <Tab key={value.id} id={value.id} pinned={value.pinned} audible={value.audible} position={value.index} url={value.url} title={value.title} favIconUrl={value.favIconUrl} status={value.status} data={value}/>
                 })}

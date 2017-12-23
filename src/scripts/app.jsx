@@ -50,7 +50,7 @@ let pref = {
 
 $(document).ready(function() {
     // getReadingLists();
-    
+
     general.highlightCurrentNavLink();
     currentPage = general.getCurrentURL();
     packagedAndBroadcast(sender, 'background', 'documentready', null); //Tells background page when front-page's DOM is ready to start communication
@@ -82,7 +82,7 @@ $(document).ready(function() {
               port.onMessage.addListener(function(msg) {
                   console.log("msg",msg);
                   activeTabsCount = msg.tabs.length;
-                  $('.active-tab-counter').text("("+activeTabsCount+")");
+                  $('.active-tab-counter').text(activeTabsCount);
                   if(!jQuery.isEmptyObject(msg))
                    {
                        tabsList = msg.tabs;
@@ -96,5 +96,5 @@ $(document).ready(function() {
           }
   });
 
-    
+
 });
