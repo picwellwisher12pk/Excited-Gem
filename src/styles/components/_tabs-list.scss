@@ -1,4 +1,30 @@
-.list-group-item {
+.tabs-list {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+}
+
+.tab-item {
+    padding: 10px 15px;
+    margin-bottom: -1px;
+    border: 1px solid #ddd;
+    display: flex;
+    flex: 1;
+    width: 100%;
+    border-radius: 0;
+    /* overflow: hidden; */
+    text-overflow: ellipsis;
+    /* text-align: left; */
+    white-space: nowrap;
+    transition: all 0.4s;
+    /* justify-content: space-between; */
+    /* align-self: flex-start; */
+    &.selected {
+        background-color: #acd8fb;
+    }
+    &:hover {
+        background-color: #eee;
+    }
     .clickable {
         color: #000;
         &:hover {
@@ -6,50 +32,67 @@
             text-decoration: none;
         }
     }
+    img {
+        width: 16px;
+        height: 16px;
+        margin: 0 5px;
+    }
+    .tab-favicon {
+        margin-right: 15px;
+        img {
+            margin: 0;
+        }
+    }
+    .glyphicon {
+        padding-left: 5px;
+        padding-right: 5px;
+    }
+    .glyphicon.disabled {
+        color: #aaa;
+    }
     .dimmed {
         color: #aebdd0;
     }
     .trimmed {
-        width: 80%;
         margin-left: 15px;
     }
-    padding: 7px 0;
-    &.selected {
-        background-color: #acd8fb;
+    .tab-url {
+        word-wrap: break-word;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        text-align: left;
+        white-space: nowrap;
+        flex: 1;
     }
-    .btn-default {
-        &:first-child {
-            border-left: none;
-        }
-        &:last-child {
-            border-right: none;
-        }
-        border-bottom: none;
-        border-top: none;
-        &.site-name {
-            max-width: 1100px;
-            overflow: hidden;
-        }
+    .tab-name {
+        flex-shrink: 0;
     }
-    .tabs-context-buttons li {
-        visibility: hidden;
-        opacity: 0.5;
+    .tab-name:hover {
+        color: blue;
     }
-    &:hover .tabs-context-buttons li {
-        visibility: visible;
+    .tab-actions {
+        width: 0;
     }
-    .tabs-context-buttons li.active {
-        visibility: visible;
-        opacity: 1;
-    }
-    .tabs-context-buttons li:hover {
-        opacity: 1;
-    }
-    .tabs-context-buttons li.remove-tab:hover svg path {
-        fill: $brand-secondary-color;
+    &:hover .tab-actions {
+        width: auto;
     }
 }
 
-.favicon {
-    margin-right: 15px;
+.tab-actions {
+    flex-shrink: 0;
+    overflow: hidden;
+    transition: all 0.4s;
+    li {
+        transition: all 0.6s;
+        display: inline-block;
+    }
+    li.active {
+        width: auto !important;
+    }
+    &:hover li {
+        display: inline-block;
+    }
+    li.remove-tab:hover svg path {
+        fill: $brand-secondary-color;
+    }
 }

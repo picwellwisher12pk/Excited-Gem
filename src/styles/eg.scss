@@ -2,171 +2,23 @@
 // @import url('https://fonts.googleapis.com/css?family=Roboto:100,300,400,700,900');
 $brand-primary-color: #59C50F;
 $brand-secondary-color: #D1335B;
+@import 'components/reset';
 @import 'components/generics';
 @import 'components/selectable';
 @import 'components/buttons';
 @import 'components/search';
 @import 'components/tabs-list';
 @import 'components/forms';
-.eg .tabs-list-container.header.affix {
+
+/* Header */
+
+.header.affix,
+.header.affix-top {
     position: fixed;
     top: 35px;
     z-index: 999;
     left: 0;
-    .horizontal-block {
-        margin-right: auto;
-        margin-left: auto;
-        padding-left: 15px;
-        padding-right: 15px;
-    }
-}
-
-.eg .tabs-list-container.header .horizontal-block {
-    &.search {
-        border: none;
-        background: #C9D3DF;
-        border-radius: 0;
-        padding: 10px 15px;
-        color: white;
-        span.clickable {
-            height: 34px;
-            padding: 6px 5px;
-            font-size: 14px;
-            line-height: 1.428571429;
-        }
-        .input-group-addon.option-regex {
-            border-radius: 4px 0 0 4px;
-        }
-        .filter-tabs {
-            background-color: #FFF;
-            overflow: hidden;
-            transition: all 0.3s;
-            width: 100%;
-            border: none;
-            border-radius: 4px !important;
-            box-shadow: 0 0 2px 0 rgba(0, 0, 0, 0.1);
-            &:hover,
-            &:active,
-            &:focus {
-                box-shadow: 0 2px 8px 0 rgba(0, 0, 0, 0.3);
-            }
-            .input-group-addon {
-                border: none;
-                background: none;
-            }
-            .quicksearch-input.form-control {
-                background-color: transparent;
-                border: none;
-                &:focus {
-                    box-shadow: none;
-                    outline: none;
-                }
-            }
-        }
-    }
-    &.context-actions {
-        background-color: #C9D3DF;
-    }
-}
-
-.eg .horizontal-block:first-child {
-    border-top-right-radius: 0;
-    border-top-left-radius: 0;
-}
-
-.eg .btn-default.disabled:hover {
-    background-color: transparent;
-}
-
-.horizontal-block {
-    transition: all 0.4s;
-    .btn-group .btn {
-        border: none;
-    }
-    .btn.clickable {
-        cursor: pointer;
-    }
-}
-
-.list-group-item.horizontal-block {
-    .btn.favicon {
-        cursor: default;
-        &:hover {
-            background-color: #FFF;
-            border-color: inherit;
-        }
-    }
-}
-
-.list-group-item.horizontal-block:hover {
-    background-color: #eee;
-    //     -webkit-box-shadow: inset 0px 2px 5px 0px rgba(0,0,0,0.2);
-    // -moz-box-shadow: inset 0px 2px 5px 0px rgba(0,0,0,0.2);
-    // box-shadow: inset 0px 2px 5px 0px rgba(0,0,0,0.2);
-    /*cursor: pointer;*/
-}
-
-.list-group-item.horizontal-block .btn-default {
-    background-color: transparent;
-}
-
-.list-group-item.horizontal-block .btn.disabled {
-    cursor: default;
-}
-
-.list-group-item.horizontal-block .site-name:hover {
-    color: blue;
-}
-
-.horizontal-block img {
-    width: 16px;
-    height: 16px;
-    margin: 0 5px;
-}
-
-.horizontal-block>span {
-    padding-left: 15px;
-}
-
-.horizontal-block .glyphicon {
-    padding-left: 5px;
-    padding-right: 5px;
-}
-
-.horizontal-block .glyphicon.disabled {
-    color: #aaa;
-}
-
-.navbar-brand {
-    float: left;
-    padding: 7px 15px;
-    font-size: 18px;
-    line-height: 20px;
-    height: auto;
-}
-
-.navbar-default {
-    background-color: #EBEBEB;
-    .navbar-brand {
-        color: #3D4D65;
-        font-family: "Roboto", Arial, Helvetica, sans-serif;
-        font-weight: 300;
-        margin-right: 30px;
-        strong {
-            font-weight: 700;
-            color: $brand-primary-color;
-        }
-    }
-    .navbar-nav li {
-        margin-right: 15px;
-        a {
-            font-size: 16px;
-        }
-        &.active a {
-            color: $brand-secondary-color;
-            background-color: transparent;
-        }
-    }
+    background-color: #C9D3DF;
 }
 
 .modal-body {
@@ -175,17 +27,6 @@ $brand-secondary-color: #D1335B;
         margin: 0;
         margin-top: -15px;
         margin-bottom: -15px;
-    }
-}
-
-.navbar {
-    min-height: auto;
-}
-
-@media (min-width: 768px) {
-    .eg .navbar-nav>li>a {
-        padding-top: 7px;
-        padding-bottom: 7px;
     }
 }
 
