@@ -12,12 +12,8 @@ $brand-secondary-color: #D1335B;
 
 /* Header */
 
-.header.affix,
-.header.affix-top {
-    position: fixed;
-    top: 35px;
+.header {
     z-index: 999;
-    left: 0;
     background-color: #C9D3DF;
 }
 
@@ -30,11 +26,15 @@ $brand-secondary-color: #D1335B;
     }
 }
 
+.tabs-list-container {
+    overflow-y: auto;
+}
+
 #feedback {
     font-size: 1.4em;
 }
 
-.eg .sessions {
+.sessions {
     .panel-group {
         .panel-heading {
             .session-name button.btn {

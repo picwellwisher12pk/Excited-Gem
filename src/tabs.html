@@ -5,94 +5,91 @@
     <title>Excited Gem</title>
 </head>
 
-<body class="eg">
-    <nav class="navbar navbar-default navbar-fixed-top">
-        <div class="container-fluid">
-            <!-- Brand and toggle get grouped for better mobile display-->
-            <div class="navbar-header">
-                <button type="button" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1" aria-expanded="false" class="navbar-toggle collapsed"><span class="sr-only">Toggle navigation</span><span class="icon-bar"></span><span class="icon-bar"></span><span class="icon-bar"></span></button>
-                <a href="#" class="navbar-brand"><strong>Excited</strong> Gem</a>
-            </div>
-            <!-- Collect the nav links, forms, and other content for toggling-->
-            <div id="bs-example-navbar-collapse-1" class="collapse navbar-collapse">
-                <ul class="nav navbar-nav">
-                    <li class="tabs"><a id="go-to-tabs" href="tabs.html">
-                          Tabs
-                          <span class="active-tab-counter label label-success"></span>
-                          <span class="sr-only">(current)</span></a></li>
-                    <li class="sessions"><a href="sessions.html" class="">Sessions</a></li>
-                </ul>
-                <ul class="nav navbar-nav navbar-right">
-                    <li class="options disabled"><a id="go-to-options" href="options.html" class="btn">Options</a></li>
-                </ul>
-            </div>
-        </div>
-    </nav>
-    <div>
-        <div id="active-tabs">
-            <!-- Page Header -->
-            <header data-spy="affix" data-offset-top="60" data-offset-bottom="200" class="header affix">
-                <section class="search-bar container-fluid">
-                    <div id="filter-tabs" class="input-group filter-tabs">
-                        <input id="quicksearch-input" type="text" placeholder="Filter Tabs by Title" aria-label="..." class="quicksearch-input form-control regex">
-                        <span class="input-group-addon option-regex">
-                          <input id="filter-type-option-id" type="checkbox" aria-label="..."> Regex</span>
-                        <span class="input-group-addon option-case-sensitive">
-                          <input id="filterCase-option-id" type="checkbox" aria-label="..."> Case Sensitive
-                      </span>
-                    </div>
-                </section>
-                <section class="context-actions container-fluid">
-                    <ul class="nav nav-pills pull-left">
-                        <li role="presentation">
-                            <a id="refreshActiveTabs" href="#" title="Refresh Active Tabs"><img src="images/reload-icon.svg" alt=""> Refresh</a>
-                        </li>
-                        <li role="presentation" class="dropdown">
-                            <a data-toggle="dropdown" href="#" role="button" aria-haspopup="true" aria-expanded="false" title="Rearrange/Sort Tabs" class="dropdown-toggle"><img src="images/arrange.svg" alt=""> Rearrange by <span class="caret"></span></a>
-                            <ul class="dropdown-menu">
-                                <li><a id="rearrange-url-btn" href="#" title="Rearrange with respect of URL">URL</a></li>
-                                <li><a id="rearrange-title-btn" href="#" title="Rearrange with respect of Title">Title</a></li>
-                            </ul>
-                        </li>
-                        <li role="presentation" class="dropdown">
-                            <a data-toggle="dropdown" href="#" role="button" aria-haspopup="true" aria-expanded="false" title="Rearrange/Sort Tabs" class="dropdown-toggle">
-                              Tabs From <span class="caret"></span></a>
-                            <ul class="dropdown-menu">
-                                <!-- tabs>=50 is warning -->
-                                <!-- tabs>=100 is danger -->
-                                <li><a id="" href="#" title="All Windows"><span >000</span> : All Windows <span class="label label-danger ">110</span></a></li>
-                                <li><a id="" href="#" title="Window Id:23 Tabs:10"><span >023</span> : Current Window  <span class="label label-warning ">50</span></a></li>
-                                <li role="separator" class="divider"></li>
-                                <li class="active"><a id="" href="#" title="Window Id:23 Tabs:10"><span >023</span> : Window <span class="label label-warning ">50</span></a></li>
-                                <li><a id="" href="#" title="Window Id:23 Tabs:10"><span >456</span> : Window  <span class="label label-success ">5</span></a></li>
-                            </ul>
-                        </li>
+<body class="eg" id="active-tabs">
+
+    <!-- Page Header -->
+    <header class="header ">
+        <nav class="navbar navbar-default">
+            <div class="container-fluid">
+                <!-- Brand and toggle get grouped for better mobile display-->
+                <div class="navbar-header">
+                    <button type="button" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1" aria-expanded="false" class="navbar-toggle collapsed"><span class="sr-only">Toggle navigation</span><span class="icon-bar"></span><span class="icon-bar"></span><span class="icon-bar"></span></button>
+                    <a href="#" class="navbar-brand"><strong>Excited</strong> Gem</a>
+                </div>
+                <!-- Collect the nav links, forms, and other content for toggling-->
+                <div id="bs-example-navbar-collapse-1" class="collapse navbar-collapse">
+                    <ul class="nav navbar-nav">
+                        <li class="tabs"><a id="go-to-tabs" href="tabs.html">
+                  Tabs
+                  <span class="active-tab-counter label label-success"></span>
+                  <span class="sr-only">(current)</span></a></li>
+                        <li class="sessions"><a href="sessions.html" class="">Sessions</a></li>
                     </ul>
-                    <ul class="nav nav-pills pull-right">
-                        <li>
-                            <a href="#"><img src="images/pin-icon.svg" alt=""></a>
-                        </li>
-                        <li>
-                            <a href="#"><img src="images/sound-icon.svg" alt=""></a>
-                        </li>
-                        <li>
-                            <a href="#">
-                                <svg stroke-linejoin="round" xmlns="http://www.w3.org/2000/svg" clip-rule="evenodd" fill-rule="evenodd" xml:space="preserve" height="16" width="16" version="1.1" xmlns:serif="http://www.serif.com/" stroke-miterlimit="1.4142" xmlns:xlink="http://www.w3.org/1999/xlink"
-                                    viewbox="0 0 16 17">
-                                    <path id="Close-Circle-Icon" serif:id="Close Circle Icon" fill="#374355" d="m8 16.678c-4.418 0-8-3.581-8-8 0-4.418 3.582-8 8-8s8 3.582 8 8c0 4.419-3.582 8-8 8zm2.831-10.843c-0.388-0.388-1.017-0.388-1.405 0l-1.432 1.432-1.433-1.432c-0.388-0.388-1.017-0.388-1.405 0s-0.388 1.017 0 1.405l1.433 1.432-1.433 1.433c-0.388 0.387-0.388 1.017 0 1.405s1.017 0.388 1.405 0l1.433-1.433 1.432 1.433c0.388 0.388 1.017 0.388 1.405 0s0.388-1.018 0-1.405l-1.433-1.433 1.433-1.432c0.388-0.388 0.388-1.017 0-1.405z"></path>
-                                </svg>
-                            </a>
-                        </li>
+                    <ul class="nav navbar-nav navbar-right">
+                        <li class="options disabled"><a id="go-to-options" href="options.html" class="btn">Options</a></li>
                     </ul>
-                </section>
-            </header>
-            <!-- Page Header Ends -->
-            <div id="active-tabs-list-container" class="tabs-list-container"></div>
-        </div>
-        <div id="react-container"></div>
-        <!-- Small modal-->
-        <div id="infoModal" tabindex="-1" role="dialog" aria-labelledby="mySmallModalLabel" class="modal bs-example-modal-sm"></div>
-    </div>
+                </div>
+            </div>
+        </nav>
+        <section class="search-bar">
+            <div id="filter-tabs" class="input-group filter-tabs">
+                <input id="quicksearch-input" type="text" placeholder="Filter Tabs by Title" aria-label="..." class="quicksearch-input form-control regex">
+                <span class="input-group-addon option-regex">
+                  <input id="filter-type-option-id" type="checkbox" aria-label="..."> Regex</span>
+                <span class="input-group-addon option-case-sensitive">
+                  <input id="filterCase-option-id" type="checkbox" aria-label="..."> Case Sensitive
+              </span>
+            </div>
+        </section>
+        <section class="context-actions container-fluid">
+            <ul class="nav nav-pills pull-left">
+                <li role="presentation">
+                    <a id="refreshActiveTabs" href="#" title="Refresh Active Tabs"><img src="images/reload-icon.svg" alt=""> Refresh</a>
+                </li>
+                <li role="presentation" class="dropdown">
+                    <a data-toggle="dropdown" href="#" role="button" aria-haspopup="true" aria-expanded="false" title="Rearrange/Sort Tabs" class="dropdown-toggle"><img src="images/arrange.svg" alt=""> Rearrange by <span class="caret"></span></a>
+                    <ul class="dropdown-menu">
+                        <li><a id="rearrange-url-btn" href="#" title="Rearrange with respect of URL">URL</a></li>
+                        <li><a id="rearrange-title-btn" href="#" title="Rearrange with respect of Title">Title</a></li>
+                    </ul>
+                </li>
+                <li role="presentation" class="dropdown">
+                    <a data-toggle="dropdown" href="#" role="button" aria-haspopup="true" aria-expanded="false" title="Rearrange/Sort Tabs" class="dropdown-toggle">
+                      Tabs From <span class="caret"></span></a>
+                    <ul class="dropdown-menu">
+                        <!-- tabs>=50 is warning -->
+                        <!-- tabs>=100 is danger -->
+                        <li><a id="" href="#" title="All Windows"><span >000</span> : All Windows <span class="label label-danger ">110</span></a></li>
+                        <li><a id="" href="#" title="Window Id:23 Tabs:10"><span >023</span> : Current Window  <span class="label label-warning ">50</span></a></li>
+                        <li role="separator" class="divider"></li>
+                        <li class="active"><a id="" href="#" title="Window Id:23 Tabs:10"><span >023</span> : Window <span class="label label-warning ">50</span></a></li>
+                        <li><a id="" href="#" title="Window Id:23 Tabs:10"><span >456</span> : Window  <span class="label label-success ">5</span></a></li>
+                    </ul>
+                </li>
+            </ul>
+            <ul class="nav nav-pills pull-right">
+                <li>
+                    <a href="#"><img src="images/pin-icon.svg" alt=""></a>
+                </li>
+                <li>
+                    <a href="#"><img src="images/sound-icon.svg" alt=""></a>
+                </li>
+                <li>
+                    <a href="#">
+                        <svg stroke-linejoin="round" xmlns="http://www.w3.org/2000/svg" clip-rule="evenodd" fill-rule="evenodd" xml:space="preserve" height="16" width="16" version="1.1" xmlns:serif="http://www.serif.com/" stroke-miterlimit="1.4142" xmlns:xlink="http://www.w3.org/1999/xlink"
+                            viewbox="0 0 16 17">
+                            <path id="Close-Circle-Icon" serif:id="Close Circle Icon" fill="#374355" d="m8 16.678c-4.418 0-8-3.581-8-8 0-4.418 3.582-8 8-8s8 3.582 8 8c0 4.419-3.582 8-8 8zm2.831-10.843c-0.388-0.388-1.017-0.388-1.405 0l-1.432 1.432-1.433-1.432c-0.388-0.388-1.017-0.388-1.405 0s-0.388 1.017 0 1.405l1.433 1.432-1.433 1.433c-0.388 0.387-0.388 1.017 0 1.405s1.017 0.388 1.405 0l1.433-1.433 1.432 1.433c0.388 0.388 1.017 0.388 1.405 0s0.388-1.018 0-1.405l-1.433-1.433 1.433-1.432c0.388-0.388 0.388-1.017 0-1.405z"></path>
+                        </svg>
+                    </a>
+                </li>
+            </ul>
+        </section>
+    </header>
+    <!-- Page Header Ends -->
+    <div id="active-tabs-list-container" class="tabs-list-container"></div>
+    <div id="react-container"></div>
+    <!-- Small modal-->
+    <div id="infoModal" tabindex="-1" role="dialog" aria-labelledby="mySmallModalLabel" class="modal bs-example-modal-sm"></div>
 </body>
 
 </html>
