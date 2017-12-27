@@ -161,7 +161,7 @@ export function sortTabs(head, type) {
         if (type == 'title') tabsList.sort(compareTitle);
         // console.log(tabsList[i].title);
         data = { 'position': head, "tabId": tabsList[head].id }
-        packageAndBroadcast(sender, 'background', 'moveTab', data);
+        packagedAndBroadcast(sender, 'background', 'moveTab', data);
         if (type == 'url') {
             tabsListArray = propertyToArray(tabsList, 'url');
             prevTabsArray = propertyToArray(prevTabs, 'url');
