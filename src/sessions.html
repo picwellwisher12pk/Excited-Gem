@@ -12,44 +12,71 @@
 </head>
 
 <body class="eg">
-    <nav class="navbar navbar-default navbar-fixed-top">
-        <div class="container-fluid">
-            <!-- Brand and toggle get grouped for better mobile display-->
-            <div class="navbar-header">
-                <button type="button" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1" aria-expanded="false" class="navbar-toggle collapsed"><span class="sr-only">Toggle navigation</span><span class="icon-bar"></span><span class="icon-bar"></span><span class="icon-bar"></span></button>
-                <a href="#" class="navbar-brand"><strong>Excited</strong> Gem</a>
+    <!-- Page Header -->
+    <header class="header ">
+        <nav class="navbar navbar-default">
+            <div class="container-fluid">
+                <!-- Brand and toggle get grouped for better mobile display-->
+                <div class="navbar-header">
+                    <button type="button" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1" aria-expanded="false" class="navbar-toggle collapsed"><span class="sr-only">Toggle navigation</span><span class="icon-bar"></span><span class="icon-bar"></span><span class="icon-bar"></span></button>
+                    <a href="#" class="navbar-brand"><strong>Excited</strong> Gem</a>
+                </div>
+                <!-- Collect the nav links, forms, and other content for toggling-->
+                <div id="bs-example-navbar-collapse-1" class="collapse navbar-collapse">
+                    <ul class="nav navbar-nav">
+                        <li class="tabs"><a id="go-to-tabs" href="tabs.html">
+                        Tabs
+                        <span class="active-tab-counter label label-success"></span>
+                        <span class="sr-only">(current)</span></a>
+                        </li>
+                        <li class="sessions"><a href="sessions.html" class="">Sessions</a></li>
+                    </ul>
+                    <ul class="nav navbar-nav navbar-right">
+                        <li class="options disabled"><a id="go-to-options" href="options.html" class="btn">Options</a></li>
+                    </ul>
+                </div>
             </div>
-            <!-- Collect the nav links, forms, and other content for toggling-->
-            <div id="bs-example-navbar-collapse-1" class="collapse navbar-collapse">
-                <ul class="nav navbar-nav">
-                    <li class="tabs"><a id="go-to-tabs" href="tabs.html">
-                          Tabs 
-                          <span class="active-tab-counter"></span>
-                          <span class="sr-only">(current)</span></a></li>
-                    <li class="sessions disabled"><a href="sessions.html" class="">Sessions</a></li>
-                </ul>
-                <ul class="nav navbar-nav navbar-right">
-                    <li class="options disabled"><a id="go-to-options" href="options.html" class="btn">Options</a></li>
-                </ul>
+        </nav>
+        <section class="search-bar">
+            <div id="filter-tabs" class="input-group filter-tabs">
+                <input id="quicksearch-input" type="text" placeholder="Filter Sessions/Tabs" aria-label="..." class="quicksearch-input form-control regex">
+                <span class="input-group-addon option-regex">
+                  <input id="filter-type-option-id" type="checkbox" aria-label="..."> Regex</span>
+                <span class="input-group-addon option-case-sensitive">
+                  <input id="filterCase-option-id" type="checkbox" aria-label="..."> Case Sensitive
+              </span>
             </div>
-        </div>
-    </nav>
+        </section>
+        <section class="context-actions container-fluid">
+            <ul class="nav nav-pills pull-left">
+                <li role="presentation">
+                    <a id="refreshActiveTabs" href="#" title="Refresh Active Tabs"><img src="images/reload-icon.svg" alt=""> Refresh</a>
+                </li>
+                <li role="presentation" class="dropdown">
+                    <a data-toggle="dropdown" href="#" role="button" aria-haspopup="true" aria-expanded="false" title="Rearrange/Sort Tabs" class="dropdown-toggle"><img src="images/arrange.svg" alt=""> Rearrange by <span class="caret"></span></a>
+                    <ul class="dropdown-menu">
+                        <li><a id="rearrange-url-btn" href="#" title="Rearrange with respect of URL">URL</a></li>
+                        <li><a id="rearrange-title-btn" href="#" title="Rearrange with respect of Title">Title</a></li>
+                    </ul>
+                </li>
+                <li role="presentation">
+                    <a id="saveSessions-btn" href="#" title="Save Active Tabs opened in all Chrome windows">
+                        <span aria-hidden="true" class="glyphicon glyphicon-save"></span> Save Session
+                    </a>
+                </li>
+                <li role="presentation">
+                    <a id="saveSessionsAndClose-btn" href="#" title="Save Active Tabs opened in all Chrome windows and close Chrome">
+                        <span aria-hidden="true" class="glyphicon glyphicon-save"> </span> Save Session and Close Chrome
+                    </a>
+                </li>
+            </ul>
+
+        </section>
+    </header>
+    <!-- Page Header Ends -->
     <div id="sessions-tab" role="tabpanel" class="tab-pane">
-        <div class="tabs-list-container header">
-            <div class="horizontal-block context-actions">
-                <ul class="nav nav-pills">
-                    <li role="presentation">
-                        <a id="saveSessions-btn" href="#" title="Save Active Tabs opened in all Chrome windows">
-                            <span aria-hidden="true" class="glyphicon glyphicon-save"></span> Save Session
-                        </a>
-                    </li>
-                    <li role="presentation">
-                        <a id="saveSessionsAndClose-btn" href="#" title="Save Active Tabs opened in all Chrome windows and close Chrome">
-                            <span aria-hidden="true" class="glyphicon glyphicon-save"> </span> Save Session and Close Chrome
-                        </a>
-                    </li>
-                </ul>
-            </div>
+        <div class="tabs-list-container">
+
             <div id="all-sessions"></div>
         </div>
     </div>
