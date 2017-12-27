@@ -13,8 +13,8 @@ import selectTab from "./components/tabSelection.js";
 // require("./components/general.js");
 
 // React Components
-import ActiveTabs from "./react-components/activetabs.jsx";
-import InfoModal from "./react-components/infomodal.jsx";
+import ActiveTabs from "./react-components/tabs.rc.jsx";
+import InfoModal from "./react-components/info-modal.rc.jsx";
 // import { getReadingLists, setReadingLists } from "./components/readingList.jsx";
 
 //Styles
@@ -53,12 +53,15 @@ $(document).ready(function() {
 
     general.highlightCurrentNavLink();
     currentPage = general.getCurrentURL();
+
     packagedAndBroadcast(sender, 'background', 'documentready', null); //Tells background page when front-page's DOM is ready to start communication
     $('.active-tab-counter').text(activeTabsCount);
+
     if (currentPage == "tabs") {
       Tabs = ReactDOM.render(<ActiveTabs />,document.getElementById('active-tabs-list-container'));
       let infoModal = ReactDOM.render(<InfoModal />,document.getElementById('infoModal'));
     }
+
 
     //Seach/Filter
     $('#quicksearch-input').on('keyup',(e)=>{
