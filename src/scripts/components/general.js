@@ -141,7 +141,8 @@ export function highlightCurrentNavLink() {
 
 export function timeConverter(UNIX_timestamp) {
     var date = new Date(UNIX_timestamp);
-    return date;
+    var options = { weekday: "short", year: "numeric", month: "short", day: "numeric", hour: "2-digit", minute: "2-digit", second: "2-digit" };
+    return date.toLocaleDateString("en-US", options);
 }
 
 
