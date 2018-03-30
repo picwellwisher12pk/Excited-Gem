@@ -6,40 +6,61 @@
     "bugs": "{}",
     "license": "MIT",
     "author": "Amir Hameed",
+    "client": {
+        "chrome": "chrome",
+        "firefox": "browser"
+    },
     "repository": {
         "type": "git",
         "url": "git+https://github.com/picwellwisher12pk/onetab-advanced.git"
     },
     "scripts": {
-        "build": "node utils/build.js",
-        "start": "node utils/webserver.js"
+        "build": "node utils/production.js",
+        "start": "node utils/webserver.js",
+        "firefoxd": "SET Client=browser & npm run start",
+        "chromed": "npm run start --env.CLIENT=chrome",
+        "firefoxp": "SET NODE_ENV=production & SET Client=browser & node utils/production.js",
+        "chromep": "SET NODE_ENV=production & SET Client=chrome & node utils/production.js"
+    },
+    "quokka": {
+        "babel": true,
+        "react": true,
+        "es6": true
     },
     "dependencies": {
-        "jquery": "^1.12.4",
         "bootstrap": "^3.3.7",
+        "jquery": "^1.12.4",
         "react": "^15.3.2",
         "react-dom": "^15.3.2"
     },
     "devDependencies": {
+        "@babel/preset-env": "^7.0.0-beta.39",
         "babel-core": "^6.17.0",
         "babel-loader": "^7.1.0",
+        "babel-preset-env": "^1.6.1",
         "babel-preset-react": "^6.16.0",
         "babel-preset-react-hmre": "^1.1.1",
+        "babel-preset-stage-3": "^6.24.1",
         "css-loader": "^0.25.0",
+        "ejs-loader": "^0.3.1",
         "extract-text-webpack-plugin": "^3.0.1",
         "file-loader": "^0.11.2",
         "fs-extra": "^0.30.0",
         "html-loader": "^0.4.5",
-        "html-webpack-plugin": "2.24.1",
+        "html-webpack-plugin": "3.1.0",
+        "jest": "^22.1.4",
         "node-sass": "^4.5.3",
         "pug-load": "latest",
         "pug-loader": "latest",
+        "react-transition-group": "^2.3.0",
         "sass-loader": "^6.0.6",
         "style-loader": "^0.13.0",
         "webpack": "3.6.0",
         "webpack-dev-server": "^2.3.0",
+        "webpackbar": "^1.5.1",
         "write-file-webpack-plugin": "3.4.2"
     },
+    "sideEffects": false,
     "lint-staged": {
         "*.test.tsx": [
             "jest"

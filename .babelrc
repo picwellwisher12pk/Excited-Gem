@@ -1,10 +1,13 @@
 {
     "presets": [
-        "react"
+        "stage-3", "env", "react"
     ],
     "env": {
         "development": {
-            "presets": ["react-hmre"]
+            "presets": ["env", "react-hmre"]
+        },
+        "production": {
+            "presets": ["env", "react"]
         }
     }
 }
