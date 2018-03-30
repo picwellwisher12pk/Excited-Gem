@@ -9,5 +9,5 @@
   }
 
   export default function packagedAndBroadcast(sender = sender, receiver, targetMethod, data) {
-      chrome.runtime.sendMessage(packagedData(sender, receiver, targetMethod, data));
+      browser.runtime.sendMessage(packagedData(sender, receiver, targetMethod, data));
   }

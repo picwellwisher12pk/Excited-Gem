@@ -1,5 +1,6 @@
+import packagedAndBroadcast from "./communications.js";
 let _development = true;
-export let homepageURL = chrome.extension.getURL("tabs.html");
+export let homepageURL = browser.extension.getURL("tabs.html");
 let allTabs;
 let refinedTabs;
 let allSessions = {
@@ -41,8 +42,8 @@ export function removeKeys(keysToRemove, object) {
  * @param  {String} message [description]
  */
 export function saveData(data, message = "Data saved") {
-    chrome.storage.local.set(data, () => {
-        chrome.notifications.create('reminder', {
+    browser.storage.local.set(data, () => {
+        browser.notifications.create('reminder', {
             type: 'basic',
             iconUrl: '../images/extension-icon48.png',
             title: 'Data saved',
@@ -54,7 +55,7 @@ export function saveData(data, message = "Data saved") {
 if (Array.prototype.equals)
     console.warn("Overriding existing Array.prototype.equals. Possible causes: New API defines the method, there's a framework conflict or you've got double inclusions in your code.");
 // attach the .equals method to Array's prototype to call it on any array
-Array.prototype.equals = function(array) {
+Array.prototype.equals = (array) => {
     // if the other array is a falsy value, return
     if (!array)
         return false;
@@ -89,13 +90,13 @@ export function arraysAreIdentical(arr1, arr2) {
 }
 
 //Takes an array of object and make an plain array out of for a given property
-export function objectToArray(array, property) {
-    let newArray = [];
-    for (let i = 0; i < array.length; i++) {
-        newArray.push(array[i][property]);
-    }
-    return newArray;
-}
+// export function objectToArray(array, property) {
+//     let newArray = [];
+//     for (let i = 0; i < array.length; i++) {
+//         newArray.push(array[i][property]);
+//     }
+//     return newArray;
+// }
 // //Takes an array of object and make an plain array out of for a given property
 // export function propertyToArray(array, property) {
 //     objectToArray(array, property);
@@ -148,55 +149,74 @@ export function timeConverter(UNIX_timestamp) {
 
 // Hide method from for-in loops
 Object.defineProperty(Array.prototype, "equals", { enumerable: false });
-
-export function sortTabs(head, type) {
-    var type = type;
-    var head = head;
+export function quickSort(arr) {
+    if (arr.length <= 1) return arr;
+    var left = [];
+    var right = [];
+    var newArray = [];
+    var pivot = arr.reverse().pop();
+    for (i = 0; i < arr.length; i++) {
+        if (arr[i] <= pivot) {
+            left.push(arr[i]);
+        } else {
+            right.push(arr[i]);
+        }
+    }
+    return newArray.concat(quickSort(left), pivot, quickSort(right));
+}
+export function sortTabs(head, type, tabsList) {
     let prevTabs = tabsList;
     let prevTabsArray;
     let tabsListArray;
     let loopFinished;
-    setTimeout(function() {
-        if (type == 'url') tabsList.sort(compareURL);
-        if (type == 'title') tabsList.sort(compareTitle);
-        // console.log(tabsList[i].title);
-        data = { 'position': head, "tabId": tabsList[head].id }
-        packagedAndBroadcast(sender, 'background', 'moveTab', data);
-        if (type == 'url') {
-            tabsListArray = propertyToArray(tabsList, 'url');
-            prevTabsArray = propertyToArray(prevTabs, 'url');
-        }
-        if (type == 'title') {
-            tabsListArray = propertyToArray(tabsList, 'title');
-            prevTabsArray = propertyToArray(prevTabs, 'title');
-        }
-        head++;
-        if (head < tabsList.length) {
-            sortTabs(head, type);
-        }
-        loopFinished = true;
-        let sameArray = arraysAreIdentical(prevTabsArray, tabsListArray);
+    console.info("Excited Gem: Sorting Starts!");
 
-        if (sameArray) {
-            console.log(sameArray, prevTabsArray, tabsListArray);
-            return;
-        }
+    head++;
+    if (type == "url") tabsList.sort(compareURL);
+    if (type == "title") tabsList.sort(compareTitle);
+    console.log(arraysAreIdentical(tabsList, prevTabs));
+    for (head < tabsList.length; head++;) {
+        // console.log("before and after sorting", prevTabs[head].id, tabsList[head].id);
+        // console.log(head, tabsList[head].id);
+        let data = { position: head, tabId: tabsList[head].id };
+        packagedAndBroadcast("content", "background", "moveTab", data);
+    }
+    // setTimeout(function() {
 
-        if (!sameArray && loopFinished) {
-            console.log(sameArray, "=", tabsListArray, '=', prevTabsArray);
-            head = 0;
-            sortTabs(head, type);
-        }
-    }, pref.sortAnimation)
+    // if (type == "url") {
+    //     tabsListArray = propertyToArray(tabsList, "url");
+    //     prevTabsArray = propertyToArray(prevTabs, "url");
+    // }
+    // if (type == "title") {
+    //     tabsListArray = propertyToArray(tabsList, "title");
+    //     prevTabsArray = propertyToArray(prevTabs, "title");
+    // }
+    // head++;
+    // if (head < tabsList.length) {
+    //     sortTabs(head, type);
+    // }
+    //     let sameArray = arraysAreIdentical(prevTabsArray, tabsListArray);
+    //     loopFinished = true;
 
+    //     if (sameArray) {
+    //         console.log(sameArray, prevTabsArray, tabsListArray);
+    //         return;
+    //     }
+
+    //     if (!sameArray && loopFinished) {
+    //         console.log("comparision", sameArray, "=", tabsListArray, "=", prevTabsArray);
+    //         head = 0;
+    //         sortTabs(head, type);
+    //     }
+    // }, 250);
 }
 /*function runQuery(query){
   let query = 'table#searchResult tbody td';
-  chrome.runtime.sendMessage(query);
+  browser.runtime.sendMessage(query);
   return query;
 }*/
 export function tabToList(tabId) {
-    chrome.tabs.query({
+    browser.tabs.query({
         active: true,
         lastFocusedWindow: true
     }, (tabs) => {
@@ -220,7 +240,7 @@ function sendToContent(datavariable, data) {
 }
 
 function tabToList(tabId) {
-    chrome.tabs.query({
+    browser.tabs.query({
         active: true,
         lastFocusedWindow: true
     }, (tabs) => {
@@ -239,6 +259,7 @@ function tabToList(tabId) {
 export function santizeTabs(tabs, ignoredUrlPatterns) {
     refinedTabs = tabs.filter((tab) => {
         let patLength = ignoredUrlPatterns.length;
+        ignoredUrlPatterns
         let url = tab.url;
         let pattern = new RegExp(ignoredUrlPatterns.join("|"), "i");
         let matched = url.match(pattern) == null;
@@ -256,8 +277,8 @@ export function santizeTabs(tabs, ignoredUrlPatterns) {
  * @return {[type]}            [description]
  */
 export function getAllTabs(homepageOpened, returnType = "all") {
-    chrome.tabs.query({
-            windowId: homepageOpened.windowId
+    browser.tabs.query({
+            // windowId: homepageOpened.windowId
         },
         (tabs) => {
             let stillLoading = false;
@@ -268,9 +289,7 @@ export function getAllTabs(homepageOpened, returnType = "all") {
                 }
             }
             if (stillLoading) {
-                setTimeout(function() {
-                    getAllTabs(homepageOpened, returnType);
-                }, 1000);
+                setTimeout(() => getAllTabs(homepageOpened, returnType), 1000);
             } else {
                 allTabs = tabs;
                 refinedTabs = santizeTabs(tabs, ignoredUrlPatterns);
@@ -284,5 +303,16 @@ export function getAllTabs(homepageOpened, returnType = "all") {
 export function streamTabs(homepageOpened, port) {
     if (port == undefined) return;
     port.postMessage({ tabs: getAllTabs(homepageOpened) });
-    log(getAllTabs(homepageOpened), port);
+    // log(getAllTabs(homepageOpened), port);
+}
+export function searchInTabs(searchTerm, originalData, searchType = "regex", searchCase = "", searchBy = null) {
+    return originalData.filter((tab) => {
+        if (searchType == "regex") {
+            let regex = new RegExp(searchTerm, searchCase);
+            if (regex.test(tab.title)) return true;
+            if (regex.test(tab.url)) return true;
+        } else {
+            return tab.title.indexOf(searchTerm) >= 0;
+        }
+    })
 }

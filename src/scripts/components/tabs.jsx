@@ -26,8 +26,8 @@ let renderTabs = () => {
     }
 }
 function sortTabs(head, type) {
-    let type = type;
-    let head = head;
+    // var type = type;
+    // let head = head;
     let prevTabs = tabsList;
     let prevTabsArray;
     let tabsListArray;

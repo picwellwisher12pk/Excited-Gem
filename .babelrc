@@ -1,13 +1,14 @@
 {
     "presets": [
-        "stage-3", "env", "react"
+        "stage-3", ["env", { "loose": true, "browsers": "last 1 Chrome version" }], "react"
     ],
     "env": {
         "development": {
-            "presets": ["env", "react-hmre"]
+            "presets": ["stage-3", "env", "react-hot"]
         },
         "production": {
-            "presets": ["env", "react"]
+            "presets": ["stage-3", "env", "react"]
         }
     }
+
 }
