@@ -13,9 +13,8 @@
         "default_title": "Excited Gem Webpack"
     },
     "commands": {
-        "_execute_browser_action": {
+        "execute_browser_action": {
             "description": "Display ActiveTabs Page",
-            "global": true,
             "suggested_key": {
                 "windows": "Ctrl+Shift+X"
             }

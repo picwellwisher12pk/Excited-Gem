@@ -28,7 +28,10 @@
         "es6": true
     },
     "dependencies": {
+        "babel-eslint": "^8.2.2",
         "bootstrap": "^3.3.7",
+        "eslint": "^4.19.1",
+        "eslint-plugin-prettier": "^2.6.0",
         "jquery": "^1.12.4",
         "react": "^15.3.2",
         "react-dom": "^15.3.2"
@@ -44,6 +47,7 @@
         "babel-preset-stage-3": "^6.24.1",
         "css-loader": "^0.25.0",
         "ejs-loader": "^0.3.1",
+        "eslint-config-prettier": "^2.9.0",
         "extract-text-webpack-plugin": "^3.0.1",
         "file-loader": "^0.11.2",
         "fs-extra": "^0.30.0",
@@ -51,10 +55,11 @@
         "html-webpack-plugin": "3.1.0",
         "jest": "^22.1.4",
         "node-sass": "^4.5.3",
+        "prettier": "1.11.1",
         "pug-load": "latest",
         "pug-loader": "latest",
-        "react-transition-group": "^2.3.0",
         "react-hot-loader": "^3.0.0-alpha.8",
+        "react-transition-group": "^2.2.1",
         "sass-loader": "^6.0.6",
         "style-loader": "^0.13.0",
         "webpack": "3.6.0",
