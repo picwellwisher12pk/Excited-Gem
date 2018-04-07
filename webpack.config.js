@@ -50,11 +50,6 @@ let options = {
         exclude: /node_modules/,
       },
       {
-        test: /\.html$/,
-        loader: 'html-loader',
-        exclude: /node_modules/,
-      },
-      {
         test: /\.js$/,
         loader: 'babel-loader',
         exclude: /node_modules/,
@@ -88,7 +83,7 @@ let options = {
 
     new HtmlWebpackPlugin({
       title: 'Excited Gem | Tabs',
-      template: path.join(__dirname, 'src', 'tabs.html'),
+      template: path.join(__dirname, 'src', 'tabs.ejs'),
       filename: 'tabs.html',
       chunks: ['tabs'],
     }),
