@@ -89,16 +89,18 @@ let options = {
     }),
 
     new HtmlWebpackPlugin({
-      template: path.join(__dirname, 'src', 'options.html'),
+      title: 'Excited Gem | Options',
+      template: path.join(__dirname, 'src', 'options.ejs'),
       filename: 'options.html',
       chunks: ['options'],
     }),
     new HtmlWebpackPlugin({
-      template: path.join(__dirname, 'src', 'sessions.html'),
+      title: 'Excited Gem | Sessions',
+      template: path.join(__dirname, 'src', 'sessions.ejs'),
       filename: 'sessions.html',
       chunks: ['sessions'],
     }),
-    new WriteFilePlugin(),
+    new WriteFilePlugin(), //Writes files to target directory during development build phase.
     new WebpackBar({ profile: true }),
   ],
 };
