@@ -85,18 +85,21 @@ let options = {
       title: 'Excited Gem | Tabs',
       template: path.join(__dirname, 'src', 'tabs.ejs'),
       filename: 'tabs.html',
+      favicon: 'src/images/logo.svg',
       chunks: ['tabs'],
     }),
 
     new HtmlWebpackPlugin({
       title: 'Excited Gem | Options',
       template: path.join(__dirname, 'src', 'options.ejs'),
+      favicon: 'src/images/logo.svg',
       filename: 'options.html',
       chunks: ['options'],
     }),
     new HtmlWebpackPlugin({
       title: 'Excited Gem | Sessions',
       template: path.join(__dirname, 'src', 'sessions.ejs'),
+      favicon: 'src/images/logo.svg',
       filename: 'sessions.html',
       chunks: ['sessions'],
     }),
