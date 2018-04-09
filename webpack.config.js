@@ -24,8 +24,8 @@ let options = {
   context: __dirname,
   entry: {
     tabs: path.join(__dirname, 'src', 'scripts', 'active-tabs-container.js'),
-    options: path.join(__dirname, 'src', 'scripts', 'options-container.js'),
-    sessions: path.join(__dirname, 'src', 'scripts', 'sessions-container.js'),
+    // options: path.join(__dirname, 'src', 'scripts', 'options-container.js'),
+    // sessions: path.join(__dirname, 'src', 'scripts', 'sessions-container.js'),
     background: path.join(__dirname, 'src', 'scripts', 'background.js'),
   },
   output: {
@@ -89,20 +89,28 @@ let options = {
       chunks: ['tabs'],
     }),
 
-    new HtmlWebpackPlugin({
-      title: 'Excited Gem | Options',
-      template: path.join(__dirname, 'src', 'options.ejs'),
-      favicon: 'src/images/logo.svg',
-      filename: 'options.html',
-      chunks: ['options'],
-    }),
-    new HtmlWebpackPlugin({
-      title: 'Excited Gem | Sessions',
-      template: path.join(__dirname, 'src', 'sessions.ejs'),
-      favicon: 'src/images/logo.svg',
-      filename: 'sessions.html',
-      chunks: ['sessions'],
-    }),
+    // new HtmlWebpackPlugin({
+    //   title: 'Excited Gem | Options',
+    //   template: path.join(__dirname, 'src', 'options.ejs'),
+    //   favicon: 'src/images/logo.svg',
+    //   filename: 'options.html',
+    //   chunks: ['options'],
+    // }),
+
+    // new HtmlWebpackPlugin({
+    //   title: 'Excited Gem | Options',
+    //   template: path.join(__dirname, 'src', 'options.ejs'),
+    //   favicon: 'src/images/logo.svg',
+    //   filename: 'options.html',
+    //   chunks: ['options'],
+    // }),
+    // new HtmlWebpackPlugin({
+    //   title: 'Excited Gem | Sessions',
+    //   template: path.join(__dirname, 'src', 'sessions.ejs'),
+    //   favicon: 'src/images/logo.svg',
+    //   filename: 'sessions.html',
+    //   chunks: ['sessions'],
+    // }),
     new WriteFilePlugin(), //Writes files to target directory during development build phase.
     new WebpackBar({ profile: true }),
   ],

@@ -19,8 +19,10 @@
         "start": "node utils/webserver.js",
         "firefoxd": "SET Client=browser & npm run start",
         "chromed": "npm run start --env.CLIENT=chrome",
-        "firefoxp": "SET NODE_ENV=production & SET Client=browser & node utils/production.js",
-        "chromep": "SET NODE_ENV=production & SET Client=chrome & node utils/production.js"
+        "firefoxp": "SET NODE_ENV=production & SET Client=browser & node utils/production.js && npm run mount",
+        "chromep": "SET NODE_ENV=production & SET Client=chrome & node utils/production.js",
+        "mount": "web-ext run --firefox=firefoxdeveloperedition"
+
     },
     "quokka": {
         "babel": true,

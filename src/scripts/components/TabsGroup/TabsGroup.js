@@ -1,10 +1,9 @@
 import React from 'react';
-// import packagedAndBroadcast from '../components/communications.js';
 import { TransitionGroup, CSSTransition } from 'react-transition-group';
-import Tab from './tab.js';
-import dummytabs from '../dummydata.json';
+import Tab from './Tab';
 let client = browser;
-class ActiveTabs extends React.Component {
+let tab;
+export default class TabsGroup extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
@@ -18,52 +17,20 @@ class ActiveTabs extends React.Component {
     let newtabs = [...this.state.tabs];
     if (confirm(`Are you sure you want to close the following tab\n` + key)) {
       client.tabs.remove(parseInt(key));
-      // newtabs[key] = null;
       newtabs.splice(newtabs.findIndex(el => el.id === key), 1);
       this.setState({ tabs: newtabs });
     }
   }
+
   componentDidMount() {
-    // this.setState({ tabs: dummytabs });
     client.tabs.query({}, tabs => {
       this.setState({ tabs: tabs });
     });
   }
-  animatedList() {
-    return (
-      <CSSTransition
-        transitionName="example"
-        classNames="example"
-        transitionAppear={true}
-        key={tab.index}
-        timeout={{ enter: 500, exit: 500 }}
-      >
-        {this.state.tabs.map(function(tab) {
-          return (
-            <Tab
-              id={tab.id}
-              indexkey={tab.id}
-              key={tab.id}
-              pinned={tab.pinned}
-              audible={tab.audible}
-              position={tab.index}
-              url={tab.url}
-              title={tab.title}
-              favIconUrl={tab.favIconUrl}
-              status={tab.status}
-              data={tab}
-              closeTab={this.closeTab}
-            >
-              Test{' '}
-            </Tab>
-          );
-        }, this)}{' '}
-      </CSSTransition>
-    );
-  }
+
   staticList() {
     console.log('staticList', this.state.tabs);
-    let tabs = this.state.tabs.map(function(tab) {
+    tab = this.state.tabs.map(function(tab) {
       return (
         <CSSTransition
           transitionName="example"
@@ -78,6 +45,7 @@ class ActiveTabs extends React.Component {
             key={tab.id}
             pinned={tab.pinned}
             audible={tab.audible}
+            muted={tab.mutedInfo.muted}
             position={tab.index}
             url={tab.url}
             title={tab.title}
@@ -85,25 +53,24 @@ class ActiveTabs extends React.Component {
             status={tab.status}
             data={tab}
             closeTab={this.closeTab}
-          />{' '}
+          />
         </CSSTransition>
       );
     }, this);
-    return tabs;
+    return tab;
   }
   render() {
+    console.log('Rendering');
     return (
       <TransitionGroup component="ul" className="tab tabs-list sortable selectable">
-        {' '}
-        {this.staticList()}{' '}
+        {this.staticList()}
       </TransitionGroup>
     );
   }
 }
-ActiveTabs.propTypes = {
+TabsGroup.propTypes = {
   tabs: React.PropTypes.array.isRequired,
 };
-ActiveTabs.defaultProps = {
+TabsGroup.defaultProps = {
   tabs: [],
 };
-export default ActiveTabs;
