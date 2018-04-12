@@ -41,3 +41,7 @@ results
 src/components
 Thumbs.db
 .history/
+New folder/
+.idea/workspace.xml
+.idea/excited-gem.iml
+.vscode/extensions.json
