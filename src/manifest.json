@@ -30,6 +30,6 @@
     "options_ui": {
         "page": "options.html",
         "open_in_tab": true
-    },
-    "applications": { "gecko": { "id": "{daf44bf7-a45e-4450-979c-91cf07434c3d}" } }
+    }
+
 }

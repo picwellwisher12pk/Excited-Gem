@@ -1,6 +1,6 @@
 {
     "name": "excited-gem",
-    "version": "0.8.1",
+    "version": "0.8.2",
     "description": "A tabs management extension for Chrome",
     "homepage": "https://picwellwisher12pk.github.io/onetab-advanced/",
     "bugs": "{}",
@@ -19,7 +19,7 @@
         "start": "node utils/webserver.js",
         "firefoxd": "SET Client=browser & npm run start",
         "chromed": "npm run start --env.CLIENT=chrome",
-        "firefoxp": "SET NODE_ENV=production & SET Client=browser &  node utils/production.js & npm run mount",
+        "firefoxp": "SET NODE_ENV=production & SET Client=browser &  node utils/production.js",
         "chromep": "SET NODE_ENV=production & SET Client=chrome & node utils/production.js",
         "mount": "cd build & web-ext run --firefox=firefoxdeveloperedition",
         "pack": "cd build & web-ext build"
@@ -80,5 +80,6 @@
             "eslint",
             "git add"
         ]
-    }
+    },
+    "applications": { "gecko": { "id": "{daf44bf7-a45e-4450-979c-91cf07434c3d}" } }
 }
