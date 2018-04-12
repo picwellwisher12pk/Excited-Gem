@@ -45,3 +45,4 @@ New folder/
 .idea/workspace.xml
 .idea/excited-gem.iml
 .vscode/extensions.json
+utils/.npmrc
