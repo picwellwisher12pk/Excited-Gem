@@ -22,8 +22,7 @@ export default class Tab extends React.Component {
     this.muteTab = this.muteTab.bind(this);
   }
   focusTab(id) {
-    console.info('opening ID: ', id);
-    packagedAndBroadcast(sender, 'background', 'focusTab', id);
+    client.tabs.update(id, { active: true });
   }
   pinTab(id, pinned) {
     console.info(id, pinned);
