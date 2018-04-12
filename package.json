@@ -23,7 +23,6 @@
         "chromep": "SET NODE_ENV=production & SET Client=chrome & node utils/production.js",
         "mount": "cd build & web-ext run --firefox=firefoxdeveloperedition",
         "pack": "cd build & web-ext build"
-
     },
     "quokka": {
         "babel": true,
@@ -61,6 +60,7 @@
         "prettier": "1.11.1",
         "pug-load": "latest",
         "pug-loader": "latest",
+        "react-devtools": "^3.2.1",
         "react-hot-loader": "^3.0.0-alpha.8",
         "react-transition-group": "^2.2.1",
         "sass-loader": "^6.0.6",
