@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <title>
+        <%= htmlWebpackPlugin.options.title %>
+    </title>
+</head>
+
+<body class="eg" id="active-tabs">
+    <aside id="navigation" class="off-page-navigation">
+
+    </aside>
+    <header id="" class="page-header">
+        <nav class="navbar">
+            <div class="">
+                <!-- Brand and toggle get grouped for better mobile display-->
+                <div class="navbar-header col-sm-3">
+                    <a href="#" class="pull-left logo" style="margin-top: 10px;margin-right:30px">
+                        <!-- <i class=" fas fa-stack fa-circle"></i> -->
+                        <img src="./images/logo.svg" alt="" style="height:40px;width:auto">
+                    </a>
+                    <ul class="nav navbar-nav" style="margin-top:10px">
+                        <li class="tabs active"><a id="go-to-tabs" href="tabs.html">
+                            Tabs
+                            <span class="active-tab-counter label label-success"></span>
+                            <span class="sr-only">(current)</span></a>
+                        </li>
+
+                    </ul>
+
+                </div>
+                <section class="search-bar col-sm-9">
+                    <div id="filter-tabs" class="input-group filter-tabs">
+                        <input id="quicksearch-input" type="text" placeholder="Search in Tab URL or Title" aria-label="..." class="quicksearch-input form-control regex">
+                        <span class="input-group-addon option-regex">
+                        <input id="filter-type-option-id" type="checkbox" aria-label="..."> Regex</span>
+                        <span class="input-group-addon option-case-sensitive">
+                        <input id="filterCase-option-id" type="checkbox" aria-label="..."> Case Sensitive
+                        </span>
+                    </div>
+                </section>
+            </div>
+        </nav>
+
+        <section class="context-actions container-fluid">
+            <ul class="nav nav-pills pull-left">
+                <li role="presentation">
+                    <a id="refreshActiveTabs" href="#" title="Refresh Active Tabs">
+                        <!-- <img src="images/reload-icon.svg" alt=""> -->
+                        <i class="fas fa-sync-alt fa-fw fa-sm"></i> Refresh
+                    </a>
+                </li>
+                <li role="presentation" class="dropdown">
+                    <a data-toggle="dropdown" href="#" role="button" aria-haspopup="true" aria-expanded="false" title="Rearrange/Sort Tabs" class="dropdown-toggle">
+                        <!-- <img src="images/arrange.svg" alt="">  -->
+                        <i class="fas fa-sort fa-fw"></i> Rearrange by
+                        <small><i class="fa fa-chevron-down fa-fw"></i></small>
+                    </a>
+                    <ul class="dropdown-menu">
+                        <li><a id="rearrange-url-btn" href="#" title="Rearrange with respect of URL">URL</a></li>
+                        <li><a id="rearrange-title-btn" href="#" title="Rearrange with respect of Title">Title</a></li>
+                    </ul>
+                </li>
+                <!-- <li role="presentation" class="dropdown">
+                    <a data-toggle="dropdown" href="#" role="button" aria-haspopup="true" aria-expanded="false" title="Rearrange/Sort Tabs" class="dropdown-toggle">
+                      Tabs From <span class="caret"></span></a>
+                    <ul class="dropdown-menu"> -->
+                <!-- tabs>=50 is warning -->
+                <!-- tabs>=100 is danger
+                        <li><a id="" href="#" title="All Windows"><span >000</span> : All Windows <span class="label label-danger">110</span></a></li>
+                        <li><a id="" href="#" title="Window Id:23 Tabs:10"><span >023</span> : Current Window  <span class="label label-warning">50</span></a></li>
+                        <li role="separator" class="divider"></li>
+                        <li class="active"><a id="" href="#" title="Window Id:23 Tabs:10"><span >023</span> : Window <span class="label label-warning">50</span></a></li>
+                        <li><a id="" href="#" title="Window Id:23 Tabs:10"><span >456</span> : Window  <span class="label label-success">5</span></a></li>
+                    </ul>
+                </li> -->
+            </ul>
+            <!-- <ul class="nav nav-pills pull-right">
+                <li>
+                    <a href="#">
+            <i class="fa fa-thumbtack fw-fw"></i>
+            </a>
+            </li>
+            <li>
+                <a href="#">
+                    <i class="fa fa-volume-down fw-fw"></i>
+                </a>
+            </li>
+            <li>
+                <a href="#">
+                    <i class="fa fa-times-circle fw-fw"></i>
+                </a>
+            </li>
+            </ul> -->
+        </section>
+    </header>
+    <div id="active-tabs-list-container" class="tabs-list-container"></div>
+    <div id="react-container"></div>
+    <!-- Small modal-->
+    <div id="infoModal" tabindex="-1" role="dialog" aria-labelledby="mySmallModalLabel" class="modal bs-example-modal-sm"></div>
+</body>
+
+</html>
+
+</html>

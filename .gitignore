@@ -1,47 +1,48 @@
-# Excited gem
-# @author Amir Hameed
-./js/*.js
-/js/*.js
-/css
-
-## Node.js
-lib-cov
-*.seed
-*.log
+$RECYCLE.BIN/
+*.cache
 *.csv
 *.dat
+*.gz
+*.log
+*.log
 *.out
 *.pid
-*.gz
-*.cache
-pids
-logs
-results
-npm-debug.log
-node_modules
-
-
-## Bower
-src/components
-
-## Sass
-.sass-cache
-
-## OS X
-.DS_Store
-.AppleDouble
-.LSOverride
-Icon
+*.seed
+./js/*.js
 ._*
+.AppleDouble
+.DS_Store
+.DS_STORE
+.LSOverride
+.remote-sync.json
+.sass-cache
 .Spotlight-V100
 .Trashes
-
-## Windows
-Thumbs.db
-ehthumbs.db
-Desktop.ini
-$RECYCLE.BIN/
-build/
-bower_components/
 .vscode/launch.json
+.vscode/settings.json
+/css
+/js/*.js
+assets/
+bower_components/
+build/
 certs/key.pem
+commonjs/
+Desktop.ini
+dist/
+thumbs.db
+excited-gem.sublime-workspace
+Icon
+lib-cov
+logs
+node_modules
+npm-debug.log
+pids
+results
+src/components
+Thumbs.db
+.history/
+New folder/
+.idea/workspace.xml
+.idea/excited-gem.iml
+.vscode/extensions.json
+utils/.npmrc

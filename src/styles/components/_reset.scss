@@ -1,0 +1,39 @@
+.navbar {
+    min-height: auto;
+}
+
+.navbar-default {
+    background-color: #EBEBEB;
+    .navbar-brand {
+        color: #3D4D65;
+        float: left;
+        font-family: "Roboto", Arial, Helvetica, sans-serif;
+        font-size: 18px;
+        font-weight: 300;
+        height: auto;
+        line-height: 20px;
+        margin-right: 30px;
+        padding: 7px 15px;
+        strong {
+            font-weight: 700;
+            color: darken($brand-primary-color, 10%);
+        }
+    }
+    .navbar-nav li {
+        margin-right: 15px;
+        a {
+            font-size: 16px;
+        }
+        &.active a {
+            color: $brand-secondary-color;
+            background-color: transparent;
+        }
+    }
+}
+
+@media (min-width: 768px) {
+    .navbar-nav>li>a {
+        padding-top: 7px;
+        padding-bottom: 7px;
+    }
+}

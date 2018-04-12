@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <title>Excited Gem | Sessions</title>
+    <style>
+        .tabGroupTitleText {
+            font-family: 'Open Sans', 'Helvetica Neue', Arial, sans-serif;
+            color: #444;
+        }
+    </style>
+</head>
+
+<body class="eg">
+    <!-- Page Header -->
+    <header class="page-header">
+        <nav class="navbar">
+            <div class="container-fluid">
+                <!-- Brand and toggle get grouped for better mobile display-->
+                <div class="navbar-header pull-left">
+                    <button type="button" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1" aria-expanded="false" class="navbar-toggle collapsed"><span class="sr-only">Toggle navigation</span><span class="icon-bar"></span><span class="icon-bar"></span><span class="icon-bar"></span></button>
+                    <a href="#" class="navbar-brand"><img src="images/gem.svg" alt="" width="31"></a>
+                    <ul class="nav navbar-nav" style="margin-top:10px">
+
+                        <li class="sessions active"><a href="sessions.html" class="">Sessions</a></li>
+                    </ul>
+
+                </div>
+                <!-- <section class="search-bar pull-right col-sm-10" style="padding-right: 0;">
+                    <div id="filter-tabs" class="input-group filter-tabs">
+                        <input id="quicksearch-input" type="text" placeholder="Search in Tab URL or Title" aria-label="..." class="quicksearch-input form-control regex">
+                        <span class="input-group-addon option-regex">
+                        <input id="filter-type-option-id" type="checkbox" aria-label="..."> Regex</span>
+                        <span class="input-group-addon option-case-sensitive">
+                        <input id="filterCase-option-id" type="checkbox" aria-label="..."> Case Sensitive
+                        </span>
+                    </div>
+                </section> -->
+            </div>
+        </nav>
+
+        <section class="context-actions container-fluid">
+            <ul class="nav nav-pills pull-left">
+                <!-- <li role="presentation">
+                    <a id="refreshActiveTabs" href="#" title="Refresh Active Tabs"><img src="images/reload-icon.svg" alt=""> Refresh</a>
+                </li>
+                <li role="presentation" class="dropdown">
+                    <a data-toggle="dropdown" href="#" role="button" aria-haspopup="true" aria-expanded="false" title="Rearrange/Sort Tabs" class="dropdown-toggle"><img src="images/arrange.svg" alt=""> Rearrange by <span class="caret"></span></a>
+                    <ul class="dropdown-menu">
+                        <li><a id="rearrange-url-btn" href="#" title="Rearrange with respect of URL">URL</a></li>
+                        <li><a id="rearrange-title-btn" href="#" title="Rearrange with respect of Title">Title</a></li>
+                    </ul>
+                </li> -->
+                <li role="presentation">
+                    <a id="saveSessions-btn" href="#" title="Save Active Tabs opened in all Chrome windows">
+                        <i class="fas fa-save fa-fw"></i> Save Session
+                    </a>
+                </li>
+                <li role="presentation">
+                    <a id="saveSessions-btn" href="#" title="Save Active Tabs opened in all Chrome windows">
+                        <i class="fas fa-chevron-up fa-fw"></i> Collapse All
+                    </a>
+                </li>
+                <li role="presentation">
+                    <a id="saveSessions-btn" href="#" title="Save Active Tabs opened in all Chrome windows">
+                        <i class="fas fa-chevron-down fa-fw"></i> Expand All
+                    </a>
+                </li>
+                <!-- <li role="presentation">
+                    <a id="saveSessionsAndClose-btn" href="#" title="Save Active Tabs opened in all Chrome windows and close Chrome">
+                        <span aria-hidden="true" class="glyphicon glyphicon-save"> </span> Save Session and Close Chrome
+                    </a>
+                </li> -->
+            </ul>
+
+        </section>
+    </header>
+    <!-- Page Header Ends -->
+    <div id="sessions-tab" role="tabpanel" class="tab-pane" style="overflow-y: auto;">
+        <div class="tabs-list-container">
+
+            <div id="all-sessions"></div>
+        </div>
+    </div>
+    <div id="react-container"></div>
+</body>
+<div id="infoModal" tabindex="-1" role="dialog" aria-labelledby="mySmallModalLabel" class="modal bs-example-modal-sm"></div>
+
+</html>

@@ -1,211 +1,143 @@
-@import url('https://fonts.googleapis.com/css?family=Open+Sans:300,400,600,700');
-body {
-    font-size: 12px;
-    padding-top: 70px;
-    font-family: 'Open Sans', sans-serif;
-    margin: 0;
-    /*background-color: blue;*/
-}
-.clickable {
-    cursor:pointer;
-}
-.eg .list-group-item{
-    padding: 0;
-    
-    .btn-default{
-        &:first-child{
-            border-left: none;
-        }
-        &:last-child{
-            border-right: none;
-        }
-        border-bottom: none;
-        border-top: none;
-        &.site-name{
-            max-width:1100px;
-            overflow: hidden;
-        }
-    }
+// @import url('https://fonts.googleapis.com/css?family=Open+Sans:300,400,600,700');
+// @import url('https://fonts.googleapis.com/css?family=Roboto:100,300,400,700,900');
+$brand-primary-color: #59C50F;
+$brand-secondary-color: #D1335B;
+@import 'components/reset';
+@import 'components/generics';
+@import 'components/selectable';
+@import 'components/buttons';
+@import 'components/search';
+@import 'components/tab';
+@import 'components/tabsgroup';
+@import 'components/forms';
+@import 'components/aside';
 
-}
-.eg .tabs-list-container.header.affix {
-    position: fixed;
-    top: 35px;
+/* Header */
+
+.page-header {
     z-index: 999;
-    left: 0;
-    .horizontal-block{
-        margin-right: auto;
-        margin-left: auto;
-        padding-left: 15px;
-        padding-right: 15px;
+    /* Permalink - use to edit and share this gradient: http://colorzilla.com/gradient-editor/#0082d5+0,2bd563+100 */
+    background: #0082d5;
+    /* Old browsers */
+    background: -moz-linear-gradient(top, #0082d5 0%, #12A4A6 100%);
+    /* FF3.6-15 */
+    background: -webkit-linear-gradient(top, #0082d5 0%, #12A4A6 100%);
+    /* Chrome10-25,Safari5.1-6 */
+    background: linear-gradient(to bottom, #0082d5 0%, #12A4A6 100%);
+    /* W3C, IE10+, FF16+, Chrome26+, Opera12+, Safari7+ */
+    // filter: progid: DXImageTransform.Microsoft.gradient( startColorstr='#0082d5', endColorstr='#2bd563', GradientType=0);
+    /* IE6-9 */
+    .nav>li>a {
+        color: #fff;
+    }
+    .nav>li.active>a {
+        color: yellow;
+        font-weight: bold;
+        background-color: #155c69;
+        border-radius: 4px;
+        padding: 10px 16px;
     }
 }
-.eg .tabs-list-container.header .horizontal-block{
-    &.search{
-        border: none;
-        background: yellowgreen;
+
+.modal-body {
+    overflow: hidden;
+    .table {
+        margin: 0;
+        margin-top: -15px;
+        margin-bottom: -15px;
+    }
+}
+
+.label {
+    margin-left: 5px;
+}
+
+.tabs-list-container {
+    overflow-y: auto;
+}
+
+#feedback {
+    font-size: 1.4em;
+}
+
+.navbar {
+    color: #fff;
+    border: none;
+    border-radius: 0;
+}
+
+.panel-group {
+    .panel+.panel {
+        margin-top: 0;
+    }
+    .panel {
         border-radius: 0;
-        padding: 10px 15px;
-        color: white;
-
-        span.clickable{
-            height: 34px;
-            padding: 6px 5px;
-            font-size: 14px;
-            line-height: 1.428571429;
+    }
+    .panel-body {
+        padding: 0;
+        .list-group {
+            border-bottom: 2px solid gray;
+            &:after {
+                content: "Window Boundary";
+                background-color: gray;
+                color: #fff;
+                display: block;
+                text-align: right;
+                padding-right: 15px;
+            }
         }
-
-        .input-group-addon.option-regex{
-            border-radius:4px 0 0 4px;
+    }
+    .panel-heading {
+        h4 a {
+            text-decoration: none;
+            color: gray;
+            font-weight: normal;
         }
-        .filter-tabs{
-            background-color: #FFF;
-            overflow: hidden;
-            transition:all 0.3s;
-            width: 100%;
+        .session-name button.btn {
+            display: none;
+        }
+        .session-name:hover button.btn.btn-primary {
+            display: block;
+            position: absolute;
+            right: 0;
+            top: 0;
+            border-radius: 50%;
+            width: 20px;
+            height: 20px;
+            padding: 0;
+            font-size: 9px
+        }
+        input.form-control[readOnly] {
+            transition: all 0.4s;
             border: none;
-            border-radius: 4px !important;
-            box-shadow: 0 0 2px 0 rgba(0,0,0,0.1);
-            &:hover ,&:focus{
-                    box-shadow: 0 2px 8px 0 rgba(0,0,0,0.3);
-            }
-            .input-group-addon{
-                border: none;
-                background: none;
-            }
-            .quicksearch-input.form-control{
-                background-color: transparent;
-                border: none;
-                &:focus{
-                    box-shadow:none;
-                    outline:none;
-                }
-                
-            }
-        }
-
-    }
-    
-    &.context-actions{
-      background-color: #bcf34d;
-      li a{
-        color:#638e0c;
-        padding: 5px;
-        &:hover,&:focus{
-            color:#000;
-            background-color: transparent;
-        }
-      }
-    }
-}
-.eg .horizontal-block:first-child {
-    border-top-right-radius: 0;
-    border-top-left-radius: 0;
-}
-
-
-.horizontal-block{
-    transition: all 0.4s;
-}
-.list-group-item.horizontal-block{
-    .btn.favicon{
-        cursor: default;
-        &:hover{
-            background-color: #FFF;
-            // border-color:inherit;
+            box-shadow: none;
         }
     }
 }
-.list-group-item.horizontal-block:hover{
-    background-color: #eee;
-//     -webkit-box-shadow: inset 0px 2px 5px 0px rgba(0,0,0,0.2);
-// -moz-box-shadow: inset 0px 2px 5px 0px rgba(0,0,0,0.2);
-// box-shadow: inset 0px 2px 5px 0px rgba(0,0,0,0.2);
-    /*cursor: pointer;*/
-}
-.horizontal-block img{
-    width: 16px;
-    height: 16px;
-    margin: 0 5px;
-}
-.horizontal-block>span{
-    padding-left: 15px;
-}
-.horizontal-block .glyphicon{
-    padding-left: 5px;
-    padding-right: 5px;
-}
-.horizontal-block .glyphicon.disabled{
-    color:#aaa;
-}
-input[type=text] {
-    padding: 4px 4px;
-    border: 1px solid #ccc;
-    border-radius: 3px;
-    box-shadow: 2px 2px 3px #ddd;
-    outline: 0;
-    -webkit-appearance: textfield;
+
+.context-actions .nav>li>a {
+    padding: 5px 0;
+    // padding-bottom: 5px;
 }
 
-.cssCheckbox label:after {
-    -ms-filter: "progid:DXImageTransform.Microsoft.Alpha(Opacity=0)";
-    filter: alpha(opacity=0);
-    opacity: 0;
-    content: '';
-    position: absolute;
-    width: 9px;
-    height: 5px;
-    background: transparent;
-    top: 4px;
-    left: 4px;
-    border: 3px solid #333;
-    border-top: none;
-    border-right: none;
-
-    -webkit-transform: rotate(-45deg);
-    -moz-transform: rotate(-45deg);
-    -o-transform: rotate(-45deg);
-    -ms-transform: rotate(-45deg);
-    transform: rotate(-45deg);
+.example-enter {
+    opacity: 0.01;
 }
 
-.cssCheckbox label:hover::after {
-    -ms-filter: "progid:DXImageTransform.Microsoft.Alpha(Opacity=30)";
-    filter: alpha(opacity=30);
-    opacity: 0.5;
-}
-
-.cssCheckbox input[type=checkbox]:checked + label:after {
-    -ms-filter: "progid:DXImageTransform.Microsoft.Alpha(Opacity=100)";
-    filter: alpha(opacity=100);
+.example-enter.example-enter-active {
     opacity: 1;
+    transition: all 500ms ease-in;
 }
-ul{
-    margin: 0;
-    padding: 0;
+
+.example-leave {
+    opacity: 1;
+    background-color: yellow;
+    max-height: auto;
 }
-li{
-    list-style: none;
-    padding-left: 0;
-    margin-left: 0;
+
+.example-leave.example-leave-active {
+    opacity: 0.01;
+    transition: all 500ms ease-in;
+    background-color: red;
+    max-height: 0;
 }
-.eg .navbar-brand {
-    float: left;
-    padding: 7px 15px;
-    font-size: 18px;
-    line-height: 20px;
-    height: auto;
-}
-.eg .navbar {
-    min-height:auto;
-    }
-@media (min-width: 768px){
-.eg .navbar-nav > li > a {
-    padding-top: 7px;
-    padding-bottom: 7px;
-}}
-#feedback { font-size: 1.4em; }
-  #selectable .ui-selecting { background: #FECA40; }
-  #selectable .ui-selected { background: #F39814; color: white; }
-  #selectable { list-style-type: none; margin: 0; padding: 0; width: 60%; }
-  #selectable li { margin: 3px; padding: 0.4em; font-size: 1.4em; height: 18px; }

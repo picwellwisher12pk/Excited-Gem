@@ -1,56 +1,84 @@
 {
-  "name": "excited-gem",
-  "version": "0.7.0",
-  "description": "A power set for Chrome",
-  "homepage": "https://picwellwisher12pk.github.io/onetab-advanced/",
-  "bugs": "{}",
-  "license": "MIT",
-  "author": "Amir Hameed",
-  "main": "gulpfile.js",
-  "repository": {
-    "type": "git",
-    "url": "git+https://github.com/picwellwisher12pk/onetab-advanced.git"
-  },
-  "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
-  },
-  "dependencies": {
-    "css-mqpacker": "^5.0.1",
-    "gulp": "^3.9.1",
-    "gulp-autoprefixer": "^3.1.1",
-    "gulp-cleanhtml": "^1.0.1",
-    "gulp-crx-pack": "^1.0.1",
-    "gulp-header": "^1.8.8",
-    "gulp-plumber": "^1.1.0",
-    "gulp-rimraf": "^0.2.1",
-    "gulp-strip-debug": "^1.1.0",
-    "gulp-typescript": "^3.1.2",
-    "gulp-zip": "^3.2.0"
-  },
-  "devDependencies": {
-    "autoprefixer": "^6.6.1",
-    "browser-sync": "^2.17.5",
-    "cssnano": "^3.10.0",
-    "del": "^2.2.2",
-    "eslint-plugin-compat": "^1.0.0",
-    "fs": "0.0.1-security",
-    "gulp": "^3.9.1",
-    "gulp-cssnano": "^2.1.2",
-    "gulp-debug": "^3.0.0",
-    "gulp-filter": "^4.0.0",
-    "gulp-jade": "latest",
-    "gulp-jshint": "^2.0.4",
-    "gulp-newer": "latest",
-    "gulp-notify": "^2.2.0",
-    "gulp-postcss": "^6.3.0",
-    "gulp-rename": "^1.2.2",
-    "gulp-sass": "^2.3.2",
-    "gulp-size": "latest",
-    "gulp-sourcemaps": "latest",
-    "gulp-util": "^3.0.7",
-    "jshint": "^2.9.4",
-    "postcss-assets": "^4.1.0",
-    "react": "^15.3.2",
-    "typescript": "^2.0.9"
-  }
+    "name": "excited-gem",
+    "version": "0.8.1",
+    "description": "A tabs management extension for Chrome",
+    "homepage": "https://picwellwisher12pk.github.io/onetab-advanced/",
+    "bugs": "{}",
+    "license": "MIT",
+    "author": "Amir Hameed",
+    "client": {
+        "chrome": "chrome",
+        "firefox": "browser"
+    },
+    "repository": {
+        "type": "git",
+        "url": "git+https://github.com/picwellwisher12pk/onetab-advanced.git"
+    },
+    "scripts": {
+        "build": "node utils/production.js",
+        "start": "node utils/webserver.js",
+        "firefoxd": "SET Client=browser & npm run start",
+        "chromed": "npm run start --env.CLIENT=chrome",
+        "firefoxp": "SET NODE_ENV=production & SET Client=browser &  node utils/production.js & npm run mount",
+        "chromep": "SET NODE_ENV=production & SET Client=chrome & node utils/production.js",
+        "mount": "cd build & web-ext run --firefox=firefoxdeveloperedition",
+        "pack": "cd build & web-ext build"
+    },
+    "quokka": {
+        "babel": true,
+        "react": true,
+        "es6": true
+    },
+    "dependencies": {
+        "babel-eslint": "^8.2.2",
+        "bootstrap": "^3.3.7",
+        "eslint": "^4.19.1",
+        "eslint-plugin-prettier": "^2.6.0",
+        "jquery": "^1.12.4",
+        "react": "^15.3.2",
+        "react-dom": "^15.3.2"
+    },
+    "devDependencies": {
+        "@babel/preset-env": "^7.0.0-beta.39",
+        "babel-core": "^6.17.0",
+        "babel-loader": "^7.1.0",
+        "babel-preset-env": "^1.6.1",
+        "babel-preset-react": "^6.16.0",
+        "babel-preset-react-hmre": "^1.1.1",
+        "babel-preset-react-hot": "^1.0.5",
+        "babel-preset-stage-3": "^6.24.1",
+        "css-loader": "^0.25.0",
+        "ejs-loader": "^0.3.1",
+        "eslint-config-prettier": "^2.9.0",
+        "extract-text-webpack-plugin": "^3.0.1",
+        "file-loader": "^0.11.2",
+        "fs-extra": "^0.30.0",
+        "html-loader": "^0.4.5",
+        "html-webpack-plugin": "3.1.0",
+        "jest": "^22.1.4",
+        "node-sass": "^4.5.3",
+        "prettier": "1.11.1",
+        "pug-load": "latest",
+        "pug-loader": "latest",
+        "react-devtools": "^3.2.1",
+        "react-hot-loader": "^3.0.0-alpha.8",
+        "react-transition-group": "^2.2.1",
+        "sass-loader": "^6.0.6",
+        "style-loader": "^0.13.0",
+        "webpack": "3.6.0",
+        "webpack-dev-server": "^2.3.0",
+        "webpackbar": "^1.5.1",
+        "write-file-webpack-plugin": "3.4.2"
+    },
+    "sideEffects": false,
+    "lint-staged": {
+        "*.test.tsx": [
+            "jest"
+        ],
+        "*.{js,tsx,ts}": [
+            "prettier --single-quote --trailing-comma es5 --write",
+            "eslint",
+            "git add"
+        ]
+    }
 }
