@@ -56,6 +56,7 @@ function updateTabs() {
   getCurrentWindowTabs().then(tabs => {
     tabsList = tabs;
     tabsgroup.setState({ tabs: tabs });
+    $('.active-tab-counter').text(tabs.length);
   });
 }
 
@@ -84,6 +85,7 @@ $('#quicksearch-input').on('keyup', e => {
   let filteredTabs = general.searchInTabs(e.target.value, tabsList);
   tabsgroup.setState({ tabs: filteredTabs });
 });
+$('#refreshActiveTabs').on('click', updateTabs);
 // Sorting of Tabs (Title | URL). Event Binding
 $('#rearrange-title-btn').on('click', () => general.sortTabs('title', tabsList));
 $('#rearrange-url-btn').on('click', () => general.sortTabs('url', tabsList));
