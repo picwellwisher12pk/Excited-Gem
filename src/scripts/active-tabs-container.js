@@ -6,6 +6,7 @@ const bootstrap = require('bootstrap');
 // import offCanvasNav from "./vendor/codedrops/sidebarEffects";
 import React from 'react';
 // import {render} from "react-dom";
+import 'react-devtools';
 import ReactDOM from 'react-dom';
 
 //JS components
@@ -38,11 +39,11 @@ import '../images/search-icon.svg';
 import '../images/sound-icon.svg';
 
 //Declarations
-let windowHeight;
-const sender = 'content';
+// const sender = 'content';
+// let currentPage = '';
+// let windowHeight;
 let NavigationReference;
 let infoModal;
-let currentPage = '';
 let pref = {
   filterType: 'regex',
   filterCase: 'true',
@@ -57,6 +58,7 @@ function updateTabs() {
     tabsgroup.setState({ tabs: tabs });
   });
 }
+
 function getCurrentWindowTabs() {
   return browser.tabs.query({ currentWindow: true });
 }
@@ -83,19 +85,5 @@ $('#quicksearch-input').on('keyup', e => {
   tabsgroup.setState({ tabs: filteredTabs });
 });
 // Sorting of Tabs (Title | URL). Event Binding
-$('#rearrange-title-btn').on('click', () => general.sortTabs(0, 'title', tabsList));
-$('#rearrange-url-btn').on('click', () => general.sortTabs(0, 'url', tabsList));
-
-//Making a communcation channel with background environment to send and recieve data.
-browser.runtime.onConnect.addListener(port => {
-  if (port.name === 'ActiveTabsConnection') {
-    port.onMessage.addListener(msg => {
-      tabsList = msg.tabs;
-      activeTabsCount = msg.tabs.length;
-      $('.active-tab-counter').text(msg.tabs.length); //Rendering count of current number of active tabs in navigation next to Tabs's label.
-      console.log('messages', msg.tabs);
-      Tabs.setState({ data: msg.tabs });
-      selectTab(1);
-    });
-  }
-});
+$('#rearrange-title-btn').on('click', () => general.sortTabs('title', tabsList));
+$('#rearrange-url-btn').on('click', () => general.sortTabs('url', tabsList));
