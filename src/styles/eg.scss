@@ -7,14 +7,36 @@ $brand-secondary-color: #D1335B;
 @import 'components/selectable';
 @import 'components/buttons';
 @import 'components/search';
-@import 'components/tabs-list';
+@import 'components/tab';
+@import 'components/tabsgroup';
 @import 'components/forms';
+@import 'components/aside';
 
 /* Header */
 
-.header {
+.page-header {
     z-index: 999;
-    background-color: #C9D3DF;
+    /* Permalink - use to edit and share this gradient: http://colorzilla.com/gradient-editor/#0082d5+0,2bd563+100 */
+    background: #0082d5;
+    /* Old browsers */
+    background: -moz-linear-gradient(top, #0082d5 0%, #12A4A6 100%);
+    /* FF3.6-15 */
+    background: -webkit-linear-gradient(top, #0082d5 0%, #12A4A6 100%);
+    /* Chrome10-25,Safari5.1-6 */
+    background: linear-gradient(to bottom, #0082d5 0%, #12A4A6 100%);
+    /* W3C, IE10+, FF16+, Chrome26+, Opera12+, Safari7+ */
+    // filter: progid: DXImageTransform.Microsoft.gradient( startColorstr='#0082d5', endColorstr='#2bd563', GradientType=0);
+    /* IE6-9 */
+    .nav>li>a {
+        color: #fff;
+    }
+    .nav>li.active>a {
+        color: yellow;
+        font-weight: bold;
+        background-color: #155c69;
+        border-radius: 4px;
+        padding: 10px 16px;
+    }
 }
 
 .modal-body {
@@ -26,6 +48,10 @@ $brand-secondary-color: #D1335B;
     }
 }
 
+.label {
+    margin-left: 5px;
+}
+
 .tabs-list-container {
     overflow-y: auto;
 }
@@ -34,28 +60,84 @@ $brand-secondary-color: #D1335B;
     font-size: 1.4em;
 }
 
-.sessions {
-    .panel-group {
-        .panel-heading {
-            .session-name button.btn {
-                display: none;
-            }
-            .session-name:hover button.btn.btn-primary {
+.navbar {
+    color: #fff;
+    border: none;
+    border-radius: 0;
+}
+
+.panel-group {
+    .panel+.panel {
+        margin-top: 0;
+    }
+    .panel {
+        border-radius: 0;
+    }
+    .panel-body {
+        padding: 0;
+        .list-group {
+            border-bottom: 2px solid gray;
+            &:after {
+                content: "Window Boundary";
+                background-color: gray;
+                color: #fff;
                 display: block;
-                position: absolute;
-                right: 0;
-                top: 0;
-                border-radius: 50%;
-                width: 20px;
-                height: 20px;
-                padding: 0;
-                font-size: 9px
-            }
-            input.form-control[readOnly] {
-                transition: all 0.4s;
-                border: none;
-                box-shadow: none;
+                text-align: right;
+                padding-right: 15px;
             }
         }
     }
+    .panel-heading {
+        h4 a {
+            text-decoration: none;
+            color: gray;
+            font-weight: normal;
+        }
+        .session-name button.btn {
+            display: none;
+        }
+        .session-name:hover button.btn.btn-primary {
+            display: block;
+            position: absolute;
+            right: 0;
+            top: 0;
+            border-radius: 50%;
+            width: 20px;
+            height: 20px;
+            padding: 0;
+            font-size: 9px
+        }
+        input.form-control[readOnly] {
+            transition: all 0.4s;
+            border: none;
+            box-shadow: none;
+        }
+    }
+}
+
+.context-actions .nav>li>a {
+    padding: 5px 0;
+    // padding-bottom: 5px;
+}
+
+.example-enter {
+    opacity: 0.01;
+}
+
+.example-enter.example-enter-active {
+    opacity: 1;
+    transition: all 500ms ease-in;
+}
+
+.example-leave {
+    opacity: 1;
+    background-color: yellow;
+    max-height: auto;
+}
+
+.example-leave.example-leave-active {
+    opacity: 0.01;
+    transition: all 500ms ease-in;
+    background-color: red;
+    max-height: 0;
 }
