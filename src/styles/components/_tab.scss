@@ -1,11 +1,6 @@
-.tabs-list {
-    display: flex;
-    flex-direction: column;
-    justify-content: space-between;
-}
-
 .tab-item {
-    padding: 10px 15px;
+    padding-left: 15px;
+    padding: 10px;
     margin-bottom: -1px;
     border: 1px solid #ddd;
     display: flex;
@@ -71,10 +66,13 @@
         color: blue;
     }
     .tab-actions {
-        width: 0;
+        width: auto;
     }
     &:hover .tab-actions {
         width: auto;
+        li {
+            width: auto;
+        }
     }
 }
 
@@ -83,8 +81,14 @@
     overflow: hidden;
     transition: all 0.4s;
     li {
+        width: 0;
         transition: all 0.6s;
         display: inline-block;
+        overflow: hidden;
+        margin-right: 5px;
+        &:last-child {
+            margin-right: 0;
+        }
     }
     li.active {
         width: auto !important;
