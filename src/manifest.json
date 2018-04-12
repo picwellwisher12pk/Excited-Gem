@@ -1,6 +1,6 @@
 {
     "name": "Excited Gem",
-    "version": "0.8.0",
+    "version": "0.8.1",
     "permissions": ["tabs", "idle", "<all_urls>", "contextMenus", "storage", "notifications"],
     "background": {
         "scripts": ["js/background.js"]
@@ -30,5 +30,6 @@
     "options_ui": {
         "page": "options.html",
         "open_in_tab": true
-    }
+    },
+    "applications": { "gecko": { "id": "{daf44bf7-a45e-4450-979c-91cf07434c3d}" } }
 }
