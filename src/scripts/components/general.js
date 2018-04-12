@@ -170,58 +170,30 @@ export function timeConverter(UNIX_timestamp) {
 
 // Hide method from for-in loops
 Object.defineProperty(Array.prototype, 'equals', { enumerable: false });
+
 let quicksort = function(array, sortby) {
+  // console.log('quickSort', array, sortby);
   if (array.length <= 1) return array;
-  sortby;
+  // if (sortby == 'url') sort = url;
+  // if (sortby == 'title') sort = title;
   var pivot = array[0];
   var left = [];
   var right = [];
   for (var i = 1; i < array.length; i++) {
-    array[i].sortby < pivot.sortby ? left.push(array[i]) : right.push(array[i]);
+    array[i][sortby] < pivot[sortby] ? left.push(array[i]) : right.push(array[i]);
   }
   return quicksort(left, sortby).concat(pivot, quicksort(right, sortby));
 };
 
 export function sortTabs(type, tabsList) {
-  let prevTabs = tabsList;
+  // let prevTabs = tabsList;
   tabsList = quicksort(tabsList, type);
-
   for (let i = 0; i < tabsList.length; i++) {
-    let data = { position: i, tabId: tabsList[i].id };
-    let tabId = parseInt(data.tabId);
-    let position = parseInt(data.position);
+    let { id } = tabsList[i];
     setTimeout(() => {
-      client.tabs.move(tabId, { index: position });
+      client.tabs.move(id, { index: i });
     }, sortDelay);
   }
-  // setTimeout(function() {
-
-  // if (type == "url") {
-  //     tabsListArray = propertyToArray(tabsList, "url");
-  //     prevTabsArray = propertyToArray(prevTabs, "url");
-  // }
-  // if (type == "title") {
-  //     tabsListArray = propertyToArray(tabsList, "title");
-  //     prevTabsArray = propertyToArray(prevTabs, "title");
-  // }
-  // head++;
-  // if (head < tabsList.length) {
-  //     sortTabs(head, type);
-  // }
-  //     let sameArray = arraysAreIdentical(prevTabsArray, tabsListArray);
-  //     loopFinished = true;
-
-  //     if (sameArray) {
-  //         console.log(sameArray, prevTabsArray, tabsListArray);
-  //         return;
-  //     }
-
-  //     if (!sameArray && loopFinished) {
-  //         console.log("comparision", sameArray, "=", tabsListArray, "=", prevTabsArray);
-  //         head = 0;
-  //         sortTabs(head, type);
-  //     }
-  // }, 250);
 }
 /*function runQuery(query){
   let query = 'table#searchResult tbody td';
