@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { Component } from 'react';
 // import InfoModal from "./infomodal.jsx";
 const client = browser;
 // let info = ReactDOM.render(<InfoModal />,document.getElementById('infoModal'));

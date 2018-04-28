@@ -1,4 +1,4 @@
-import React from 'react';
+import React,{Component} from 'react';
 import { TransitionGroup, CSSTransition } from 'react-transition-group';
 import Tab from './Tab';
 let client = browser;

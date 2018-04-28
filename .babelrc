@@ -2,6 +2,7 @@
     "presets": [
         "stage-3", ["env", { "loose": true, "browsers": "last 1 Chrome version" }], "react"
     ],
+    "plugins": ["dynamic-import-webpack"],
     "env": {
         "development": {
             "presets": ["stage-3", "env", "react-hot"]

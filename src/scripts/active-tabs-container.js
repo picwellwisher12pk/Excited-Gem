@@ -4,13 +4,14 @@
 const bootstrap = require('bootstrap');
 
 // import offCanvasNav from "./vendor/codedrops/sidebarEffects";
-import React from 'react';
-// import {render} from "react-dom";
+function React() {
+  return import(/* webpackChunkName: "react" */ 'react').then(react => react);
+}
 import 'react-devtools';
-import ReactDOM from 'react-dom';
-
+import { render } from 'react-dom';
+React();
 //JS components
-import packagedAndBroadcast from './components/communications.js';
+// import packagedAndBroadcast from './components/communications.js';
 import * as general from './components/general.js';
 import selectTab from './components/tabSelection.js';
 // require("./components/general.js");
@@ -18,7 +19,7 @@ import selectTab from './components/tabSelection.js';
 // React Components
 import Navigation from './react-components/navigation.rc.js';
 import TabsGroup from './components/TabsGroup';
-import InfoModal from './react-components/info-modal.js';
+// import InfoModal from './react-components/info-modal.js';
 // import { getReadingLists, setReadingLists } from "./components/readingList.jsx";
 
 //Styles
@@ -72,13 +73,13 @@ client.tabs.onUpdated.addListener(function(tabId, info) {
   updateTabs();
 });
 
-tabsgroup = ReactDOM.render(<TabsGroup />, document.getElementById('active-tabs-list-container'));
+tabsgroup = render(<TabsGroup />, document.getElementById('active-tabs-list-container'));
 client.tabs.query({}, tabs => {
   $('.active-tab-counter').text(tabs.length);
 });
 
-NavigationReference = ReactDOM.render(<Navigation />, document.getElementById('navigation'));
-infoModal = ReactDOM.render(<InfoModal />, document.getElementById('infoModal'));
+NavigationReference = render(<Navigation />, document.getElementById('navigation'));
+infoModal = render(<InfoModal />, document.getElementById('infoModal'));
 
 //Seach/Filter
 $('#quicksearch-input').on('keyup', e => {

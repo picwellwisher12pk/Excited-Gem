@@ -17,6 +17,7 @@
     "scripts": {
         "build": "node utils/production.js",
         "start": "node utils/webserver.js",
+        "webpack": "webpack --config test.config.js --display-error-details",
         "firefoxd": "SET Client=browser & npm run start",
         "chromed": "npm run start --env.CLIENT=chrome",
         "firefoxp": "SET NODE_ENV=production & SET Client=browser &  node utils/production.js",
@@ -40,35 +41,42 @@
     },
     "devDependencies": {
         "@babel/preset-env": "^7.0.0-beta.39",
-        "babel-core": "^6.17.0",
-        "babel-loader": "^7.1.0",
+        "babel-core": "^6.26.0",
+        "babel-loader": "^7.1.4",
+        "babel-plugin-dynamic-import-webpack": "^1.0.2",
+        "babel-plugin-syntax-dynamic-import": "^6.18.0",
         "babel-preset-env": "^1.6.1",
         "babel-preset-react": "^6.16.0",
         "babel-preset-react-hmre": "^1.1.1",
         "babel-preset-react-hot": "^1.0.5",
         "babel-preset-stage-3": "^6.24.1",
-        "css-loader": "^0.25.0",
+        "css-loader": "^0.28.11",
         "ejs-loader": "^0.3.1",
         "eslint-config-prettier": "^2.9.0",
-        "extract-text-webpack-plugin": "^3.0.1",
-        "file-loader": "^0.11.2",
+        "extract-text-webpack-plugin": "^4.0.0-beta.0",
+        "file-loader": "^1.1.11",
         "fs-extra": "^0.30.0",
         "html-loader": "^0.4.5",
         "html-webpack-plugin": "3.1.0",
         "jest": "^22.1.4",
-        "node-sass": "^4.5.3",
+        "mini-css-extract-plugin": "^0.4.0",
+        "node-sass": "^4.8.3",
         "prettier": "1.11.1",
         "pug-load": "latest",
         "pug-loader": "latest",
         "react-devtools": "^3.2.1",
         "react-hot-loader": "^3.0.0-alpha.8",
         "react-transition-group": "^2.2.1",
-        "sass-loader": "^6.0.6",
-        "style-loader": "^0.13.0",
-        "webpack": "3.6.0",
-        "webpack-dev-server": "^2.3.0",
+        "sass-loader": "^6.0.7",
+        "style-loader": "^0.20.0",
+        "webpack": "4.5.0",
+        "webpack-bundle-analyzer": "^2.11.1",
+        "webpack-cli": "^2.0.14",
+        "webpack-dev-server": "^3.1.1",
+        "webpack-serve": "^0.3.1",
+        "webpack-visualizer-plugin": "^0.1.11",
         "webpackbar": "^1.5.1",
-        "write-file-webpack-plugin": "3.4.2"
+        "write-file-webpack-plugin": "^4.2.0"
     },
     "sideEffects": false,
     "lint-staged": {
@@ -81,5 +89,9 @@
             "git add"
         ]
     },
-    "applications": { "gecko": { "id": "{daf44bf7-a45e-4450-979c-91cf07434c3d}" } }
+    "applications": {
+        "gecko": {
+            "id": "{daf44bf7-a45e-4450-979c-91cf07434c3d}"
+        }
+    }
 }
