@@ -5,7 +5,6 @@ const bootstrap = require('bootstrap');
 
 // import offCanvasNav from "./vendor/codedrops/sidebarEffects";
 import React from 'react';
-// import {render} from "react-dom";
 import 'react-devtools';
 import ReactDOM from 'react-dom';
 
@@ -30,6 +29,7 @@ import '../styles/eg.scss';
 
 //Images
 import '../images/logo.svg';
+import '../images/dev-logo.svg';
 import '../images/arrange.svg';
 import '../images/close-icon.svg';
 import '../images/info-icon.svg';

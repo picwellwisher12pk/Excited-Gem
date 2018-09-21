@@ -1,9 +1,11 @@
 {
     "name": "excited-gem",
+    "title": "Excited Gem",
     "version": "0.8.2",
-    "description": "A tabs management extension for Chrome",
+    "description": "A tool to manage your tabs and other browser related features.",
     "homepage": "https://picwellwisher12pk.github.io/onetab-advanced/",
     "bugs": "{}",
+    "logoimage": "images/logo.svg",
     "license": "MIT",
     "author": "Amir Hameed",
     "client": {
@@ -30,19 +32,19 @@
         "es6": true
     },
     "dependencies": {
-        "babel-eslint": "^8.2.2",
+        "babel-eslint": "^8.2.6",
         "bootstrap": "^3.3.7",
         "eslint": "^4.19.1",
-        "eslint-plugin-prettier": "^2.6.0",
+        "eslint-plugin-prettier": "^2.6.2",
         "jquery": "^1.12.4",
         "react": "^15.3.2",
         "react-dom": "^15.3.2"
     },
     "devDependencies": {
-        "@babel/preset-env": "^7.0.0-beta.39",
-        "babel-core": "^6.17.0",
-        "babel-loader": "^7.1.0",
-        "babel-preset-env": "^1.6.1",
+        "@babel/preset-env": "^7.0.0-beta.54",
+        "babel-core": "^6.26.3",
+        "babel-loader": "^7.1.5",
+        "babel-preset-env": "^1.7.0",
         "babel-preset-react": "^6.16.0",
         "babel-preset-react-hmre": "^1.1.1",
         "babel-preset-react-hot": "^1.0.5",
@@ -50,23 +52,23 @@
         "css-loader": "^0.25.0",
         "ejs-loader": "^0.3.1",
         "eslint-config-prettier": "^2.9.0",
-        "extract-text-webpack-plugin": "^3.0.1",
+        "extract-text-webpack-plugin": "^3.0.2",
         "file-loader": "^0.11.2",
         "fs-extra": "^0.30.0",
         "html-loader": "^0.4.5",
         "html-webpack-plugin": "3.1.0",
-        "jest": "^22.1.4",
-        "node-sass": "^4.5.3",
+        "jest": "^22.4.4",
+        "node-sass": "^4.9.2",
         "prettier": "1.11.1",
-        "pug-load": "latest",
-        "pug-loader": "latest",
-        "react-devtools": "^3.2.1",
+        "pug-load": "^2.0.11",
+        "pug-loader": "^2.4.0",
+        "react-devtools": "^3.2.3",
         "react-hot-loader": "^3.0.0-alpha.8",
-        "react-transition-group": "^2.2.1",
-        "sass-loader": "^6.0.6",
+        "react-transition-group": "^2.4.0",
+        "sass-loader": "^6.0.7",
         "style-loader": "^0.13.0",
         "webpack": "3.6.0",
-        "webpack-dev-server": "^2.3.0",
+        "webpack-dev-server": "^2.11.2",
         "webpackbar": "^1.5.1",
         "write-file-webpack-plugin": "3.4.2"
     },
@@ -81,5 +83,9 @@
             "git add"
         ]
     },
-    "applications": { "gecko": { "id": "{daf44bf7-a45e-4450-979c-91cf07434c3d}" } }
+    "applications": {
+        "gecko": {
+            "id": "{daf44bf7-a45e-4450-979c-91cf07434c3d}"
+        }
+    }
 }
