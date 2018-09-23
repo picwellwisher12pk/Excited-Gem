@@ -48,3 +48,5 @@ New folder/
 utils/.npmrc
 package-lock.json
 firefox/
+.idea/watcherTasks.xml
+build.zip
