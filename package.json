@@ -18,7 +18,7 @@
     },
     "scripts": {
         "build": "node utils/production.js",
-        "start": "node utils/webserver.js",
+        "start": "node utils/webserver.js NODE_ENV=development browserClient=firefox",
         "firefoxd": "SET Client=browser & npm run start",
         "chromed": "npm run start --env.CLIENT=chrome",
         "firefoxp": "SET NODE_ENV=production & SET Client=browser &  node utils/production.js",
@@ -32,6 +32,7 @@
         "es6": true
     },
     "dependencies": {
+        "@babel/polyfill": "^7.0.0",
         "babel-eslint": "^8.2.6",
         "bootstrap": "^3.3.7",
         "eslint": "^4.19.1",

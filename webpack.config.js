@@ -95,10 +95,10 @@ if (env.browserClient === 'chrome' || env.browserClient === 'all') {
 
       new HtmlWebpackPlugin({
         title: 'Excited Gem | Tabs',
-        logotype: env.NODE_ENV == 'development' ? 'dev-logo.svg' : 'logo.svg',
+        logotype: 'dev-logo.svg',
         template: path.join(__dirname, 'src', 'tabs.ejs'),
         filename: 'tabs.html',
-        favicon: 'src/images/logo.svg',
+        favicon: 'src/images/dev-logo.svg',
         chunks: ['tabs'],
       }),
       new WriteFilePlugin(), //Writes files to target directory during development build phase.
@@ -121,7 +121,7 @@ if (env.browserClient === 'firefox' || env.browserClient === 'all') {
     {
       context: __dirname,
       entry: {
-        tabs: path.join(__dirname, 'src', 'scripts', 'active-tabs-container.js'),
+        tabs: ["@babel/polyfill", path.join(__dirname, 'src', 'scripts', 'active-tabs-container.js')],
         background: path.join(__dirname, 'src', 'scripts', 'background.js')
       },
       output: {
@@ -178,10 +178,10 @@ if (env.browserClient === 'firefox' || env.browserClient === 'all') {
 
         new HtmlWebpackPlugin({
           title: 'Excited Gem | Tabs',
-          logotype: env.NODE_ENV == 'development' ? 'dev-logo.svg' : 'logo.svg',
+          logotype: env.NODE_ENV === 'development' ? 'dev-logo.svg' : 'logo.svg',
           template: path.join(__dirname, 'src', 'tabs.ejs'),
           filename: 'tabs.html',
-          favicon: 'src/images/logo.svg',
+          favicon: 'src/images/dev-logo.svg',
           chunks: ['tabs'],
         }),
         new WriteFilePlugin(), //Writes files to target directory during development build phase.
