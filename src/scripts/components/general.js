@@ -1,12 +1,12 @@
 import packagedAndBroadcast from './communications.js';
 let _development = true;
-export let homepageURL = browser.extension.getURL('tabs.html');
+let client =  process.env.browser == 'firefox' ? browser : chrome;
+export let homepageURL = client.extension.getURL('tabs.html');
 let allTabs;
 let refinedTabs;
 let allSessions = {
   // sessions
 };
-let client = browser;
 let ignoredUrlPatterns = ['chrome://*', 'chrome-extension://*', 'http(s)?://localhost*'];
 let ignoredDataKeys = [
   'active',
@@ -55,8 +55,8 @@ export function removeKeys(keysToRemove, object) {
  * @param  {String} message [description]
  */
 export function saveData(data, message = 'Data saved') {
-  browser.storage.local.set(data, () => {
-    browser.notifications.create(
+  client.storage.local.set(data, () => {
+    client.notifications.create(
       'reminder',
       {
         type: 'basic',
@@ -301,6 +301,7 @@ export function streamTabs(homepageOpened, port) {
   // log(getAllTabs(homepageOpened), port);
 }
 export function searchInTabs(searchTerm, originalData, searchType = 'regex', searchCase = '', searchBy = null) {
+  console.log("general.js:searchInTabs",searchTerm,originalData);
   return originalData.filter(tab => {
     if (searchType == 'regex') {
       let regex = new RegExp(searchTerm, searchCase);

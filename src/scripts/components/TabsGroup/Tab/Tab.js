@@ -56,7 +56,7 @@ export default class Tab extends React.Component {
           </li> */}
           <li
             title="Un/Pin Tab"
-            className={`clickable` + (this.state.pinned ? ` active` : ` disabled`)}
+            className={`clickable pin-tab` + (this.state.pinned ? ` active` : ` disabled`)}
             onClick={this.pinTab.bind(this, this.props.id, this.state.pinned)}
             aria-hidden="true"
             role="group"
@@ -68,7 +68,7 @@ export default class Tab extends React.Component {
           {/* This will not appear as status icon instead this will be just a button to trigger pin or unpin */}
           <li
             title="Un/Mute Tab"
-            className={`clickable` + (showSpeaker ? ` active` : ` disabled`)}
+            className={`clickable sound-tab` + (showSpeaker ? ` active` : ` disabled`)}
             onClick={this.muteTab}
             aria-hidden="true"
           >

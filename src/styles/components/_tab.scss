@@ -1,3 +1,4 @@
+@import "../bootstrap/_variables";
 .tab-item {
     padding-left: 15px;
     padding: 10px;
@@ -96,7 +97,13 @@
     &:hover li {
         display: inline-block;
     }
-    li.remove-tab:hover svg path {
-        fill: $brand-secondary-color;
+    li.pin-tab:hover i {
+        color: $brand-primary;
+    }
+    li.sound-tab:hover i {
+        color: $brand-info;
+    }
+    li.remove-tab:hover i {
+        color: $brand-secondary-color;
     }
 }

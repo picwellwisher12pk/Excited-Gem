@@ -23,13 +23,13 @@ export default class TabsGroup extends React.Component {
   }
 
   componentDidMount() {
-    client.tabs.query({}, tabs => {
-      this.setState({ tabs: tabs });
-    });
+    // client.tabs.query({}, tabs => {
+    //   // this.setState({ tabs: tabs });
+    // });
   }
 
   staticList() {
-    console.log('staticList', this.state.tabs);
+    console.log('Tabsgroup.js: staticList', this.state.tabs);
     tab = this.state.tabs.map(function(tab) {
       return (
         <CSSTransition
@@ -60,7 +60,7 @@ export default class TabsGroup extends React.Component {
     return tab;
   }
   render() {
-    console.log('Rendering');
+    console.log('Tabsgroup.js: Rendering');
     return (
       <TransitionGroup component="ul" className="tab tabs-list sortable selectable">
         {this.staticList()}

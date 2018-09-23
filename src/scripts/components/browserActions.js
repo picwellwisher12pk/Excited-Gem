@@ -1,3 +1,5 @@
+let env = require('../../../utils/env');
+let client =  env.browserClient == 'firefox' ? browser : chrome;
 import * as general from "./general.js";
 /**
  * Opens OneTab Main Page
@@ -7,7 +9,12 @@ import * as general from "./general.js";
 //   windowId: null
 // };
 
-
+export function getCurrentWindowTabs() {
+  return client.tabs.query({ currentWindow: true });
+}
+export function getAllWindowTabs() {
+  return client.tabs.query({});
+}
 /**
  * Sets badge label to Tabs count
  * @param {Integer} tabId     [description]

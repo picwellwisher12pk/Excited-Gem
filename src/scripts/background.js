@@ -1,4 +1,5 @@
 import * as general from './components/general.js';
+let client =  process.env.browser == 'firefox' ? browser : chrome;
 import { saveSessions, getSessions } from './components/getsetSessions.js';
 import packagedAndBroadcast from './components/communications.js';
 // import { registerMenus, setTabCountInBadge } from "./components/browserActions.jsx";
@@ -9,7 +10,6 @@ const sender = 'background';
 const currentSender = 'background';
 let ActiveTabsConnection;
 let homepageOpened = null;
-let client = browser;
 console.log(client);
 /*Background Router */
 ///////////////////////

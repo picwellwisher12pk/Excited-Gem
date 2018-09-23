@@ -46,3 +46,4 @@ New folder/
 .idea/excited-gem.iml
 .vscode/extensions.json
 utils/.npmrc
+package-lock.json
