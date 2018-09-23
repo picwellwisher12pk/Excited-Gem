@@ -1,3 +1,6 @@
+let env = require('../../utils/env');
+let client =  env.browserClient == 'firefox' ? browser : chrome;
+
 //Scripts and Modules
 //Vendors
 // const $ = (jQuery = require('jquery'));
@@ -8,16 +11,17 @@ import React from 'react';
 import 'react-devtools';
 import ReactDOM from 'react-dom';
 
-//JS components
-import packagedAndBroadcast from './components/communications.js';
+//JS libraries
+// import packagedAndBroadcast from './components/communications.js';
+import {getCurrentWindowTabs,getAllWindowTabs} from './components/browserActions';
 import * as general from './components/general.js';
-import selectTab from './components/tabSelection.js';
+// import selectTab from './components/tabSelection.js';
 // require("./components/general.js");
 
 // React Components
-import Navigation from './react-components/navigation.rc.js';
+// import Navigation from './react-components/navigation.rc.js';
 import TabsGroup from './components/TabsGroup';
-import InfoModal from './react-components/info-modal.js';
+// import InfoModal from './react-components/info-modal.js';
 // import { getReadingLists, setReadingLists } from "./components/readingList.jsx";
 
 //Styles
@@ -42,50 +46,57 @@ import '../images/sound-icon.svg';
 // const sender = 'content';
 // let currentPage = '';
 // let windowHeight;
-let NavigationReference;
-let infoModal;
+// let NavigationReference;
+// let infoModal;
 let pref = {
   filterType: 'regex',
   filterCase: 'true',
+  windowType: 'current'
 };
-let client = browser;
-let tabsList;
-let tabsgroup;
+window.tabsList = [];
+window.tabsgroup = null;
 
 function updateTabs() {
-  getCurrentWindowTabs().then(tabs => {
-    tabsList = tabs;
-    tabsgroup.setState({ tabs: tabs });
-    $('.active-tab-counter').text(tabs.length);
-  });
+  let result = pref.windowType == 'current' ? getCurrentWindowTabs() : getAllWindowTabs();
+  result.then(tabs => {
+      window.tabsList = tabs;
+      window.tabsgroup.setState({tabs: window.tabsList} );
+      $('.active-tab-counter').text(tabs.length);
+      $('#allWindows span.count').text(tabs.length);
+
+      $('#currentWindow span.count').text(tabs.length);
+      if (tabs.length >= 50)  $('#currentWindow span.count, #allWindows span.count').toggleClass('label-success label-warning');
+      if (tabs.length >= 100)  $('#currentWindow span.count, #allWindows span.count').toggleClass('label-success label-danger');
+      });
 }
 
-function getCurrentWindowTabs() {
-  return browser.tabs.query({ currentWindow: true });
-}
-// tabsgroup.forceUpdate();
 client.tabs.onRemoved.addListener(updateTabs);
 client.tabs.onAttached.addListener(updateTabs);
 client.tabs.onUpdated.addListener(updateTabs);
-client.tabs.onUpdated.addListener(function(tabId, info) {
-  console.log('onExtension page on updated event', tabId, info);
+
+
+// NavigationReference = ReactDOM.render(<Navigation />, document.getElementById('navigation'));
+// infoModal = ReactDOM.render(<InfoModal />, document.getElementById('infoModal'));
+window.tabsgroup = ReactDOM.render(<TabsGroup />, document.getElementById('active-tabs-list-container'));
+//Seach/Filter
+
+$('#quicksearch-input').keyup( e => {
+  console.log("active-tabs-container.js:Search:");
+  let filteredTabs = general.searchInTabs(e.target.value, window.tabsList);
+  window.tabsgroup.setState({ tabs: filteredTabs });
+});
+$('#allWindows').click(e =>{
+  pref.windowType = 'All';
+  updateTabs();
+});
+$('#currentWindow').click(e =>{
+  pref.windowType = 'current';
   updateTabs();
 });
 
-tabsgroup = ReactDOM.render(<TabsGroup />, document.getElementById('active-tabs-list-container'));
-client.tabs.query({}, tabs => {
-  $('.active-tab-counter').text(tabs.length);
-});
 
-NavigationReference = ReactDOM.render(<Navigation />, document.getElementById('navigation'));
-infoModal = ReactDOM.render(<InfoModal />, document.getElementById('infoModal'));
 
-//Seach/Filter
-$('#quicksearch-input').on('keyup', e => {
-  let filteredTabs = general.searchInTabs(e.target.value, tabsList);
-  tabsgroup.setState({ tabs: filteredTabs });
-});
 $('#refreshActiveTabs').on('click', updateTabs);
 // Sorting of Tabs (Title | URL). Event Binding
-$('#rearrange-title-btn').on('click', () => general.sortTabs('title', tabsList));
-$('#rearrange-url-btn').on('click', () => general.sortTabs('url', tabsList));
+$('#rearrange-title-btn').on('click', () => general.sortTabs('title', window.tabsList));
+$('#rearrange-url-btn').on('click', () => general.sortTabs('url', window.tabsList));
