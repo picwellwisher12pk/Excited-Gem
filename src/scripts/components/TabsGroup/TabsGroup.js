@@ -3,24 +3,52 @@ import { TransitionGroup, CSSTransition } from 'react-transition-group';
 import Tab from './Tab';
 let client = browser;
 let tab;
+let config = {
+  promptForClosure :true
+}
 export default class TabsGroup extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
       tabs: this.props.tabs,
+      selectedTabs: []
     };
     this.closeTab = this.closeTab.bind(this);
     this.staticList = this.staticList.bind(this);
+    this.updateSelectedTabs = this.updateSelectedTabs.bind(this);
   }
-
-  closeTab(key) {
+  updateSelectedTabs(id,selected){
+    let tempArray = this.state.selectedTabs;
+    selected ? tempArray.splice(tempArray.indexOf(id),1) : tempArray.push(id) ;
+    this.setState({selectedTabs: tempArray});
+  }
+  closeTab(key,promptForClosure = config.promptForClosure) {
+    console.log(promptForClosure);
     let newtabs = [...this.state.tabs];
-    if (confirm(`Are you sure you want to close the following tab\n` + key)) {
+    if(promptForClosure) {if (!confirm(`Are you sure you want to close the following tab\n` + key)) return false;}
       client.tabs.remove(parseInt(key));
       newtabs.splice(newtabs.findIndex(el => el.id === key), 1);
       this.setState({ tabs: newtabs });
-    }
+
   }
+  pinTab(tabId, pinned) {
+    // !pinned ? client.tabs.update(tabId, { pinned: true }) : client.tabs.update(tabId, { pinned: false });
+    // this.setState({ pinned: !pinned });
+  }
+  muteTab(id) {
+    client.tabs.update(this.state.id, { muted: this.state.audible });
+    // this.setState({ audible: !this.state.audible });
+    // this.setState({ muted: !this.state.muted });
+  }
+  processSelectedTabs(action){
+    if ( action == 'close' ){
+      if(!confirm('Are you sure you want to close selected tabs')) return false;
+      for (let id of this.state.selectedTabs) this.closeTab(id,false);
+    }
+    if ( action == 'pin' ) for (let id of this.state.selectedTabs) this.pinTab(id);
+    if ( action == 'mute' ) for (let id of this.state.selectedTabs) this.muteTab(id);
+  }
+
 
   componentDidMount() {
     // client.tabs.query({}, tabs => {
@@ -53,6 +81,9 @@ export default class TabsGroup extends React.Component {
             status={tab.status}
             data={tab}
             closeTab={this.closeTab}
+            pinTab={this.pinTab}
+            muteTab={this.muteTab}
+            updateSelectedTabs={this.updateSelectedTabs}
           />
         </CSSTransition>
       );

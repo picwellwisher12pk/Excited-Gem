@@ -97,6 +97,9 @@ $('#currentWindow').click(e =>{
 
 
 $('#refreshActiveTabs').on('click', updateTabs);
+$('#closeSelectedBtn').on('click', (e)=>{
+  window.tabsgroup.processSelectedTabs('close');
+});
 // Sorting of Tabs (Title | URL). Event Binding
 $('#rearrange-title-btn').on('click', () => general.sortTabs('title', window.tabsList));
 $('#rearrange-url-btn').on('click', () => general.sortTabs('url', window.tabsList));

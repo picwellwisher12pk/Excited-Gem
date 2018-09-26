@@ -17,20 +17,27 @@ export default class Tab extends React.Component {
       muted: this.props.mutedInfo,
       status: this.props.status,
       data: this.props.data,
+      checked: false
     };
-    this.muteTab = this.muteTab.bind(this);
+    this.isSelected = this.isSelected.bind(this);
+    // this.onChange = this.onChange.bind(this);
   }
   focusTab(id) {
     client.tabs.update(id, { active: true });
   }
-  pinTab(tabId, pinned) {
-    !pinned ? client.tabs.update(tabId, { pinned: true }) : client.tabs.update(tabId, { pinned: false });
-    this.setState({ pinned: !pinned });
+  isSelected(event){
+    const value = event.target.checked;
+    this.setState({checked: value});
+    this.props.updateSelectedTabs(this.props.id,this.state.checked);
   }
-  muteTab() {
-    client.tabs.update(this.state.id, { muted: this.state.audible });
-    this.setState({ audible: !this.state.audible });
-    this.setState({ muted: !this.state.muted });
+  pinTab_(tabId, pinned) {
+    // !pinned ? client.tabs.update(tabId, { pinned: true }) : client.tabs.update(tabId, { pinned: false });
+    // this.setState({ pinned: !pinned });
+  }
+  muteTab_() {
+    // client.tabs.update(this.state.id, { muted: this.state.audible });
+    // this.setState({ audible: !this.state.audible });
+    // this.setState({ muted: !this.state.muted });
   }
   componentWillReceiveProps() {}
 
@@ -41,10 +48,11 @@ export default class Tab extends React.Component {
     let trimmedURL = url;
     let showSpeaker = this.state.audible || this.state.muted;
     return (
-      <li key={this.props.id} data-id={this.props.id} className="tab-item">
-        <span className="tab-favicon" aria-label="favicon">
+      <li key={this.props.id} data-id={this.props.id} className={`tab-item` + (this.state.checked ? ` checked` : ` `)}>
+        <label  className="tab-favicon" aria-label="favicon">
           <img src={this.state.favicon} />
-        </span>
+          <input type="checkbox" onChange={this.isSelected.bind(this)} />
+        </label>
         <a title={url} className="clickable tab-name" onClick={this.focusTab.bind(null, this.props.id)}>
           {this.state.title}
         </a>
@@ -57,7 +65,7 @@ export default class Tab extends React.Component {
           <li
             title="Un/Pin Tab"
             className={`clickable pin-tab` + (this.state.pinned ? ` active` : ` disabled`)}
-            onClick={this.pinTab.bind(this, this.props.id, this.state.pinned)}
+            onClick={() =>this.props.pinTab(this.props.id, this.state.pinned)}
             aria-hidden="true"
             role="group"
             aria-label="pinned"
@@ -69,7 +77,7 @@ export default class Tab extends React.Component {
           <li
             title="Un/Mute Tab"
             className={`clickable sound-tab` + (showSpeaker ? ` active` : ` disabled`)}
-            onClick={this.muteTab}
+            onClick={() => this.props.muteTab(this.props.id)}
             aria-hidden="true"
           >
             <i className={`fa fw-fw ` + (this.state.audible ? ` fa-volume-up` : ` fa-volume-mute`)} />
