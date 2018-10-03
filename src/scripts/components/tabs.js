@@ -22,7 +22,7 @@ let renderTabs = () => {
             }
           });
         }
-      }
+      })
     }
 }
 function sortTabs(head, type) {

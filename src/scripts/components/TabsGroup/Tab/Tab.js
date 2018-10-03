@@ -1,9 +1,11 @@
 import React from 'react';
+import PropTypes from 'prop-types';
 // import InfoModal from "./infomodal.jsx";
 const client = browser;
 // let info = ReactDOM.render(<InfoModal />,document.getElementById('infoModal'));
 export default class Tab extends React.Component {
   constructor(props) {
+    console.log('constructor');
     super(props);
     this.state = {
       id: this.props.id,
@@ -14,7 +16,7 @@ export default class Tab extends React.Component {
       position: this.props.position,
       favicon: this.props.favIconUrl,
       audible: this.props.audible,
-      muted: this.props.mutedInfo,
+      muted: this.props.muted,
       status: this.props.status,
       data: this.props.data,
       checked: false
@@ -39,14 +41,29 @@ export default class Tab extends React.Component {
     // this.setState({ audible: !this.state.audible });
     // this.setState({ muted: !this.state.muted });
   }
-  componentWillReceiveProps() {}
+  componentDidUpdate(props,state,snapshot){
+    // console.log("tab.js updated:",props.title,props.pinned,state.title,state.pinned,snapshot);
+  }
+  componentWillReceiveProps(props) {
+    console.log(props.muted);
+    this.setState({id: props.id});
+    this.setState({key: props.key});
+    this.setState({url: props.url});
+    this.setState({title: props.title});
+    this.setState({pinned: props.pinned});
+    this.setState({position: props.position});
+    this.setState({favicon: props.favIconUrl});
+    this.setState({audible: props.audible});
+    this.setState({muted: props.muted});
+    this.setState({status: props.status});
+    this.setState({data: props.data});
+  }
 
   render() {
     let url = this.state.url;
-    // let length = -1;
-    // let trimmedURL = url.substring(0, length);
     let trimmedURL = url;
-    let showSpeaker = this.state.audible || this.state.muted;
+    let audible = this.state.audible || this.state.muted;
+    // console.log("Tab.js:",this.state.title,this.state.pinned,this.props.pinned);
     return (
       <li key={this.props.id} data-id={this.props.id} className={`tab-item` + (this.state.checked ? ` checked` : ` `)}>
         <label  className="tab-favicon" aria-label="favicon">
@@ -65,7 +82,7 @@ export default class Tab extends React.Component {
           <li
             title="Un/Pin Tab"
             className={`clickable pin-tab` + (this.state.pinned ? ` active` : ` disabled`)}
-            onClick={() =>this.props.pinTab(this.props.id, this.state.pinned)}
+            onClick={() =>this.props.togglePin(this.props.id)}
             aria-hidden="true"
             role="group"
             aria-label="pinned"
@@ -76,11 +93,11 @@ export default class Tab extends React.Component {
           {/* This will not appear as status icon instead this will be just a button to trigger pin or unpin */}
           <li
             title="Un/Mute Tab"
-            className={`clickable sound-tab` + (showSpeaker ? ` active` : ` disabled`)}
-            onClick={() => this.props.muteTab(this.props.id)}
+            className={`clickable sound-tab` + (audible ? ` active` : ` disabled`)}
+            onClick={() => this.props.toggleMute(this.props.id)}
             aria-hidden="true"
           >
-            <i className={`fa fw-fw ` + (this.state.audible ? ` fa-volume-up` : ` fa-volume-mute`)} />
+            <i className={`fa fw-fw ` + (!this.state.muted ? ` fa-volume-up` : ` fa-volume-mute`)} />
           </li>
 
           <li
@@ -100,12 +117,12 @@ export default class Tab extends React.Component {
 }
 
 Tab.propTypes = {
-  url: React.PropTypes.string,
-  title: React.PropTypes.string,
-  pinned: React.PropTypes.bool,
-  position: React.PropTypes.number,
-  favicon: React.PropTypes.string,
-  audible: React.PropTypes.bool,
-  status: React.PropTypes.string,
-  data: React.PropTypes.object,
+  url: PropTypes.string,
+  title: PropTypes.string,
+  pinned: PropTypes.bool,
+  position: PropTypes.number,
+  favicon: PropTypes.string,
+  audible:PropTypes.bool,
+  status: PropTypes.string,
+  data: PropTypes.object,
 };

@@ -1,5 +1,7 @@
+console.log("testing");
 let env = require('../../utils/env');
 let client =  env.browserClient == 'firefox' ? browser : chrome;
+window.homepageOpened = null;
 
 //Scripts and Modules
 //Vendors
@@ -13,7 +15,7 @@ import ReactDOM from 'react-dom';
 
 //JS libraries
 // import packagedAndBroadcast from './components/communications.js';
-import {getCurrentWindowTabs,getAllWindowTabs} from './components/browserActions';
+import {updateTabs,getTabs,setTabCountInBadge} from './components/browserActions';
 import * as general from './components/general.js';
 // import selectTab from './components/tabSelection.js';
 // require("./components/general.js");
@@ -56,30 +58,45 @@ let pref = {
 window.tabsList = [];
 window.tabsgroup = null;
 
-function updateTabs() {
-  let result = pref.windowType == 'current' ? getCurrentWindowTabs() : getAllWindowTabs();
-  result.then(tabs => {
-      window.tabsList = tabs;
-      window.tabsgroup.setState({tabs: window.tabsList} );
-      $('.active-tab-counter').text(tabs.length);
-      $('#allWindows span.count').text(tabs.length);
-
-      $('#currentWindow span.count').text(tabs.length);
-      if (tabs.length >= 50)  $('#currentWindow span.count, #allWindows span.count').toggleClass('label-success label-warning');
-      if (tabs.length >= 100)  $('#currentWindow span.count, #allWindows span.count').toggleClass('label-success label-danger');
-      });
-}
-
-client.tabs.onRemoved.addListener(updateTabs);
-client.tabs.onAttached.addListener(updateTabs);
-client.tabs.onUpdated.addListener(updateTabs);
-
+//Browser Events
+client.runtime.onInstalled.addListener(() => {
+  console.log("Excited Gem Installed !");
+});
+client.tabs.onRemoved.addListener(
+  (tabId) => {
+    console.log(tabId," closing");
+    setTabCountInBadge(tabId, true);
+    getTabs().then(tabs => {  console.log("after tab closing:",tabs);window.tabsgroup.setState({tabs}) });
+  });
+client.tabs.onCreated.addListener(
+  (tabId) => {
+    setTabCountInBadge(tabId, false);
+    getTabs().then(tabs => {  window.tabsgroup.setState({tabs}) });
+  });
+client.tabs.onAttached.addListener(
+  (tabId) => {
+    setTabCountInBadge(tabId, true);
+    getTabs().then(tabs => {  window.tabsgroup.setState({tabs}) });
+  });
+client.tabs.onDetached.addListener(
+  (tabId) => {setTabCountInBadge(tabId, true);
+    getTabs().then(tabs => {  window.tabsgroup.setState({tabs}) });
+  });
+client.tabs.onUpdated.addListener(
+  (tabId,changeInfo, tabInfo) => {
+    console.log(tabId," being Updated",changeInfo,tabInfo);
+    getTabs().then(tabs => {
+      console.log("updating", tabs);
+      window.tabsgroup.setState({tabs});
+    })
+  });
+setTabCountInBadge();
 
 // NavigationReference = ReactDOM.render(<Navigation />, document.getElementById('navigation'));
 // infoModal = ReactDOM.render(<InfoModal />, document.getElementById('infoModal'));
 window.tabsgroup = ReactDOM.render(<TabsGroup />, document.getElementById('active-tabs-list-container'));
-//Seach/Filter
 
+//Search/Filter
 $('#quicksearch-input').keyup( e => {
   console.log("active-tabs-container.js:Search:");
   let filteredTabs = general.searchInTabs(e.target.value, window.tabsList);
@@ -87,16 +104,16 @@ $('#quicksearch-input').keyup( e => {
 });
 $('#allWindows').click(e =>{
   pref.windowType = 'All';
-  updateTabs();
+  updateTabs( window.tabsgroup);
 });
 $('#currentWindow').click(e =>{
   pref.windowType = 'current';
-  updateTabs();
+  updateTabs( window.tabsgroup);
 });
 
 
 
-$('#refreshActiveTabs').on('click', updateTabs);
+$('#refreshActiveTabs').on('click', updateTabs( window.tabsgroup));
 $('#closeSelectedBtn').on('click', (e)=>{
   window.tabsgroup.processSelectedTabs('close');
 });
