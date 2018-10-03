@@ -27,6 +27,7 @@ $brand-secondary-color: #D1335B;
     /* W3C, IE10+, FF16+, Chrome26+, Opera12+, Safari7+ */
     // filter: progid: DXImageTransform.Microsoft.gradient( startColorstr='#0082d5', endColorstr='#2bd563', GradientType=0);
     /* IE6-9 */
+    position: relative;
     .nav>li>a {
         color: #fff;
     }
@@ -140,4 +141,29 @@ $brand-secondary-color: #D1335B;
     transition: all 500ms ease-in;
     background-color: red;
     max-height: 0;
+}
+.selection-action{
+  /* Permalink - use to edit and share this gradient: http://colorzilla.com/gradient-editor/#ffc578+0,fb9d23+100;Orange+3D+%233 */
+  background: #ffc578; /* Old browsers */
+  background: -moz-linear-gradient(top,  #ffc578 0%, #fb9d23 100%); /* FF3.6-15 */
+  background: -webkit-linear-gradient(top,  #ffc578 0%,#fb9d23 100%); /* Chrome10-25,Safari5.1-6 */
+  background: linear-gradient(to bottom,  #ffc578 0%,#fb9d23 100%); /* W3C, IE10+, FF16+, Chrome26+, Opera12+, Safari7+ */
+  filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#ffc578', endColorstr='#fb9d23',GradientType=0 ); /* IE6-9 */
+
+  transform: rotateX(90deg);
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  width: 100%;
+  -webkit-transition: all 0.3s;
+  -moz-transition: all 0.3s;
+  -ms-transition: all 0.3s;
+  -o-transition: all 0.3s;
+  transition: all 0.3s;
+  .nav > li > a{
+    color:#784603;
+  }
+}
+.selection-action.active{
+  transform: rotateX(0deg);
 }
