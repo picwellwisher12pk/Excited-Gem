@@ -1,0 +1,60 @@
+doctype html
+html(lang="en")
+  head
+    title="Excited Gem"
+    script(src="/src/scripts/app.js")
+    style
+
+  body.eg
+    include navigation
+    .container-fluid
+      h1
+        | Tabs
+        small.active-tab-counter  (0)
+
+      #active-tabs.active(role='tabpanel')
+          .row
+            .col-xs-12
+          .tabs-list-container.header(data-spy='affix', data-offset-top='60', data-offset-bottom='200')
+            .horizontal-block.search
+              .row
+                .col-sm-1
+                  span.clickable.glyphicon.glyphicon-pushpin.pinned(title='Pin All', aria-hidden='true')
+                  span.clickable.glyphicon.glyphicon-volume-off.audible(title='Mute All', aria-hidden='true')
+                .col-sm-10
+                  .input-group.filter-tabs#filter-tabs
+                    input#quicksearch-input.quicksearch-input.form-control.regex(type='text', placeholder='Filter Tabs by Title', aria-label='...')
+                    span.input-group-addon.option-regex
+                      input#filter-type-option-id(type='checkbox', aria-label='...')
+                      |  Regex
+                    span.input-group-addon.option-case-sensitive
+                      input#filterCase-option-id(type='checkbox', aria-label='...')
+                      |  Case Sensitive
+                .col-sm-1
+                  .options.pull-right
+                    span.clickable.remove-tab.glyphicon.glyphicon-remove(data-command='remove', aria-hidden='true')
+            .horizontal-block.context-actions
+              ul.nav.nav-pills
+                li(role='presentation')
+                  a#refreshActiveTabs(href='#', title='Refresh Active Tabs')
+                    span.glyphicon.glyphicon-refresh(aria-hidden='true')
+                    |                                     Refresh
+                li.dropdown(role='presentation')
+                  a.dropdown-toggle(data-toggle='dropdown', href='#', role='button', aria-haspopup='true', aria-expanded='false', title='Rearrange/Sort Tabs')
+                    span.glyphicon.glyphicon-sort-by-alphabet(aria-hidden='true')
+                    |                                   Rearrange by
+                    span.caret
+                  ul.dropdown-menu
+                    li
+                      a#rearrange-url-btn(href='#', title='Rearrange with respect of URL')
+                        | URL
+                    li
+                      a#rearrange-title-btn(href='#', title='Rearrange with respect of Title')
+                        | Title
+
+          #active-tabs-list-container.tabs-list-container
+
+          //- #all-sessions
+      #react-container
+      // Small modal
+      #infoModal.modal.bs-example-modal-sm(tabindex='-1', role='dialog', aria-labelledby='mySmallModalLabel')

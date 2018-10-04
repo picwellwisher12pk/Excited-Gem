@@ -1,0 +1,146 @@
+@import "../bootstrap/_variables";
+.tab-item {
+    padding-left: 15px;
+    padding: 10px;
+    margin-bottom: -1px;
+    border: 1px solid #ddd;
+    display: flex;
+    flex: 1;
+    width: 100%;
+    border-radius: 0;
+    /* overflow: hidden; */
+    text-overflow: ellipsis;
+    /* text-align: left; */
+    white-space: nowrap;
+    transition: all 0.4s;
+    position: relative;
+    /* justify-content: space-between; */
+    /* align-self: flex-start; */
+    &.selected {
+        background-color: #acd8fb;
+    }
+    &:hover {
+        background-color: #eee;
+    }
+    .clickable {
+        color: #000;
+        &:hover {
+            color: #000;
+            text-decoration: none;
+        }
+    }
+    img {
+        width: 16px;
+        height: 16px;
+        margin: 0 5px;
+    }
+    .tab-favicon {
+        margin-right: 15px;
+        width: 16px;
+        img {
+            margin: 0;
+            -webkit-transition: all 0.2s;
+            -moz-transition: all 0.2s;
+            -ms-transition: all 0.2s;
+            -o-transition: all 0.2s;
+            transition: all 0.2s;
+        }
+        input{
+          opacity: 0;
+          width: 16px;
+          height: 16px;
+          -webkit-transition: all 0.2s;
+          -moz-transition: all 0.2s;
+          -ms-transition: all 0.2s;
+          -o-transition: all 0.2s;
+          transition: all 0.2s;
+          position: absolute;
+          left: 0;
+        }
+        &:hover{
+          input{
+            opacity: 1;
+            left: 12px;
+          }
+          img{
+            opacity: 0;
+          }
+        }
+    }
+    &.checked .tab-favicon{
+      input{
+        opacity: 1;
+        left: 12px;
+      }
+      img{
+        opacity: 0;
+      }
+    }
+    .glyphicon {
+        padding-left: 5px;
+        padding-right: 5px;
+    }
+    .glyphicon.disabled {
+        color: #aaa;
+    }
+    .dimmed {
+        color: #aebdd0;
+    }
+    .trimmed {
+        margin-left: 15px;
+    }
+    .tab-url {
+        word-wrap: break-word;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        text-align: left;
+        white-space: nowrap;
+        flex: 1;
+    }
+    .tab-name {
+        flex-shrink: 0;
+    }
+    .tab-name:hover {
+        color: blue;
+    }
+    .tab-actions {
+        width: auto;
+    }
+    &:hover .tab-actions {
+        width: auto;
+        li {
+            width: auto;
+        }
+    }
+}
+
+.tab-actions {
+    flex-shrink: 0;
+    overflow: hidden;
+    transition: all 0.4s;
+    li {
+        width: 0;
+        transition: all 0.6s;
+        display: inline-block;
+        overflow: hidden;
+        margin-right: 5px;
+        &:last-child {
+            margin-right: 0;
+        }
+    }
+    li.active {
+        width: auto !important;
+    }
+    &:hover li {
+        display: inline-block;
+    }
+    li.pin-tab:hover i {
+        color: $link-color;
+    }
+    li.sound-tab:hover i {
+        color: $info;
+    }
+    li.remove-tab:hover i {
+        color: $brand-secondary-color;
+    }
+}
