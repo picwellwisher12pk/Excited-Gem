@@ -14,72 +14,110 @@
 </aside>
 <header id="" class="page-header">
   <nav class="navbar">
-    <div class="">
-      <!-- Brand and toggle get grouped for better mobile display-->
-      <div class="navbar-header col-sm-3">
-        <a href="#" class="pull-left logo" style="margin-top: 10px;margin-right:30px">
-          <!-- <i class=" fas fa-stack fa-circle"></i> -->
-          <img src="./images/<%= htmlWebpackPlugin.options.logotype %>" alt="" style="height:40px;width:auto">
-        </a>
-        <ul class="nav navbar-nav" style="margin-top:10px">
-          <li class="tabs active"><a id="go-to-tabs" href="tabs.html">
-              Tabs
-              <span class="active-tab-counter label label-success"></span>
-              <span class="sr-only">(current)</span></a>
-          </li>
 
-        </ul>
-
+    <!-- Brand and toggle get grouped for better mobile display-->
+    <div class="navbar-brand ">
+      <a href="#" class="pull-left logo" style="margin-top: 10px;">
+        <!-- <i class=" fas fa-stack fa-circle"></i> -->
+        <img src="./images/<%= htmlWebpackPlugin.options.logotype %>" alt="" style="height:40px;width:auto">
+      </a>
+      <div id="go-to-tabs">
+        Tabs
+        <span class="active-tab-counter badge badge-success"></span>
+        <span class="sr-only">(current)</span>
       </div>
-      <section class="search-bar col-sm-9">
-        <div id="filter-tabs" class="input-group filter-tabs">
-          <input id="quicksearch-input" type="text" placeholder="Search in Tab URL or Title" aria-label="..."
-                 class="quicksearch-input form-control regex">
-          <span class="input-group-addon option-regex">
-                        <input id="filter-type-option-id" type="checkbox" aria-label="..."> Regex</span>
-          <span class="input-group-addon option-case-sensitive">
-                        <input id="filterCase-option-id" type="checkbox" aria-label="..."> Case Sensitive
-                        </span>
-        </div>
-      </section>
     </div>
+
+    <section class="search-bar" style="width: 66%;">
+        <div id="filter-tabs" class="input-group filter-tabs">
+          <input id="quicksearch-input" type="text" placeholder="Search in Tab URL or Title" aria-label="..." class="quicksearch-input form-control regex">
+          <div class="input-group-append option-regex">
+              <div class="custom-control custom-checkbox ">
+                <input type="checkbox" class="custom-control-input" id="filter-type-option-id">
+                <label class="custom-control-label input-group-text" for="filter-type-option-id">Regex</label>
+              </div>
+          </div>
+          <div class="input-group-append option-case-sensitive">
+            <div class="custom-control custom-checkbox ">
+              <input type="checkbox" class="custom-control-input" id="filterCase-option-id">
+              <label class="custom-control-label input-group-text" for="filterCase-option-id">Case Sensitive</label>
+            </div>
+          </div>
+          <div class="input-group-append" style="position: relative;">
+            <button class="btn btn-warning dropdown-toggle" type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Search From</button>
+            <div class="dropdown-menu dropdown-menu-right">
+              <div class="px-4 py-3">
+                <div class="form-check">
+                  <input type="checkbox" class="form-check-input" id="dropdownCheck2">
+                  <label class="form-check-label" for="dropdownCheck2">
+                    URL
+                  </label>
+                </div>
+                <div class="form-check">
+                  <input type="checkbox" class="form-check-input" id="dropdownCheck2">
+                  <label class="form-check-label" for="dropdownCheck2">
+                    Title
+                  </label>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+    </section>
   </nav>
 
   <section class="context-actions container-fluid">
     <ul class="nav nav-pills pull-left">
-      <li role="presentation">
-        <a id="refreshActiveTabs" href="#" title="Refresh Active Tabs">
+      <li class="nav-item" >
+        <div class="nav-link custom-checkbox-container">
+          <div class="custom-control custom-checkbox ">
+            <input type="checkbox" class="custom-control-input" id="checkall">
+            <label class="custom-control-label input-group-text" for="checkall">Check All</label>
+          </div>
+        </div>
+
+      </li>
+      <li role="presentation" class="nav-item">
+        <a class="nav-link" refreshActiveTabs" href="#" title="Refresh Active Tabs">
           <!-- <img src="images/reload-icon.svg" alt=""> -->
           <i class="fas fa-sync-alt fa-fw fa-sm"></i> Refresh
         </a>
       </li>
-      <li role="presentation" class="dropdown">
-        <a data-toggle="dropdown" href="#" role="button" aria-haspopup="true" aria-expanded="false"
+      <li role="presentation" class="nav-item dropdown">
+        <a class="nav-link dropdown-toggle" data-toggle="dropdown" href="#" role="button" aria-haspopup="true" aria-expanded="false"
            title="Rearrange/Sort Tabs" class="dropdown-toggle">
           <!-- <img src="images/arrange.svg" alt="">  -->
           <i class="fas fa-sort fa-fw"></i> Rearrange by
-          <small><i class="fa fa-chevron-down fa-fw"></i></small>
+          <!--<small><i class="fa fa-chevron-down fa-fw"></i></small>-->
         </a>
-        <ul class="dropdown-menu">
-          <li><a id="rearrange-url-btn" href="#" title="Rearrange with respect of URL">URL</a></li>
-          <li><a id="rearrange-title-btn" href="#" title="Rearrange with respect of Title">Title</a></li>
-        </ul>
+        <div class="dropdown-menu">
+          <a class="dropdown-item" id="rearrange-url-btn" href="#" title="Rearrange with respect of URL">URL</a>
+          <a class="dropdown-item" id="rearrange-title-btn" href="#" title="Rearrange with respect of Title">Title</a>
+        </div>
       </li>
-      <li role="presentation" class="dropdown">
+      <li role="presentation" class="nav-item dropdown">
         <a data-toggle="dropdown" href="#" role="button" aria-haspopup="true" aria-expanded="false"
-           title="Show Tabs from Current/All Window(s)" class="dropdown-toggle">
-          Show Tabs From <span class="caret"></span></a>
-        <ul class="dropdown-menu">
+           title="Show Tabs from Current/All Window(s)" class="nav-link dropdown-toggle">
+          Show Tabs From
+          <!--<span class="caret"></span>-->
+        </a>
+        <div class="dropdown-menu">
           <!--tabs>=50 is warning-->
           <!--tabs>=100 is danger-->
-          <li><a id="allWindows" href="#" title="All Windows"><span class="windowID">000</span> : All Windows <span
-                class="count label label-success">110</span></a></li>
-          <li><a id="currentWindow" href="#" title="Window Id:23 Tabs:10"><span class="windowID">023</span> : Current
-              Window <span class="count label label-success">50</span></a></li>
+          <a class="dropdown-item" id="allWindows" href="#" title="All Windows">
+            <span class="  windowID">000</span>
+            : All Windows
+            <span class="count badge badge-success">110</span>
+          </a>
+          <a class="dropdown-item" id="currentWindow" href="#" title="Window Id:23 Tabs:10">
+            <span class="windowID">023</span>
+            : Current Window
+            <span class="count badge badge-success">50</span>
+          </a>
           <!--<li role="separator" class="divider"></li>-->
           <!--<li class="active"><a id="" href="#" title="Window Id:23 Tabs:10"><span >023</span> : Window <span class="label label-warning">50</span></a></li>-->
           <!--<li><a id="" href="#" title="Window Id:23 Tabs:10"><span >456</span> : Window  <span class="label label-success">5</span></a></li>-->
-        </ul>
+        </div>
       </li>
 
     </ul>

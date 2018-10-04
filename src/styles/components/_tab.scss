@@ -135,10 +135,10 @@
         display: inline-block;
     }
     li.pin-tab:hover i {
-        color: $brand-primary;
+        color: $link-color;
     }
     li.sound-tab:hover i {
-        color: $brand-info;
+        color: $info;
     }
     li.remove-tab:hover i {
         color: $brand-secondary-color;

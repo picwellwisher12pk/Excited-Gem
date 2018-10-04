@@ -27,7 +27,9 @@ import TabsGroup from './components/TabsGroup';
 // import { getReadingLists, setReadingLists } from "./components/readingList.jsx";
 
 //Styles
-import '../styles/bootstrap.scss';
+// import "../styles/bootstrap/functions";
+// import "../styles/bootstrap/variables";
+// import '../styles/bootstrap.scss';
 import '../styles/fontawesome5/fa-solid.scss';
 import '../styles/fontawesome5.scss';
 import '../styles/eg.scss';
