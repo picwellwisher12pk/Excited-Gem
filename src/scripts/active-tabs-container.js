@@ -3,6 +3,8 @@ let env = require('../../utils/env');
 let client =  env.browserClient == 'firefox' ? browser : chrome;
 window.homepageOpened = null;
 
+
+
 //Scripts and Modules
 //Vendors
 // const $ = (jQuery = require('jquery'));
@@ -22,7 +24,7 @@ import * as general from './components/general.js';
 
 // React Components
 // import Navigation from './react-components/navigation.rc.js';
-import TabsGroup from './components/TabsGroup';
+import TabsGroup from './components/Accordion/TabsGroup';
 // import InfoModal from './react-components/info-modal.js';
 // import { getReadingLists, setReadingLists } from "./components/readingList.jsx";
 
@@ -59,7 +61,36 @@ let pref = {
 };
 window.tabsList = [];
 window.tabsgroup = null;
-
+const menu = document.querySelector(".context-menu");
+let menuVisible = false;
+const toggleMenu = command => {
+  menu.style.display = command === "show" ? "block" : "none";
+  menuVisible = !menuVisible;
+};
+window.addEventListener("click", e => {
+  if(menuVisible)toggleMenu("hide");
+});
+const setPosition = ({ top, left }) => {
+  menu.style.left = `${left}px`;
+  menu.style.top = `${top}px`;
+  toggleMenu("show");
+};
+if (document.addEventListener) {
+  document.addEventListener('contextmenu', function(e) {
+  e.preventDefault();
+    const origin = {
+      left: e.pageX,
+      top: e.pageY
+    };
+    setPosition(origin);
+    return false;
+  }, false);
+} else {
+  document.attachEvent('oncontextmenu', function() {
+    alert("You've tried to open context menu");
+    window.event.returnValue = false;
+  });
+}
 //Browser Events
 client.runtime.onInstalled.addListener(() => {
   console.log("Excited Gem Installed !");

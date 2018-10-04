@@ -42,8 +42,8 @@
         "react-dom": "^16.5.2"
     },
     "devDependencies": {
-        "autoprefixer": "^8.6.5",
         "@babel/preset-env": "^7.0.0-beta.54",
+        "autoprefixer": "^8.6.5",
         "babel-core": "^6.26.3",
         "babel-loader": "^7.1.5",
         "babel-preset-env": "^1.7.0",
@@ -64,6 +64,7 @@
         "popper.js": "^1.14.4",
         "postcss-cli": "^5.0.1",
         "postcss-loader": "^3.0.0",
+        "precss": "^3.1.2",
         "prettier": "1.11.1",
         "pug-load": "^2.0.11",
         "pug-loader": "^2.4.0",

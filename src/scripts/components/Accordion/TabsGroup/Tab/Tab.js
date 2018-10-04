@@ -68,7 +68,7 @@ export default class Tab extends React.Component {
       <li key={this.props.id} data-id={this.props.id} className={`tab-item` + (this.state.checked ? ` checked` : ` `)}>
         <label  className="tab-favicon" aria-label="favicon">
           <img src={this.state.favicon} />
-          <input type="checkbox" onChange={this.isSelected.bind(this)} />
+          <input type="checkbox" onChange={this.isSelected.bind(this)} className="checkbox"/>
         </label>
         <a title={url} className="clickable tab-name" onClick={this.focusTab.bind(null, this.props.id)}>
           {this.state.title}

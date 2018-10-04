@@ -1,10 +1,10 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { TransitionGroup, CSSTransition } from 'react-transition-group';
-import Tab from './Tab';
-let env = require('../../../../utils/env');
+import Tab from './Tab/index';
+let env = require('../../../../../utils/env');
 let client =  env.browserClient == 'firefox' ? browser : chrome;
-import {getTabs} from '../../components/browserActions';
+import {getTabs} from '../../browserActions';
 let tab;
 let config = {
   promptForClosure :true,
