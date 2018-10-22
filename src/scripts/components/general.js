@@ -1,5 +1,5 @@
 import packagedAndBroadcast from './communications.js';
-let _development = true;
+window.development = true;
 let client =  process.env.browser == 'firefox' ? browser : chrome;
 export let homepageURL = client.extension.getURL('tabs.html');
 let allTabs;
@@ -144,9 +144,52 @@ export function hasClass(elem, className) {
 //     return 'tabs';
 //   }
 // }
-export function log(input, input2?) {
-  if (_development) console.log(input, input2);
+export function setValue(object, path, value) {
+  var a = path.split('.');
+  var o = object;
+  for (var i = 0; i < a.length - 1; i++) {
+    var n = a[i];
+    if (n in o) {
+      o = o[n];
+    } else {
+      o[n] = {};
+      o = o[n];
+    }
+  }
+  o[a[a.length - 1]] = value;
 }
+export function getValue(object, path) {
+  var o = object;
+  path = path.replace(/\[(\w+)\]/g, '.$1');
+  path = path.replace(/^\./, '');
+  var a = path.split('.');
+  while (a.length) {
+    var n = a.shift();
+    if (n in o) {
+      o = o[n];
+    } else {
+      return;
+    }
+  }
+  return o;
+}
+export function log() {
+    let trace = false;
+  if (window.development || window.debug) {
+    console.group(arguments[0]);
+    console.log(Array.prototype.slice.call(arguments));
+    trace ? console.trace(): '';
+    console.groupEnd();
+  }
+}
+// export function log(){
+//   log.history = log.history || [];   // store logs to an array for reference
+//   log.history.push(arguments);
+//   if(console){
+//     console.log( Array.prototype.slice.call(arguments) );
+//   }
+// }
+
 // export function highlightCurrentNavLink() {
 //   var currentPage = getCurrentURL();
 //   if (currentPage == 'tabs') $('ul.nav.navbar-nav li.tabs').toggleClass('active');
@@ -200,46 +243,6 @@ export function sortTabs(type, tabsList) {
   browser.runtime.sendMessage(query);
   return query;
 }*/
-export function tabToList(tabId) {
-  browser.tabs.query(
-    {
-      active: true,
-      lastFocusedWindow: true,
-    },
-    tabs => {
-      // and use that tab to fill in out title and url
-      let tab = tabs[0];
-      sendToContent('tabsList', tab);
-    }
-  );
-}
-
-export function sendTabsToContent() {
-  sendToContent('tabsList', getAllTabs());
-}
-/**
- * [listAllTabs description]
- * @return {[type]} [description]
- */
-function sendToContent(datavariable, data) {
-  let obj = {};
-  obj[datavariable] = data;
-  // packagedAndBroadcast(sender,"content","drawTabs",obj);
-}
-
-function tabToList(tabId) {
-  browser.tabs.query(
-    {
-      active: true,
-      lastFocusedWindow: true,
-    },
-    tabs => {
-      // and use that tab to fill in out title and url
-      let tab = tabs[0];
-      sendToContent('tabsList', tab);
-    }
-  );
-}
 
 /**
  * Remove tab objects from tab array based on ignore group
@@ -260,55 +263,5 @@ export function santizeTabs(tabs, ignoredUrlPatterns) {
   return refinedTabs;
 }
 
-/**
- * [getAllTabs description]
- * @param  {Number} windowId   [Default to current window id -2]
- * @param  {String} returnType all | refined
- * @return {[type]}            [description]
- */
-export function getAllTabs(homepageOpened, returnType = 'all') {
-  browser.tabs.query(
-    {
-      // windowId: homepageOpened.windowId
-    },
-    tabs => {
-      let stillLoading = false;
-      for (let tab of tabs) {
-        if (tab.status == 'loading') {
-          stillLoading = true;
-          break;
-        }
-      }
-      if (stillLoading) {
-        setTimeout(() => getAllTabs(homepageOpened, returnType), 1000);
-      } else {
-        allTabs = tabs;
-        refinedTabs = santizeTabs(tabs, ignoredUrlPatterns);
-      }
-    }
-  );
-  // log("getAllTabs Return:", allTabs,refinedTabs);
-  if (returnType == 'all') {
-    return allTabs;
-  } else {
-    return refinedTabs;
-  }
-}
 
-export function streamTabs(homepageOpened, port) {
-  if (port == undefined) return;
-  port.postMessage({ tabs: getAllTabs(homepageOpened) });
-  // log(getAllTabs(homepageOpened), port);
-}
-export function searchInTabs(searchTerm, originalData, searchType = 'regex', searchCase = '', searchBy = null) {
-  console.log("general.js:searchInTabs",searchTerm,originalData);
-  return originalData.filter(tab => {
-    if (searchType == 'regex') {
-      let regex = new RegExp(searchTerm, searchCase);
-      if (regex.test(tab.title)) return true;
-      if (regex.test(tab.url)) return true;
-    } else {
-      return tab.title.indexOf(searchTerm) >= 0;
-    }
-  });
-}
+

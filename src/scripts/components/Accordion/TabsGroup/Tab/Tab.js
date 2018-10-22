@@ -1,8 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-// import InfoModal from "./infomodal.jsx";
-const client = browser;
-// let info = ReactDOM.render(<InfoModal />,document.getElementById('infoModal'));
+import {log} from '../../../general';
+
 export default class Tab extends React.Component {
   constructor(props) {
     console.log('constructor');
@@ -22,7 +21,6 @@ export default class Tab extends React.Component {
       checked: false
     };
     this.isSelected = this.isSelected.bind(this);
-    // this.onChange = this.onChange.bind(this);
   }
   focusTab(id) {
     client.tabs.update(id, { active: true });
@@ -32,20 +30,12 @@ export default class Tab extends React.Component {
     this.setState({checked: value});
     this.props.updateSelectedTabs(this.props.id,this.state.checked);
   }
-  pinTab_(tabId, pinned) {
-    // !pinned ? client.tabs.update(tabId, { pinned: true }) : client.tabs.update(tabId, { pinned: false });
-    // this.setState({ pinned: !pinned });
-  }
-  muteTab_() {
-    // client.tabs.update(this.state.id, { muted: this.state.audible });
-    // this.setState({ audible: !this.state.audible });
-    // this.setState({ muted: !this.state.muted });
-  }
+
   componentDidUpdate(props,state,snapshot){
-    // console.log("tab.js updated:",props.title,props.pinned,state.title,state.pinned,snapshot);
+
   }
   componentWillReceiveProps(props) {
-    console.log(props.muted);
+    // log(props.muted);
     this.setState({id: props.id});
     this.setState({key: props.key});
     this.setState({url: props.url});
@@ -60,6 +50,7 @@ export default class Tab extends React.Component {
   }
 
   render() {
+    // log('Tab.js: render method',this.state.title,this.state.url);
     let url = this.state.url;
     let trimmedURL = url;
     let audible = this.state.audible || this.state.muted;

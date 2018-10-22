@@ -1,45 +1,42 @@
 import * as general from './components/general.js';
-let client =  process.env.browser == 'firefox' ? browser : chrome;
-import { saveSessions, getSessions } from './components/getsetSessions.js';
-import packagedAndBroadcast from './components/communications.js';
-// import { registerMenus, setTabCountInBadge } from "./components/browserActions.jsx";
-const { registerMenus, setTabCountInBadge,updateTabs } = require('./components/browserActions.js');
-import './components/idle.js';
-import {getTabs, openExcitedGemPage} from "./components/browserActions";
+let env = require('../../utils/env');
+let client =  env.browserClient == 'firefox' ? browser : chrome;
 
-const sender = 'background';
-const currentSender = 'background';
+// import { saveSessions, getSessions } from './components/getsetSessions.js';
+// import packagedAndBroadcast from './components/communications.js';
+// import { registerMenus, setTabCountInBadge } from "./components/browserActions.jsx";
+// const {  setTabCountInBadge,updateTabs } = require('./components/browserActions.js');
+// import './defaultPreferences';
+import {log} from './components/general';
+import {preferences} from './defaultPreferences';
+// import './components/idle.js';
+import {getTabs, openExcitedGemPage, setBadge} from "./components/browserActions";
+
+// const sender = 'background';
+// const currentSender = 'background';
 // let ActiveTabsConnection;
 
 // sessions.saveSessions();
 //Most of the functions starts from here
-function documentready() {
-  client.tabs.query({ currentWindow: true}, function(tabArray) {
-    // let TabId = tabArray[0].id;
-    // let port = client.tabs.connect(TabId, { name: 'ActiveTabsConnection' });
-    // ActiveTabsConnection = port;
-    // general.log('documentready', tabArray[0], port);
-    // streamTabs(port);
-  });
-}
-function muteAll(data) {
+
+let muteAll = (data) => {
   for (let i = 0; i < data.length; i++) {
     client.tabs.update(tabId, { muted: true });
   }
-}
+};
 
-function moveTab(data) {
+let moveTab = (data) => {
   tabId = parseInt(data.tabId);
   position = parseInt(data.position);
   client.tabs.move(tabId, { index: position });
-}
+};
 
 /**
  * [saveData description]
  * @param  {String/Object/Array} data    [description]
  * @param  {String} message [description]
  */
-function saveData(data, message = 'Data saved') {
+let saveData = (data, message = 'Data saved') =>{
   client.storage.local.set(data, () => {
     client.notifications.create(
       'reminder',
@@ -52,12 +49,23 @@ function saveData(data, message = 'Data saved') {
       notificationId => {}
     );
   });
-}
+};
 
 /* Events */
 ///////////
 client.runtime.onInstalled.addListener(() => {
-  console.info('Exited Gem Installed.');
+  if (env.NODE_ENV == 'development') client.storage.local.clear(console.log("cleared")); //Previous data being removed for development version
+  let jsonObj = {};
+  jsonObj['preferences'] = preferences;
+  console.log(preferences);
+  client.storage.local.set(jsonObj,  (result) => {
+    // console.log("Default preferences are being saved into local storage.");
+    client.storage.local.get('preferences', (result) => {
+      // console.log("preference save confirming", result);
+    });
+
+  });
+  getTabs().then((tabs)=> setBadge(tabs.length));
 });
 client.tabs.onRemoved.addListener(() => {
   client.tabs.get(homepageOpened.id, () => {
@@ -67,9 +75,9 @@ client.tabs.onRemoved.addListener(() => {
     } else {
       // Tab exists
     }
-    console.log('tab-closed:', tab);
+    log('tab-closed:', tab);
   });
-  general.log('Excited Gem: Tab Removed/Closed.');
+  log('Excited Gem: Tab Removed/Closed.');
 });
 
 
@@ -88,4 +96,4 @@ client.browserAction.onClicked.addListener(tab => {
 // On clicking extension button opens EG homepage.
 
 //Registering Menus
-registerMenus();
+// registerMenus();

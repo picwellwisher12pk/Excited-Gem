@@ -24,7 +24,7 @@ if (env.browserClient === 'chrome' || env.browserClient === 'all') {
 
     context: __dirname,
       entry  :    {
-      tabs: path.join(__dirname, 'src', 'scripts', 'TabsPage.js'),
+      tabs: path.join(__dirname, 'src', 'scripts', 'TabsApp.js'),
         background  :      path.join(__dirname, 'src', 'scripts', 'background.js')
     }
   ,
@@ -136,7 +136,7 @@ if (env.browserClient === 'firefox' || env.browserClient === 'all') {
     {
       context: __dirname,
       entry: {
-        tabs: ["@babel/polyfill", path.join(__dirname, 'src', 'scripts', 'TabsPage.js')],
+        tabs: ["@babel/polyfill", path.join(__dirname, 'src', 'scripts', 'TabsApp.js')],
         background: path.join(__dirname, 'src', 'scripts', 'background.js')
       },
       output: {

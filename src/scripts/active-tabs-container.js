@@ -1,4 +1,3 @@
-console.log("testing");
 let env = require('../../utils/env');
 let client =  env.browserClient == 'firefox' ? browser : chrome;
 window.homepageOpened = null;
@@ -48,17 +47,6 @@ import '../images/reload-icon.svg';
 import '../images/search-icon.svg';
 import '../images/sound-icon.svg';
 
-//Declarations
-// const sender = 'content';
-// let currentPage = '';
-// let windowHeight;
-// let NavigationReference;
-// let infoModal;
-let pref = {
-  filterType: 'regex',
-  filterCase: 'true',
-  windowType: 'current'
-};
 window.tabsList = [];
 window.tabsgroup = null;
 const menu = document.querySelector(".context-menu");
@@ -91,65 +79,12 @@ if (document.addEventListener) {
     window.event.returnValue = false;
   });
 }
-//Browser Events
-client.runtime.onInstalled.addListener(() => {
-  console.log("Excited Gem Installed !");
-});
-client.tabs.onRemoved.addListener(
-  (tabId) => {
-    console.log(tabId," closing");
-    setTabCountInBadge(tabId, true);
-    getTabs().then(tabs => {  console.log("after tab closing:",tabs);window.tabsgroup.setState({tabs}) });
-  });
-client.tabs.onCreated.addListener(
-  (tabId) => {
-    setTabCountInBadge(tabId, false);
-    getTabs().then(tabs => {  window.tabsgroup.setState({tabs}) });
-  });
-client.tabs.onAttached.addListener(
-  (tabId) => {
-    setTabCountInBadge(tabId, true);
-    getTabs().then(tabs => {  window.tabsgroup.setState({tabs}) });
-  });
-client.tabs.onDetached.addListener(
-  (tabId) => {setTabCountInBadge(tabId, true);
-    getTabs().then(tabs => {  window.tabsgroup.setState({tabs}) });
-  });
-client.tabs.onUpdated.addListener(
-  (tabId,changeInfo, tabInfo) => {
-    console.log(tabId," being Updated",changeInfo,tabInfo);
-    getTabs().then(tabs => {
-      console.log("updating", tabs);
-      window.tabsgroup.setState({tabs});
-    })
-  });
-setTabCountInBadge();
 
 // NavigationReference = ReactDOM.render(<Navigation />, document.getElementById('navigation'));
 // infoModal = ReactDOM.render(<InfoModal />, document.getElementById('infoModal'));
 window.tabsgroup = ReactDOM.render(<TabsGroup />, document.getElementById('active-tabs-list-container'));
 
-//Search/Filter
-$('#quicksearch-input').keyup( e => {
-  console.log("active-tabs-container.js:Search:");
-  let filteredTabs = general.searchInTabs(e.target.value, window.tabsList);
-  window.tabsgroup.setState({ tabs: filteredTabs });
-});
-$('#allWindows').click(e =>{
-  pref.windowType = 'All';
-  updateTabs( window.tabsgroup);
-});
-$('#currentWindow').click(e =>{
-  pref.windowType = 'current';
-  updateTabs( window.tabsgroup);
-});
-
-
-
 $('#refreshActiveTabs').on('click', updateTabs( window.tabsgroup));
 $('#closeSelectedBtn').on('click', (e)=>{
   window.tabsgroup.processSelectedTabs('close');
 });
-// Sorting of Tabs (Title | URL). Event Binding
-$('#rearrange-title-btn').on('click', () => general.sortTabs('title', window.tabsList));
-$('#rearrange-url-btn').on('click', () => general.sortTabs('url', window.tabsList));

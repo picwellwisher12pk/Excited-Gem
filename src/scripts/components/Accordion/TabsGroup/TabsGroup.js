@@ -2,19 +2,17 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { TransitionGroup, CSSTransition } from 'react-transition-group';
 import Tab from './Tab/index';
-let env = require('../../../../../utils/env');
-let client =  env.browserClient == 'firefox' ? browser : chrome;
 import {getTabs} from '../../browserActions';
+import {log} from '../../general';
 let tab;
-let config = {
-  promptForClosure :true,
-  tabsTransition: true
-};
+
 export default class TabsGroup extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      tabs: this.props.tabs,
+      tabs: this.props.tabs ? this.props.tabs : [],
+      client: this.props.client,
+      preferences: this.props.preferences,
       selectedTabs: []
     };
     this.closeTab = this.closeTab.bind(this);
@@ -31,13 +29,12 @@ export default class TabsGroup extends React.Component {
     this.setState({selectedTabs: tempArray});
   }
   //Close
-  closeTab(key,promptForClosure = config.promptForClosure) {
+  closeTab(key,promptForClosure = this.state.preferences.promptForClosure) {
     let newtabs = [...this.state.tabs];
     if(promptForClosure) {if (!confirm(`Are you sure you want to close the following tab\n` + key)) return false;}
       client.tabs.remove(parseInt(key));
       newtabs.splice(newtabs.findIndex(el => el.id === key), 1);
-      getTabs().then(tabs=>{this.setState({tabs:tabs}); this.forceUpdate();}, error => console.log(`Error: ${error}`));
-
+      getTabs().then(tabs=>{this.setState({tabs:tabs}); this.forceUpdate();}, error => log(`Error: ${error}`));
   }
   //Pinned
   pinTab(tabId) {
@@ -49,12 +46,12 @@ export default class TabsGroup extends React.Component {
     // tabs[index].pinned = true;
     // console.log(`${tabId} = ${tabs[index].id}`,tabs[index].pinned);
     // this.setState({tabs});
-    getTabs().then(tabs=>{this.setState({tabs:tabs})}, error => console.log(`Error: ${error}`));
+    getTabs().then(tabs=>{this.setState({tabs:tabs})}, error => log(`Error: ${error}`));
   }
   unpinTab(tabId){
-    console.info("unpinning");
+    log("unpinning");
     client.tabs.update(tabId, { pinned: false });
-    getTabs().then(tabs=>{this.setState({tabs:tabs})}, error => console.log(`Error: ${error}`));
+    getTabs().then(tabs=>{this.setState({tabs:tabs})}, error => log(`Error: ${error}`));
 
   }
   togglePin(tabId){
@@ -73,9 +70,8 @@ export default class TabsGroup extends React.Component {
     client.tabs.get(id).then(tab=> {
       client.tabs.update(parseInt(id), { muted: ! tab.mutedInfo.muted});
     });
-    getTabs().then(tabs=>{this.setState({tabs:tabs})}, error => console.log(`Error: ${error}`));
+    getTabs().then(tabs=>{this.setState({tabs:tabs})}, error => log(`Error: ${error}`));
    }
-
   processSelectedTabs(action){
     //close
     if ( action == 'close' ){
@@ -94,7 +90,21 @@ export default class TabsGroup extends React.Component {
 
 
   componentDidMount() {
-    getTabs().then(tabs=>{this.setState({tabs:tabs}); this.forceUpdate();}, error => console.log(`Error: ${error}`));
+    console.log("tabsgroup mounted:",this.state.tabs);
+    // if(!this.props.tabs){
+    //   getTabs().then(tabs=>
+    //     {
+    //       this.setState({tabs:tabs});
+    //       this.forceUpdate();
+    //     },
+    //     error => log(`Error: ${error}`));}
+    // else{
+    //   this.setState({tabs:this.props.tabs});
+    // }
+
+  }
+  componentWillReceiveProps(props) {
+    this.setState({tabs: props.tabs});
   }
   tabTemplate(tab){
     return <Tab
@@ -118,7 +128,7 @@ export default class TabsGroup extends React.Component {
   }
   animatedList() {
     tab = this.state.tabs.map(function(tab) {
-    if(tab.index==5) console.log('Tabsgroup.js: animatedList', config.tabsTransition,tab.title,tab.pinned,tab.status);
+    if(tab.index==5) console.log('Tabsgroup.js: animatedList', this.state.preferences.tabsTransition,tab.title,tab.pinned,tab.status);
       return (
         <CSSTransition
           transitionName="example"
@@ -135,14 +145,16 @@ export default class TabsGroup extends React.Component {
   }
   staticList() {
     tab = this.state.tabs.map(function(tab) {
-      if(tab.index>5 && tab.index<10) console.log('Tabsgroup', tab.title,tab.pinned,tab.status);
-
+      if(tab.index>5 && tab.index<10) log('Tabsgroup', tab.title,tab.pinned,tab.status);
       {this.tabTemplate(tab)}
     }, this);
     return tab;
   }
   render() {
-    if(config.tabsTransition){
+    log("tabsgroup.js: render method",this.state.tabs);
+    if(this.state.tabs == null || this.state.tabs == undefined ) return ["Loading tabs..."];
+    if(this.state.preferences.tabsGroup.tabsListAnimation){
+      log("Tabsgroup, render method");
       return (
         <TransitionGroup component="ul" className="tab tabs-list sortable selectable">
           {this.animatedList()}
@@ -161,7 +173,7 @@ export default class TabsGroup extends React.Component {
   }
 }
 TabsGroup.propTypes = {
-  tabs: PropTypes.array.isRequired,
+  tabs: PropTypes.array,
 };
 TabsGroup.defaultProps = {
   tabs: [],
