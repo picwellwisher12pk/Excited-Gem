@@ -1,5 +1,9 @@
 //Scripts and Modules
 // import {preferences} from "./defaultPreferences";
+import {preferences} from "./defaultPreferences";
+
+let env = require('../../utils/env');
+let client =  env.browserClient == 'firefox' ? browser : chrome;
 
 const bootstrap = require('bootstrap');
 import React from 'react';
@@ -45,16 +49,18 @@ export default class ActiveTabs extends React.Component {
     log("Activetabs.js constructor:",this.state.preferences,this.props.preferences)
   }
   sortBy(parameter){
-    sortTabs( window.tabsList,parameter);
+    sortTabs( parameter);
   }
   filterTabs(){
     if(window.searchTerm=="") return window.tabs;
     let filteredTabs =  window.tabs.filter(tab => {
       if (this.state.preferences.search.regex) {
         let regex = new RegExp(window.searchTerm, this.state.preferences.search.ignoreCase? 'i':'');
-        for(let attribute of this.state.preferences.search.searchIn) if (regex.test(tab[attribute])) return true;
+        if(this.state.preferences.search.searchIn[0]){if (regex.test(tab.title)) return true;}
+        if(this.state.preferences.search.searchIn[1]){if (regex.test(tab.url)) return true;}
       } else {
-        for(let attribute of this.state.preferences.search.searchIn) return tab[attribute].indexOf(window.searchTerm) >= 0;
+        if(this.state.preferences.search.searchIn[0]){return tab.title.indexOf(window.searchTerm) >= 0;}
+        if(this.state.preferences.search.searchIn[1]){return tab.url.indexOf(window.searchTerm) >= 0;}
       }
     });
     return filteredTabs;
@@ -63,7 +69,6 @@ export default class ActiveTabs extends React.Component {
     window.searchTerm = searchTerm;
     this.forceUpdate();
   }
-
   componentWillMount(){
 
   }
@@ -73,22 +78,28 @@ export default class ActiveTabs extends React.Component {
   componentWillReceiveProps(props) {
     this.setState({tabs: props.tabs});
   }
-  setPreferences(section,key,value){
-    this.state.client.storage.local.get('preferences', function(result) {
-      let tempResult = result;
-      tempResult[section][key] = value;
-      this.state.client.storage.local.set(tempResult,()=>{
-        client.notifications.create(
-          "reminder", {
-            type: "basic",
-            iconUrl: "../images/logo.svg",
-            title: "Settings Saved",
-            message: "Search settings updated"
-          },
-          function(notificationId) {}
-        );
-      })
-    });
+  setPreferences(prefSection,key,value){
+    console.log("set pref:",prefSection,key,value);
+
+    client.storage.local.get('preferences')
+      .then((result)=>{
+        console.log("getting stored pref:",result);
+        let jsonObj = result;
+        jsonObj['preferences'][prefSection][key] = value;
+        console.log(jsonObj.preferences.search.searchIn);
+        client.storage.local.set(jsonObj)
+          .then((tempResult)=> {console.log("saving pref:",tempResult)});
+      });
+
+//   client.notifications.create(
+//   "reminder", {
+//   type: "basic",
+//   iconUrl: "../images/logo.svg",
+//   title: "Settings Saved",
+//   message: "Search settings updated"
+// },
+// function(notificationId) {}
+// );
   }
   render() {
     console.log("active tabs render method",this.state.tabs);

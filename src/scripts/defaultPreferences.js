@@ -2,7 +2,7 @@ exports.preferences = {
   search:{
     regex : true,
     ignoreCase : true,
-    searchIn: ['title','url'] // both,title,url
+    searchIn: [true,true] // title,url
   },
   defaultTabsFrom : "current",
   tempTabsFrom: 'current',
