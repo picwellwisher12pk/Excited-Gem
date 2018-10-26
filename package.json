@@ -1,7 +1,7 @@
 {
     "name": "excited-gem",
     "title": "Excited Gem",
-    "version": "0.8.2",
+    "version": "0.8.5",
     "description": "A tool to manage your tabs and other browser related features.",
     "homepage": "https://picwellwisher12pk.github.io/onetab-advanced/",
     "bugs": "{}",
@@ -17,12 +17,12 @@
         "url": "git+https://github.com/picwellwisher12pk/onetab-advanced.git"
     },
     "scripts": {
-        "build": "node utils/production.js",
+        "build": "node utils/production.js NODE_ENV=development browserClient=firefox",
         "start": "node utils/webserver.js NODE_ENV=development browserClient=firefox",
         "firefoxd": "SET Client=browser & npm run start",
         "chromed": "npm run start --env.CLIENT=chrome",
-        "firefoxp": "SET NODE_ENV=production & SET Client=browser &  node utils/production.js",
-        "chromep": "SET NODE_ENV=production & SET Client=chrome & node utils/production.js",
+        "firefoxp": "SET NODE_ENV=production& SET BROWSER_CLIENT=firefox& node utils/production.js",
+        "chromep": "SET NODE_ENV=production& SET BROWSER_CLIENT=chrome& node utils/production.js",
         "mount": "cd build & web-ext run --firefox=firefoxdeveloperedition",
         "pack": "cd build & web-ext build"
     },

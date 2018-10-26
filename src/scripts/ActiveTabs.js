@@ -25,8 +25,9 @@ import '../styles/fontawesome5.scss';
 import '../styles/eg.scss';
 
 //Images
-import '../images/logo.svg';
-import '../images/dev-logo.svg';
+let logo;
+env.NODE_ENV === 'production'? logo = require('../images/logo.svg'): logo = require('../images/dev-logo.svg');
+
 import '../images/arrange.svg';
 import '../images/close-icon.svg';
 import '../images/info-icon.svg';
@@ -88,27 +89,31 @@ export default class ActiveTabs extends React.Component {
         jsonObj['preferences'][prefSection][key] = value;
         console.log(jsonObj.preferences.search.searchIn);
         client.storage.local.set(jsonObj)
-          .then((tempResult)=> {console.log("saving pref:",tempResult)});
+          .then((tempResult)=> {
+            console.log("saving pref:",tempResult);
+            client.notifications.create(
+              "reminder", {
+                type: "basic",
+                iconUrl: "../images/logo.svg",
+                title: "Settings Saved",
+                message: "Search settings updated"
+              },
+              function(notificationId) {}
+            );
+          });
       });
 
-//   client.notifications.create(
-//   "reminder", {
-//   type: "basic",
-//   iconUrl: "../images/logo.svg",
-//   title: "Settings Saved",
-//   message: "Search settings updated"
-// },
-// function(notificationId) {}
-// );
+
   }
   render() {
     console.log("active tabs render method",this.state.tabs);
+    console.log(this.state.NODE_ENV);
       return [
         <header className="page-header" key={1}>
           <nav className="navbar">
             <div className="navbar-brand ">
               <a href="#" className="pull-left logo" style={{marginTop: "10px"}}>
-                <img src={"../images/"+this.state.NODE_ENV == 'production'? "logo.svg": "dev-logo.svg"} alt="" style={{height:"40px",width:"auto"}} />
+                <img src={logo} alt="" style={{height:"40px",width:"auto"}} />
               </a>
               <div id="go-to-tabs">
                 Tabs <span className={`active-tab-counter badge ` + (this.state.tabs.length > 50 ?'badge-danger':'badge-success')}>{this.state.tabs.length?this.state.tabs.length:''}</span>
@@ -126,14 +131,14 @@ export default class ActiveTabs extends React.Component {
           </nav>
           <section className="context-actions container-fluid">
             <ul className="nav nav-pills pull-left">
-              <li className="nav-item" >
-                <div className="nav-link custom-checkbox-container">
-                  <div className="custom-control custom-checkbox ">
-                    <input type="checkbox" className="custom-control-input" id="checkall" />
-                      <label className="custom-control-label input-group-text" htmlFor="checkall">Check All</label>
-                  </div>
-                </div>
-              </li>
+              {/*<li className="nav-item" >*/}
+                {/*<div className="nav-link custom-checkbox-container">*/}
+                  {/*<div className="custom-control custom-checkbox ">*/}
+                    {/*<input type="checkbox" className="custom-control-input" id="checkall" />*/}
+                      {/*<label className="custom-control-label input-group-text" htmlFor="checkall">Check All</label>*/}
+                  {/*</div>*/}
+                {/*</div>*/}
+              {/*</li>*/}
               <li role="presentation" className="nav-item">
                 <a className="nav-link refreshActiveTabs" title="Refresh Active Tabs" href='#' onClick={()=> {updateTabs()}}>
                   <i className="fas fa-sync-alt fa-fw fa-sm" /> Refresh

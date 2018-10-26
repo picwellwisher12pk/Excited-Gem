@@ -63,15 +63,15 @@
           left: 11px;
           top: 15px;
         }
-        &:hover{
-          .checkbox{
-            opacity: 1;
-            //left: 12px;
-          }
-          img{
-            opacity: 0;
-          }
-        }
+        //&:hover{
+        //  .checkbox{
+        //    opacity: 1;
+        //    //left: 12px;
+        //  }
+        //  img{
+        //    opacity: 0;
+        //  }
+        //}
     }
     &.checked{
            background-color: #dcffba;

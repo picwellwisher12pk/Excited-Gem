@@ -1,12 +1,11 @@
-import packagedAndBroadcast from './communications.js';
-window.development = true;
-let client =  process.env.browser == 'firefox' ? browser : chrome;
+let env = require('../../../utils/env');
+let client =  env.browserClient === 'firefox' ? browser : chrome;
+window.development = env.NODE_ENV==="development";
 export let homepageURL = client.extension.getURL('tabs.html');
-let allTabs;
 let refinedTabs;
-let allSessions = {
-  // sessions
-};
+// let allSessions = {
+//   // sessions
+// };
 let ignoredUrlPatterns = ['chrome://*', 'chrome-extension://*', 'http(s)?://localhost*'];
 let ignoredDataKeys = [
   'active',
@@ -23,7 +22,7 @@ let ignoredDataKeys = [
 ];
 let sortDelay = 250;
 export function compareURL(a, b) {
-  console.log('URL', a.url.slice(1, 30), b.url.slice(1, 30));
+  log('URL', a.url.slice(1, 30), b.url.slice(1, 30));
   if (a.url < b.url) return -1;
   if (a.url > b.url) return 1;
   return 0;
@@ -186,7 +185,7 @@ export function log() {
 //   log.history = log.history || [];   // store logs to an array for reference
 //   log.history.push(arguments);
 //   if(console){
-//     console.log( Array.prototype.slice.call(arguments) );
+//     log( Array.prototype.slice.call(arguments) );
 //   }
 // }
 
@@ -214,23 +213,22 @@ export function timeConverter(UNIX_timestamp) {
 // Hide method from for-in loops
 Object.defineProperty(Array.prototype, 'equals', { enumerable: false });
 
-let quicksort = function(array, sortby) {
-  // console.log('quickSort', array, sortby);
+function quicksort(sortby,array) {
+  log("quicksort array",array);
   if (array.length <= 1) return array;
-  // if (sortby == 'url') sort = url;
-  // if (sortby == 'title') sort = title;
-  var pivot = array[0];
-  var left = [];
-  var right = [];
-  for (var i = 1; i < array.length; i++) {
+  let pivot = array[0];
+  let left = [];
+  let right = [];
+  for (let i = 1; i < array.length; i++) {
     array[i][sortby] < pivot[sortby] ? left.push(array[i]) : right.push(array[i]);
   }
-  return quicksort(left, sortby).concat(pivot, quicksort(right, sortby));
+  log('left:',left,'right:',right);
+  return quicksort(sortby,left).concat(pivot, quicksort(sortby, right));
 };
 
-export function sortTabs(type, tabsList) {
-  // let prevTabs = tabsList;
-  tabsList = quicksort(tabsList, type);
+export function sortTabs(sortby) {
+  let tabsList = quicksort(sortby,window.tabs);
+  log("after quicksort",tabsList);
   for (let i = 0; i < tabsList.length; i++) {
     let { id } = tabsList[i];
     setTimeout(() => {

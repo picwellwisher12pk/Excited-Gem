@@ -2,9 +2,9 @@ const WebpackDevServer = require("webpack-dev-server"),
     webpack = require("webpack"),
     config = require("../webpack.config"),
     env = require("./env"),
-    fileSystem = require("fs"),
+    // fileSystem = require("fs"),
     path = require("path");
-const util = require('util');
+// const util = require('util');
 require("./prepare");
 //Firefox
 if(env.browserClient === 'firefox' || env.browserClient === 'all'){

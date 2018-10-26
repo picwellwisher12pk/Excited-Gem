@@ -6,6 +6,7 @@ import {getTabs, setBadge} from "./components/browserActions";
 let preferences = {};
 let env = require('../../utils/env');
 window.client =  env.browserClient == 'firefox' ? browser : chrome;
+console.log("Node ENV:",process.env.NODE_ENV);
 
 client.tabs.onRemoved.addListener(onRemoved);
 

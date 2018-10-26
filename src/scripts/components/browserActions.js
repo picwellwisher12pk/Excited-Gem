@@ -51,6 +51,7 @@ export function updateTabs(reactObject = window.activeTabs) {
  */
 export function setBadge(length){
     client.browserAction.setBadgeText({text: length.toString()});
+    client.browserAction.setBadgeTextColor({color: white});
     client.browserAction.setBadgeBackgroundColor({'color': length <= 50 ? 'green' : 'red'});
 }
 export function setTabCountInBadge(tabId, isOnRemoved) {
