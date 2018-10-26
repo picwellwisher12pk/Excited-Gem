@@ -44,6 +44,7 @@ export default class Search extends React.Component {
                placeholder={placeholder}
                className="quicksearch-input form-control regex"
                onChange={()=> {this.props.searchInTabs(this.searchField.current.value)}}
+               autoFocus
         />
         <div className="input-group-append option-regex">
           <div className="custom-control custom-checkbox ">
