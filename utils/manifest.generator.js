@@ -21,6 +21,11 @@ manifest.browser_action = {
   },
   default_title: process.env.npm_package_title,
 };
+// manifest.sidebar_action= {
+//   "default_title": "Excited Gem",
+//     "default_panel": "tabs.html",
+//     "default_icon": "logo.svg"
+// };
 
 if(env.browserClient === 'firefox'){
   var firefoxManifest = require('../manifest_partials/firefox');

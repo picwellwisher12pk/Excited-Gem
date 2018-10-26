@@ -16,6 +16,7 @@
         height: 40px !important;
         padding-left: 45px;
         box-shadow: none;
+        font-family: "Roboto Light",arial,sans-serif;
         background-image: url('/images/search-icon.svg');
         background-position: 15px center;
         background-repeat: no-repeat;
@@ -42,7 +43,6 @@
     }
     .filter-tabs {
         background-color: #FFF;
-        overflow: hidden;
         transition: all 0.3s;
         width: 100%;
         border: none;
@@ -53,9 +53,23 @@
         &:focus {
             box-shadow: 0 2px 8px 0 rgba(0, 0, 0, 0.3);
         }
-        .input-group-addon {
+        .input-group-append {
             border: none;
             background: none;
+            position: relative;
+            .input-group-text{
+              background-color: transparent;
+              border: none;
+              padding: 0.6rem 0.3rem;
+              padding-right: 1rem;
+            }
         }
+      .custom-control-label{
+        user-select: none;
+      }
+      .custom-control-label::before,.custom-control-label::after{
+        top: .85rem;
+        left: -1rem;
+      }
     }
 }

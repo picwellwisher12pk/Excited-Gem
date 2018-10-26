@@ -24,7 +24,7 @@ if (env.browserClient === 'chrome' || env.browserClient === 'all') {
 
     context: __dirname,
       entry  :    {
-      tabs: path.join(__dirname, 'src', 'scripts', 'active-tabs-container.js'),
+      tabs: path.join(__dirname, 'src', 'scripts', 'TabsApp.js'),
         background  :      path.join(__dirname, 'src', 'scripts', 'background.js')
     }
   ,
@@ -38,9 +38,24 @@ if (env.browserClient === 'chrome' || env.browserClient === 'all') {
     module: {
       rules: [
         {
-          test: /\.scss$/,
-          loader: ExtractTextPlugin.extract('css-loader!sass-loader'),
-          exclude: /node_modules/,
+          test: /\.(scss)$/,
+          use: [{
+            loader: 'style-loader', // inject CSS to page
+          }, {
+            loader: 'css-loader', // translates CSS into CommonJS modules
+          }, {
+            loader: 'postcss-loader', // Run post css actions
+            options: {
+              plugins: function () { // post css plugins, can be exported to postcss.config.js
+                return [
+                  require('precss'),
+                  require('autoprefixer')
+                ];
+              }
+            }
+          }, {
+            loader: 'sass-loader' // compiles Sass to CSS
+          }]
         },
         {
           test: new RegExp('.(' + images.join('|') + ')$'),
@@ -117,11 +132,13 @@ if (env.browserClient === 'chrome' || env.browserClient === 'all') {
 }
 
 if (env.browserClient === 'firefox' || env.browserClient === 'all') {
+  console.log("making firefox build");
   exports.firefoxConfig = [
     {
       context: __dirname,
       entry: {
-        tabs: ["@babel/polyfill", path.join(__dirname, 'src', 'scripts', 'active-tabs-container.js')],
+        tabs: ["@babel/polyfill", path.join(__dirname, 'src', 'scripts', 'TabsApp.js')],
+        // tabs: path.join(__dirname, 'src', 'scripts', 'TabsApp.js'),
         background: path.join(__dirname, 'src', 'scripts', 'background.js')
       },
       output: {
@@ -131,9 +148,24 @@ if (env.browserClient === 'firefox' || env.browserClient === 'all') {
       module: {
         rules: [
           {
-            test: /\.scss$/,
-            loader: ExtractTextPlugin.extract('css-loader!sass-loader'),
-            exclude: /node_modules/,
+            test: /\.(scss)$/,
+            use: [{
+              loader: 'style-loader', // inject CSS to page
+            }, {
+              loader: 'css-loader', // translates CSS into CommonJS modules
+            }, {
+              loader: 'postcss-loader', // Run post css actions
+              options: {
+                plugins: function () { // post css plugins, can be exported to postcss.config.js
+                  return [
+                    require('precss'),
+                    require('autoprefixer')
+                  ];
+                }
+              }
+            }, {
+              loader: 'sass-loader' // compiles Sass to CSS
+            }]
           },
           {
             test: new RegExp('.(' + images.join('|') + ')$'),
@@ -181,7 +213,7 @@ if (env.browserClient === 'firefox' || env.browserClient === 'all') {
           logotype: env.NODE_ENV === 'development' ? 'dev-logo.svg' : 'logo.svg',
           template: path.join(__dirname, 'src', 'tabs.ejs'),
           filename: 'tabs.html',
-          favicon: 'src/images/dev-logo.svg',
+          favicon: env.NODE_ENV === 'development' ? 'src/images/dev-logo.svg' : 'src/images/logo.svg',
           chunks: ['tabs'],
         }),
         new WriteFilePlugin(), //Writes files to target directory during development build phase.
