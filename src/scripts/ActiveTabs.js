@@ -1,23 +1,22 @@
 //Scripts and Modules
-// import {preferences} from "./defaultPreferences";
 import {preferences} from "./defaultPreferences";
-
-let env = require('../../utils/env');
-let client =  env.browserClient == 'firefox' ? browser : chrome;
-
 const bootstrap = require('bootstrap');
+// const debug = require('debug')('activetabs');
 import React from 'react';
 import PropTypes from 'prop-types';
 import 'react-devtools';
+import { TransitionGroup, CSSTransition } from 'react-transition-group';
 
 //JS libraries
-import {updateTabs,getTabs,setTabCountInBadge} from './components/browserActions';
-import {sortTabs,log} from './components/general.js';
+import {updateTabs,getTabs} from './components/browserActions';
+import {sortTabs} from './components/general.js';
 
 // React Components
 import Search from './components/Header/Search/index';
 import Tabsgroup from './components/Accordion/TabsGroup/index';
+import Tab from './components/Accordion/TabsGroup/Tab/index';
 import WindowSelector from "./components/WindowSelector";
+import ErrorBoundary from "./ErrorBoundary";
 
 //Styles
 import '../styles/fontawesome5/fa-solid.scss';
@@ -26,8 +25,7 @@ import '../styles/eg.scss';
 
 //Images
 let logo;
-env.NODE_ENV === 'production'? logo = require('../images/logo.svg'): logo = require('../images/dev-logo.svg');
-
+NODE_ENV === 'production'? logo = require('../images/logo.svg'): logo = require('../images/dev-logo.svg');
 import '../images/arrange.svg';
 import '../images/close-icon.svg';
 import '../images/info-icon.svg';
@@ -36,18 +34,74 @@ import '../images/reload-icon.svg';
 import '../images/search-icon.svg';
 import '../images/sound-icon.svg';
 
+
 export default class ActiveTabs extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      preferences: this.props.preferences,
-      tabs:  window.tabs ?  window.tabs : [],
-      client: this.props.client,
-      NODE_ENV: this.props.NODE_ENV
+      selectedTabs:[]
     };
     this.setPreferences= this.setPreferences.bind(this);
+    this.closeTab= this.closeTab.bind(this);
     this.searchInTabs= this.searchInTabs.bind(this);
-    log("Activetabs.js constructor:",this.state.preferences,this.props.preferences)
+    this.updateSelectedTabs= this.updateSelectedTabs.bind(this);
+  }
+  updateSelectedTabs(id,selected){
+    let tempArray = this.state.selectedTabs;
+    selected ? tempArray.splice(tempArray.indexOf(id),1) : tempArray.push(id) ;
+    tempArray.length>0 ? $('#selection-action').addClass('active') : $('#selection-action').removeClass('active');
+    this.setState({selectedTabs: tempArray});
+  }
+  //Close
+  closeTab(key,promptForClosure = this.state.preferences.promptForClosure) {
+    if(promptForClosure) {if (!confirm(`Are you sure you want to close the following tab\n` + key)) return false;}
+    browser.tabs.remove(parseInt(key));
+
+  }
+  //Pinned
+  pinTab(tabId) {
+    console.info("pinning");
+    browser.tabs.update(tabId, { pinned: true });
+    getTabs().then(tabs=>{this.setState({tabs:tabs})}, error => log(`Error: ${error}`));
+  }
+  unpinTab(tabId){
+    log("unpinning");
+    browser.tabs.update(tabId, { pinned: false });
+    getTabs().then(tabs=>{this.setState({tabs:tabs})}, error => log(`Error: ${error}`));
+
+  }
+  togglePin(tabId){
+    let tab = this.state.tabs.filter(tab => tab.id == tabId);
+    tab[0].pinned ? this.unpinTab(tabId) : this.pinTab(tabId);
+  }
+
+  //Muted or Not
+  muteTab(id){
+    browser.tabs.update(parseInt(id), { muted: true});
+  }
+  unmuteTab(id){
+    browser.tabs.update(parseInt(id), { muted: false});
+  }
+  toggleMute(id) {
+    browser.tabs.get(id).then(tab=> {
+      browser.tabs.update(parseInt(id), { muted: ! tab.mutedInfo.muted});
+    });
+    getTabs().then(tabs=>{this.setState({tabs:tabs})}, error => log(`Error: ${error}`));
+  }
+  processSelectedTabs(action,selection = this.state.selectedTabs){
+    //close
+    if ( action == 'close' ){
+      if(!confirm('Are you sure you want to close selected tabs')) return false;
+      for (let id of selection) this.closeTab(id,false);
+    }
+    //Pin
+    if ( action == 'pinSelected' ) for (let id of selection) this.pinTab(id);
+    if ( action == 'unpinSelected' ) for (let id of selection) this.unpinTab(id);
+    if ( action == 'togglePin' ) for (let id of selection) this.togglePin(id);
+
+    //Mute
+    if ( action == 'muteSelected' ) for (let id of selection) this.muteTab(id);
+    if ( action == 'unmuteSelected' ) for (let id of selection) this.unmuteTab(id);
   }
   sortBy(parameter){
     sortTabs( parameter);
@@ -70,28 +124,35 @@ export default class ActiveTabs extends React.Component {
     window.searchTerm = searchTerm;
     this.forceUpdate();
   }
-  componentWillMount(){
 
+  componentDidMount(a,b) {
+    console.log("active tab mounted",a,b);
+    this.setState({tabs:window.tabs});
+    this.setState({preferences:this.props.preferences});
   }
-  componentDidMount() {
-      this.setState({tabs:window.tabs});
+  componentDidUpdate(a,b){
+    console.log("active tab updated",a,b);
+    // this.setState({tabs:window.tabs});
+    // this.setState({preferences:this.props.preferences});
   }
-  componentWillReceiveProps(props) {
-    this.setState({tabs: props.tabs});
+  static getDerivedStateFromProps(nextProps, prevState) {
+   console.log("ActiveTabs.js getDerivedStateFromProps:",nextProps, prevState);
+    return prevState;
   }
+
   setPreferences(prefSection,key,value){
-    console.log("set pref:",prefSection,key,value);
+   console.log("set pref:",prefSection,key,value);
 
-    client.storage.local.get('preferences')
+    browser.storage.local.get('preferences')
       .then((result)=>{
-        console.log("getting stored pref:",result);
+       console.log("getting stored pref:",result);
         let jsonObj = result;
         jsonObj['preferences'][prefSection][key] = value;
-        console.log(jsonObj.preferences.search.searchIn);
-        client.storage.local.set(jsonObj)
+       console.log(jsonObj.preferences.search.searchIn);
+        browser.storage.local.set(jsonObj)
           .then((tempResult)=> {
-            console.log("saving pref:",tempResult);
-            client.notifications.create(
+           console.log("saving pref:",tempResult);
+            browser.notifications.create(
               "reminder", {
                 type: "basic",
                 iconUrl: "../images/logo.svg",
@@ -103,12 +164,45 @@ export default class ActiveTabs extends React.Component {
           });
       });
 
+  }
+  tabTemplate(tab){
+    return <Tab
+      id={tab.id}
+      indexkey={tab.id}
+      key={tab.id}
+      pinned={tab.pinned}
+      audible={tab.audible}
+      muted={tab.mutedInfo.muted}
+      position={tab.index}
+      url={tab.url}
+      title={tab.title}
+      favIconUrl={tab.favIconUrl}
+      status={tab.status}
+      closeTab={this.closeTab}
+      togglePin={this.togglePin}
+      toggleMute={this.toggleMute}
+      updateSelectedTabs={this.updateSelectedTabs}
+    />
+  }
 
+  prepareTabList(){
+      if(this.state.tabs == null || this.state.tabs == undefined ) return ["Loading tabs..."];
+        return this.filterTabs().map((tab)=> {
+          return (
+            <CSSTransition
+            transitionName="fade"
+            classNames="fade"
+            appear={this.state.preferences.tabsGroup.tabsListAnimation}
+            exit={false}
+            key={tab.id}
+            timeout={{ enter: 200, exit:0 }} >
+              {this.tabTemplate(tab)}
+            </CSSTransition>
+          );
+        }, this);
   }
   render() {
-    console.log("active tabs render method",this.state.tabs);
-    console.log(this.state.NODE_ENV);
-      return [
+      return <ErrorBoundary>
         <header className="page-header" key={1}>
           <nav className="navbar">
             <div className="navbar-brand ">
@@ -120,7 +214,6 @@ export default class ActiveTabs extends React.Component {
                 <span className="sr-only">(current)</span>
               </div>
             </div>
-            {log("Active Tabs render preferences",this.state.preferences)}
             <Search
               regex={this.state.preferences.search.regex}
               ignoreCase={this.state.preferences.search.ignoreCase}
@@ -140,7 +233,7 @@ export default class ActiveTabs extends React.Component {
                 {/*</div>*/}
               {/*</li>*/}
               <li role="presentation" className="nav-item">
-                <a className="nav-link refreshActiveTabs" title="Refresh Active Tabs" href='#' onClick={()=> {updateTabs()}}>
+                <a className="nav-link refreshActiveTabs" title="Refresh Active Tabs" href='#' onClick={()=> {updateTabs();this.setState({tabs:window.tabs})}}>
                   <i className="fas fa-sync-alt fa-fw fa-sm" /> Refresh
                 </a>
               </li>
@@ -157,16 +250,16 @@ export default class ActiveTabs extends React.Component {
               <WindowSelector />
             </ul>
           </section>
-          <section className="context-actions container-fluid selection-action" id="selection-action">
+          <section className="context-actions container-fluid selection-action navbar navbar-dark bg-dark" id="selection-action">
             <ul className="nav nav-pills pull-left">
               <li role="presentation" className="nav-item dropdown">
                 <a data-toggle="dropdown" href="#" role="button" aria-haspopup="true" aria-expanded="false"
                    title="Selection of Tabs" className="dropdown-toggle">
                   Selection <span className="caret"></span></a>
                 <ul className="dropdown-menu">
-                  <li><a id="selectAllBtn" href="#" title="Pin all selected tabs">Select All</a></li>
-                  <li><a id="unselectAllBtn" href="#" title="Unpin all selected tabs">Select None </a></li>
-                  <li><a id="toggleSelectionBtn" href="#" title="Toggle Pin selected tab">Toggle/Invert Selection </a></li>
+                  <li className="dropdown-item"><a onClick={this.selectAll} href="#" title="Select All">Select All</a></li>
+                  <li className="dropdown-item"><a onClick={this.selectNone} href="#" title="Clear Selection/ Select None">Select None </a></li>
+                  <li className="dropdown-item"><a onClick={this.toggleSelection} href="#" title="Toggle Selection">Toggle/Invert Selection </a></li>
                 </ul>
               </li>
               <li role="presentation" className="dropdown">
@@ -174,9 +267,9 @@ export default class ActiveTabs extends React.Component {
                    title="Unpin/Pin Selected Tabs" className="dropdown-toggle">
                   Unpin/Pin Selected <span className="caret"></span></a>
                 <ul className="dropdown-menu">
-                  <li><a id="pinSelectedBtn" href="#" title="Pin all selected tabs">Pin selected</a></li>
-                  <li><a id="unpinSelectedBtn" href="#" title="Unpin all selected tabs">Unpin selected </a></li>
-                  <li><a id="togglePinSelected" href="#" title="Toggle Pin selected tab">Toggle pin selected </a></li>
+                  <li className="dropdown-item"><a onClick={this.pinSelected} href="#" title="Pin all selected tabs">Pin selected</a></li>
+                  <li className="dropdown-item"><a onClick={this.unpinSelected} href="#" title="Unpin all selected tabs">Unpin selected </a></li>
+                  <li className="dropdown-item"><a onClick={this.togglePinSelected} href="#" title="Toggle Pin selected tab">Toggle pin selected </a></li>
                 </ul>
               </li>
               <li role="presentation" className="dropdown">
@@ -184,24 +277,43 @@ export default class ActiveTabs extends React.Component {
                    title="Unmute/Mute Selected Tabs" className="dropdown-toggle">
                   Unmute/Mute Selected <span className="caret"></span></a>
                 <ul className="dropdown-menu">
-                  <li><a id="muteSelectedBtn" href="#" title="Pin all selected tabs">Mute selected</a></li>
-                  <li><a id="unmuteSelectedBtn" href="#" title="Unpin all selected tabs">Unmute selected </a></li>
-                  <li><a id="toggleMuteSelected" href="#" title="Toggle Pin selected tab">Toggle mute selected </a></li>
+                  <li className="dropdown-item"><a onClick={this.muteSelected} href="#" title="Mute all selected tabs">Mute selected</a></li>
+                  <li className="dropdown-item"><a onClick={this.unmuteSelected} href="#" title="Unmute all selected tabs">Unmute selected </a></li>
+                  <li className="dropdown-item"><a onClick={this.toggleMuteSelected} href="#" title="Toggle Mute selected tab">Toggle mute selected </a></li>
                 </ul>
               </li>
-              <li>                <a href="#" id="closeSelectedBtn">Close Selected</a>              </li>
+              <li><a href="#" onClick={()=> this.processSelectedTabs('close')}>Close Selected</a></li>
             </ul>
             <ul className="nav nav-pills pull-right">
-              <li>                <a href="#" id="closeAllBtn">Close All</a>              </li>
-              <li>                <a href="#" id="muteAllBtn">Mute All</a>              </li>
+              <li><a href="#" onClick={this.closeAll}>Close All</a></li>
+              <li><a href="#" onClick={this.muteAll}>Mute All</a></li>
             </ul>
           </section>
-        </header>,
+        </header>
         <div className={'tabs-list-container'} key={2}>
-
-          <Tabsgroup tabs={this.filterTabs()} client={this.props.client} preferences={this.props.preferences}/>
+          <Tabsgroup preferences={this.props.preferences} tabs={this.state.tabs}>
+            {this.filterTabs().map((tab)=> {
+              console.log(tab.title);
+                return (
+                  <CSSTransition
+                  transitionName="fade"
+                  classNames="fade"
+                  appear={this.state.preferences.tabsGroup.tabsListAnimation}
+                  exit={false}
+                  key={tab.id}
+                  timeout={{ enter: 200, exit:0 }} >
+                    {this.tabTemplate(tab)}
+                  </CSSTransition>
+                );
+              }, this)
+            }
+          </Tabsgroup>
         </div>
-      ];
+      </ErrorBoundary>
   }
 }
 
+ActiveTabs.propTypes = {
+  preferences: PropTypes.object,
+  tabs: PropTypes.array
+};

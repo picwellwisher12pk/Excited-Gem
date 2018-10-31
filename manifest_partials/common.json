@@ -1,6 +1,7 @@
 {
   "background": {
     "scripts": [
+      "browser-polyfill.js",
       "js/background.js"
     ]
   },

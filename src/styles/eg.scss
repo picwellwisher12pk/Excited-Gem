@@ -140,34 +140,33 @@ $brand-secondary-color: #D1335B;
 
 }
 
-.example-enter {
+.fade-enter {
     opacity: 0.01;
 }
 
-.example-enter.example-enter-active {
+.fade-enter.fade-enter-active {
     opacity: 1;
-    transition: all 500ms ease-in;
+    transition: all 200ms ease-in;
 }
 
-.example-leave {
+.fade-exit {
     opacity: 1;
     background-color: yellow;
     max-height: auto;
 }
 
-.example-leave.example-leave-active {
+.fade-exit-active {
     opacity: 0.01;
-    transition: all 500ms ease-in;
-    background-color: red;
+    // transition: all 50ms ease-in;
     max-height: 0;
 }
 .selection-action{
   /* Permalink - use to edit and share this gradient: http://colorzilla.com/gradient-editor/#ffc578+0,fb9d23+100;Orange+3D+%233 */
-  background: #ffc578; /* Old browsers */
-  background: -moz-linear-gradient(top,  #ffc578 0%, #fb9d23 100%); /* FF3.6-15 */
-  background: -webkit-linear-gradient(top,  #ffc578 0%,#fb9d23 100%); /* Chrome10-25,Safari5.1-6 */
-  background: linear-gradient(to bottom,  #ffc578 0%,#fb9d23 100%); /* W3C, IE10+, FF16+, Chrome26+, Opera12+, Safari7+ */
-  filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#ffc578', endColorstr='#fb9d23',GradientType=0 ); /* IE6-9 */
+  background: #bfd100; /* Old browsers */
+  background: -moz-linear-gradient(top,  #bfd100 -10%, #67c100 110%); /* FF3.6-15 */
+  background: -webkit-linear-gradient(top,  #bfd100 -10%,#67c100 110%); /* Chrome10-25,Safari5.1-6 */
+  background: linear-gradient(to bottom,  #bfd100 -10%,#67c100 110%); /* W3C, IE10+, FF16+, Chrome26+, Opera12+, Safari7+ */
+  filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#bfd100', endColorstr='#67c100',GradientType=0 ); /* IE6-9 */
 
   transform: rotateX(90deg);
   position: absolute;
@@ -180,7 +179,7 @@ $brand-secondary-color: #D1335B;
   -o-transition: all 0.3s;
   transition: all 0.3s;
   .nav > li > a{
-    color:#784603;
+    color:#fff;
   }
 }
 .selection-action.active{

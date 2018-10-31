@@ -34,8 +34,8 @@ export function updateTabs(reactObject = window.activeTabs) {
   let result = preferences.defaultTabsFrom == 'current' ? getCurrentWindowTabs() : getAllWindowTabs();
   result.then(tabs => {
     window.tabs = tabs;
-   reactObject.setState({tabs: tabs} );
    console.log('inside updatetabs function:',tabs);
+   reactObject.setState({tabs: tabs} );
     // $('.active-tab-counter').text(tabs.length);
     // $('#allWindows span.count').text(tabs.length);
 

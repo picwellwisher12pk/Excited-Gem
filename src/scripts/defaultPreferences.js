@@ -7,7 +7,7 @@ exports.preferences = {
   defaultTabsFrom : "current",
   tempTabsFrom: 'current',
   tabsGroup: {
-    promptForClosure :true,
+    promptForClosure :true,/**/
     tabsListAnimation: true,
     tabSortAnimation: true,
     //selection by ckeckbox/hover mode/click mode
