@@ -104,12 +104,12 @@ export default class ActiveTabs extends React.Component {
     //Pin
     if ( action == 'pinSelected' ) for (let id of selection) this.pinTab(id);
     if ( action == 'unpinSelected' ) for (let id of selection) this.unpinTab(id);
-    if ( action == 'togglePin' ) for (let id of selection) this.togglePin(id);
+    if ( action == 'togglePinSelected' ) for (let id of selection) !this.state.allPinned ?this.pinTab(id):this.unpinTab(id);
 
     //Mute
-    if ( action == 'toggleMuteSelected' ) for (let id of selection) !this.state.allMuted ?this.muteTab(id):this.unmuteTab(id);
     if ( action == 'muteSelected' ) for (let id of selection) this.muteTab(id);
     if ( action == 'unmuteSelected' ) for (let id of selection) this.unmuteTab(id);
+    if ( action == 'toggleMuteSelected' ) for (let id of selection) !this.state.allMuted ?this.muteTab(id):this.unmuteTab(id);
   }
   sortBy(parameter){
     sortTabs( parameter);
@@ -272,9 +272,9 @@ export default class ActiveTabs extends React.Component {
                    title="Selection of Tabs" className="dropdown-toggle">
                   Selection <span className="caret"></span></a>
                 <ul className="dropdown-menu">
-                  <li className="dropdown-item"><a onClick={this.selectAll} href="#" title="Select All">Select All</a></li>
-                  <li className="dropdown-item"><a onClick={this.selectNone} href="#" title="Clear Selection/ Select None">Select None </a></li>
-                  <li className="dropdown-item"><a onClick={this.toggleSelection} href="#" title="Toggle Selection">Toggle/Invert Selection </a></li>
+                  <li className="dropdown-item"><a onClick={()=>this.processSelectedTabs('selectAll')} href="#" title="Select All">Select All</a></li>
+                  <li className="dropdown-item"><a onClick={()=>this.processSelectedTabs('selectNone')} href="#" title="Clear Selection/ Select None">Select None </a></li>
+                  <li className="dropdown-item"><a onClick={()=>this.processSelectedTabs('toggleSelection')} href="#" title="Toggle Selection">Toggle/Invert Selection </a></li>
                 </ul>
               </li>
               <li role="presentation" className="dropdown">
@@ -282,9 +282,9 @@ export default class ActiveTabs extends React.Component {
                    title="Unpin/Pin Selected Tabs" className="dropdown-toggle">
                   Unpin/Pin Selected <span className="caret"></span></a>
                 <ul className="dropdown-menu">
-                  <li className="dropdown-item"><a onClick={this.pinSelected} href="#" title="Pin all selected tabs">Pin selected</a></li>
-                  <li className="dropdown-item"><a onClick={this.unpinSelected} href="#" title="Unpin all selected tabs">Unpin selected </a></li>
-                  <li className="dropdown-item"><a onClick={this.togglePinSelected} href="#" title="Toggle Pin selected tab">Toggle pin selected </a></li>
+                  <li className="dropdown-item"><a onClick={()=>this.processSelectedTabs('pinSelected')} href="#" title="Pin all selected tabs">Pin selected</a></li>
+                  <li className="dropdown-item"><a onClick={()=>this.processSelectedTabs('unpinSelected')} href="#" title="Unpin all selected tabs">Unpin selected </a></li>
+                  <li className="dropdown-item"><a onClick={()=>this.processSelectedTabs('togglePinSelected')} href="#" title="Toggle Pin selected tab">Toggle pin selected </a></li>
                 </ul>
               </li>
               <li role="presentation" className="dropdown">
@@ -292,9 +292,9 @@ export default class ActiveTabs extends React.Component {
                    title="Unmute/Mute Selected Tabs" className="dropdown-toggle">
                   Unmute/Mute Selected <span className="caret"></span></a>
                 <ul className="dropdown-menu">
-                  <li className="dropdown-item"><a onClick={this.muteSelected} href="#" title="Mute all selected tabs">Mute selected</a></li>
-                  <li className="dropdown-item"><a onClick={this.unmuteSelected} href="#" title="Unmute all selected tabs">Unmute selected </a></li>
-                  <li className="dropdown-item"><a onClick={this.toggleMuteSelected} href="#" title="Toggle Mute selected tab">Toggle mute selected </a></li>
+                  <li className="dropdown-item"><a onClick={()=>this.processSelectedTabs('muteSelected')} href="#" title="Mute all selected tabs">Mute</a></li>
+                  <li className="dropdown-item"><a onClick={()=>this.processSelectedTabs('unmuteSelected')} href="#" title="Unmute all selected tabs">Unmute</a></li>
+                  <li className="dropdown-item"><a onClick={()=>this.processSelectedTabs('toggleMuteSelected')} href="#" title="Toggle Mute selected tab">Toggle mute</a></li>
                 </ul>
               </li>
               <li><a href="#" onClick={()=> this.processSelectedTabs('closeSelected')}>Close Selected</a></li>
