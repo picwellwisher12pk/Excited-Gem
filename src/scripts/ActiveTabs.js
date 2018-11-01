@@ -39,7 +39,8 @@ export default class ActiveTabs extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      selectedTabs:[]
+      selectedTabs:[],
+      allMuted:false
     };
     this.setPreferences= this.setPreferences.bind(this);
     this.closeTab= this.closeTab.bind(this);
@@ -90,9 +91,15 @@ export default class ActiveTabs extends React.Component {
   }
   processSelectedTabs(action,selection = this.state.selectedTabs){
     //close
-    if ( action == 'close' ){
-      if(!confirm('Are you sure you want to close selected tabs')) return false;
+    if ( action == 'closeSelected' ){
+      let message = 'Are you sure you want to close selected tabs';
+      if(selection.length == this.state.tabs.length) message = 'Are you sure you want to close all the tabs? This will also close this window.';
+      if(!confirm(message)) return false;
       for (let id of selection) this.closeTab(id,false);
+      this.setState({selectedTabs:[]});
+      $('#selection-action').removeClass('active');
+      console.log("processSelectedTabs",this,this.state.selectedTabs);
+
     }
     //Pin
     if ( action == 'pinSelected' ) for (let id of selection) this.pinTab(id);
@@ -100,6 +107,7 @@ export default class ActiveTabs extends React.Component {
     if ( action == 'togglePin' ) for (let id of selection) this.togglePin(id);
 
     //Mute
+    if ( action == 'toggleMuteSelected' ) for (let id of selection) !this.state.allMuted ?this.muteTab(id):this.unmuteTab(id);
     if ( action == 'muteSelected' ) for (let id of selection) this.muteTab(id);
     if ( action == 'unmuteSelected' ) for (let id of selection) this.unmuteTab(id);
   }
@@ -124,9 +132,8 @@ export default class ActiveTabs extends React.Component {
     window.searchTerm = searchTerm;
     this.forceUpdate();
   }
-
   componentDidMount(a,b) {
-    console.log("active tab mounted",a,b);
+    // console.log("active tab mounted",a,b);
     this.setState({tabs:window.tabs});
     this.setState({preferences:this.props.preferences});
   }
@@ -136,7 +143,7 @@ export default class ActiveTabs extends React.Component {
     // this.setState({preferences:this.props.preferences});
   }
   static getDerivedStateFromProps(nextProps, prevState) {
-   console.log("ActiveTabs.js getDerivedStateFromProps:",nextProps, prevState);
+   // console.log("ActiveTabs.js getDerivedStateFromProps:",nextProps, prevState);
     return prevState;
   }
 
@@ -184,7 +191,6 @@ export default class ActiveTabs extends React.Component {
       updateSelectedTabs={this.updateSelectedTabs}
     />
   }
-
   prepareTabList(){
       if(this.state.tabs == null || this.state.tabs == undefined ) return ["Loading tabs..."];
         return this.filterTabs().map((tab)=> {
@@ -202,7 +208,7 @@ export default class ActiveTabs extends React.Component {
         }, this);
   }
   render() {
-      return <ErrorBoundary>
+      return [
         <header className="page-header" key={1}>
           <nav className="navbar">
             <div className="navbar-brand ">
@@ -222,7 +228,7 @@ export default class ActiveTabs extends React.Component {
               setPreferences={this.setPreferences}
             />
           </nav>
-          <section className="context-actions container-fluid">
+          <section className="context-actions navbar container-fluid">
             <ul className="nav nav-pills pull-left">
               {/*<li className="nav-item" >*/}
                 {/*<div className="nav-link custom-checkbox-container">*/}
@@ -248,9 +254,18 @@ export default class ActiveTabs extends React.Component {
                 </div>
               </li>
               <WindowSelector />
+
             </ul>
+            <ul className="nav nav-pills">
+                <li><a href="#" onClick={(event)=> {
+                    this.processSelectedTabs("toggleMuteSelected",this.state.tabs.map(tab=> tab.id));
+                    this.setState({allMuted:!this.state.allMuted});
+
+                }}>{this.state.allMuted? "Unmute All": "Mute All"}</a></li>
+                <li style={{marginRight:0}}><a href="#" onClick={()=>this.processSelectedTabs('closeSelected',this.state.tabs.map(tab=> tab.id))}>Close All <i className="fa fa-times-circle fw-fw"></i></a></li>
+              </ul>
           </section>
-          <section className="context-actions container-fluid selection-action navbar navbar-dark bg-dark" id="selection-action">
+          <section className={`context-actions container-fluid selection-action navbar navbar-dark`} id="selection-action">
             <ul className="nav nav-pills pull-left">
               <li role="presentation" className="nav-item dropdown">
                 <a data-toggle="dropdown" href="#" role="button" aria-haspopup="true" aria-expanded="false"
@@ -282,16 +297,12 @@ export default class ActiveTabs extends React.Component {
                   <li className="dropdown-item"><a onClick={this.toggleMuteSelected} href="#" title="Toggle Mute selected tab">Toggle mute selected </a></li>
                 </ul>
               </li>
-              <li><a href="#" onClick={()=> this.processSelectedTabs('close')}>Close Selected</a></li>
+              <li><a href="#" onClick={()=> this.processSelectedTabs('closeSelected')}>Close Selected</a></li>
             </ul>
-            <ul className="nav nav-pills pull-right">
-              <li><a href="#" onClick={this.closeAll}>Close All</a></li>
-              <li><a href="#" onClick={this.muteAll}>Mute All</a></li>
-            </ul>
+
           </section>
-        </header>
-        <div className={'tabs-list-container'} key={2}>
-          <Tabsgroup preferences={this.props.preferences} tabs={this.state.tabs}>
+        </header>,
+          <Tabsgroup preferences={this.props.preferences} tabs={this.state.tabs} key={2}>
             {this.filterTabs().map((tab)=> {
               console.log(tab.title);
                 return (
@@ -308,8 +319,7 @@ export default class ActiveTabs extends React.Component {
               }, this)
             }
           </Tabsgroup>
-        </div>
-      </ErrorBoundary>
+        ];
   }
 }
 
