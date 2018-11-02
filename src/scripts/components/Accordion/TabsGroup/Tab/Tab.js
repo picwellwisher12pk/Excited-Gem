@@ -56,7 +56,16 @@ export default class Tab extends React.Component {
   }
   render() {
     debug('Tab.js: render');
+    let title = this.state.title;
     let url = this.state.url;
+    if(window.searchTerm){
+      console.log("search term found",window.searchTerm);
+      let regex = new RegExp(window.searchTerm,'gi');
+       title = this.state.title.replace(regex,`<mark>${window.searchTerm}</mark>`);
+       url = this.state.url.replace(regex,`<mark>${window.searchTerm}</mark>`);
+      console.log("title url postprocess",title,url);
+    }
+    // let url = this.state.url;
     let checked = this.state.checked;
     let pinned = this.state.pinned;
     let loading = this.state.status=='loading';
@@ -67,10 +76,10 @@ export default class Tab extends React.Component {
           <img src={this.state.favicon} />
           <input type="checkbox" onChange={this.isSelected.bind(this)} className="checkbox"/>
         </label>
-        <a title={url} className="clickable tab-name" onClick={this.focusTab.bind(null, this.props.id)}>
-          {this.state.title}
-        </a>
-        <span className="tab-url trimmed dimmed">{url}</span>
+        <a title={url} className="clickable tab-name" onClick={this.focusTab.bind(null, this.props.id)}
+        dangerouslySetInnerHTML={{ __html: title }}
+        />
+        <span className="tab-url trimmed dimmed" dangerouslySetInnerHTML={{ __html: url }} />
         <ul className=" tab-actions" role="group" aria-label="options">
           {/* <li title="Tab Information" className="clickable">
             onClick={this.infoModal.bind(null, this.state.data)}

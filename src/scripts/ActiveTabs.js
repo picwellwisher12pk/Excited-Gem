@@ -275,7 +275,7 @@ export default class ActiveTabs extends React.Component {
             <ul className="nav nav-pills pull-left">
               <li role="presentation" className="nav-item dropdown">
                 <a data-toggle="dropdown" href="#" role="button" aria-haspopup="true" aria-expanded="false"
-                   title="Selection of Tabs" className="dropdown-toggle">
+                   title="Selection of Tabs" className="dropdown-toggle nav-link">
                   Selection <span className="caret"></span></a>
                 <ul className="dropdown-menu">
                   <li className="dropdown-item"><a onClick={()=>this.processSelectedTabs('selectAll')} href="#" title="Select All">Select All</a></li>
@@ -283,27 +283,27 @@ export default class ActiveTabs extends React.Component {
                   <li className="dropdown-item"><a onClick={()=>this.processSelectedTabs('toggleSelection')} href="#" title="Toggle Selection">Toggle/Invert Selection </a></li>
                 </ul>
               </li>
-              <li role="presentation" className="dropdown">
+              <li role="presentation" className="nav-item dropdown">
                 <a data-toggle="dropdown" href="#" role="button" aria-haspopup="true" aria-expanded="false"
-                   title="Unpin/Pin Selected Tabs" className="dropdown-toggle">
-                  Unpin/Pin Selected <span className="caret"></span></a>
+                   title="Unpin/Pin Selected Tabs" className="dropdown-toggle nav-link">
+                  Unpin/Pin <span className="caret"></span></a>
                 <ul className="dropdown-menu">
                   <li className="dropdown-item"><a onClick={()=>this.processSelectedTabs('pinSelected')} href="#" title="Pin all selected tabs">Pin selected</a></li>
                   <li className="dropdown-item"><a onClick={()=>this.processSelectedTabs('unpinSelected')} href="#" title="Unpin all selected tabs">Unpin selected </a></li>
                   <li className="dropdown-item"><a onClick={()=>this.processSelectedTabs('togglePinSelected')} href="#" title="Toggle Pin selected tab">Toggle pin selected </a></li>
                 </ul>
               </li>
-              <li role="presentation" className="dropdown">
+              <li role="presentation" className="nav-item dropdown">
                 <a data-toggle="dropdown" href="#" role="button" aria-haspopup="true" aria-expanded="false"
-                   title="Unmute/Mute Selected Tabs" className="dropdown-toggle">
-                  Unmute/Mute Selected <span className="caret"></span></a>
+                   title="Unmute/Mute Selected Tabs" className="dropdown-toggle nav-link">
+                  Unmute/Mute <span className="caret"></span></a>
                 <ul className="dropdown-menu">
                   <li className="dropdown-item"><a onClick={()=>this.processSelectedTabs('muteSelected')} href="#" title="Mute all selected tabs">Mute</a></li>
                   <li className="dropdown-item"><a onClick={()=>this.processSelectedTabs('unmuteSelected')} href="#" title="Unmute all selected tabs">Unmute</a></li>
                   <li className="dropdown-item"><a onClick={()=>this.processSelectedTabs('toggleMuteSelected')} href="#" title="Toggle Mute selected tab">Toggle mute</a></li>
                 </ul>
               </li>
-              <li><a href="#" onClick={()=> this.processSelectedTabs('closeSelected')}>Close Selected</a></li>
+              <li className="nav-item"><a href="#" className="nav-link" onClick={()=> this.processSelectedTabs('closeSelected')}>Close</a></li>
             </ul>
 
           </section>

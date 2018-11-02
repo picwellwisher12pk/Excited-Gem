@@ -162,9 +162,10 @@ $brand-secondary-color: #D1335B;
 }
 .selection-action{
   background-color: #14819a;
+  background: linear-gradient(to bottom,  #0C9DB2 0%,#4ACADE 100%); /* W3C, IE10+, FF16+, Chrome26+, Opera12+, Safari7+ */
+
   position: absolute;
-  bottom: 40px;
-  height: 23px;
+  bottom: 0;
   left: 0;
   width: 100%;
   -webkit-transition: all 0.1s;
@@ -172,14 +173,16 @@ $brand-secondary-color: #D1335B;
   -ms-transition: all 0.1s;
   -o-transition: all 0.1s;
   transition: all 0.1s;
+  z-index: -1;
   opacity: 0;
   .nav > li > a{
     color:#fff;
   }
 }
 .selection-action.active{
-  // transform: rotateX(0deg);
   opacity: 1;
-  bottom: 0;
-  height: auto;
+  z-index: 1;
+}
+mark{
+  background-color: yellow;
 }
