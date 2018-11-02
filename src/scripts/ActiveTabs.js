@@ -132,8 +132,14 @@ export default class ActiveTabs extends React.Component {
     window.searchTerm = searchTerm;
     this.forceUpdate();
   }
+  isAllMuted(){
+    for(let tab of window.tabs){
+      if (!tab.mutedInfo.muted) return false;
+    }
+    return true;
+  }
   componentDidMount(a,b) {
-    // console.log("active tab mounted",a,b);
+    this.setState({allMuted:this.isAllMuted()});
     this.setState({tabs:window.tabs});
     this.setState({preferences:this.props.preferences});
   }
