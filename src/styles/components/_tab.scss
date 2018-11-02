@@ -21,6 +21,9 @@
     transition: all 0.3s;
     /* justify-content: space-between; */
     /* align-self: flex-start; */
+    &.loading{
+        opacity: 0.5;
+    }
     &.selected {
         background-color: #acd8fb;
     }

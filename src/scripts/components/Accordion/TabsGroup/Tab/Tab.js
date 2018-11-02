@@ -57,9 +57,12 @@ export default class Tab extends React.Component {
   render() {
     debug('Tab.js: render');
     let url = this.state.url;
+    let checked = this.state.checked;
+    let pinned = this.state.pinned;
+    let loading = this.state.status=='loading';
     let audible = this.state.audible || this.state.muted;
     return (
-      <li key={this.props.id} data-id={this.props.id} className={`tab-item` + (this.state.checked ? ` checked` : ` `)}>
+      <li key={this.props.id} data-id={this.props.id} className={`tab-item` + (checked ? ` checked` : ` `)+ (loading ? ` loading` : ` `)}>
         <label className="tab-favicon" aria-label="favicon">
           <img src={this.state.favicon} />
           <input type="checkbox" onChange={this.isSelected.bind(this)} className="checkbox"/>
@@ -75,7 +78,7 @@ export default class Tab extends React.Component {
           </li> */}
           <li
             title="Un/Pin Tab"
-            className={`clickable pin-tab` + (this.state.pinned ? ` active` : ` disabled`)}
+            className={`clickable pin-tab` + (pinned ? ` active` : ` disabled`)}
             onClick={() =>this.props.togglePin(this.props.id)}
             aria-label="pinned"
           >
