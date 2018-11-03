@@ -157,13 +157,11 @@ $brand-secondary-color: #D1335B;
 
 .fade-exit-active {
     opacity: 0.01;
-    // transition: all 50ms ease-in;
     max-height: 0;
 }
 .selection-action{
   background-color: #14819a;
-  background: linear-gradient(to bottom,  #0C9DB2 0%,#4ACADE 100%); /* W3C, IE10+, FF16+, Chrome26+, Opera12+, Safari7+ */
-
+  background: linear-gradient(to bottom,  #0C9DB2 0%,#4ACADE 100%);
   position: absolute;
   bottom: 0;
   left: 0;

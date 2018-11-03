@@ -1,47 +1,34 @@
-let debug = require('debug')('tab');
+// let console.log = require('console.log')('tab');
 import React from 'react';
 import PropTypes from 'prop-types';
 import {log} from '../../../general';
 
 export default class Tab extends React.Component {
   constructor(props) {
-    debug('Tab constructor');
+    console.log('Tab constructor');
     super(props);
-    this.state = {...this.props,checked:false};
-    // {id}: this.props,
-    //   key: this.props.key,
-    //   url: this.props.url,
-    //   title: this.props.title,
-    //   pinned: this.props.pinned,
-    //   position: this.props.position,
-    //   favicon: this.props.favIconUrl,
-    //   audible: this.props.audible,
-    //   muted: this.props.muted,
-    //   status: this.props.status,
-    //   checked: false
-    // {id, key, url, title, pinned, position, favicon, audible, muted, status}: this.props,
-    // };
-    this.isSelected = this.isSelected.bind(this);
+    this.state = {...this.props};
+    this.isChecked = this.isChecked.bind(this);
   }
   focusTab(id) {
     browser.tabs.update(id, { active: true });
   }
-  isSelected(event){
+  isChecked(event){
     const value = event.target.checked;
-    this.setState({checked: value});
-    this.props.updateSelectedTabs(this.props.id,this.state.checked);
+    console.log("tabjs. this is checked",value);
+    // this.setState({checked: value});
+    this.props.updateSelectedTabs(this.props.id,value);
   }
   componentWillReceiveProps(props) {
-    debug("Tab.js getting new props:",props);
+    // console.log("Tab.js getting new props:",props);
   }
   componentWillUnmount(){
-    debug("Tab.js unmounting:");
+    // console.log("Tab.js unmounting:");
   }
   componentDidUpdate(props,state,snapshot){
-
+    // console.log("Tab.js updated",props,state);
   }
   componentWillReceiveProps(props) {
-    // log(props.muted);
     this.setState({id: props.id});
     this.setState({key: props.key});
     this.setState({url: props.url});
@@ -51,21 +38,20 @@ export default class Tab extends React.Component {
     this.setState({favicon: props.favIconUrl});
     this.setState({audible: props.audible});
     this.setState({muted: props.muted});
+    this.setState({checked: props.checked});
     this.setState({status: props.status});
-    this.setState({data: props.data});
   }
   render() {
-    debug('Tab.js: render');
+    console.log('Tab.js: render checked',this.state.checked);
     let title = this.state.title;
     let url = this.state.url;
     if(window.searchTerm){
-      console.log("search term found",window.searchTerm);
+      // console.log("search term found",window.searchTerm);
       let regex = new RegExp(window.searchTerm,'gi');
        title = this.state.title.replace(regex,`<mark>${window.searchTerm}</mark>`);
        url = this.state.url.replace(regex,`<mark>${window.searchTerm}</mark>`);
       console.log("title url postprocess",title,url);
     }
-    // let url = this.state.url;
     let checked = this.state.checked;
     let pinned = this.state.pinned;
     let loading = this.state.status=='loading';
@@ -74,7 +60,7 @@ export default class Tab extends React.Component {
       <li key={this.props.id} data-id={this.props.id} className={`tab-item` + (checked ? ` checked` : ` `)+ (loading ? ` loading` : ` `)}>
         <label className="tab-favicon" aria-label="favicon">
           <img src={this.state.favicon} />
-          <input type="checkbox" onChange={this.isSelected.bind(this)} className="checkbox"/>
+          <input type="checkbox" onChange={this.isChecked.bind(this)} defaultChecked={this.state.checked} checked={this.state.checked} className="checkbox"/>
         </label>
         <a title={url} className="clickable tab-name" onClick={this.focusTab.bind(null, this.props.id)}
         dangerouslySetInnerHTML={{ __html: title }}
@@ -123,5 +109,6 @@ Tab.propTypes = {
   position: PropTypes.number,
   favicon: PropTypes.string,
   audible:PropTypes.bool,
-  status: PropTypes.string
+  status: PropTypes.string,
+  checked: PropTypes.bool
 };

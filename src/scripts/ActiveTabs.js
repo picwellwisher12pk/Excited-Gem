@@ -47,17 +47,29 @@ export default class ActiveTabs extends React.Component {
     this.searchInTabs= this.searchInTabs.bind(this);
     this.updateSelectedTabs= this.updateSelectedTabs.bind(this);
   }
+  componentDidMount(a,b) {
+    this.setState({allMuted:this.isAllMuted()});
+    this.setState({tabs:window.tabs});
+    this.setState({preferences:this.props.preferences});
+  }
+  componentDidUpdate(a,b){
+    // console.log("active tab updated",a,b);
+  }
+  static getDerivedStateFromProps(nextProps, prevState) {
+    return prevState;
+  }
   updateSelectedTabs(id,selected){
     let tempArray = this.state.selectedTabs;
-    selected ? tempArray.splice(tempArray.indexOf(id),1) : tempArray.push(id) ;
+    !selected ? tempArray.splice(tempArray.indexOf(id),1) : tempArray.push(id) ;
     tempArray.length>0 ? $('#selection-action').addClass('active') : $('#selection-action').removeClass('active');
     this.setState({selectedTabs: tempArray});
+    console.log('tempArray',tempArray,"selectedtabs",this.state.selectedTabs);
+    this.setState({tabs:window.tabs});
   }
   //Close
   closeTab(key,promptForClosure = this.state.preferences.promptForClosure) {
     if(promptForClosure) {if (!confirm(`Are you sure you want to close the following tab\n` + key)) return false;}
     browser.tabs.remove(parseInt(key));
-
   }
   //Pinned
   pinTab(tabId) {
@@ -66,7 +78,7 @@ export default class ActiveTabs extends React.Component {
     getTabs().then(tabs=>{this.setState({tabs:tabs})}, error => log(`Error: ${error}`));
   }
   unpinTab(tabId){
-    log("unpinning");
+    console.info("unpinning");
     browser.tabs.update(tabId, { pinned: false });
     getTabs().then(tabs=>{this.setState({tabs:tabs})}, error => log(`Error: ${error}`));
 
@@ -75,7 +87,6 @@ export default class ActiveTabs extends React.Component {
     let tab = this.state.tabs.filter(tab => tab.id == tabId);
     tab[0].pinned ? this.unpinTab(tabId) : this.pinTab(tabId);
   }
-
   //Muted or Not
   muteTab(id){
     browser.tabs.update(parseInt(id), { muted: true});
@@ -89,27 +100,56 @@ export default class ActiveTabs extends React.Component {
     });
     getTabs().then(tabs=>{this.setState({tabs:tabs})}, error => log(`Error: ${error}`));
   }
-  processSelectedTabs(action,selection = this.state.selectedTabs){
-    //close
-    if ( action == 'closeSelected' ){
-      let message = 'Are you sure you want to close selected tabs';
-      if(selection.length == this.state.tabs.length) message = 'Are you sure you want to close all the tabs? This will also close this window.';
-      if(!confirm(message)) return false;
-      for (let id of selection) this.closeTab(id,false);
-      this.setState({selectedTabs:[]});
-      $('#selection-action').removeClass('active');
-      console.log("processSelectedTabs",this,this.state.selectedTabs);
+  processSelectedTabs(action){
+    let selection = this.state.tabs.filter(tab => this.state.selectedTabs.includes(tab.id));
+    switch(action){
+      case 'closeSelected':
+        let message = 'Are you sure you want to close selected tabs';
+        if(this.state.selectedTabs.length == this.state.tabs.length) message = 'Are you sure you want to close all the tabs? This will also close this window.';
+        if(!confirm(message)) return false;
+        for (let id of this.state.selectedTabs) {
+          console.log(id,this.state.selectedTabs);
+          this.closeTab(id,false);
+        }
+        this.setState({selectedTabs:[]});
+        $('#selection-action').removeClass('active');
+        console.log("processSelectedTabs",this,selectedIds,selection);
+        break;
 
+      case 'pinSelected':
+        for (let tab of selection) this.pinTab(tab.id);
+        break;
+      case 'unpinSelected':
+        for (let tab of selection) this.unpinTab(tab.id);
+        break;
+      case 'togglePinSelected':
+        for (let tab of selection) !tab.pinned ?this.pinTab(tab.id):this.unpinTab(tab.id);
+        break;
+
+      //Mute
+      case 'muteSelected':
+        for (let tab of selection) this.muteTab(tab.id);
+        break;
+      case 'unmuteSelected':
+        for (let tab of selection) this.unmuteTab(tab.id);
+        break;
+      case 'toggleMuteSelected':
+        for (let tab of selection)!tab.mutedInfo.muted ? this.muteTab(tab.id) : this.unmuteTab(tab.id);
+        break;
+
+      //Selection
+      case 'selectAll':
+        this.setState({selectedTabs: this.state.tabs.map(tab => tab.id)});
+        break;
+      case 'selectNone':
+        this.setState({selectedTabs:[]});
+        $('#selection-action').removeClass('active')
+        break;
+      case 'invertSelection':
+        let inverted = this.state.tabs.filter(tab => !this.state.selectedTabs.includes(tab.id)).map(tab=> tab.id);
+        this.setState({selectedTabs: inverted});
+        break;
     }
-    //Pin
-    if ( action == 'pinSelected' ) for (let id of selection) this.pinTab(id);
-    if ( action == 'unpinSelected' ) for (let id of selection) this.unpinTab(id);
-    if ( action == 'togglePinSelected' ) for (let id of selection) !this.state.allPinned ?this.pinTab(id):this.unpinTab(id);
-
-    //Mute
-    if ( action == 'muteSelected' ) for (let id of selection) this.muteTab(id);
-    if ( action == 'unmuteSelected' ) for (let id of selection) this.unmuteTab(id);
-    if ( action == 'toggleMuteSelected' ) for (let id of selection) !this.state.allMuted ?this.muteTab(id):this.unmuteTab(id);
   }
   sortBy(parameter){
     sortTabs( parameter);
@@ -138,24 +178,9 @@ export default class ActiveTabs extends React.Component {
     }
     return true;
   }
-  componentDidMount(a,b) {
-    this.setState({allMuted:this.isAllMuted()});
-    this.setState({tabs:window.tabs});
-    this.setState({preferences:this.props.preferences});
-  }
-  componentDidUpdate(a,b){
-    console.log("active tab updated",a,b);
-    // this.setState({tabs:window.tabs});
-    // this.setState({preferences:this.props.preferences});
-  }
-  static getDerivedStateFromProps(nextProps, prevState) {
-   // console.log("ActiveTabs.js getDerivedStateFromProps:",nextProps, prevState);
-    return prevState;
-  }
 
   setPreferences(prefSection,key,value){
    console.log("set pref:",prefSection,key,value);
-
     browser.storage.local.get('preferences')
       .then((result)=>{
        console.log("getting stored pref:",result);
@@ -176,9 +201,13 @@ export default class ActiveTabs extends React.Component {
             );
           });
       });
-
   }
   tabTemplate(tab){
+    let checked = false;
+    if(this.state.selectedTabs){
+      console.log("selection",this.selectedTabs,this.state.selectedTabs.includes(tab.id));
+      checked = this.state.selectedTabs.includes(tab.id);
+    }
     return <Tab
       id={tab.id}
       indexkey={tab.id}
@@ -191,6 +220,7 @@ export default class ActiveTabs extends React.Component {
       title={tab.title}
       favIconUrl={tab.favIconUrl}
       status={tab.status}
+      checked={checked}
       closeTab={this.closeTab}
       togglePin={this.togglePin}
       toggleMute={this.toggleMute}
@@ -264,11 +294,10 @@ export default class ActiveTabs extends React.Component {
             </ul>
             <ul className="nav nav-pills">
                 <li><a href="#" onClick={(event)=> {
-                    this.processSelectedTabs("toggleMuteSelected",this.state.tabs.map(tab=> tab.id));
+                    this.processSelectedTabs("toggleMuteSelected",this.state.tabs);
                     this.setState({allMuted:!this.state.allMuted});
-
                 }}>{this.state.allMuted? "Unmute All": "Mute All"}</a></li>
-                <li style={{marginRight:0}}><a href="#" onClick={()=>this.processSelectedTabs('closeSelected',this.state.tabs.map(tab=> tab.id))}>Close All <i className="fa fa-times-circle fw-fw"></i></a></li>
+                <li style={{marginRight:0}}><a href="#" onClick={()=>this.processSelectedTabs('closeSelected',this.state.tabs)}>Close All <i className="fa fa-times-circle fw-fw"></i></a></li>
               </ul>
           </section>
           <section className={`context-actions container-fluid selection-action navbar navbar-dark`} id="selection-action">
@@ -280,7 +309,7 @@ export default class ActiveTabs extends React.Component {
                 <ul className="dropdown-menu">
                   <li className="dropdown-item"><a onClick={()=>this.processSelectedTabs('selectAll')} href="#" title="Select All">Select All</a></li>
                   <li className="dropdown-item"><a onClick={()=>this.processSelectedTabs('selectNone')} href="#" title="Clear Selection/ Select None">Select None </a></li>
-                  <li className="dropdown-item"><a onClick={()=>this.processSelectedTabs('toggleSelection')} href="#" title="Toggle Selection">Toggle/Invert Selection </a></li>
+                  <li className="dropdown-item"><a onClick={()=>this.processSelectedTabs('invertSelection')} href="#" title="Toggle Selection">Invert Selection </a></li>
                 </ul>
               </li>
               <li role="presentation" className="nav-item dropdown">
@@ -310,7 +339,7 @@ export default class ActiveTabs extends React.Component {
         </header>,
           <Tabsgroup preferences={this.props.preferences} tabs={this.state.tabs} key={2}>
             {this.filterTabs().map((tab)=> {
-              console.log(tab.title);
+              // console.log(tab.title);
                 return (
                   <CSSTransition
                   transitionName="fade"
