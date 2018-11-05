@@ -5,21 +5,23 @@
 // import './defaultPreferences';
 import {log} from './components/general';
 import {preferences} from './defaultPreferences';
-import {getTabs, openExcitedGemPage, setBadge} from "./components/browserActions";
+import {getTabs, openExcitedGemPage, setBadge,setTabCountInBadge} from "./components/browserActions";
 
 
-let muteAll = (data) => {
-  for (let i = 0; i < data.length; i++) {
-    browser.tabs.update(tabId, { muted: true });
-  }
-};
+// let muteAll = (data) => {
+//   for (let i = 0; i < data.length; i++) {
+//     browser.tabs.update(tabId, { muted: true });
+//   }
+// };
 
-let moveTab = (data) => {
-  tabId = parseInt(data.tabId);
-  position = parseInt(data.position);
-  browser.tabs.move(tabId, { index: position });
-};
-
+// let moveTab = (data) => {
+//   tabId = parseInt(data.tabId);
+//   position = parseInt(data.position);
+//   browser.tabs.move(tabId, { index: position });
+// };
+function onRemoved(tabId, removeInfo) {
+  getTabs().then((tabs)=> {window.tabs = tabs;});
+}
 /**
  * [saveData description]
  * @param  {String/Object/Array} data    [description]
@@ -43,6 +45,7 @@ let saveData = (data, message = 'Data saved') =>{
 /* Events */
 ///////////
 browser.runtime.onInstalled.addListener(() => {
+  console.info("Excited Gem Installed!");
   if (NODE_ENV == 'development') browser.storage.local.clear(console.log("cleared")); //Previous data being removed for development version
   let jsonObj = {};
   jsonObj['preferences'] = preferences;
@@ -56,27 +59,42 @@ browser.runtime.onInstalled.addListener(() => {
   });
   getTabs().then((tabs)=> setBadge(tabs.length));
 });
-browser.tabs.onRemoved.addListener(() => {
-  browser.tabs.get(homepageOpened.id, () => {
-    if (browser.runtime.lastError) {
-      setHomePageOpened(null);
-      console.log(browser.runtime.lastError.message);
-    } else {
-      // Tab exists
-    }
-    log('tab-closed:', tab);
-  });
+browser.tabs.onRemoved.addListener((tabId) => {
+  // browser.tabs.get(homepageOpened.id, () => {
+  //   if (browser.runtime.lastError) {
+  //     setHomePageOpened(null);
+  //     console.log(browser.runtime.lastError.message);
+  //   } else {
+  //     // Tab exists
+  //   }
+  //   log('tab-closed:', tab);
+  // });
   log('Excited Gem: Tab Removed/Closed.');
+  onRemoved();
+  setTabCountInBadge(tabId,true);
+
 });
 
+
+
+browser.tabs.onDetached.addListener(onRemoved);
+
+browser.tabs.onCreated.addListener(
+  () => {
+   getTabs().then((tabs)=> setBadge(tabs.length));
+  });
+browser.tabs.onAttached.addListener(
+  () => {
+    getTabs().then((tabs)=> setBadge(tabs.length));
+  });
 
 
 /* Browser Actions */
 /////////////////////
 browser.browserAction.onClicked.addListener(tab => {
-  console.log("Extension Page opening");
+  console.info("Extension Page opening");
   openExcitedGemPage();
-  updateTabs(window.tabsgroup);
+  // updateTabs(window.tabsgroup);
 });
 
 
