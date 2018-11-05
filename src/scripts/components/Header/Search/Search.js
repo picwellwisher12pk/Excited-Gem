@@ -33,7 +33,7 @@ export default class Search extends React.Component {
     placeholder+= this.state.searchIn[0]? "Titles":"";
     placeholder+= this.state.searchIn[0] && this.state.searchIn[1] ? " and ": "";
     placeholder+= this.state.searchIn[1]? "URLs":"";
-    console.log("Search Render");
+    // console.log("Search Render");
 
     return (<ErrorBoundary>
       <section className="search-bar" style={{width: '66%'}}>

@@ -55,7 +55,7 @@ export function setBadge(length){
     client.browserAction.setBadgeBackgroundColor({'color': length <= 50 ? 'green' : 'red'});
 }
 export function setTabCountInBadge(tabId, isOnRemoved) {
-  browser.tabs.query({})
+  getTabs()
     .then((tabs) => {
       let length = tabs.length;
       if (isOnRemoved && tabId && tabs.map((t) => { return t.id; }).includes(tabId)) {

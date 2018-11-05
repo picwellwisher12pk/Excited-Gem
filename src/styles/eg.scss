@@ -159,14 +159,21 @@ $brand-secondary-color: #D1335B;
     opacity: 0.01;
     max-height: 0;
 }
-.selection-action{
+#selection-action{
+    -webkit-transition: all 0.3s;
+  -moz-transition: all 0.3s;
+  -ms-transition: all 0.3s;
+  -o-transition: all 0.3s;
+  transition: all 0.3s;
+  background-color: transparent;
+
+}
+.selection-active{
   background-color: #14819a;
   background: linear-gradient(to bottom,  #0C9DB2 0%,#4ACADE 100%);
-  position: absolute;
-  bottom: 0;
-  left: 0;
-  width: 100%;
-  -webkit-transition: all 0.1s;
+}
+.selection-action{
+    -webkit-transition: all 0.1s;
   -moz-transition: all 0.1s;
   -ms-transition: all 0.1s;
   -o-transition: all 0.1s;
@@ -177,7 +184,7 @@ $brand-secondary-color: #D1335B;
     color:#fff;
   }
 }
-.selection-action.active{
+.selection-active .selection-action{
   opacity: 1;
   z-index: 1;
 }

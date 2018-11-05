@@ -39,7 +39,8 @@ browser.tabs.onUpdated.addListener(
       });
   });
 
-browser.storage.local.get('preferences', function(result) {
+browser.storage.local.get('preferences').then(result=> {
   console.log("Root",window.tabs,result.preferences,NODE_ENV);
   window.activeTabs = render(<ActiveTabs tabs={window.tabs} preferences={result.preferences} />, document.querySelector("#root"));
+  console.log("tabapp",result.preferences);
 });
