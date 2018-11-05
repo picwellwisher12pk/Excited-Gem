@@ -34,8 +34,8 @@ export function updateTabs(reactObject = window.activeTabs) {
   let result = preferences.defaultTabsFrom == 'current' ? getCurrentWindowTabs() : getAllWindowTabs();
   result.then(tabs => {
     window.tabs = tabs;
-   reactObject.setState({tabs: tabs} );
    console.log('inside updatetabs function:',tabs);
+   reactObject.setState({tabs: tabs} );
     // $('.active-tab-counter').text(tabs.length);
     // $('#allWindows span.count').text(tabs.length);
 
@@ -55,7 +55,7 @@ export function setBadge(length){
     client.browserAction.setBadgeBackgroundColor({'color': length <= 50 ? 'green' : 'red'});
 }
 export function setTabCountInBadge(tabId, isOnRemoved) {
-  browser.tabs.query({})
+  getTabs()
     .then((tabs) => {
       let length = tabs.length;
       if (isOnRemoved && tabId && tabs.map((t) => { return t.id; }).includes(tabId)) {

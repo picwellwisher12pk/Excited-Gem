@@ -1,48 +1,46 @@
-import React from 'react';
 import 'react-devtools';
+import React from 'react';
 import {render} from 'react-dom';
 import ActiveTabs from './ActiveTabs';
-import {getTabs, setBadge} from "./components/browserActions";
-let preferences = {};
-let env = require('../../utils/env');
-window.client =  env.browserClient == 'firefox' ? browser : chrome;
-console.log("Node ENV:",process.env.NODE_ENV);
-
-client.tabs.onRemoved.addListener(onRemoved);
+import {getTabs} from "./components/browserActions";
 
 function onRemoved(tabId, removeInfo) {
     getTabs().then (tabs =>{
       window.tabs = tabs.filter(tab => tab.id != tabId);
-      setBadge(window.tabs.length);
       window.activeTabs.setState({tabs:window.tabs});
       });
-  }
-client.tabs.onCreated.addListener(
+}
+getTabs().then((tabs)=> {window.tabs = tabs;});
+
+
+browser.tabs.onRemoved.addListener(onRemoved);
+browser.tabs.onDetached.addListener(onRemoved);
+
+browser.tabs.onCreated.addListener(
   () => {
     getTabs().then(tabs => {
+      console.log("onCreated:",tabs);
       window.tabs = tabs;
-      window.activeTabs.setState({tabs:window.tabs});
-      setBadge(window.tabs.length);
+      window.activeTabs.setState({tabs});
       });
   });
-client.tabs.onAttached.addListener(
+browser.tabs.onAttached.addListener(
   () => {
     getTabs().then(tabs => {
       window.tabs = tabs;
-      window.activeTabs.setState({tabs:window.tabs});
-      setBadge(window.tabs.length);
+      window.activeTabs.setState({tabs});
     });
   });
-client.tabs.onDetached.addListener(onRemoved);
-client.tabs.onUpdated.addListener(
+browser.tabs.onUpdated.addListener(
   (tabId,changeInfo, tabInfo) => {
       getTabs().then(tabs => {
         window.tabs = tabs;
-        window.activeTabs.setState({tabs: window.tabs});
+        window.activeTabs.setState({tabs});
       });
   });
 
-getTabs().then((tabs)=> {window.tabs = tabs;});
-client.storage.local.get('preferences', function(result) {
-  window.activeTabs = render(<ActiveTabs tabs={window.tabs} client={client} preferences={result.preferences} NODE_ENV={env.NODE_ENV} />, document.querySelector("#root"));
+browser.storage.local.get('preferences').then(result=> {
+  console.log("Root",window.tabs,result.preferences,NODE_ENV);
+  window.activeTabs = render(<ActiveTabs tabs={window.tabs} preferences={result.preferences} />, document.querySelector("#root"));
+  console.log("tabapp",result.preferences);
 });

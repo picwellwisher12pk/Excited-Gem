@@ -138,7 +138,6 @@ if (env.browserClient === 'firefox' || env.browserClient === 'all') {
       context: __dirname,
       entry: {
         tabs: ["@babel/polyfill", path.join(__dirname, 'src', 'scripts', 'TabsApp.js')],
-        // tabs: path.join(__dirname, 'src', 'scripts', 'TabsApp.js'),
         background: path.join(__dirname, 'src', 'scripts', 'background.js')
       },
       output: {
@@ -204,8 +203,7 @@ if (env.browserClient === 'firefox' || env.browserClient === 'all') {
         }),
         // expose and write the allowed env vars on the compiled bundle
         new webpack.DefinePlugin({
-          'process.env.NODE_ENV': JSON.stringify(env.NODE_ENV),
-          CLIENT: 'browser',
+          NODE_ENV: JSON.stringify(env.NODE_ENV)
         }),
 
         new HtmlWebpackPlugin({
@@ -227,6 +225,6 @@ if (env.browserClient === 'firefox' || env.browserClient === 'all') {
         filename: '[name].json',
       },
     },*/
-    {devtool: env.NODE_ENV === 'development' ? 'cheap-module-eval-source-map' : 'cheap-source-map'}
+    {devtool: env.NODE_ENV === 'development' ? 'eval-source-map' : 'cheap-source-map'}
   ];
 }
