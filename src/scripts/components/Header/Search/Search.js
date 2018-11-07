@@ -14,6 +14,15 @@ export default class Search extends React.Component {
       this.url = React.createRef();
       console.log("search",this.state.searchIn);
   }
+  onKeyUpped(event) {
+    console.log("keypressed",event.target,this);
+    if ( event.keyCode == 27 ) {
+      console.log("escaped");
+      this.searchField.current.value='';
+      this.props.searchInTabs('');
+    }
+
+  }
   toggleSearchIn(number,event){
     let title=this.title.current.checked;
     let url=this.url.current.checked;
@@ -36,7 +45,7 @@ export default class Search extends React.Component {
     // console.log("Search Render");
 
     return (<ErrorBoundary>
-      <section className="search-bar" style={{width: '66%'}}>
+      <section className="search-bar" style={{width: '66%',paddingRight:0}}>
       <div id="filter-tabs" className="input-group filter-tabs">
         <input id="quicksearch-input"
                type="text"
@@ -44,6 +53,7 @@ export default class Search extends React.Component {
                placeholder={placeholder}
                className="quicksearch-input form-control regex"
                onChange={()=> {this.props.searchInTabs(this.searchField.current.value)}}
+               onKeyUp={(event)=>{this.onKeyUpped(event)}}
                autoFocus
         />
         <div className="input-group-append option-regex">
