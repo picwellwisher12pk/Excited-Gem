@@ -60,6 +60,8 @@ $brand-secondary-color: #D1335B;
 
 .tabs-list-container {
     overflow-y: auto;
+    flex-grow: 1;
+    flex-shrink: 1;
 }
 
 #feedback {
