@@ -21,6 +21,12 @@
     transition: all 0.3s;
     /* justify-content: space-between; */
     /* align-self: flex-start; */
+    &.idle .tab-name,
+    &.idle .tab-url,
+    &.idle .tab-favicon
+    {
+        opacity: 0.5;
+    }
     &.selected {
         background-color: #acd8fb;
     }
@@ -63,15 +69,15 @@
           left: 11px;
           top: 15px;
         }
-        //&:hover{
-        //  .checkbox{
-        //    opacity: 1;
-        //    //left: 12px;
-        //  }
-        //  img{
-        //    opacity: 0;
-        //  }
-        //}
+        &:hover{
+          .checkbox{
+            opacity: 1;
+            //left: 12px;
+          }
+          img{
+            opacity: 0;
+          }
+        }
     }
     &.checked{
            background-color: #dcffba;

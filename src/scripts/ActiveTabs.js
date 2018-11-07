@@ -1,33 +1,32 @@
 //Scripts and Modules
-// import {preferences} from "./defaultPreferences";
 import {preferences} from "./defaultPreferences";
-
-let env = require('../../utils/env');
-let client =  env.browserClient == 'firefox' ? browser : chrome;
-
 const bootstrap = require('bootstrap');
+// const debug = require('debug')('activetabs');
 import React from 'react';
 import PropTypes from 'prop-types';
 import 'react-devtools';
+import { TransitionGroup, CSSTransition } from 'react-transition-group';
 
 //JS libraries
-import {updateTabs,getTabs,setTabCountInBadge} from './components/browserActions';
-import {sortTabs,log} from './components/general.js';
+import {updateTabs,getTabs} from './components/browserActions';
+import {sortTabs} from './components/general.js';
 
 // React Components
 import Search from './components/Header/Search/index';
 import Tabsgroup from './components/Accordion/TabsGroup/index';
+import Tab from './components/Accordion/TabsGroup/Tab/index';
 import WindowSelector from "./components/WindowSelector";
+import ErrorBoundary from "./ErrorBoundary";
 
 //Styles
 import '../styles/fontawesome5/fa-solid.scss';
+import '../styles/fontawesome5/fa-regular.scss';
 import '../styles/fontawesome5.scss';
 import '../styles/eg.scss';
 
 //Images
 let logo;
-env.NODE_ENV === 'production'? logo = require('../images/logo.svg'): logo = require('../images/dev-logo.svg');
-
+NODE_ENV === 'production'? logo = require('../images/logo.svg'): logo = require('../images/dev-logo.svg');
 import '../images/arrange.svg';
 import '../images/close-icon.svg';
 import '../images/info-icon.svg';
@@ -36,18 +35,142 @@ import '../images/reload-icon.svg';
 import '../images/search-icon.svg';
 import '../images/sound-icon.svg';
 
+
 export default class ActiveTabs extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      preferences: this.props.preferences,
-      tabs:  window.tabs ?  window.tabs : [],
-      client: this.props.client,
-      NODE_ENV: this.props.NODE_ENV
+      tabs:[],
+      preferences:{},
+      selectedTabs:[],
+      allMuted:false,
+      allSelected:false,
+      allPinned:false
     };
     this.setPreferences= this.setPreferences.bind(this);
+    this.closeTab= this.closeTab.bind(this);
     this.searchInTabs= this.searchInTabs.bind(this);
-    log("Activetabs.js constructor:",this.state.preferences,this.props.preferences)
+    this.updateSelectedTabs= this.updateSelectedTabs.bind(this);
+    this.togglePin= this.togglePin.bind(this);
+  }
+  static getDerivedStateFromProps(nextProps, prevState) {
+    console.log(nextProps,prevState);
+    return nextProps;
+  }
+  componentDidMount(a,b) {
+    this.setState({allMuted:this.isAllMuted()});
+    this.setState({allPinned:this.isAllPinned()});
+    this.setState({allPinned:this.isAllSelected()});
+    this.setState({tabs:window.tabs});
+    this.setState({preferences:this.props.preferences});
+    console.log("mounted",window.tabs,this.state.tabs);
+  }
+  componentDidUpdate(a,b){
+   }
+
+  updateSelectedTabs(id,selected){
+    let tempArray = this.state.selectedTabs;
+    !selected ? tempArray.splice(tempArray.indexOf(id),1) : tempArray.push(id) ;
+    tempArray.length>0 ? $('#selection-action').addClass('selection-active') : $('#selection-action').removeClass('selection-active');
+    this.setState({selectedTabs: tempArray});
+    this.setState({tabs:window.tabs});
+  }
+  isAllSelected(){
+    for(let tab of window.tabs){
+      if (!tab.checked) return false;
+    }
+    return true;
+  }
+  //Close
+  closeTab(key,promptForClosure = this.state.preferences.promptForClosure) {
+    if(promptForClosure) {if (!confirm(`Are you sure you want to close the following tab\n` + key)) return false;}
+    browser.tabs.remove(parseInt(key));
+  }
+  //Pinned
+  pinTab(tabId) {
+    console.info("pinning");
+    browser.tabs.update(tabId, { pinned: true });
+    getTabs().then(tabs=>{this.setState({tabs:tabs})}, error => log(`Error: ${error}`));
+  }
+  unpinTab(tabId){
+    console.info("unpinning");
+    browser.tabs.update(tabId, { pinned: false });
+    getTabs().then(tabs=>{this.setState({tabs:tabs})}, error => log(`Error: ${error}`));
+  }
+  togglePin(tabId){
+    let tab = this.state.tabs.filter(tab => tab.id == tabId);
+    tab[0].pinned ? this.unpinTab(tabId) : this.pinTab(tabId);
+  }
+  isAllPinned(){
+    for(let tab of window.tabs){
+      if (!tab.pinned) return false;
+    }
+    return true;
+  }
+  //Muted or Not
+  muteTab(id){browser.tabs.update(parseInt(id), { muted: true}); }
+  unmuteTab(id){browser.tabs.update(parseInt(id), { muted: false}); }
+  toggleMute(id) {
+    browser.tabs.get(id).then(tab=> {
+      browser.tabs.update(parseInt(id), { muted: ! tab.mutedInfo.muted});
+    });
+    getTabs().then(tabs=>{this.setState({tabs:tabs})}, error => log(`Error: ${error}`));
+  }
+  isAllMuted(){
+    for(let tab of window.tabs){
+      if (!tab.mutedInfo.muted) return false;
+    }
+    return true;
+  }
+  processSelectedTabs(action,selection = this.state.selectedTabs){
+    // let selection = this.state.tabs.filter(tab => selection.includes(tab.id));
+    console.log(selection,selection,this.state.selectedTabs,this.state.tabs.map(tab=>tab.id));
+    switch(action){
+      case 'closeSelected':
+        let message = 'Are you sure you want to close selected tabs';
+        if(selection.length == this.state.tabs.length) message = 'Are you sure you want to close all the tabs? This will also close this window.';
+        if(!confirm(message)) return false;
+        for (let id of selection) this.closeTab(id,false);
+        this.setState({selectedTabs:[]});
+        $('#selection-action').removeClass('selection-active');
+        break;
+
+      case 'pinSelected':
+        for (let tab of selection) this.pinTab(tab);
+        break;
+      case 'unpinSelected':
+        for (let tab of selection) this.unpinTab(tab);
+        break;
+      case 'togglePinSelected':
+        for (let tab of selection) !tab.pinned ?this.pinTab(tab):this.unpinTab(tab);
+        break;
+
+      //Mute
+      case 'muteSelected':
+        console.log("muting");
+        for (let tab of selection) this.muteTab(tab);
+        break;
+      case 'unmuteSelected':
+        for (let tab of selection) this.unmuteTab(tab);
+        break;
+      case 'toggleMuteSelected':
+        for (let tab of selection)!tab.mutedInfo.muted ? this.muteTab(tab) : this.unmuteTab(tab);
+        break;
+
+      //Selection
+      case 'selectAll':
+        this.setState({selectedTabs: this.filterTabs().map(tab => tab.id)});
+         $('#selection-action').addClass('selection-active');
+        break;
+      case 'selectNone':
+        this.setState({selectedTabs:[]});
+        $('#selection-action').removeClass('selection-active')
+        break;
+      case 'invertSelection':
+        let inverted = this.state.tabs.filter(tab => !this.state.selectedTabs.includes(tab.id)).map(tab=> tab.id);
+        this.setState({selectedTabs: inverted});
+        break;
+    }
   }
   sortBy(parameter){
     sortTabs( parameter);
@@ -70,28 +193,14 @@ export default class ActiveTabs extends React.Component {
     window.searchTerm = searchTerm;
     this.forceUpdate();
   }
-  componentWillMount(){
-
-  }
-  componentDidMount() {
-      this.setState({tabs:window.tabs});
-  }
-  componentWillReceiveProps(props) {
-    this.setState({tabs: props.tabs});
-  }
   setPreferences(prefSection,key,value){
-    console.log("set pref:",prefSection,key,value);
-
-    client.storage.local.get('preferences')
+    browser.storage.local.get('preferences')
       .then((result)=>{
-        console.log("getting stored pref:",result);
         let jsonObj = result;
         jsonObj['preferences'][prefSection][key] = value;
-        console.log(jsonObj.preferences.search.searchIn);
-        client.storage.local.set(jsonObj)
+        browser.storage.local.set(jsonObj)
           .then((tempResult)=> {
-            console.log("saving pref:",tempResult);
-            client.notifications.create(
+            browser.notifications.create(
               "reminder", {
                 type: "basic",
                 iconUrl: "../images/logo.svg",
@@ -102,12 +211,32 @@ export default class ActiveTabs extends React.Component {
             );
           });
       });
-
-
+  }
+  tabTemplate(tab){
+    let checked = false;
+    if(this.state.selectedTabs) checked = this.state.selectedTabs.includes(tab.id);
+    return <Tab
+      id={tab.id}
+      indexkey={tab.id}
+      key={tab.id}
+      pinned={tab.pinned}
+      audible={tab.audible}
+      muted={tab.mutedInfo.muted}
+      position={tab.index}
+      url={tab.url}
+      title={tab.title}
+      discarded={tab.discarded}
+      favIconUrl={tab.favIconUrl}
+      status={tab.status}
+      checked={checked}
+      closeTab={this.closeTab}
+      togglePin={this.togglePin}
+      toggleMute={this.toggleMute}
+      updateSelectedTabs={this.updateSelectedTabs}
+    />
   }
   render() {
-    console.log("active tabs render method",this.state.tabs);
-    console.log(this.state.NODE_ENV);
+    console.log(this.state.tabs.length,this.props.tabs.length);
       return [
         <header className="page-header" key={1}>
           <nav className="navbar">
@@ -116,11 +245,10 @@ export default class ActiveTabs extends React.Component {
                 <img src={logo} alt="" style={{height:"40px",width:"auto"}} />
               </a>
               <div id="go-to-tabs">
-                Tabs <span className={`active-tab-counter badge ` + (this.state.tabs.length > 50 ?'badge-danger':'badge-success')}>{this.state.tabs.length?this.state.tabs.length:''}</span>
+                Tabs <span className={`active-tab-counter badge ` + (window.tabs.length > 50 ?'badge-danger':'badge-success')}>{window.tabs.length? window.tabs.length:''}</span>
                 <span className="sr-only">(current)</span>
               </div>
             </div>
-            {log("Active Tabs render preferences",this.state.preferences)}
             <Search
               regex={this.state.preferences.search.regex}
               ignoreCase={this.state.preferences.search.ignoreCase}
@@ -129,79 +257,140 @@ export default class ActiveTabs extends React.Component {
               setPreferences={this.setPreferences}
             />
           </nav>
-          <section className="context-actions container-fluid">
+          <section className="context-actions navbar container-fluid" id="selection-action">
             <ul className="nav nav-pills pull-left">
-              {/*<li className="nav-item" >*/}
-                {/*<div className="nav-link custom-checkbox-container">*/}
-                  {/*<div className="custom-control custom-checkbox ">*/}
-                    {/*<input type="checkbox" className="custom-control-input" id="checkall" />*/}
-                      {/*<label className="custom-control-label input-group-text" htmlFor="checkall">Check All</label>*/}
-                  {/*</div>*/}
-                {/*</div>*/}
-              {/*</li>*/}
-              <li role="presentation" className="nav-item">
-                <a className="nav-link refreshActiveTabs" title="Refresh Active Tabs" href='#' onClick={()=> {updateTabs()}}>
-                  <i className="fas fa-sync-alt fa-fw fa-sm" /> Refresh
-                </a>
+              <li className="nav-item">
+                <a className="nav-link" onClick={()=>{
+                    !this.state.allSelected ? this.processSelectedTabs("selectAll",this.state.tabs.map(tab=>tab.id)) : this.processSelectedTabs("selectNone",this.state.tabs.map(tab=>tab.id));
+
+                    this.setState({allSelected:!this.state.allSelected});
+                }} title="Select All">
+                  <input type="checkbox" checked={this.state.allSelected} readOnly/></a>
               </li>
 
               <li className="nav-item dropdown">
-                <a className="nav-link dropdown-toggle" href='#' title="Rearrange/Sort Tabs" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                {/*<a className="nav-link dropdown-toggle" href='#' title="Rearrange/Sort Tabs" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                   <i className="fas fa-sort fa-fw" /> Rearrange by
                 </a>
                 <div className="dropdown-menu">
                   <a className="dropdown-item" id="rearrange-url-btn" href="#" title="Rearrange with respect of URL" onClick={this.sortBy.bind(null,'url')}>URL</a>
                   <a className="dropdown-item" id="rearrange-title-btn" href="#" title="Rearrange with respect of Title" onClick={this.sortBy.bind(null,'title')}>Title</a>
+                </div>*/}
+                <div className="input-group" style={{width:"auto",marginRight:"15px"}}>
+                <a className="form-control" onClick={()=>this.processSelectedTabs('togglePinSelected')} href="#" title="Toggle Pin selected tab" style={{border:"none"}}>Sort by</a>
+                <div className="input-group-append" id="button-addon4">
+                  <button className="btn btn-default" type="button" title="Pin Selected" onClick={this.sortBy.bind(null,'title')} >Title</button>
+                  <button className="btn btn-default" type="button" title="Unpin Selected" onClick={this.sortBy.bind(null,'url')} >URL</button>
                 </div>
+              </div>
               </li>
               <WindowSelector />
+
+            </ul>
+            <div className="nav context-actions selection-action">
+              <div className="input-group" style={{width:"auto",marginRight:"15px"}}>
+                <a className="form-control" onClick={()=>this.processSelectedTabs('togglePinSelected')} href="#" title="Toggle Pin selected tab" style={{border:"none"}}>Un/Pin Selected</a>
+                <div className="input-group-append" id="button-addon4">
+                  <button className="btn btn-default" type="button" title="Pin Selected" onClick={()=>this.processSelectedTabs('pinSelected')} style={{backgroundColor:"white"}}><i className="fa fa-thumbtack fa-fw"></i></button>
+                  <button className="btn btn-default" type="button" title="Unpin Selected" onClick={()=>this.processSelectedTabs('unpinSelected')} style={{backgroundColor:"white"}}><i className="far fa-thumbtack"></i></button>
+                </div>
+              </div>
+              <div className="input-group" style={{width:"auto",marginRight:"15px"}} >
+                <a  className="form-control" onClick={()=>this.processSelectedTabs('toggleMuteSelected')} href="#" title="Toggle Pin selected tab" style={{border:"none"}}>Un/Mute Selected</a>
+                <div className="input-group-append" id="button-addon4">
+                  <button className="btn btn-default" type="button" title="Mute Selected" onClick={()=>this.processSelectedTabs('muteSelected')} style={{backgroundColor:"white"}}><i className="fa fa-volume-mute"></i></button>
+                  <button className="btn btn-default" type="button" title="Unmute Selected" onClick={()=>this.processSelectedTabs('unmuteSelected')} style={{backgroundColor:"white"}}><i className="fa fa-volume-up"></i></button>
+                </div>
+              </div>
+              <button className="btn btn-default" type="button" title="Close Selected" onClick={()=>this.processSelectedTabs('closeSelected')} style={{backgroundColor:"white"}}><i className="fa fa-times-circle"></i></button>
+            </div>
+            <ul className="nav nav-pills">
+                <li role="presentation" className="nav-item">
+                  <a className="nav-link refreshActiveTabs" title="Refresh Excited Gem Tabs" href='#' onClick={()=> {updateTabs();this.setState({tabs:window.tabs})}}>
+                    <i className="fas fa-sync-alt fa-fw fa-sm" />
+                  </a>
+                </li>
+                <li style={{marginRight:18}} className="nav-item">
+                  <a href="#" onClick={()=>{
+                    !this.state.allPinned ? this.processSelectedTabs("pinSelected",this.filterTabs().map(tab=>tab.id)) : this.processSelectedTabs("unpinSelected",this.filterTabs().map(tab=>tab.id));
+                    this.setState({allPinned:!this.state.allPinned});
+                  }} title={(!this.state.allPinned ? `Pin All` : `Unpin All`)} className="nav-link">
+                  <i className={(!this.state.allPinned ? `far fa-thumbtack` : `fa fa-thumbtack`)}></i></a>
+                </li>
+                <li style={{marginRight:18}} className="nav-item">
+                  <a href="#" className="nav-link" onClick={(event)=> {
+                    !this.state.allMuted ? this.processSelectedTabs("muteSelected",this.filterTabs().map(tab=>tab.id)) : this.processSelectedTabs("unmuteSelected",this.filterTabs().map(tab=>tab.id));
+                    this.setState({allMuted:!this.state.allMuted});
+                }} title={(!this.state.allMuted ? `Mute All` : `Unmute All`)}> <i className={`fa fa-fw ` + (!this.state.allMuted ? `fa-volume-up` : `fa-volume-mute`)} />
+                  </a>
+                </li>
+                <li style={{marginRight:0}} className="nav-item"><a href="#" title="Close All" className="nav-link" onClick={()=>this.processSelectedTabs('closeSelected',this.filterTabs().map(tab=>tab.id))}><i className="fa fa-times-circle fw-fw"></i></a></li>
             </ul>
           </section>
-          <section className="context-actions container-fluid selection-action" id="selection-action">
+          {/*<section className={`context-actions container-fluid selection-action navbar navbar-dark`}>
             <ul className="nav nav-pills pull-left">
               <li role="presentation" className="nav-item dropdown">
                 <a data-toggle="dropdown" href="#" role="button" aria-haspopup="true" aria-expanded="false"
-                   title="Selection of Tabs" className="dropdown-toggle">
+                   title="Selection of Tabs" className="dropdown-toggle nav-link">
                   Selection <span className="caret"></span></a>
                 <ul className="dropdown-menu">
-                  <li><a id="selectAllBtn" href="#" title="Pin all selected tabs">Select All</a></li>
-                  <li><a id="unselectAllBtn" href="#" title="Unpin all selected tabs">Select None </a></li>
-                  <li><a id="toggleSelectionBtn" href="#" title="Toggle Pin selected tab">Toggle/Invert Selection </a></li>
+                  <li className="dropdown-item"><a onClick={()=>this.processSelectedTabs('selectAll')} href="#" title="Select All">Select All</a></li>
+                  <li className="dropdown-item"><a onClick={()=>this.processSelectedTabs('selectNone')} href="#" title="Clear Selection/ Select None">Select None </a></li>
+                  <li className="dropdown-item"><a onClick={()=>this.processSelectedTabs('invertSelection')} href="#" title="Toggle Selection">Invert Selection </a></li>
                 </ul>
               </li>
-              <li role="presentation" className="dropdown">
+              <li role="presentation" className="nav-item dropdown">
                 <a data-toggle="dropdown" href="#" role="button" aria-haspopup="true" aria-expanded="false"
-                   title="Unpin/Pin Selected Tabs" className="dropdown-toggle">
-                  Unpin/Pin Selected <span className="caret"></span></a>
+                   title="Unpin/Pin Selected Tabs" className="dropdown-toggle nav-link">
+                  Unpin/Pin <span className="caret"></span></a>
                 <ul className="dropdown-menu">
-                  <li><a id="pinSelectedBtn" href="#" title="Pin all selected tabs">Pin selected</a></li>
-                  <li><a id="unpinSelectedBtn" href="#" title="Unpin all selected tabs">Unpin selected </a></li>
-                  <li><a id="togglePinSelected" href="#" title="Toggle Pin selected tab">Toggle pin selected </a></li>
+                  <li className="dropdown-item"><a onClick={()=>this.processSelectedTabs('pinSelected')} href="#" title="Pin all selected tabs">Pin selected</a></li>
+                  <li className="dropdown-item"><a onClick={()=>this.processSelectedTabs('unpinSelected')} href="#" title="Unpin all selected tabs">Unpin selected </a></li>
+                  <li className="dropdown-item"><a onClick={()=>this.processSelectedTabs('togglePinSelected')} href="#" title="Toggle Pin selected tab">Toggle pin selected </a></li>
                 </ul>
               </li>
-              <li role="presentation" className="dropdown">
+              <li role="presentation" className="nav-item dropdown">
                 <a data-toggle="dropdown" href="#" role="button" aria-haspopup="true" aria-expanded="false"
-                   title="Unmute/Mute Selected Tabs" className="dropdown-toggle">
-                  Unmute/Mute Selected <span className="caret"></span></a>
+                   title="Unmute/Mute Selected Tabs" className="dropdown-toggle nav-link">
+                  Unmute/Mute <span className="caret"></span></a>
                 <ul className="dropdown-menu">
-                  <li><a id="muteSelectedBtn" href="#" title="Pin all selected tabs">Mute selected</a></li>
-                  <li><a id="unmuteSelectedBtn" href="#" title="Unpin all selected tabs">Unmute selected </a></li>
-                  <li><a id="toggleMuteSelected" href="#" title="Toggle Pin selected tab">Toggle mute selected </a></li>
+                  <li className="dropdown-item"><a onClick={()=>this.processSelectedTabs('muteSelected')} href="#" title="Mute all selected tabs">Mute</a></li>
+                  <li className="dropdown-item"><a onClick={()=>this.processSelectedTabs('unmuteSelected')} href="#" title="Unmute all selected tabs">Unmute</a></li>
+                  <li className="dropdown-item"><a onClick={()=>this.processSelectedTabs('toggleMuteSelected')} href="#" title="Toggle Mute selected tab">Toggle mute</a></li>
                 </ul>
               </li>
-              <li>                <a href="#" id="closeSelectedBtn">Close Selected</a>              </li>
+              <li className="nav-item"><a href="#" className="nav-link" onClick={()=> this.processSelectedTabs('closeSelected')}>Close</a></li>
             </ul>
-            <ul className="nav nav-pills pull-right">
-              <li>                <a href="#" id="closeAllBtn">Close All</a>              </li>
-              <li>                <a href="#" id="muteAllBtn">Mute All</a>              </li>
-            </ul>
-          </section>
-        </header>,
-        <div className={'tabs-list-container'} key={2}>
 
-          <Tabsgroup tabs={this.filterTabs()} client={this.props.client} preferences={this.props.preferences}/>
-        </div>
-      ];
+          </section>*/}
+        </header>,
+        <div className="tabs-list-container">
+          <Tabsgroup preferences={this.props.preferences} tabs={this.state.tabs} key={2}>
+            {this.filterTabs().map((tab)=> {
+              // console.log(tab.title);
+                return (
+                  <CSSTransition
+                  transitionName="fade"
+                  classNames="fade"
+                  appear={this.state.preferences.tabsGroup.tabsListAnimation}
+                  exit={false}
+                  key={tab.id}
+                  timeout={{ enter: 200, exit:0 }} >
+                    {this.tabTemplate(tab)}
+                  </CSSTransition>
+                );
+              }, this)
+            }
+          </Tabsgroup>
+          </div>
+        ];
   }
 }
 
+ActiveTabs.propTypes = {
+  preferences: PropTypes.object,
+  tabs: PropTypes.array
+};
+ActiveTabs.defaultProps={
+  tabs:[]
+};

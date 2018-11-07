@@ -1,5 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
+import ErrorBoundary from '../../../ErrorBoundary';
 export default class Search extends React.Component {
   constructor(props) {
     super(props);
@@ -11,6 +12,16 @@ export default class Search extends React.Component {
       this.searchField = React.createRef();
       this.title = React.createRef();
       this.url = React.createRef();
+      console.log("search",this.state.searchIn);
+  }
+  onKeyUpped(event) {
+    console.log("keypressed",event.target,this);
+    if ( event.keyCode == 27 ) {
+      console.log("escaped");
+      this.searchField.current.value='';
+      this.props.searchInTabs('');
+    }
+
   }
   toggleSearchIn(number,event){
     let title=this.title.current.checked;
@@ -26,17 +37,15 @@ export default class Search extends React.Component {
     this.props.searchInTabs(this.searchField.current.value);
   }
   render(){
-    // let ignoreCase = this.state.ignoreCase;
-    // let regex = this.state.regex;
     let searchIn = this.state.searchIn;
     let placeholder = "Search in ";
     placeholder+= this.state.searchIn[0]? "Titles":"";
     placeholder+= this.state.searchIn[0] && this.state.searchIn[1] ? " and ": "";
     placeholder+= this.state.searchIn[1]? "URLs":"";
-    console.log("placeholder",placeholder);
+    // console.log("Search Render");
 
-    return (
-      <section className="search-bar" style={{width: '66%'}}>
+    return (<ErrorBoundary>
+      <section className="search-bar" style={{width: '66%',paddingRight:0}}>
       <div id="filter-tabs" className="input-group filter-tabs">
         <input id="quicksearch-input"
                type="text"
@@ -44,6 +53,7 @@ export default class Search extends React.Component {
                placeholder={placeholder}
                className="quicksearch-input form-control regex"
                onChange={()=> {this.props.searchInTabs(this.searchField.current.value)}}
+               onKeyUp={(event)=>{this.onKeyUpped(event)}}
                autoFocus
         />
         <div className="input-group-append option-regex">
@@ -91,12 +101,12 @@ export default class Search extends React.Component {
         {/*</div>*/}
       </div>
     </section>
-  )
+    </ErrorBoundary>)
   }
 }
 Search.propTypes = {
   regex: PropTypes.bool,
   case: PropTypes.bool,
-  searchIn: PropTypes.string
+  searchIn: PropTypes.array
 };
 

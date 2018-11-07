@@ -1,70 +1,74 @@
+// let console.log = require('console.log')('tab');
 import React from 'react';
 import PropTypes from 'prop-types';
 import {log} from '../../../general';
 
 export default class Tab extends React.Component {
   constructor(props) {
-    console.log('constructor');
+    console.log('Tab constructor');
     super(props);
-    this.state = {
-      id: this.props.id,
-      key: this.props.key,
-      url: this.props.url,
-      title: this.props.title,
-      pinned: this.props.pinned,
-      position: this.props.position,
-      favicon: this.props.favIconUrl,
-      audible: this.props.audible,
-      muted: this.props.muted,
-      status: this.props.status,
-      data: this.props.data,
-      checked: false
-    };
-    this.isSelected = this.isSelected.bind(this);
+    this.state = {...this.props};
+    this.isChecked = this.isChecked.bind(this);
   }
   focusTab(id) {
-    client.tabs.update(id, { active: true });
+    browser.tabs.update(id, { active: true });
   }
-  isSelected(event){
+  isChecked(event){
     const value = event.target.checked;
-    this.setState({checked: value});
-    this.props.updateSelectedTabs(this.props.id,this.state.checked);
-  }
-
-  componentDidUpdate(props,state,snapshot){
-
+    console.log("tabjs. this is checked",value);
+    // this.setState({checked: value});
+    this.props.updateSelectedTabs(this.props.id,value);
   }
   componentWillReceiveProps(props) {
-    // log(props.muted);
+    // console.log("Tab.js getting new props:",props);
+  }
+  componentWillUnmount(){
+    // console.log("Tab.js unmounting:");
+  }
+  componentDidUpdate(props,state,snapshot){
+    // console.log("Tab.js updated",props,state);
+  }
+  componentWillReceiveProps(props) {
     this.setState({id: props.id});
     this.setState({key: props.key});
+    this.setState({indexkey: props.indexkey});
     this.setState({url: props.url});
+    this.setState({discarded: props.discarded});
     this.setState({title: props.title});
     this.setState({pinned: props.pinned});
     this.setState({position: props.position});
     this.setState({favicon: props.favIconUrl});
     this.setState({audible: props.audible});
     this.setState({muted: props.muted});
+    this.setState({checked: props.checked});
     this.setState({status: props.status});
-    this.setState({data: props.data});
   }
-
   render() {
-    // log('Tab.js: render method',this.state.title,this.state.url);
+    console.log('Tab.js: render checked',this.state.checked);
+    let title = this.state.title;
     let url = this.state.url;
-    let trimmedURL = url;
+    if(window.searchTerm){
+      // console.log("search term found",window.searchTerm);
+      let regex = new RegExp(window.searchTerm,'gi');
+       title = this.state.title.replace(regex,`<mark>${window.searchTerm}</mark>`);
+       url = this.state.url.replace(regex,`<mark>${window.searchTerm}</mark>`);
+      console.log("title url postprocess",title,url);
+    }
+    let checked = this.state.checked;
+    let pinned = this.state.pinned;
+    let loading = this.state.status=='loading';
+    let discarded = this.state.discarded;
     let audible = this.state.audible || this.state.muted;
-    // console.log("Tab.js:",this.state.title,this.state.pinned,this.props.pinned);
     return (
-      <li key={this.props.id} data-id={this.props.id} className={`tab-item` + (this.state.checked ? ` checked` : ` `)}>
-        <label  className="tab-favicon" aria-label="favicon">
+      <li key={this.props.id} data-id={this.props.id} className={`tab-item` + (checked ? ` checked` : ` `)+ (loading||discarded ? ` idle` : ` `)}>
+        <label className="tab-favicon" aria-label="favicon">
           <img src={this.state.favicon} />
-          {/*<input type="checkbox" onChange={this.isSelected.bind(this)} className="checkbox"/>*/}
+          <input type="checkbox" onChange={this.isChecked.bind(this)} checked={this.state.checked} className="checkbox"/>
         </label>
-        <a title={url} className="clickable tab-name" onClick={this.focusTab.bind(null, this.props.id)}>
-          {this.state.title}
-        </a>
-        <span className="tab-url trimmed dimmed">{url}</span>
+        <a title={url} className="clickable tab-name" onClick={this.focusTab.bind(null, this.props.id)}
+        dangerouslySetInnerHTML={{ __html: title }}
+        />
+        <span className="tab-url trimmed dimmed" dangerouslySetInnerHTML={{ __html: url }} onClick={this.focusTab.bind(null, this.props.id)}/>
         <ul className=" tab-actions" role="group" aria-label="options">
           {/* <li title="Tab Information" className="clickable">
             onClick={this.infoModal.bind(null, this.state.data)}
@@ -72,32 +76,26 @@ export default class Tab extends React.Component {
           </li> */}
           <li
             title="Un/Pin Tab"
-            className={`clickable pin-tab` + (this.state.pinned ? ` active` : ` disabled`)}
+            className={`clickable pin-tab` + (pinned ? ` active` : ` disabled`)}
             onClick={() =>this.props.togglePin(this.props.id)}
-            aria-hidden="true"
-            role="group"
             aria-label="pinned"
           >
             <i className="fa fa-thumbtack fw-fw" />
           </li>
 
-          {/* This will not appear as status icon instead this will be just a button to trigger pin or unpin */}
           <li
             title="Un/Mute Tab"
             className={`clickable sound-tab` + (audible ? ` active` : ` disabled`)}
             onClick={() => this.props.toggleMute(this.props.id)}
-            aria-hidden="true"
           >
             <i className={`fa fw-fw ` + (!this.state.muted ? ` fa-volume-up` : ` fa-volume-mute`)} />
           </li>
-
           <li
             title="Close Tab"
             className="clickable remove-tab"
             data-id={this.props.id}
             onClick={() => this.props.closeTab(this.props.id)}
             data-command="remove"
-            aria-hidden="true"
           >
             <i className="fa fa-times-circle fw-fw" />
           </li>
@@ -115,5 +113,5 @@ Tab.propTypes = {
   favicon: PropTypes.string,
   audible:PropTypes.bool,
   status: PropTypes.string,
-  data: PropTypes.object,
+  checked: PropTypes.bool
 };
