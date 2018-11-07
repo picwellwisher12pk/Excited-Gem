@@ -31,7 +31,9 @@ export default class Tab extends React.Component {
   componentWillReceiveProps(props) {
     this.setState({id: props.id});
     this.setState({key: props.key});
+    this.setState({indexkey: props.indexkey});
     this.setState({url: props.url});
+    this.setState({discarded: props.discarded});
     this.setState({title: props.title});
     this.setState({pinned: props.pinned});
     this.setState({position: props.position});
@@ -55,17 +57,18 @@ export default class Tab extends React.Component {
     let checked = this.state.checked;
     let pinned = this.state.pinned;
     let loading = this.state.status=='loading';
+    let discarded = this.state.discarded;
     let audible = this.state.audible || this.state.muted;
     return (
-      <li key={this.props.id} data-id={this.props.id} className={`tab-item` + (checked ? ` checked` : ` `)+ (loading ? ` loading` : ` `)}>
+      <li key={this.props.id} data-id={this.props.id} className={`tab-item` + (checked ? ` checked` : ` `)+ (loading||discarded ? ` idle` : ` `)}>
         <label className="tab-favicon" aria-label="favicon">
           <img src={this.state.favicon} />
-          <input type="checkbox" onChange={this.isChecked.bind(this)} defaultChecked={this.state.checked} checked={this.state.checked} className="checkbox"/>
+          <input type="checkbox" onChange={this.isChecked.bind(this)} checked={this.state.checked} className="checkbox"/>
         </label>
         <a title={url} className="clickable tab-name" onClick={this.focusTab.bind(null, this.props.id)}
         dangerouslySetInnerHTML={{ __html: title }}
         />
-        <span className="tab-url trimmed dimmed" dangerouslySetInnerHTML={{ __html: url }} />
+        <span className="tab-url trimmed dimmed" dangerouslySetInnerHTML={{ __html: url }} onClick={this.focusTab.bind(null, this.props.id)}/>
         <ul className=" tab-actions" role="group" aria-label="options">
           {/* <li title="Tab Information" className="clickable">
             onClick={this.infoModal.bind(null, this.state.data)}

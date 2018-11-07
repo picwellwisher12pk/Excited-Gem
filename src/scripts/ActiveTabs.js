@@ -225,6 +225,7 @@ export default class ActiveTabs extends React.Component {
       position={tab.index}
       url={tab.url}
       title={tab.title}
+      discarded={tab.discarded}
       favIconUrl={tab.favIconUrl}
       status={tab.status}
       checked={checked}
@@ -264,7 +265,7 @@ export default class ActiveTabs extends React.Component {
 
                     this.setState({allSelected:!this.state.allSelected});
                 }} title="Select All">
-                  <input type="checkbox" checked={this.state.allSelected} readonly/></a>
+                  <input type="checkbox" checked={this.state.allSelected} readOnly/></a>
               </li>
 
               <li className="nav-item dropdown">
@@ -290,18 +291,18 @@ export default class ActiveTabs extends React.Component {
               <div className="input-group" style={{width:"auto",marginRight:"15px"}}>
                 <a className="form-control" onClick={()=>this.processSelectedTabs('togglePinSelected')} href="#" title="Toggle Pin selected tab" style={{border:"none"}}>Un/Pin Selected</a>
                 <div className="input-group-append" id="button-addon4">
-                  <button className="btn btn-default" type="button" title="Pin Selected" onClick={()=>this.processSelectedTabs('pinSelected')} style={{backgroundColor:"white"}}><i class="fa fa-thumbtack fa-fw"></i></button>
-                  <button className="btn btn-default" type="button" title="Unpin Selected" onClick={()=>this.processSelectedTabs('unpinSelected')} style={{backgroundColor:"white"}}><i class="far fa-thumbtack"></i></button>
+                  <button className="btn btn-default" type="button" title="Pin Selected" onClick={()=>this.processSelectedTabs('pinSelected')} style={{backgroundColor:"white"}}><i className="fa fa-thumbtack fa-fw"></i></button>
+                  <button className="btn btn-default" type="button" title="Unpin Selected" onClick={()=>this.processSelectedTabs('unpinSelected')} style={{backgroundColor:"white"}}><i className="far fa-thumbtack"></i></button>
                 </div>
               </div>
               <div className="input-group" style={{width:"auto",marginRight:"15px"}} >
                 <a  className="form-control" onClick={()=>this.processSelectedTabs('toggleMuteSelected')} href="#" title="Toggle Pin selected tab" style={{border:"none"}}>Un/Mute Selected</a>
                 <div className="input-group-append" id="button-addon4">
-                  <button className="btn btn-default" type="button" title="Mute Selected" onClick={()=>this.processSelectedTabs('muteSelected')} style={{backgroundColor:"white"}}><i class="fa fa-volume-mute"></i></button>
-                  <button className="btn btn-default" type="button" title="Unmute Selected" onClick={()=>this.processSelectedTabs('unmuteSelected')} style={{backgroundColor:"white"}}><i class="fa fa-volume-up"></i></button>
+                  <button className="btn btn-default" type="button" title="Mute Selected" onClick={()=>this.processSelectedTabs('muteSelected')} style={{backgroundColor:"white"}}><i className="fa fa-volume-mute"></i></button>
+                  <button className="btn btn-default" type="button" title="Unmute Selected" onClick={()=>this.processSelectedTabs('unmuteSelected')} style={{backgroundColor:"white"}}><i className="fa fa-volume-up"></i></button>
                 </div>
               </div>
-              <button className="btn btn-default" type="button" title="Close Selected" onClick={()=>this.processSelectedTabs('closeSelected')} style={{backgroundColor:"white"}}><i class="fa fa-times-circle"></i></button>
+              <button className="btn btn-default" type="button" title="Close Selected" onClick={()=>this.processSelectedTabs('closeSelected')} style={{backgroundColor:"white"}}><i className="fa fa-times-circle"></i></button>
             </div>
             <ul className="nav nav-pills">
                 <li role="presentation" className="nav-item">
@@ -317,7 +318,7 @@ export default class ActiveTabs extends React.Component {
                   <i className={(!this.state.allPinned ? `far fa-thumbtack` : `fa fa-thumbtack`)}></i></a>
                 </li>
                 <li style={{marginRight:18}} className="nav-item">
-                  <a href="#" class="nav-link" onClick={(event)=> {
+                  <a href="#" className="nav-link" onClick={(event)=> {
                     !this.state.allMuted ? this.processSelectedTabs("muteSelected",this.filterTabs().map(tab=>tab.id)) : this.processSelectedTabs("unmuteSelected",this.filterTabs().map(tab=>tab.id));
                     this.setState({allMuted:!this.state.allMuted});
                 }} title={(!this.state.allMuted ? `Mute All` : `Unmute All`)}> <i className={`fa fa-fw ` + (!this.state.allMuted ? `fa-volume-up` : `fa-volume-mute`)} />
@@ -363,6 +364,7 @@ export default class ActiveTabs extends React.Component {
 
           </section>*/}
         </header>,
+        <div className="tabs-list-container">
           <Tabsgroup preferences={this.props.preferences} tabs={this.state.tabs} key={2}>
             {this.filterTabs().map((tab)=> {
               // console.log(tab.title);
@@ -380,6 +382,7 @@ export default class ActiveTabs extends React.Component {
               }, this)
             }
           </Tabsgroup>
+          </div>
         ];
   }
 }

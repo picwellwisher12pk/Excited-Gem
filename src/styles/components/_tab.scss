@@ -21,7 +21,10 @@
     transition: all 0.3s;
     /* justify-content: space-between; */
     /* align-self: flex-start; */
-    &.loading{
+    &.idle .tab-name,
+    &.idle .tab-url,
+    &.idle .tab-favicon
+    {
         opacity: 0.5;
     }
     &.selected {
