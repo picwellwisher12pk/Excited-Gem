@@ -1,4 +1,6 @@
 import 'react-devtools';
+// var browser = require('./browser-polyfill.js');
+var browser = require("webextension-polyfill");
 import React from 'react';
 import {render} from 'react-dom';
 import ActiveTabs from './ActiveTabs';

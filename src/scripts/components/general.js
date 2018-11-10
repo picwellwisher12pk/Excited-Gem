@@ -1,7 +1,7 @@
 let env = require('../../../utils/env');
-let client =  env.browserClient === 'firefox' ? browser : chrome;
+var browser = require("webextension-polyfill");
 window.development = env.NODE_ENV==="development";
-export let homepageURL = client.extension.getURL('tabs.html');
+export let homepageURL = browser.extension.getURL('tabs.html');
 let refinedTabs;
 // let allSessions = {
 //   // sessions
@@ -54,8 +54,8 @@ export function removeKeys(keysToRemove, object) {
  * @param  {String} message [description]
  */
 export function saveData(data, message = 'Data saved') {
-  client.storage.local.set(data, () => {
-    client.notifications.create(
+  browser.storage.local.set(data, () => {
+    browser.notifications.create(
       'reminder',
       {
         type: 'basic',
@@ -232,7 +232,7 @@ export function sortTabs(sortby) {
   for (let i = 0; i < tabsList.length; i++) {
     let { id } = tabsList[i];
     setTimeout(() => {
-      client.tabs.move(id, { index: i });
+      browser.tabs.move(id, { index: i });
     }, sortDelay);
   }
 }

@@ -1,6 +1,6 @@
 let env = require('../../../utils/env');
 import {preferences} from '../defaultPreferences';
-let client =  env.browserClient == 'firefox' ? browser : chrome;
+var browser = require("webextension-polyfill");
 
 import * as general from "./general.js";
 /**
@@ -15,19 +15,19 @@ import * as general from "./general.js";
 // }
 export function openExcitedGemPage() {
   if (window.homepageOpened === undefined || window.homepageOpened === null) {
-    client.tabs.create({ url: general.homepageURL, pinned: true }, tab => window.homepageOpened = tab);
+    browser.tabs.create({ url: general.homepageURL, pinned: true }, tab => window.homepageOpened = tab);
   } else {
-    client.tabs.update(window.homepageOpened.id, { selected: true }); //If OneTab Page is opened ,brings focus to it.
+    browser.tabs.update(window.homepageOpened.id, { selected: true }); //If OneTab Page is opened ,brings focus to it.
   }
 }
 export function getCurrentWindowTabs() {
-  return client.tabs.query({ currentWindow: true });
+  return browser.tabs.query({ currentWindow: true });
 }
 export function getAllWindowTabs() {
-  return client.tabs.query({});
+  return browser.tabs.query({});
 }
 export function getTabs(){
-  return preferences.defaultTabsFrom == 'current' ? client.tabs.query({ currentWindow: true }) : client.tabs.query({});
+  return preferences.defaultTabsFrom == 'current' ? browser.tabs.query({ currentWindow: true }) : browser.tabs.query({});
 }
 
 export function updateTabs(reactObject = window.activeTabs) {
@@ -50,9 +50,9 @@ export function updateTabs(reactObject = window.activeTabs) {
  * @param {Object} info [description]
  */
 export function setBadge(length){
-    client.browserAction.setBadgeText({text: length.toString()});
-    client.browserAction.setBadgeTextColor({color: white});
-    client.browserAction.setBadgeBackgroundColor({'color': length <= 50 ? 'green' : 'red'});
+    browser.browserAction.setBadgeText({text: length.toString()});
+    // browser.browserAction.setBadgeTextColor({color: 'white'}); //Not compatible with chrome
+    browser.browserAction.setBadgeBackgroundColor({'color': length <= 50 ? 'green' : 'red'});
 }
 export function setTabCountInBadge(tabId, isOnRemoved) {
   getTabs()
@@ -69,20 +69,20 @@ export function registerMenus(){
 /**
  * Creating Context Menus
  */
-client.contextMenus.removeAll();
+browser.contextMenus.removeAll();
 
 function createReadingListMenu(data) {
   for (let i = 0; i < data.length; i++) {
     let id = String(data[i].id);
     let name = data[i].name;
     console.log("id:", id, 'name:', name);
-    client.contextMenus.create({
+    browser.contextMenus.create({
       "parentId": "showreadinglists",
       "id": id,
       "title": name,
       "onclick"() { }
     });
-    client.contextMenus.create({
+    browser.contextMenus.create({
       "parentId": "addreadinglists",
       "id": id + "create",
       "title": name,
@@ -93,32 +93,32 @@ function createReadingListMenu(data) {
   console.log("menu", data);
 }
 
-// client.contextMenus.create({
+// browser.contextMenus.create({
 //   "title": "Refresh Main Page",
 //   "onclick"() { streamTabs(ActiveTabsConnection); }
 // });
-// client.contextMenus.create({
+// browser.contextMenus.create({
 //     "title": "Send Current tab to list",
 //     "onclick" : tabToList ,
 //   });
-// client.contextMenus.create({
+// browser.contextMenus.create({
 //     "title": "Refresh Main Page including Ignored",
 //     "onclick" : sendToContent(true),
 //   });
-client.contextMenus.create({
+browser.contextMenus.create({
   "title": "Show Excited Gem Page",
   // "onclick": openExcitedGemPage
 });
-client.contextMenus.create({
+browser.contextMenus.create({
   "title": "Add to Reading Lists",
   "id": "addreadinglists"
 });
-client.contextMenus.create({
+browser.contextMenus.create({
   "title": "Show Reading Lists",
   "id": "showreadinglists"
 });
 
-// client.contextMenus.create({
+// browser.contextMenus.create({
 //     "title": "Run Query",
 //     "onclick" : runQuery,
 //   });

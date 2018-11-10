@@ -1,7 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
+var browser = require("webextension-polyfill");
 import {updateTabs,getTabs,setTabCountInBadge} from './browserActions';
-const client = browser;
 let config= {
   tabsfrom : "current"
 };
@@ -28,7 +28,7 @@ export default class WindowSelector extends React.Component {
     console.log("WindowSelector unmounting")
   }
   componentDidMount(){
-    client.windows.getAll({
+    browser.windows.getAll({
       populate: true,
       windowTypes: ["normal"]
     }).then(
@@ -38,7 +38,7 @@ export default class WindowSelector extends React.Component {
         this.setState({browserWindows : windowInfoArray});
       }
     );
-    client.windows.getCurrent({populate: true}).then(tab => {
+    browser.windows.getCurrent({populate: true}).then(tab => {
       this.setState({currentWindow:tab});
       console.log('currentwindow',this.state.currentWindow);
       console.log('currentwindow',this.state.currentWindow.tabs.length);

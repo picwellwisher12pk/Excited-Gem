@@ -3,6 +3,7 @@
 // import { registerMenus, setTabCountInBadge } from "./components/browserActions.jsx";
 // const {  setTabCountInBadge,updateTabs } = require('./components/browserActions.js');
 // import './defaultPreferences';
+var browser = require("webextension-polyfill");
 import {log} from './components/general';
 import {preferences} from './defaultPreferences';
 import {getTabs, openExcitedGemPage, setBadge,setTabCountInBadge} from "./components/browserActions";
@@ -45,17 +46,13 @@ let saveData = (data, message = 'Data saved') =>{
 /* Events */
 ///////////
 browser.runtime.onInstalled.addListener(() => {
-  console.info("Excited Gem Installed!");
-  if (NODE_ENV == 'development') browser.storage.local.clear(console.log("cleared")); //Previous data being removed for development version
+  // console.info("Excited Gem Installed!");
+  // if (NODE_ENV == 'development') browser.storage.local.clear(console.log("cleared")); //Previous data being removed for development version
   let jsonObj = {};
   jsonObj['preferences'] = preferences;
-  console.log(preferences);
-  browser.storage.local.set(jsonObj,  (result) => {
-    // console.log("Default preferences are being saved into local storage.");
-    browser.storage.local.get('preferences', (result) => {
-      // console.log("preference save confirming", result);
+  browser.storage.local.set(jsonObj).then(result => {
+    browser.storage.local.get('preferences').then(result => {
     });
-
   });
   getTabs().then((tabs)=> setBadge(tabs.length));
 });
@@ -93,8 +90,9 @@ browser.tabs.onAttached.addListener(
 /////////////////////
 browser.browserAction.onClicked.addListener(tab => {
   console.info("Extension Page opening");
-  openExcitedGemPage();
-  // updateTabs(window.tabsgroup);
+  browser.tabs.create({ url: browser.extension.getURL('tabs.html'), pinned: true })
+  .then(tab => window.homepageOpened = tab);
+  // openExcitedGemPage();
 });
 
 
