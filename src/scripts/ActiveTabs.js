@@ -27,6 +27,7 @@ import '../styles/eg.scss';
 //Images
 let logo;
 NODE_ENV === 'production'? logo = require('../images/logo.svg'): logo = require('../images/dev-logo.svg');
+NODE_ENV === 'production'? logo = require('../images/logo.png'): logo = require('../images/dev-logo.png');
 import '../images/arrange.svg';
 import '../images/close-icon.svg';
 import '../images/info-icon.svg';

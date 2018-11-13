@@ -2,7 +2,7 @@ var manifest = require('../manifest_partials/common'),
   fileSystem = require('fs'),
   path = require('path'),
   env = require('./env');
-logofile = env.NODE_ENV == 'development' ? "images/dev-logo.svg" : "images/logo.svg";
+logofile = env.NODE_ENV == 'development' ? "images/dev-logo.png" : "images/logo.png";
 
 // generates the manifest file using the package.json informations
 manifest.description = process.env.npm_package_description;

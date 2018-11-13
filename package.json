@@ -1,11 +1,11 @@
 {
     "name": "excited-gem",
     "title": "Excited Gem",
-    "version": "0.9.1",
+    "version": "0.9.11",
     "description": "A tool to manage your tabs and other browser related features.",
     "homepage": "https://picwellwisher12pk.github.io/onetab-advanced/",
     "bugs": "{}",
-    "logoimage": "images/logo.svg",
+    "logoimage": "images/logo.png",
     "license": "MIT",
     "author": "Amir Hameed",
     "client": {
