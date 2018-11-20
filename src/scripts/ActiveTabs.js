@@ -6,6 +6,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import 'react-devtools';
 import { TransitionGroup, CSSTransition } from 'react-transition-group';
+let browser = require("webextension-polyfill");
 
 //JS libraries
 import {updateTabs,getTabs} from './components/browserActions';
@@ -365,8 +366,8 @@ export default class ActiveTabs extends React.Component {
 
           </section>*/}
         </header>,
-        <div className="tabs-list-container">
-          <Tabsgroup preferences={this.props.preferences} tabs={this.state.tabs} key={2}>
+        <div className="tabs-list-container" key={2}>
+          <Tabsgroup preferences={this.props.preferences} tabs={this.state.tabs}>
             {this.filterTabs().map((tab)=> {
               // console.log(tab.title);
                 return (

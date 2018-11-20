@@ -2,6 +2,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import {log} from '../../../general';
+let browser = require("webextension-polyfill");
 
 export default class Tab extends React.Component {
   constructor(props) {

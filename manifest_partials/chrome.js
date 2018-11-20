@@ -1,4 +1,5 @@
-{
+let chrome = {
+   "default_locale": "en",
   "homepage_url": "http://path/to/homepage",
   "minimum_chrome_version": "versionString",
   "omnibox": {
@@ -9,3 +10,4 @@
     "open_in_tab": true
   }
 }
+export default chrome;

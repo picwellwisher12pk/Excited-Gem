@@ -1,7 +1,7 @@
 {
     "name": "excited-gem",
     "title": "Excited Gem",
-    "version": "0.9.11",
+    "version": "0.9.120",
     "description": "A tool to manage your tabs and other browser related features.",
     "homepage": "https://picwellwisher12pk.github.io/onetab-advanced/",
     "bugs": "{}",
@@ -27,7 +27,7 @@
         "firefoxp": "SET NODE_ENV=production& SET BROWSER_CLIENT=firefox& node utils/production.js",
         "chromep": "SET NODE_ENV=production& SET BROWSER_CLIENT=chrome& node utils/production.js",
         "mount": "cd firefox & web-ext run --firefox=firefoxdeveloperedition",
-        "pack": "cd build & web-ext build"
+        "packf": "cd firefox & web-ext build"
     },
     "quokka": {
         "babel": true,
@@ -44,7 +44,7 @@
         "eslint-plugin-prettier": "^2.7.0",
         "jquery": "^3.3.1",
         "prop-types": "^15.6.2",
-        "react": "^16.6.0",
+        "react": "^16.6.3",
         "react-dom": "^16.6.0"
     },
     "devDependencies": {

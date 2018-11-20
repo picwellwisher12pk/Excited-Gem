@@ -3,6 +3,7 @@ import PropTypes from 'prop-types';
 import { TransitionGroup, CSSTransition } from 'react-transition-group';
 import Tab from './Tab/index';
 import {log} from '../../general';
+var browser = require("webextension-polyfill");
 
 export default class TabsGroup extends React.Component {
   constructor(props) {
