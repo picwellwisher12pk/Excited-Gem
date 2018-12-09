@@ -36,16 +36,21 @@
     },
     "dependencies": {
         "@babel/polyfill": "^7.0.0",
+        "audit": "0.0.6",
         "babel-eslint": "^8.2.6",
         "bootstrap": "^4.1.3",
         "console.log": "^0.1.3",
         "debug": "^4.1.0",
         "eslint": "^4.19.1",
         "eslint-plugin-prettier": "^2.7.0",
+        "fix": "0.0.6",
         "jquery": "^3.3.1",
         "prop-types": "^15.6.2",
         "react": "^16.6.3",
-        "react-dom": "^16.6.0"
+        "react-beautiful-dnd": "^10.0.2",
+        "react-dnd": "^6.0.0",
+        "react-dom": "^16.6.3",
+        "react-sortable": "^2.0.0"
     },
     "devDependencies": {
         "@babel/preset-env": "^7.1.0",
@@ -64,7 +69,7 @@
         "file-loader": "^0.11.2",
         "fs-extra": "^0.30.0",
         "html-loader": "^0.4.5",
-        "html-webpack-plugin": "3.1.0",
+        "html-webpack-plugin": "^3.2.0",
         "jest": "^22.4.4",
         "node-sass": "^4.10.0",
         "popper.js": "^1.14.4",
@@ -80,10 +85,10 @@
         "sass-loader": "^7.1.0",
         "style-loader": "^0.13.0",
         "webextension-polyfill": "^0.3.1",
-        "webpack": "3.6.0",
+        "webpack": "^3.12.0",
         "webpack-dev-server": "^2.11.3",
         "webpackbar": "^1.5.1",
-        "write-file-webpack-plugin": "3.4.2"
+        "write-file-webpack-plugin": "^3.4.2"
     },
     "sideEffects": false,
     "lint-staged": {

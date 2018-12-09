@@ -1,14 +1,14 @@
 // let console.log = require('console.log')('tab');
-import React from 'react';
+import React,{Component,Fragment} from 'react';
 import PropTypes from 'prop-types';
+import { DragDropContext, Droppable, Draggable } from 'react-beautiful-dnd';
 import {log} from '../../../general';
 let browser = require("webextension-polyfill");
 
-export default class Tab extends React.Component {
+export default class Tab extends Component {
   constructor(props) {
-    console.log('Tab constructor');
+    // console.log('Tab constructor');
     super(props);
-    this.state = {...this.props};
     this.isChecked = this.isChecked.bind(this);
   }
   focusTab(id) {
@@ -30,41 +30,36 @@ export default class Tab extends React.Component {
     // console.log("Tab.js updated",props,state);
   }
   componentWillReceiveProps(props) {
-    this.setState({id: props.id});
-    this.setState({key: props.key});
-    this.setState({indexkey: props.indexkey});
-    this.setState({url: props.url});
-    this.setState({discarded: props.discarded});
-    this.setState({title: props.title});
-    this.setState({pinned: props.pinned});
-    this.setState({position: props.position});
-    this.setState({favicon: props.favIconUrl});
-    this.setState({audible: props.audible});
-    this.setState({muted: props.muted});
-    this.setState({checked: props.checked});
-    this.setState({status: props.status});
   }
+
   render() {
-    console.log('Tab.js: render checked',this.state.checked);
-    let title = this.state.title;
-    let url = this.state.url;
+    let title = this.props.title;
+    let url = this.props.url;
     if(window.searchTerm){
-      // console.log("search term found",window.searchTerm);
       let regex = new RegExp(window.searchTerm,'gi');
-       title = this.state.title.replace(regex,`<mark>${window.searchTerm}</mark>`);
-       url = this.state.url.replace(regex,`<mark>${window.searchTerm}</mark>`);
+       title = this.props.title.replace(regex,`<mark>${window.searchTerm}</mark>`);
+       url = this.props.url.replace(regex,`<mark>${window.searchTerm}</mark>`);
       console.log("title url postprocess",title,url);
     }
-    let checked = this.state.checked;
-    let pinned = this.state.pinned;
-    let loading = this.state.status=='loading';
-    let discarded = this.state.discarded;
-    let audible = this.state.audible || this.state.muted;
+    let checked = this.props.checked;
+    let pinned = this.props.pinned;
+    let loading = this.props.status=='loading';
+    let discarded = this.props.discarded;
+    let audible = this.props.audible || this.props.muted;
     return (
-      <li key={this.props.id} data-id={this.props.id} className={`tab-item` + (checked ? ` checked` : ` `)+ (loading||discarded ? ` idle` : ` `)}>
+      <Draggable draggableId={this.props.id} index={this.props.position} className={`tab-item` + (checked ? ` checked` : ` `)+ (loading||discarded ? ` idle` : ` `)}>
+      {(provided,snapshot)=>{
+       return <li
+       {...provided.draggableProps}
+       {...provided.dragHandleProps}
+       ref={provided.innerRef}
+       key={this.props.id} data-id={this.props.id}
+       draggableId={this.props.id}
+       className={`tab-item` + (checked ? ` checked` : ` `)+ (loading||discarded ? ` idle` : ` `)}
+       >
         <label className="tab-favicon" aria-label="favicon">
-          <img src={this.state.favicon} />
-          <input type="checkbox" onChange={this.isChecked.bind(this)} checked={this.state.checked} className="checkbox"/>
+          <img src={this.props.favicon} />
+          <input type="checkbox" onChange={this.isChecked.bind(this)} checked={this.props.checked} className="checkbox"/>
         </label>
         <a title={url} className="clickable tab-name" onClick={this.focusTab.bind(null, this.props.id)}
         dangerouslySetInnerHTML={{ __html: title }}
@@ -72,7 +67,7 @@ export default class Tab extends React.Component {
         <span className="tab-url trimmed dimmed" dangerouslySetInnerHTML={{ __html: url }} onClick={this.focusTab.bind(null, this.props.id)}/>
         <ul className=" tab-actions" role="group" aria-label="options">
           {/* <li title="Tab Information" className="clickable">
-            onClick={this.infoModal.bind(null, this.state.data)}
+            onClick={this.infoModal.bind(null, this.props.data)}
           <i className="fa fa-info-circle fw-fw" />
           </li> */}
           <li
@@ -89,7 +84,7 @@ export default class Tab extends React.Component {
             className={`clickable sound-tab` + (audible ? ` active` : ` disabled`)}
             onClick={() => this.props.toggleMute(this.props.id)}
           >
-            <i className={`fa fw-fw ` + (!this.state.muted ? ` fa-volume-up` : ` fa-volume-mute`)} />
+            <i className={`fa fw-fw ` + (!this.props.muted ? ` fa-volume-up` : ` fa-volume-mute`)} />
           </li>
           <li
             title="Close Tab"
@@ -102,6 +97,9 @@ export default class Tab extends React.Component {
           </li>
         </ul>
       </li>
+      }}
+
+      </Draggable>
     );
   }
 }

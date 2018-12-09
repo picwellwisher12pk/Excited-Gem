@@ -1,5 +1,4 @@
 import 'react-devtools';
-// var browser = require('./browser-polyfill.js');
 var browser = require("webextension-polyfill");
 import React from 'react';
 import {render} from 'react-dom';
@@ -23,21 +22,21 @@ browser.tabs.onCreated.addListener(
     getTabs().then(tabs => {
       console.log("onCreated:",tabs);
       window.tabs = tabs;
-      window.activeTabs.setState({tabs});
+      if(window.activeTabs) window.activeTabs.setState({tabs});
       });
   });
 browser.tabs.onAttached.addListener(
   () => {
     getTabs().then(tabs => {
       window.tabs = tabs;
-      window.activeTabs.setState({tabs});
+      if(window.activeTabs)  window.activeTabs.setState({tabs});
     });
   });
 browser.tabs.onUpdated.addListener(
   (tabId,changeInfo, tabInfo) => {
       getTabs().then(tabs => {
         window.tabs = tabs;
-        window.activeTabs.setState({tabs});
+        if(window.activeTabs)  window.activeTabs.setState({tabs});
       });
   });
 

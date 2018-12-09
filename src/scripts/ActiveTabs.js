@@ -1,5 +1,4 @@
 //Scripts and Modules
-import { preferences } from './defaultPreferences';
 const bootstrap = require('bootstrap');
 // const debug = require('debug')('activetabs');
 import React from 'react';
@@ -7,6 +6,7 @@ import PropTypes from 'prop-types';
 import 'react-devtools';
 import { TransitionGroup, CSSTransition } from 'react-transition-group';
 let browser = require('webextension-polyfill');
+import { DragDropContext, Droppable, Draggable } from 'react-beautiful-dnd';
 
 //JS libraries
 import { updateTabs, getTabs } from './components/browserActions';
@@ -17,7 +17,6 @@ import Search from './components/Header/Search/index';
 import Tabsgroup from './components/Accordion/TabsGroup/index';
 import Tab from './components/Accordion/TabsGroup/Tab/index';
 import WindowSelector from './components/WindowSelector';
-import ErrorBoundary from './ErrorBoundary';
 
 //Styles
 import '../styles/fontawesome5/fa-solid.scss';
@@ -27,7 +26,6 @@ import '../styles/eg.scss';
 
 //Images
 let logo;
-NODE_ENV === 'production' ? (logo = require('../images/logo.svg')) : (logo = require('../images/dev-logo.svg'));
 NODE_ENV === 'production' ? (logo = require('../images/logo.png')) : (logo = require('../images/dev-logo.png'));
 import '../images/arrange.svg';
 import '../images/close-icon.svg';
@@ -53,6 +51,7 @@ export default class ActiveTabs extends React.Component {
     this.searchInTabs = this.searchInTabs.bind(this);
     this.updateSelectedTabs = this.updateSelectedTabs.bind(this);
     this.togglePin = this.togglePin.bind(this);
+    this.onDragEnd = this.onDragEnd.bind(this);
   }
   static getDerivedStateFromProps(nextProps, prevState) {
     console.log(nextProps, prevState);
@@ -249,7 +248,7 @@ export default class ActiveTabs extends React.Component {
     return (
       <Tab
         id={tab.id}
-        indexkey={tab.id}
+        indexkey={tab.index}
         key={tab.id}
         pinned={tab.pinned}
         audible={tab.audible}
@@ -268,6 +267,17 @@ export default class ActiveTabs extends React.Component {
       />
     );
   }
+  reorder(list, startIndex, endIndex) {
+    const result = Array.from(list);
+    const [removed] = result.splice(startIndex, 1);
+    result.splice(endIndex, 0, removed);
+    return result;
+  }
+  onDragEnd(result) {
+    if (!result.destination) return;
+    browser.tabs.move(result.draggableId, { index: result.destination.index });
+    window.activeTabs.setState({tabs:window.tabs});
+  }
   render() {
     console.log(this.state.tabs.length, this.props.tabs.length);
     return [
@@ -278,13 +288,14 @@ export default class ActiveTabs extends React.Component {
               <img src={logo} alt="" style={{ height: '40px', width: 'auto' }} />
             </a>
             <div id="go-to-tabs">
-              Tabs{' '}
+              Tabs
               <span
                 className={`active-tab-counter badge ` + (window.tabs.length > 50 ? 'badge-danger' : 'badge-success')}
               >
+
                 {window.tabs.length ? window.tabs.length : ''}
               </span>
-              <span className="sr-only">(current)</span>
+              <span className="sr-only"> (current) </span>
             </div>
           </div>
           <Search
@@ -312,15 +323,7 @@ export default class ActiveTabs extends React.Component {
                 <input type="checkbox" checked={this.state.allSelected} readOnly />
               </a>
             </li>
-
             <li className="nav-item dropdown">
-              {/*<a className="nav-link dropdown-toggle" href='#' title="Rearrange/Sort Tabs" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                  <i className="fas fa-sort fa-fw" /> Rearrange by
-                </a>
-                <div className="dropdown-menu">
-                  <a className="dropdown-item" id="rearrange-url-btn" href="#" title="Rearrange with respect of URL" onClick={this.sortBy.bind(null,'url')}>URL</a>
-                  <a className="dropdown-item" id="rearrange-title-btn" href="#" title="Rearrange with respect of Title" onClick={this.sortBy.bind(null,'title')}>Title</a>
-                </div>*/}
               <div className="input-group" style={{ width: 'auto', marginRight: '15px' }}>
                 <a
                   className="form-control"
@@ -362,7 +365,7 @@ export default class ActiveTabs extends React.Component {
                 title="Toggle Pin selected tab"
                 style={{ border: 'none' }}
               >
-                Un/Pin Selected
+                Un / Pin Selected
               </a>
               <div className="input-group-append" id="button-addon4">
                 <button
@@ -385,7 +388,7 @@ export default class ActiveTabs extends React.Component {
                 </button>
               </div>
             </div>
-            <div className="input-group" style={{ width: 'auto', marginRight: '15px' }} >
+            <div className="input-group" style={{ width: 'auto', marginRight: '15px' }}>
               <a
                 className="form-control"
                 onClick={() => this.processSelectedTabs('toggleMuteSelected')}
@@ -393,7 +396,7 @@ export default class ActiveTabs extends React.Component {
                 title="Toggle Pin selected tab"
                 style={{ border: 'none' }}
               >
-                Un/Mute Selected
+                Un / Mute Selected
               </a>
               <div className="input-group-append" id="button-addon4">
                 <button
@@ -467,7 +470,7 @@ export default class ActiveTabs extends React.Component {
                 }}
                 title={!this.state.allMuted ? `Mute All` : `Unmute All`}
               >
-                {' '}
+
                 <i className={`fa fa-fw ` + (!this.state.allMuted ? `fa-volume-up` : `fa-volume-mute`)} />
               </a>
             </li>
@@ -483,60 +486,27 @@ export default class ActiveTabs extends React.Component {
             </li>
           </ul>
         </section>
-        {/*<section className={`context-actions container-fluid selection-action navbar navbar-dark`}>
-            <ul className="nav nav-pills pull-left">
-              <li role="presentation" className="nav-item dropdown">
-                <a data-toggle="dropdown" href="#" role="button" aria-haspopup="true" aria-expanded="false"
-                   title="Selection of Tabs" className="dropdown-toggle nav-link">
-                  Selection <span className="caret"></span></a>
-                <ul className="dropdown-menu">
-                  <li className="dropdown-item"><a onClick={()=>this.processSelectedTabs('selectAll')} href="#" title="Select All">Select All</a></li>
-                  <li className="dropdown-item"><a onClick={()=>this.processSelectedTabs('selectNone')} href="#" title="Clear Selection/ Select None">Select None </a></li>
-                  <li className="dropdown-item"><a onClick={()=>this.processSelectedTabs('invertSelection')} href="#" title="Toggle Selection">Invert Selection </a></li>
-                </ul>
-              </li>
-              <li role="presentation" className="nav-item dropdown">
-                <a data-toggle="dropdown" href="#" role="button" aria-haspopup="true" aria-expanded="false"
-                   title="Unpin/Pin Selected Tabs" className="dropdown-toggle nav-link">
-                  Unpin/Pin <span className="caret"></span></a>
-                <ul className="dropdown-menu">
-                  <li className="dropdown-item"><a onClick={()=>this.processSelectedTabs('pinSelected')} href="#" title="Pin all selected tabs">Pin selected</a></li>
-                  <li className="dropdown-item"><a onClick={()=>this.processSelectedTabs('unpinSelected')} href="#" title="Unpin all selected tabs">Unpin selected </a></li>
-                  <li className="dropdown-item"><a onClick={()=>this.processSelectedTabs('togglePinSelected')} href="#" title="Toggle Pin selected tab">Toggle pin selected </a></li>
-                </ul>
-              </li>
-              <li role="presentation" className="nav-item dropdown">
-                <a data-toggle="dropdown" href="#" role="button" aria-haspopup="true" aria-expanded="false"
-                   title="Unmute/Mute Selected Tabs" className="dropdown-toggle nav-link">
-                  Unmute/Mute <span className="caret"></span></a>
-                <ul className="dropdown-menu">
-                  <li className="dropdown-item"><a onClick={()=>this.processSelectedTabs('muteSelected')} href="#" title="Mute all selected tabs">Mute</a></li>
-                  <li className="dropdown-item"><a onClick={()=>this.processSelectedTabs('unmuteSelected')} href="#" title="Unmute all selected tabs">Unmute</a></li>
-                  <li className="dropdown-item"><a onClick={()=>this.processSelectedTabs('toggleMuteSelected')} href="#" title="Toggle Mute selected tab">Toggle mute</a></li>
-                </ul>
-              </li>
-              <li className="nav-item"><a href="#" className="nav-link" onClick={()=> this.processSelectedTabs('closeSelected')}>Close</a></li>
-            </ul>
-
-          </section>*/}
       </header>,
-      <div className="tabs-list-container" key={2}>
-        <Tabsgroup preferences={this.props.preferences} tabs={this.state.tabs}>
-          {this.filterTabs().map(tab => 
-            // console.log(tab.title);
-             (
-              <CSSTransition
-                transitionName="fade"
-                classNames="fade"
-                appear={this.state.preferences.tabsGroup.tabsListAnimation}
-                exit={false}
-                key={tab.id}
-                timeout={{ enter: 200, exit: 0 }} >
-                {this.tabTemplate(tab)}
-              </CSSTransition>
-            )
-          , this)}
-        </Tabsgroup>
+      <div className="tabs-list-container">
+        <DragDropContext onDragEnd={ this.onDragEnd } key={2} >
+            <Tabsgroup preferences={this.props.preferences} tabs={this.state.tabs}>
+            {this.filterTabs().map(
+              tab => (
+                <CSSTransition
+                  transitionName="fade"
+                  classNames="fade"
+                  appear={this.state.preferences.tabsGroup.tabsListAnimation}
+                  exit={false}
+                  key={tab.id}
+                  timeout={{ enter: 200, exit: 0 }}
+                >
+
+                  {this.tabTemplate(tab)}
+                </CSSTransition>
+              )
+            )}
+          </Tabsgroup>
+        </DragDropContext>
       </div>,
     ];
   }
