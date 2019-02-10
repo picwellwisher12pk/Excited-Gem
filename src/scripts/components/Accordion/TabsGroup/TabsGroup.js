@@ -14,25 +14,25 @@ export default class TabsGroup extends React.Component {
     };
     this.render = this.render.bind(this);
   }
-  static getDerivedStateFromProps(nextProps, prevState) {
-    console.log("Tabsgroup.js getDerivedStateFromProps:",nextProps, prevState);
-    return nextProps;
-  }
+  // static getDerivedStateFromProps(nextProps, prevState) {
+  //   // console.log("Tabsgroup.js getDerivedStateFromProps:",nextProps, prevState);
+  //   // return nextProps;
+  // }
   componentDidMount() {
     console.log("tabsgroup mounted:",this.state.tabs);
   }
 
   render() {
-    console.log("tabgroup this props children",this.state.tabs,this.props.children);
+    // console.log("tabgroup this props children",this.state.tabs,this.props.children);
     const animated = `<TransitionGroup component="ul" className="tab tabs-list sortable selectable">
               ${this.props.children}
             </TransitionGroup>`;
     // const { innerRef } = this.props;
     // const staticList = `<ul className="tab tabs-list sortable selectable" ref=${provided.innerRef}> ${this.props.children}</ul>`;
     return (
-      <Droppable droppableId="droppable">
+      <Droppable droppableId="droppable" id={'droppable'}>
         {(provided, snapshot) => (
-          <ul className="tab tabs-list sortable selectable" ref={provided.innerRef}>
+          <ul className="tab tabs-list sortable selectable" ref={provided.innerRef} id={'droppableUL'}>
           {this.props.children}
           {provided.placeholder}
           </ul>

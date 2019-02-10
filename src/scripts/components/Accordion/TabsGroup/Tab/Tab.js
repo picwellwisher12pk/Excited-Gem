@@ -47,18 +47,19 @@ export default class Tab extends Component {
     let discarded = this.props.discarded;
     let audible = this.props.audible || this.props.muted;
     return (
-      <Draggable draggableId={this.props.id} index={this.props.position} className={`tab-item` + (checked ? ` checked` : ` `)+ (loading||discarded ? ` idle` : ` `)}>
+      <Draggable draggableId={this.props.id} key={this.props.id} data-id={this.props.id} id={this.props.id} index={this.props.position} className={`tab-item` + (checked ? ` checked` : ` `)+ (loading||discarded ? ` idle` : ` `)}>
       {(provided,snapshot)=>{
        return <li
        {...provided.draggableProps}
        {...provided.dragHandleProps}
-       ref={provided.innerRef}
-       key={this.props.id} data-id={this.props.id}
-       draggableId={this.props.id}
+  ref={provided.innerRef}
+      id={`draggable-`+this.props.position}
+
+       // draggableId={this.props.id}
        className={`tab-item` + (checked ? ` checked` : ` `)+ (loading||discarded ? ` idle` : ` `)}
        >
         <label className="tab-favicon" aria-label="favicon">
-          <img src={this.props.favicon} />
+          <img src={this.props.favIconUrl} />
           <input type="checkbox" onChange={this.isChecked.bind(this)} checked={this.props.checked} className="checkbox"/>
         </label>
         <a title={url} className="clickable tab-name" onClick={this.focusTab.bind(null, this.props.id)}
@@ -79,8 +80,7 @@ export default class Tab extends Component {
             <i className="fa fa-thumbtack fw-fw" />
           </li>
 
-          <li
-            title="Un/Mute Tab"
+          <li title="Un/Mute Tab"
             className={`clickable sound-tab` + (audible ? ` active` : ` disabled`)}
             onClick={() => this.props.toggleMute(this.props.id)}
           >

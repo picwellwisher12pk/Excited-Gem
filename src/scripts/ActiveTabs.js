@@ -488,8 +488,8 @@ export default class ActiveTabs extends React.Component {
         </section>
       </header>,
       <div className="tabs-list-container">
-        <DragDropContext onDragEnd={ this.onDragEnd } key={2} >
-            <Tabsgroup preferences={this.props.preferences} tabs={this.state.tabs}>
+        <DragDropContext onDragEnd={ this.onDragEnd } key={2} id={'activeTabs'}>
+            <Tabsgroup preferences={this.props.preferences} tabs={this.state.tabs} id={'tabsGroup'}>
             {this.filterTabs().map(
               tab => (
                 <CSSTransition
@@ -499,6 +499,7 @@ export default class ActiveTabs extends React.Component {
                   exit={false}
                   key={tab.id}
                   timeout={{ enter: 200, exit: 0 }}
+                  id={'csstransition'}
                 >
 
                   {this.tabTemplate(tab)}

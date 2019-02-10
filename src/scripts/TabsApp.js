@@ -39,6 +39,13 @@ browser.tabs.onUpdated.addListener(
         if(window.activeTabs)  window.activeTabs.setState({tabs});
       });
   });
+browser.tabs.onMoved.addListener(
+  (tabId,changeInfo, tabInfo) => {
+      getTabs().then(tabs => {
+        window.tabs = tabs;
+        if(window.activeTabs)  window.activeTabs.setState({tabs});
+      });
+  });
 
 browser.storage.local.get('preferences').then(result=> {
   console.log("Root",window.tabs,result.preferences,NODE_ENV);
