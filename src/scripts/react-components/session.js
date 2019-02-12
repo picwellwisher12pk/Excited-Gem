@@ -1,8 +1,8 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
 import { timeConverter } from '../components/general.js';
-import Tab from './tab.js';
-import packagedAndBroadcast from '../components/communications.js';
+import Tab from '../components/Accordion/Tabsgroup/Tab/Tab.js';
+let browser = require("webextension-polyfill");
 export default class Sessions extends React.Component {
   constructor(props) {
     super(props);
@@ -19,8 +19,7 @@ export default class Sessions extends React.Component {
 
   render() {
     let _this = this;
-    let sessions = this.state.data;
-    console.log('sessions.js', sessions);
+    let sessions = this.props.data;
     return (
       <div className="panel-group" id="accordion" role="tablist" aria-multiselectable="true">
         {sessions.map(function(value, index) {
@@ -31,7 +30,7 @@ export default class Sessions extends React.Component {
   }
 }
 Sessions.propTypes = {
-  data: React.PropTypes.array.isRequired,
+  // data: React.PropTypes.array.isRequired,
 };
 Sessions.defaultProps = {
   data: [],
