@@ -14,13 +14,12 @@ import '../styles/fontawesome5.scss';
 import '../styles/eg.scss';
 
 $(document).ready(function() {
-  let sessions = ReactDOM.render(<Sessions />, document.getElementById('all-sessions'));
-  // sessions.setState({data : getSessions()});
-  getSessions(sessions);
+    let sessions = ReactDOM.render(<Sessions />, document.getElementById('all-sessions'));
+    getSessions(sessions);
 
   $('#saveSessions-btn').on('click', function(e) {
     e.preventDefault();
-    saveSessions();
+    saveSessions(sessions);
   });
 
   $('#saveSessionsAndClose-btn').on('click', function() {

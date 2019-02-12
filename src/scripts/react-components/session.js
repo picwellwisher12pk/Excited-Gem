@@ -19,7 +19,7 @@ export default class Sessions extends React.Component {
 
   render() {
     let _this = this;
-    let sessions = this.props.data;
+    let sessions = this.state.data;
     return (
       <div className="panel-group" id="accordion" role="tablist" aria-multiselectable="true">
         {sessions.map(function(value, index) {

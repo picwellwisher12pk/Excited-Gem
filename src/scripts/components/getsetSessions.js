@@ -3,7 +3,7 @@ let allSessions = {
     sessions: []
 };
 
-export function saveSessions() {
+export function saveSessions(sessionsComponent) {
     browser.windows.getAll({ populate: true }).then(function(windows) {
         // let sessionsArray = [];
         let session = {
@@ -16,7 +16,7 @@ export function saveSessions() {
             session.windows[i] = windows[i].tabs;
         }
         // sessionsArray.push(session);
-        setIncStorage("sessions", session);
+        setIncStorage("sessions", session,sessionsComponent);
         console.info("Session saved:", session);
     });
 }
@@ -38,7 +38,7 @@ export function getSessions(sessionsComponent) {
 //Use timestamp as names to save sessions. and before saving look if tabs in current sessions are already saved in last session
 //if yes then don't save session. and alert. Tabs from curent session already exist in previously saved session.
 
-function setIncStorage(storagekey, newdata) {
+function setIncStorage(storagekey, newdata,sessionsComponent) {
     browser.storage.local.get([storagekey]).then(function(result) {
         //result[storagekey] ,oldData, = Array
         let sessionsArray = [];
@@ -50,6 +50,7 @@ function setIncStorage(storagekey, newdata) {
             jsonObj[storagekey] = sessionsArray;
             // console.log(jsonObj);
             browser.storage.local.set(jsonObj).then(function() {
+                sessionsComponent.setState({ data: sessionsArray });
                 browser.notifications.create(
                     "reminder", {
                         type: "basic",
@@ -65,6 +66,7 @@ function setIncStorage(storagekey, newdata) {
             console.log(sessionsArray,newdata);
             jsonObj[storagekey] = sessionsArray;
             browser.storage.local.set(jsonObj).then(function() {
+                sessionsComponent.setState({ data: sessionsArray });
                 browser.notifications.create(
                     "reminder", {
                         type: "basic",
