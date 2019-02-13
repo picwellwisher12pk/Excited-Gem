@@ -1,8 +1,8 @@
 import React from 'react';
-import ReactDOM from 'react-dom';
-import { timeConverter } from '../components/general.js';
-import Tab from '../components/Accordion/Tabsgroup/Tab/Tab.js';
-let browser = require("webextension-polyfill");
+import { timeConverter } from '../components/general';
+import Tab from '../components/Accordion/Tabsgroup/Tab/';
+import { removeSessions } from '../components/getsetSessions';
+let browser = require('webextension-polyfill');
 export default class Sessions extends React.Component {
   constructor(props) {
     super(props);
@@ -11,8 +11,11 @@ export default class Sessions extends React.Component {
       name: this.props.data.name,
       id: this.props.data.created,
     };
+    this.updateSessions = this.updateSessions.bind(this);
   }
-
+  updateSessions(data) {
+    this.setState({ data });
+  }
   handleClick() {
     console.log(this); // null
   }
@@ -21,9 +24,9 @@ export default class Sessions extends React.Component {
     let _this = this;
     let sessions = this.state.data;
     return (
-      <div className="panel-group" id="accordion" role="tablist" aria-multiselectable="true">
+      <div className="accordion" id="accordion" role="tablist" aria-multiselectable="true">
         {sessions.map(function(value, index) {
-          return <Session key={index} data={value} />;
+          return <Session key={index} data={value} updateSessions={_this.updateSessions} />;
         })}
       </div>
     );
@@ -40,6 +43,7 @@ class Session extends React.Component {
     super(props);
     this.state = {
       data: this.props.data,
+      show: false,
     };
   }
   exposeSessionNameInput() {
@@ -52,40 +56,67 @@ class Session extends React.Component {
       .toggleClass('col-sm-2');
     $('.eg .sessions .panel-group .panel-heading .session-name button.btn-primary').hide();
   }
+  componentDidMount() {}
+  // showToggle(){
+
+  // }
   renameSession(id) {
     this.setState({ name: event.target.value });
   }
   render() {
     let _this = this;
     let data = _this.state.data;
+    // console.log(this.state.data.created);
+    let dateTime = timeConverter(this.state.data.created);
     return (
-      <div key={data.created} data-id={data.created} className="panel panel-default">
-        <div className="panel-heading clearfix cf" role="tab">
-          <h4 className="panel-title ">
-            <a
-              role="button"
+      <div key={data.created} data-id={data.created} className="card">
+        <div className="card-header clearfix cf" id={data.created}>
+          <h5 className="mb-0 float-left">
+            <button
+              className="btn btn-link"
+              type="button"
               data-toggle="collapse"
-              data-parent="#accordion"
-              href={`#` + data.created}
+              data-target={`#collapse` + dateTime}
               aria-expanded="true"
+              aria-controls={`collapse` + dateTime}
               aria-controls={data.created}
+              onClick={() => _this.setState({ show: !_this.state.show })}
             >
-              {/* {timeConverter(created_at)} */}
-              {timeConverter(_this.state.data.created)}
-            </a>
+              {dateTime}
+            </button>
             <span className="pull-right">
               {data.windows.map(function(value, index) {
                 return (
-                  <small className="label label-success" key={index}>
-                    Window {index}: {value.length}
+                  <small className="badge badge-success" key={index}>
+                    {index + 1} : {value.length}
                   </small>
                 );
               })}
             </span>
-          </h4>
+          </h5>
+          <div className="float-right">
+            <button className="btn btn-sm btn-link">
+              <i className="fa fa-pen" />
+            </button>
+            <button
+              className="btn btn-sm btn-link text-danger"
+              onClick={() => {
+                console.log(removeSessions(data.created).then(item => item));
+                removeSessions(data.created).then(items => this.props.updateSessions(items));
+              }}
+            >
+              <i className="fa fa-times" />
+            </button>
+          </div>
         </div>
-        <div id={data.created} className="panel-collapse collapse in" role="tabpanel" aria-labelledby="headingOne">
-          <div className="panel-body">
+        <div
+          id={data.created}
+          className={`collapse` + (_this.state.show ? `show` : ``)}
+          data-parent="#accordion"
+          aria-labelledby={data.created}
+          id={`collapse` + dateTime}
+        >
+          <div className="card-body">
             {data.windows.map(function(value, index) {
               return <SessionsTabs data={value} key={index} windowID={index} />;
             })}

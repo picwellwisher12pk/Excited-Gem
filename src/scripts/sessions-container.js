@@ -14,8 +14,9 @@ import '../styles/fontawesome5.scss';
 import '../styles/eg.scss';
 
 $(document).ready(function() {
-    let sessions = ReactDOM.render(<Sessions />, document.getElementById('all-sessions'));
-    getSessions(sessions);
+  $('.collapse').collapse();
+  let sessions = ReactDOM.render(<Sessions />, document.getElementById('all-sessions'));
+  getSessions().then(items => sessions.setState({ data: items }));
 
   $('#saveSessions-btn').on('click', function(e) {
     e.preventDefault();
