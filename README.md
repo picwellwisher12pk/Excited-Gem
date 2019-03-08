@@ -1,3 +1,4 @@
+Big thanks to [BrowserStack](http://browserstack.com/) for the support. Because Excited gem is an extension for browsers, there was need to test the UI and features in multiple browsers across multiple devices and OS. There is where [BrowserStack](http://browserstack.com/) comes in. I am using [BrowserStack](http://browserstack.com/) for to test my extension on different browsers.
 # Excited Gem
 
 This repo is a quest to improve the famous extension for Chrome "OneTab" with respect to UI and UX along with some more useful options for regular Chrome/Firefox users and developers/programmers.
