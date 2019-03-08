@@ -6,7 +6,7 @@
     "homepage": "https://picwellwisher12pk.github.io/onetab-advanced/",
     "bugs": "{}",
     "logoimage": "images/logo.svg",
-    "license": "MIT",
+    "license": "GNU 3.0",
     "author": "Amir Hameed",
     "client": {
         "chrome": "chrome",
