@@ -23,7 +23,5 @@ $(document).ready(function() {
     saveSessions(sessions);
   });
 
-  $('#saveSessionsAndClose-btn').on('click', function() {
-    packagedAndBroadcast(sender, 'background', 'saveSessionsAndClose', null);
-  });
+
 });

@@ -1,7 +1,7 @@
 import React from 'react';
 import { timeConverter } from '../components/general';
 import Tab from '../components/Accordion/Tabsgroup/Tab/';
-import { removeSessions } from '../components/getsetSessions';
+import { removeSessions,renameSession } from '../components/getsetSessions';
 let browser = require('webextension-polyfill');
 export default class Sessions extends React.Component {
   constructor(props) {
@@ -60,14 +60,27 @@ class Session extends React.Component {
   // showToggle(){
 
   // }
-  renameSession(id) {
-    this.setState({ name: event.target.value });
+  // renameSession(id) {
+  //   this.setState({ name: event.target.value });
+  // }
+  renderTitle(){
+    if(this.state.data.name!='')
+        {  
+          return <React.Fragment><strong>{this.state.data.name}</strong> <small className="text-muted">{timeConverter(this.state.data.created)}</small></React.Fragment>;
+          } 
+        else 
+        {
+          return timeConverter(this.state.data.created); //show date time in human readable format  
+        }  
+
   }
   render() {
     let _this = this;
     let data = _this.state.data;
-    // console.log(this.state.data.created);
-    let dateTime = timeConverter(this.state.data.created);
+    let title = this.renderTitle();
+    let datetime = String(data.created);  
+  
+   
     return (
       <div key={data.created} data-id={data.created} className="card">
         <div className="card-header clearfix cf" id={data.created}>
@@ -76,13 +89,12 @@ class Session extends React.Component {
               className="btn btn-link"
               type="button"
               data-toggle="collapse"
-              data-target={`#collapse` + dateTime}
+              data-target={`#collapse` + datetime}
               aria-expanded="true"
-              aria-controls={`collapse` + dateTime}
-              aria-controls={data.created}
+              aria-controls={`collapse` + datetime}
               onClick={() => _this.setState({ show: !_this.state.show })}
             >
-              {dateTime}
+              {title}
             </button>
             <span className="pull-right">
               {data.windows.map(function(value, index) {
@@ -95,13 +107,16 @@ class Session extends React.Component {
             </span>
           </h5>
           <div className="float-right">
-            <button className="btn btn-sm btn-link">
+            <button className="btn btn-sm btn-link" onClick={() => {
+                let newTitle = prompt("Enter title/name for your collection!",(data.name?data.name:'untitled'));
+                renameSession(data.created,newTitle).then(items => this.props.updateSessions(items));
+              }}>
               <i className="fa fa-pen" />
             </button>
             <button
               className="btn btn-sm btn-link text-danger"
               onClick={() => {
-                console.log(removeSessions(data.created).then(item => item));
+                if (!confirm(`Are you sure you want to remove this session.`)) return false;
                 removeSessions(data.created).then(items => this.props.updateSessions(items));
               }}
             >
@@ -114,7 +129,7 @@ class Session extends React.Component {
           className={`collapse` + (_this.state.show ? `show` : ``)}
           data-parent="#accordion"
           aria-labelledby={data.created}
-          id={`collapse` + dateTime}
+          id={`collapse` + datetime}
         >
           <div className="card-body">
             {data.windows.map(function(value, index) {
@@ -135,7 +150,9 @@ class SessionsTabs extends React.Component {
       windowID: this.props.windowID,
     };
   }
+  removeTab(){
 
+  }
   render() {
     let _this = this;
     let data = _this.state.data;
@@ -144,7 +161,7 @@ class SessionsTabs extends React.Component {
       <ul className="list-group" id={_this.props.windowID}>
         {data.map(function(value, index) {
           // console.log(value);
-          return <Tab key={value.id} id={value.id} favIconUrl={value.favIconUrl} url={value.url} title={value.title} />;
+          return <Tab key={value.id} id={value.id} favIconUrl={value.favIconUrl} url={value.url} title={value.title} closeTab={_this.removeTab(value.id)}/>;
         })}
       </ul>
     );

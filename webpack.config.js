@@ -1,10 +1,9 @@
-let webpack = require('webpack'),
-  path = require('path'),
+let path = require('path'),
   fileSystem = require('fs'),
-  dotenv = require('dotenv'),
+  // dotenv = require('dotenv'),
   env = require('./utils/env'),
   HtmlWebpackPlugin = require('html-webpack-plugin'),
-  ExtractTextPlugin = require('extract-text-webpack-plugin'),
+  MiniCssExtractPlugin = require("mini-css-extract-plugin"),
   WriteFilePlugin = require('write-file-webpack-plugin'),
   WebpackBar = require('webpackbar');
 
@@ -119,20 +118,20 @@ if (env.browserClient === 'chrome' || env.browserClient === 'all') {
     }
   ,
     plugins: [
-      new webpack.ProvidePlugin({
+      new ProvidePlugin({
         $: 'jquery',
         jQuery: 'jquery',
       }),
-      new ExtractTextPlugin({
+      new MiniCssExtractPlugin({
         filename: 'css/[name].css',
       }),
       // expose and write the allowed env vars on the compiled bundle
-      new webpack.DefinePlugin({
+      new DefinePlugin({
         'process.env.NODE_ENV': JSON.stringify(env.NODE_ENV),
         CLIENT: 'chrome',
       }),
 
-      new HtmlWebpackPlugin({
+      new MiniCssExtractPlugin({
         title: 'Excited Gem | Tabs',
         logotype: 'dev-logo.svg',
         template: path.join(__dirname, 'src', 'tabs.ejs'),
@@ -174,9 +173,9 @@ if (env.browserClient === 'firefox' || env.browserClient === 'all') {
           {
             test: /\.(scss)$/,
             use: [{
-              loader: 'style-loader', // inject CSS to page
+              loader: 'style-loader/url', // inject CSS to page
             }, {
-              loader: 'css-loader', // translates CSS into CommonJS modules
+              loader: 'file-loader', // translates CSS into CommonJS modules
             }, {
               loader: 'postcss-loader', // Run post css actions
               options: {
@@ -219,18 +218,18 @@ if (env.browserClient === 'firefox' || env.browserClient === 'all') {
         moduleExtensions: ['-loader'],
       },
       plugins: [
-        new webpack.ProvidePlugin({
-          $: 'jquery',
-          jQuery: 'jquery',
-        }),
-        new ExtractTextPlugin({
+        // new ProvidePlugin({
+        //   $: 'jquery',
+        //   jQuery: 'jquery',
+        // }),
+        new MiniCssExtractPlugin({
           filename: 'css/[name].css',
         }),
         // expose and write the allowed env vars on the compiled bundle
-        new webpack.DefinePlugin(envKeys),
-        new webpack.DefinePlugin({
-          NODE_ENV: JSON.stringify(env.NODE_ENV)
-        }),
+        // new DefinePlugin(envKeys),
+        // new DefinePlugin({
+        //   NODE_ENV: JSON.stringify(env.NODE_ENV)
+        // }),
 
         new HtmlWebpackPlugin({
           title: 'Excited Gem | Tabs',

@@ -13,6 +13,9 @@ export function saveSessions(sessionsComponent) {
       windows: [],
     };
     for (let i = 0; i < windows.length; i++) {
+      for(let j = 0; j<windows[i].tabs.length;i++){
+        console.log(windows[i].tabs[i]);
+      }
       session.windows[i] = windows[i].tabs;
     }
     // sessionsArray.push(session);
@@ -79,6 +82,18 @@ function setIncStorage(storagekey, newdata, sessionsComponent) {
 export function removeSessions(sessionID) {
   return getSessions().then(items => {
     let newData = items.filter(element => String(element.created) != String(sessionID));
+    let jsonObj = {};
+    jsonObj['sessions'] = newData;
+    return browser.storage.local.set(jsonObj).then(() => getSessions());
+  });
+}
+export function renameSession(sessionId,title){
+  return getSessions().then(items => {
+
+    let newData = items.map(element => {
+      if(String(element.created) == String(sessionId)) element['name'] = title;
+      return element;
+      });
     let jsonObj = {};
     jsonObj['sessions'] = newData;
     return browser.storage.local.set(jsonObj).then(() => getSessions());
