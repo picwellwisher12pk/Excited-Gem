@@ -77,12 +77,12 @@ export default class Tab extends React.Component {
         </label>
         <a
           title={url}
-          className="clickable tab-name"
+          className="clickable tab-name clip"
           onClick={this.focusTab.bind(null, this.props.id)}
           dangerouslySetInnerHTML={{ __html: title }}
         />
         <span
-          className="tab-url trimmed dimmed"
+          className="tab-url trimmed dimmed clip"
           dangerouslySetInnerHTML={{ __html: url }}
           onClick={this.focusTab.bind(null, this.props.id)}
         />
@@ -105,7 +105,7 @@ export default class Tab extends React.Component {
             className={`clickable sound-tab` + (audible ? ` active` : ` disabled`)}
             onClick={() => this.props.toggleMute(this.props.id)}
           >
-            <i className={`fw-fw ` + (!this.state.muted ? `fas fa-volume-up` : `far fa-volume-mute`)} />
+            <i className={`fw-fw ` + (!this.state.muted ? `far fa-volume-up` : `far fa-volume-mute`)} />
           </li>
           <li
             title="Close Tab"

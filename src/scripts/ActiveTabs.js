@@ -458,7 +458,7 @@ export default class ActiveTabs extends React.Component {
                 title={!this.state.allPinned ? `Pin All` : `Unpin All`}
                 className="nav-link"
               >
-                <i className={!this.state.allPinned ? `fas fa-map-marker` : `fal fa-map-marker-slash`} />
+                <i className={!this.state.allPinned ? `fal fa-map-marker` : `fal fa-map-marker-slash`} />
               </a>
             </li>
             <li style={{ marginRight: 18 }} className="nav-item">
