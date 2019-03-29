@@ -1,7 +1,7 @@
 let webpack = require('webpack'),
   path = require('path'),
   fileSystem = require('fs'),
-  dotenv = require('dotenv'),
+  // dotenv = require('dotenv'),
   env = require('./utils/env'),
   HtmlWebpackPlugin = require('html-webpack-plugin'),
   ExtractTextPlugin = require('extract-text-webpack-plugin'),
