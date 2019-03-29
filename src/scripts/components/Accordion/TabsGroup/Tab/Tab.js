@@ -97,7 +97,7 @@ export default class Tab extends React.Component {
             onClick={() => this.props.togglePin(this.props.id)}
             aria-label="pinned"
           >
-            <i className="fa fa-thumbtack fw-fw" />
+            <i className="far fa-map-marker fw-fw" />
           </li>
 
           <li
@@ -105,7 +105,7 @@ export default class Tab extends React.Component {
             className={`clickable sound-tab` + (audible ? ` active` : ` disabled`)}
             onClick={() => this.props.toggleMute(this.props.id)}
           >
-            <i className={`fa fw-fw ` + (!this.state.muted ? ` fa-volume-up` : ` fa-volume-mute`)} />
+            <i className={`fw-fw ` + (!this.state.muted ? `fas fa-volume-up` : `far fa-volume-mute`)} />
           </li>
           <li
             title="Close Tab"
@@ -114,7 +114,7 @@ export default class Tab extends React.Component {
             onClick={() => this.props.closeTab(this.props.id)}
             data-command="remove"
           >
-            <i className="fa fa-times-circle fw-fw" />
+            <i className="far fa-times fw-fw" />
           </li>
         </ul>
       </li>

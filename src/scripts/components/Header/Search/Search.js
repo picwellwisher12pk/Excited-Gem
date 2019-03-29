@@ -57,7 +57,7 @@ export default class Search extends React.Component {
         <section className="search-bar" style={{ width: '66%', paddingRight: 0 }}>
           <div id="filter-tabs" className="input-group filter-tabs">
             <i
-              className={'icon fa ' + (this.state.empty ? 'fa-search text-secondary' : 'fa-times text-danger cp')}
+              className={'icon fal ' + (this.state.empty ? 'fa-search text-secondary' : 'fa-times text-danger cp')}
               onClick={() => {
                 if (!this.state.empty) this.clear();
               }}

@@ -1,11 +1,12 @@
 //Scripts and Modules
-import { preferences } from './defaultPreferences';
+// import { preferences } from './defaultPreferences';
 const bootstrap = require('bootstrap');
 // const debug = require('debug')('activetabs');
+import { Scrollbars } from 'react-custom-scrollbars';
 import React from 'react';
 import PropTypes from 'prop-types';
 import 'react-devtools';
-import { TransitionGroup, CSSTransition } from 'react-transition-group';
+import { CSSTransition } from 'react-transition-group';
 let browser = require('webextension-polyfill');
 
 //JS libraries
@@ -17,11 +18,12 @@ import Search from './components/Header/Search/index';
 import Tabsgroup from './components/Accordion/TabsGroup/index';
 import Tab from './components/Accordion/TabsGroup/Tab/index';
 import WindowSelector from './components/WindowSelector';
-import ErrorBoundary from './ErrorBoundary';
+// import ErrorBoundary from './ErrorBoundary';
 
 //Styles
 import '../styles/fontawesome5/fa-solid.scss';
 import '../styles/fontawesome5/fa-regular.scss';
+import '../styles/fontawesome5/fa-light.scss';
 import '../styles/fontawesome5.scss';
 import '../styles/eg.scss';
 
@@ -240,7 +242,7 @@ export default class ActiveTabs extends React.Component {
             type: 'basic',
             iconUrl: '../images/logo.svg',
             title: 'Settings Saved',
-            message: 'Search settings updated',
+            message: 'Search settings updated'
           },
           function(notificationId) {}
         );
@@ -372,20 +374,20 @@ export default class ActiveTabs extends React.Component {
                 <button
                   className="btn btn-default"
                   type="button"
-                  title="Pin Selected"
-                  onClick={() => this.processSelectedTabs('pinSelected')}
-                  style={{ backgroundColor: 'white' }}
-                >
-                  <i className="fa fa-thumbtack fa-fw" />
-                </button>
-                <button
-                  className="btn btn-default"
-                  type="button"
                   title="Unpin Selected"
                   onClick={() => this.processSelectedTabs('unpinSelected')}
                   style={{ backgroundColor: 'white' }}
                 >
-                  <i className="far fa-thumbtack" />
+                  <i className="fal fa-map-marker-slash" />
+                </button>
+                <button
+                  className="btn btn-default"
+                  type="button"
+                  title="Pin Selected"
+                  onClick={() => this.processSelectedTabs('pinSelected')}
+                  style={{ backgroundColor: 'white' }}
+                >
+                  <i className="fas fa-map-marker fa-fw" />
                 </button>
               </div>
             </div>
@@ -407,7 +409,7 @@ export default class ActiveTabs extends React.Component {
                   onClick={() => this.processSelectedTabs('muteSelected')}
                   style={{ backgroundColor: 'white' }}
                 >
-                  <i className="fa fa-volume-mute" />
+                  <i className="fal fa-volume-slash" />
                 </button>
                 <button
                   className="btn btn-default"
@@ -416,7 +418,7 @@ export default class ActiveTabs extends React.Component {
                   onClick={() => this.processSelectedTabs('unmuteSelected')}
                   style={{ backgroundColor: 'white' }}
                 >
-                  <i className="fa fa-volume-up" />
+                  <i className="fas fa-volume-up" />
                 </button>
               </div>
             </div>
@@ -427,7 +429,7 @@ export default class ActiveTabs extends React.Component {
               onClick={() => this.processSelectedTabs('closeSelected')}
               style={{ backgroundColor: 'white' }}
             >
-              <i className="fa fa-times-circle" />
+              <i className="fas fa-times text-danger" />
             </button>
           </div>
           <ul className="nav nav-pills">
@@ -441,7 +443,7 @@ export default class ActiveTabs extends React.Component {
                   this.setState({ tabs: window.tabs });
                 }}
               >
-                <i className="fas fa-sync-alt fa-fw fa-sm" />
+                <i className="far fa-sync-alt fa-fw fa-sm" />
               </a>
             </li>
             <li style={{ marginRight: 18 }} className="nav-item">
@@ -456,7 +458,7 @@ export default class ActiveTabs extends React.Component {
                 title={!this.state.allPinned ? `Pin All` : `Unpin All`}
                 className="nav-link"
               >
-                <i className={!this.state.allPinned ? `far fa-thumbtack` : `fa fa-thumbtack`} />
+                <i className={!this.state.allPinned ? `fas fa-map-marker` : `fal fa-map-marker-slash`} />
               </a>
             </li>
             <li style={{ marginRight: 18 }} className="nav-item">
@@ -471,8 +473,7 @@ export default class ActiveTabs extends React.Component {
                 }}
                 title={!this.state.allMuted ? `Mute All` : `Unmute All`}
               >
-                {' '}
-                <i className={`fa fa-fw ` + (!this.state.allMuted ? `fa-volume-up` : `fa-volume-mute`)} />
+                <i className={`fal fa-fw ` + (!this.state.allMuted ? `fa-volume-up` : `fa-volume-up-slash`)} />
               </a>
             </li>
             <li style={{ marginRight: 0 }} className="nav-item">
@@ -482,7 +483,7 @@ export default class ActiveTabs extends React.Component {
                 className="nav-link"
                 onClick={() => this.processSelectedTabs('closeSelected', this.filterTabs().map(tab => tab.id))}
               >
-                <i className="fa fa-times-circle fw-fw" />
+                <i className="fal fa-times fw-fw" />
               </a>
             </li>
           </ul>
@@ -524,26 +525,29 @@ export default class ActiveTabs extends React.Component {
 
           </section>*/}
       </header>,
-      <div className="tabs-list-container" key={2}>
-        <Tabsgroup preferences={this.props.preferences} tabs={this.state.tabs}>
-          {this.filterTabs().map(
-            tab => (
-              // console.log(tab.title);
-              <CSSTransition
-                transitionName="fade"
-                classNames="fade"
-                appear={this.state.preferences.tabsGroup.tabsListAnimation}
-                exit={false}
-                key={tab.id}
-                timeout={{ enter: 200, exit: 0 }}
-              >
-                {this.tabTemplate(tab)}
-              </CSSTransition>
-            ),
-            this
-          )}
-        </Tabsgroup>
-      </div>,
+      <Scrollbars autoHeight={false} autoHeightMax={'auto'}>
+        <div className="tabs-list-container" key={2}>
+          <Tabsgroup preferences={this.props.preferences} tabs={this.state.tabs}>
+            {this.filterTabs().map(
+              tab => (
+                <CSSTransition
+                  transitionName="fade"
+                  classNames="fade"
+                  appear={
+                    this.state.preferences.tabsGroup.tabsListAnimation // console.log(tab.title);
+                  }
+                  exit={false}
+                  key={tab.id}
+                  timeout={{ enter: 200, exit: 0 }}
+                >
+                  {this.tabTemplate(tab)}
+                </CSSTransition>
+              ),
+              this
+            )}
+          </Tabsgroup>
+        </div>
+      </Scrollbars>,
     ];
   }
 }
