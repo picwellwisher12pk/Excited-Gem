@@ -6,7 +6,6 @@ let browser = require('webextension-polyfill');
 
 export default class Tab extends React.Component {
   constructor(props) {
-    // console.log('Tab constructor');
     super(props);
     this.state = { ...this.props };
     this.isChecked = this.isChecked.bind(this);
@@ -16,8 +15,6 @@ export default class Tab extends React.Component {
   }
   isChecked(event) {
     const value = event.target.checked;
-    // console.log("tabjs. this is checked",value);
-    // this.setState({checked: value});
     this.props.updateSelectedTabs(this.props.id, value);
   }
   componentWillReceiveProps(props) {
@@ -52,17 +49,51 @@ export default class Tab extends React.Component {
       title = this.state.title.replace(regex, `<mark>${window.searchTerm}</mark>`);
       url = this.state.url.replace(regex, `<mark>${window.searchTerm}</mark>`);
     }
-    let linkProps;
+    let linkProps = null;
+    let actionButtons = null;
     if (this.props.activeTab) {
-      linkProps = {
-        onClick: this.focusTab.bind(null, this.props.id),
-      };
+      linkProps = { onClick: this.focusTab.bind(null, this.props.id) };
+      actionButtons = [
+        <li
+          title="Un/Pin Tab"
+          className={`clickable pin-tab` + (pinned ? ` active` : ` disabled`)}
+          onClick={() => this.props.togglePin(this.props.id)}
+          aria-label="pinned"
+        >
+          <i className="far fa-map-marker fw-fw" />
+        </li>,
+        <li
+          title="Un/Mute Tab"
+          className={`clickable sound-tab` + (audible ? ` active` : ` disabled`)}
+          onClick={() => this.props.toggleMute(this.props.id)}
+        >
+          <i className={`fw-fw ` + (!this.state.muted ? `far fa-volume-up` : `far fa-volume-mute`)} />
+        </li>,
+        <li
+          title="Close Tab"
+          className="clickable remove-tab"
+          data-id={this.props.id}
+          onClick={() => this.props.closeTab(this.props.id)}
+          data-command="remove"
+        >
+          <i className="far fa-times fw-fw" />
+        </li>,
+      ];
     } else {
-      linkProps = {
-        href: this.props.url,
-        target: '_blank',
-      };
+      linkProps = { href: this.props.url, target: '_blank' };
+      actionButtons = (
+        <li
+          title="Remove"
+          className="clickable remove-tab"
+          data-id={this.props.id}
+          onClick={() => this.props.removeTab(this.props.id)}
+          data-command="remove"
+        >
+          <i className="far fa-times fw-fw" />
+        </li>
+      );
     }
+
     let checked = this.state.checked;
     let pinned = this.state.pinned;
     let loading = this.state.status == 'loading';
@@ -94,31 +125,7 @@ export default class Tab extends React.Component {
             onClick={this.infoModal.bind(null, this.state.data)}
           <i className="fa fa-info-circle fw-fw" />
           </li> */}
-          <li
-            title="Un/Pin Tab"
-            className={`clickable pin-tab` + (pinned ? ` active` : ` disabled`)}
-            onClick={() => this.props.togglePin(this.props.id)}
-            aria-label="pinned"
-          >
-            <i className="far fa-map-marker fw-fw" />
-          </li>
-
-          <li
-            title="Un/Mute Tab"
-            className={`clickable sound-tab` + (audible ? ` active` : ` disabled`)}
-            onClick={() => this.props.toggleMute(this.props.id)}
-          >
-            <i className={`fw-fw ` + (!this.state.muted ? `far fa-volume-up` : `far fa-volume-mute`)} />
-          </li>
-          <li
-            title="Close Tab"
-            className="clickable remove-tab"
-            data-id={this.props.id}
-            onClick={() => this.props.closeTab(this.props.id)}
-            data-command="remove"
-          >
-            <i className="far fa-times fw-fw" />
-          </li>
+          {actionButtons}
         </ul>
       </li>
     );
