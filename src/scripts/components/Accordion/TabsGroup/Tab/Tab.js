@@ -31,7 +31,7 @@ export default class Tab extends React.Component {
   }
   componentWillReceiveProps(props) {
     this.setState({ id: props.id });
-    this.setState({ key: props.key });
+    if (props.key) this.setState({ key: props.key });
     this.setState({ indexkey: props.indexkey });
     this.setState({ url: props.url });
     this.setState({ discarded: props.discarded });
@@ -45,15 +45,23 @@ export default class Tab extends React.Component {
     this.setState({ status: props.status });
   }
   render() {
-    // console.log('Tab.js: render checked', this.state.checked);
     let title = this.state.title;
     let url = this.state.url;
     if (window.searchTerm) {
-      // console.log("search term found",window.searchTerm);
       let regex = new RegExp(window.searchTerm, 'gi');
       title = this.state.title.replace(regex, `<mark>${window.searchTerm}</mark>`);
       url = this.state.url.replace(regex, `<mark>${window.searchTerm}</mark>`);
-      // console.log('title url postprocess', title, url);
+    }
+    let linkProps;
+    if (this.props.activeTab) {
+      linkProps = {
+        onClick: this.focusTab.bind(null, this.props.id),
+      };
+    } else {
+      linkProps = {
+        href: this.props.url,
+        target: '_blank',
+      };
     }
     let checked = this.state.checked;
     let pinned = this.state.pinned;
@@ -75,12 +83,7 @@ export default class Tab extends React.Component {
             className="checkbox"
           />
         </label>
-        <a
-          title={url}
-          className="clickable tab-name clip"
-          onClick={this.focusTab.bind(null, this.props.id)}
-          dangerouslySetInnerHTML={{ __html: title }}
-        />
+        <a title={url} {...linkProps} dangerouslySetInnerHTML={{ __html: title }} />
         <span
           className="tab-url trimmed dimmed clip"
           dangerouslySetInnerHTML={{ __html: url }}

@@ -1,15 +1,14 @@
 import React from 'react';
 import { timeConverter } from '../components/general';
 import Tab from '../components/Accordion/Tabsgroup/Tab/';
-import { removeSessions } from '../components/getsetSessions';
-let browser = require('webextension-polyfill');
+import { renameSession, removeSessions, getSessions } from '../components/getsetSessions';
+// import { Scrollbars } from 'react-custom-scrollbars';
+// let browser = require('webextension-polyfill');
 export default class Sessions extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
       data: this.props.data,
-      name: this.props.data.name,
-      id: this.props.data.created,
     };
     this.updateSessions = this.updateSessions.bind(this);
   }
@@ -19,10 +18,12 @@ export default class Sessions extends React.Component {
   handleClick() {
     console.log(this); // null
   }
-
   render() {
     let _this = this;
     let sessions = this.state.data;
+    console.log(('Sessions': sessions));
+    console.log(this.props.data, this.state.data);
+    if (sessions == []) return 'No Session Saved.';
     return (
       <div className="accordion" id="accordion" role="tablist" aria-multiselectable="true">
         {sessions.map(function(value, index) {
@@ -43,30 +44,20 @@ class Session extends React.Component {
     super(props);
     this.state = {
       data: this.props.data,
+      id: this.props.created,
+      name: this.props.data.name,
       show: false,
     };
   }
-  exposeSessionNameInput() {
-    $('.eg .sessions .panel-group .panel-heading input.form-control')
-      .removeAttr('readOnly')
-      .toggleClass('col-sm-10')
-      .focus();
-    $('.eg .sessions .panel-group .panel-heading .session-name button.btn-success.save')
-      .show('fast')
-      .toggleClass('col-sm-2');
-    $('.eg .sessions .panel-group .panel-heading .session-name button.btn-primary').hide();
-  }
+
   componentDidMount() {}
   // showToggle(){
 
   // }
-  renameSession(id) {
-    this.setState({ name: event.target.value });
-  }
+
   render() {
     let _this = this;
-    let data = _this.state.data;
-    // console.log(this.state.data.created);
+    let data = _this.props.data;
     let dateTime = timeConverter(this.state.data.created);
     return (
       <div key={data.created} data-id={data.created} className="card">
@@ -82,7 +73,7 @@ class Session extends React.Component {
               aria-controls={data.created}
               onClick={() => _this.setState({ show: !_this.state.show })}
             >
-              {dateTime}
+              {this.props.data.name ? this.props.data.name : dateTime}
             </button>
             <span className="pull-right">
               {data.windows.map(function(value, index) {
@@ -95,17 +86,25 @@ class Session extends React.Component {
             </span>
           </h5>
           <div className="float-right">
-            <button className="btn btn-sm btn-link">
-              <i className="fa fa-pen" />
+            <button
+              className="btn btn-sm btn-link"
+              title="Rename/Retitle Session "
+              onClick={() => {
+                let sessionName = prompt('Please enter name for your session');
+                renameSession(data.created, sessionName).then(items => this.props.updateSessions(items));
+              }}
+            >
+              <i className="fal fa-pen" />
             </button>
             <button
               className="btn btn-sm btn-link text-danger"
+              title="Remove Session"
               onClick={() => {
-                console.log(removeSessions(data.created).then(item => item));
+                // console.log(removeSessions(data.created).then(item => item));
                 removeSessions(data.created).then(items => this.props.updateSessions(items));
               }}
             >
-              <i className="fa fa-times" />
+              <i className="fal fa-times" />
             </button>
           </div>
         </div>

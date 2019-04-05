@@ -267,6 +267,7 @@ export default class ActiveTabs extends React.Component {
         favIconUrl={tab.favIconUrl}
         status={tab.status}
         checked={checked}
+        activeTab={true}
         closeTab={this.closeTab}
         togglePin={this.togglePin}
         toggleMute={this.toggleMute}

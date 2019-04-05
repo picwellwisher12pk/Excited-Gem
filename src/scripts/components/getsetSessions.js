@@ -1,7 +1,7 @@
 let browser = require('webextension-polyfill');
-let allSessions = {
-  sessions: [],
-};
+// let allSessions = {
+//   sessions: [],
+// };
 
 export function saveSessions(sessionsComponent) {
   browser.windows.getAll({ populate: true }).then(function(windows) {
@@ -41,11 +41,11 @@ function setIncStorage(storagekey, newdata, sessionsComponent) {
     let sessionsArray = [];
     let oldData = result[storagekey] ? result[storagekey] : null;
     let jsonObj = {};
-    // console.log(oldData);
+    console.log(oldData);
     if (oldData) {
       sessionsArray = [...oldData, newdata];
       jsonObj[storagekey] = sessionsArray;
-      // console.log(jsonObj);
+      console.log(jsonObj);
       browser.storage.local.set(jsonObj).then(function() {
         sessionsComponent.setState({ data: sessionsArray });
         browser.notifications
@@ -58,9 +58,9 @@ function setIncStorage(storagekey, newdata, sessionsComponent) {
           .then(function(notificationId) {});
       });
     } else {
-      console.log('else');
+      // console.log('else');
       sessionsArray.push(newdata);
-      console.log(sessionsArray, newdata);
+      // console.log(sessionsArray, newdata);
       jsonObj[storagekey] = sessionsArray;
       browser.storage.local.set(jsonObj).then(function() {
         sessionsComponent.setState({ data: sessionsArray });
@@ -69,7 +69,7 @@ function setIncStorage(storagekey, newdata, sessionsComponent) {
             type: 'basic',
             iconUrl: '../images/extension-icon48.png',
             title: 'Data saved',
-            message: 'First session has been saved.',
+            message: 'First session has been saved.'
           })
           .then(function(notificationId) {});
       });
@@ -81,6 +81,16 @@ export function removeSessions(sessionID) {
     let newData = items.filter(element => String(element.created) != String(sessionID));
     let jsonObj = {};
     jsonObj['sessions'] = newData;
+    return browser.storage.local.set(jsonObj).then(() => getSessions());
+  });
+}
+export function renameSession(id, name) {
+  console.log('getset session');
+  return getSessions().then(data => {
+    let targetIndex = data.findIndex(element => element.created == id); /*?*/
+    data[targetIndex].name = name;
+    let jsonObj = {};
+    jsonObj['sessions'] = data;
     return browser.storage.local.set(jsonObj).then(() => getSessions());
   });
 }
