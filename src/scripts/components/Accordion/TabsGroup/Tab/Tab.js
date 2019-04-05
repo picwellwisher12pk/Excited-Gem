@@ -27,19 +27,23 @@ export default class Tab extends React.Component {
     // console.log("Tab.js updated",props,state);
   }
   componentWillReceiveProps(props) {
-    this.setState({ id: props.id });
-    if (props.key) this.setState({ key: props.key });
-    this.setState({ indexkey: props.indexkey });
+
     this.setState({ url: props.url });
-    this.setState({ discarded: props.discarded });
     this.setState({ title: props.title });
-    this.setState({ pinned: props.pinned });
-    this.setState({ position: props.position });
     this.setState({ favicon: props.favIconUrl });
-    this.setState({ audible: props.audible });
-    this.setState({ muted: props.muted });
-    this.setState({ checked: props.checked });
-    this.setState({ status: props.status });
+    if(props.activeTab){
+      this.setState({ id: props.id });
+      if (props.key) this.setState({ key: props.key });
+      this.setState({ indexkey: props.indexkey });
+      this.setState({ discarded: props.discarded });
+      this.setState({ pinned: props.pinned });
+      this.setState({ position: props.position });
+      this.setState({ audible: props.audible });
+      this.setState({ muted: props.muted });
+      this.setState({ checked: props.checked });
+      this.setState({ status: props.status });
+    }
+
   }
   render() {
     let title = this.state.title;

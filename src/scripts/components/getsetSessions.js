@@ -13,7 +13,16 @@ export function saveSessions(sessionsComponent) {
       windows: [],
     };
     for (let i = 0; i < windows.length; i++) {
-      session.windows[i] = windows[i].tabs;
+      let strippedTabs = windows[i].tabs.map((cur, index) => {
+        let tab = {};
+        tab['url'] = cur.url;
+        tab['title'] = cur.title;
+        tab['favIconUrl'] = cur.favIconUrl;
+        tab['windowId'] = cur.windowId;
+        return tab;
+      });
+      console.log(strippedTabs);
+      session.windows[i] = strippedTabs;
     }
     // sessionsArray.push(session);
     setIncStorage('sessions', session, sessionsComponent);
@@ -53,7 +62,7 @@ function setIncStorage(storagekey, newdata, sessionsComponent) {
             type: 'basic',
             iconUrl: '../images/extension-icon48.png',
             title: 'Data saved',
-            message: 'A new Session has been saved!',
+            message: 'A new Session has been saved!'
           })
           .then(function(notificationId) {});
       });
