@@ -76,10 +76,10 @@ class Session extends React.Component {
               {this.props.data.name ? this.props.data.name : dateTime}
             </button>
             <span className="pull-right">
-              {data.windows.map(function(value, index) {
+              {Object.keys(data.windows).map(function(key, index) {
                 return (
                   <small className="badge badge-success" key={index}>
-                    {index + 1} : {value.length}
+                    {index + 1} : {data.windows[key].length}
                   </small>
                 );
               })}
@@ -115,11 +115,9 @@ class Session extends React.Component {
           aria-labelledby={data.created}
           id={`collapse` + dateTime}
         >
-          <div className="card-body">
-            {data.windows.map(function(value, index) {
-              return <SessionsTabs data={value} key={index} windowID={index} />;
-            })}
-          </div>
+          {Object.keys(data.windows).map(function(key, index) {
+            return <SessionsTabs data={data.windows[key]} key={index} windowID={key} />;
+          })}
         </div>
       </div>
     );
@@ -140,7 +138,7 @@ class SessionsTabs extends React.Component {
     let data = _this.state.data;
     // console.log("session tabs", data);
     return (
-      <ul className="list-group" id={_this.props.windowID}>
+      <ul className="list-group list-group-flush" id={_this.props.windowID}>
         {data.map(function(value, index) {
           // console.log(value);
           return <Tab key={value.id} id={value.id} favIconUrl={value.favIconUrl} url={value.url} title={value.title} />;

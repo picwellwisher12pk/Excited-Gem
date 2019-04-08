@@ -2,7 +2,9 @@
 <html lang="en">
 
 <head>
-    <title><%= htmlWebpackPlugin.options.title %></title>
+    <title>
+        <%= htmlWebpackPlugin.options.title %>
+    </title>
 </head>
 
 <body class="eg">
@@ -12,7 +14,8 @@
             <div class="container-fluid">
                 <!-- Brand and toggle get grouped for better mobile display-->
                 <div class="navbar-header pull-left">
-                    <button type="button" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1" aria-expanded="false" class="navbar-toggle collapsed"><span class="sr-only">Toggle navigation</span><span class="icon-bar"></span><span class="icon-bar"></span><span class="icon-bar"></span></button>
+                    <button type="button" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1" aria-expanded="false" class="navbar-toggle collapsed"><span class="sr-only">Toggle navigation</span><span
+              class="icon-bar"></span><span class="icon-bar"></span><span class="icon-bar"></span></button>
                     <a href="#" class="navbar-brand"><img src="images/dev-logo.png" alt="" width="31"></a>
                     <ul class="nav navbar-nav" style="margin-top:10px">
 
@@ -51,15 +54,25 @@
                     </a>
                 </li>
                 <li role="presentation">
+                    <a id="restoreRemove-btn" href="#" title="Save Active Tabs opened in all Chrome windows">
+            Restore Session and remove session(New Window)
+          </a>
+                </li>
+                <li role="presentation">
+                    <a id="restoreRemove-btn" href="#" title="Save Active Tabs opened in all Chrome windows">
+            Restore Session and keep session(New Window)
+          </a>
+                </li>
+                <!-- <li role="presentation">
                     <a id="saveSessions-btn" href="#" title="Save Active Tabs opened in all Chrome windows">
                         <i class="fas fa-chevron-up fa-fw"></i> Collapse All
                     </a>
-                </li>
-                <li role="presentation">
+                </li> -->
+                <!-- <li role="presentation">
                     <a id="saveSessions-btn" href="#" title="Save Active Tabs opened in all Chrome windows">
                         <i class="fas fa-chevron-down fa-fw"></i> Expand All
                     </a>
-                </li>
+                </li> -->
                 <!-- <li role="presentation">
                     <a id="saveSessionsAndClose-btn" href="#" title="Save Active Tabs opened in all Chrome windows and close Chrome">
                         <span aria-hidden="true" class="glyphicon glyphicon-save"> </span> Save Session and Close Chrome
@@ -78,6 +91,7 @@
     </div>
     <div id="react-container"></div>
 </body>
-<div id="infoModal" tabindex="-1" role="dialog" aria-labelledby="mySmallModalLabel" class="modal bs-example-modal-sm"></div>
+<div id="infoModal" tabindex="-1" role="dialog" aria-labelledby="mySmallModalLabel" class="modal bs-example-modal-sm">
+</div>
 
 </html>
