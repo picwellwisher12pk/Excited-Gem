@@ -1,7 +1,7 @@
 import React from 'react';
 import { timeConverter } from '../components/general';
 import Tab from '../components/Accordion/Tabsgroup/Tab/';
-import { renameSession, removeSessions, getSessions } from '../components/getsetSessions';
+import { renameSession, removeSessions, removeTab } from '../components/getsetSessions';
 // import { Scrollbars } from 'react-custom-scrollbars';
 // let browser = require('webextension-polyfill');
 export default class Sessions extends React.Component {
@@ -21,8 +21,6 @@ export default class Sessions extends React.Component {
   render() {
     let _this = this;
     let sessions = this.state.data;
-    console.log(('Sessions': sessions));
-    console.log(this.props.data, this.state.data);
     if (sessions == []) return 'No Session Saved.';
     return (
       <div className="accordion" id="accordion" role="tablist" aria-multiselectable="true">
@@ -49,7 +47,9 @@ class Session extends React.Component {
       show: false,
     };
   }
-
+  updateSessions(data) {
+    this.props.updateSessions(data);
+  }
   componentDidMount() {}
   // showToggle(){
 
@@ -58,7 +58,7 @@ class Session extends React.Component {
   render() {
     let _this = this;
     let data = _this.props.data;
-    let dateTime = timeConverter(this.state.data.created);
+    let dateTime = timeConverter(this.props.data.created);
     return (
       <div key={data.created} data-id={data.created} className="card">
         <div className="card-header clearfix cf" id={data.created}>
@@ -100,7 +100,6 @@ class Session extends React.Component {
               className="btn btn-sm btn-link text-danger"
               title="Remove Session"
               onClick={() => {
-                // console.log(removeSessions(data.created).then(item => item));
                 removeSessions(data.created).then(items => this.props.updateSessions(items));
               }}
             >
@@ -116,7 +115,15 @@ class Session extends React.Component {
           id={`collapse` + dateTime}
         >
           {Object.keys(data.windows).map(function(key, index) {
-            return <SessionsTabs data={data.windows[key]} key={index} windowID={key} />;
+            return (
+              <SessionsTabs
+                data={data.windows[key]}
+                key={index}
+                windowID={key}
+                sessionID={data.created}
+                updateSessions={_this.updateSessions}
+              />
+            );
           })}
         </div>
       </div>
@@ -130,18 +137,30 @@ class SessionsTabs extends React.Component {
     this.state = {
       data: this.props.data,
       windowID: this.props.windowID,
+      sessionID: this.props.sessionID,
     };
+    this.removeTab = this.removeTab.bind(this);
   }
-
+  removeTab(tabURL) {
+    removeTab(tabURL, this.props.windowID, this.props.sessionID).then(items => window.sessions.updateSessions(items));
+  }
   render() {
     let _this = this;
-    let data = _this.state.data;
-    // console.log("session tabs", data);
+    let data = _this.props.data;
+
     return (
       <ul className="list-group list-group-flush" id={_this.props.windowID}>
         {data.map(function(value, index) {
-          // console.log(value);
-          return <Tab key={value.id} id={value.id} favIconUrl={value.favIconUrl} url={value.url} title={value.title} />;
+          return (
+            <Tab
+              key={value.index}
+              id={value.id}
+              favIconUrl={value.favIconUrl}
+              url={value.url}
+              removeTab={_this.removeTab}
+              title={value.title}
+            />
+          );
         })}
       </ul>
     );

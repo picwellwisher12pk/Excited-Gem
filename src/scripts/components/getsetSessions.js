@@ -77,7 +77,7 @@ function setIncStorage(storagekey, newdata, sessionsComponent) {
             type: 'basic',
             iconUrl: '../images/extension-icon48.png',
             title: 'Data saved',
-            message: 'First session has been saved.',
+            message: 'First session has been saved.'
           })
           .then(function(notificationId) {});
       });
@@ -93,10 +93,19 @@ export function removeSessions(sessionID) {
   });
 }
 export function renameSession(id, name) {
-  console.log('getset session');
   return getSessions().then(data => {
     let targetIndex = data.findIndex(element => element.created == id); /*?*/
     data[targetIndex].name = name;
+    let jsonObj = {};
+    jsonObj['sessions'] = data;
+    return browser.storage.local.set(jsonObj).then(() => getSessions());
+  });
+}
+export function removeTab(tabURL, windowId, sessionId) {
+  return getSessions().then(data => {
+    let Tabs = data[data.findIndex(element => element.created == sessionId)].windows[windowId];
+    let newData = Tabs.filter(tab => tab.url != tabURL);
+    data[data.findIndex(element => element.created == sessionId)].windows[windowId] = [...newData];
     let jsonObj = {};
     jsonObj['sessions'] = data;
     return browser.storage.local.set(jsonObj).then(() => getSessions());

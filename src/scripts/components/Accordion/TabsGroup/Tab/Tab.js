@@ -27,11 +27,10 @@ export default class Tab extends React.Component {
     // console.log("Tab.js updated",props,state);
   }
   componentWillReceiveProps(props) {
-
     this.setState({ url: props.url });
     this.setState({ title: props.title });
     this.setState({ favicon: props.favIconUrl });
-    if(props.activeTab){
+    if (props.activeTab) {
       this.setState({ id: props.id });
       if (props.key) this.setState({ key: props.key });
       this.setState({ indexkey: props.indexkey });
@@ -43,7 +42,6 @@ export default class Tab extends React.Component {
       this.setState({ checked: props.checked });
       this.setState({ status: props.status });
     }
-
   }
   render() {
     let title = this.state.title;
@@ -90,7 +88,7 @@ export default class Tab extends React.Component {
           title="Remove"
           className="clickable remove-tab"
           data-id={this.props.id}
-          onClick={() => this.props.removeTab(this.props.id)}
+          onClick={() => this.props.removeTab(this.props.url)}
           data-command="remove"
         >
           <i className="far fa-times fw-fw" />
