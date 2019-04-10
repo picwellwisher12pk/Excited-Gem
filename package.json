@@ -12,6 +12,7 @@
         "chrome": "chrome",
         "firefox": "browser"
     },
+
     "browser": {
         "./dist/index.js": "./firefox/tabs.js"
     },
