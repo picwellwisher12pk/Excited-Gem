@@ -1,4 +1,5 @@
 import React from 'react';
+var browser = require('webextension-polyfill');
 import { timeConverter } from '../components/general';
 import Tab from '../components/Accordion/Tabsgroup/Tab/';
 import { renameSession, removeSessions, removeTab } from '../components/getsetSessions';
@@ -50,15 +51,28 @@ class Session extends React.Component {
   updateSessions(data) {
     this.props.updateSessions(data);
   }
-  componentDidMount() {}
-  // showToggle(){
-
-  // }
-
+  restoreSession(data, removeSession, sessionID) {
+    Object.keys(data.windows).forEach((keyWindow, indexWindow) => {
+      browser.windows
+        .create({
+          url: [...data.windows[keyWindow].map(tab => tab.url)],
+        })
+        .then(
+          windowInfo => {
+            if (removeSession) {
+              console.log(`Created new tab: ${windowInfo.id}`);
+              removeSessions(sessionID).then(items => this.props.updateSessions(items));
+            }
+          },
+          error => console.error(`Error: ${error}`)
+        );
+    });
+  }
   render() {
     let _this = this;
     let data = _this.props.data;
     let dateTime = timeConverter(this.props.data.created);
+    let nameSpan = this.props.data.name ? <span className="session-name">{this.props.data.name}</span> : '';
     return (
       <div key={data.created} data-id={data.created} className="card">
         <div className="card-header clearfix cf" id={data.created}>
@@ -73,19 +87,36 @@ class Session extends React.Component {
               aria-controls={data.created}
               onClick={() => _this.setState({ show: !_this.state.show })}
             >
-              {this.props.data.name ? this.props.data.name : dateTime}
+              {nameSpan}
+              <span className="session-datetime">{dateTime}</span>
             </button>
             <span className="pull-right">
               {Object.keys(data.windows).map(function(key, index) {
                 return (
-                  <small className="badge badge-success" key={index}>
-                    {index + 1} : {data.windows[key].length}
+                  <small title="Tab count for window" className="session-tab-count badge badge-success" key={index}>
+                    {data.windows[key].length}
                   </small>
                 );
               })}
             </span>
           </h5>
           <div className="float-right">
+            <button
+              className="btn btn-sm btn-link"
+              title="Restore Tabs and witout deleting"
+              onClick={() => this.restoreSession(data)}
+            >
+              <i className="fal fa-external-link-square" />
+            </button>
+            <button
+              className="btn btn-sm btn-link"
+              title="Restore Tabs and remove them"
+              onClick={() => {
+                this.restoreSession(data, true, data.created).then(items => this.props.updateSessions(items));
+              }}
+            >
+              <i className="fal fa-external-link" />
+            </button>
             <button
               className="btn btn-sm btn-link"
               title="Rename/Retitle Session "
@@ -114,17 +145,15 @@ class Session extends React.Component {
           aria-labelledby={data.created}
           id={`collapse` + dateTime}
         >
-          {Object.keys(data.windows).map(function(key, index) {
-            return (
-              <SessionsTabs
-                data={data.windows[key]}
-                key={index}
-                windowID={key}
-                sessionID={data.created}
-                updateSessions={_this.updateSessions}
-              />
-            );
-          })}
+          {Object.keys(data.windows).map((key, index) => (
+            <SessionsTabs
+              data={data.windows[key]}
+              key={index}
+              windowID={key}
+              sessionID={data.created}
+              updateSessions={_this.updateSessions}
+            />
+          ))}
         </div>
       </div>
     );

@@ -35,13 +35,13 @@ NODE_ENV === 'production'
 NODE_ENV === 'production'
   ? (logo = require('../images/logo.png'))
   : (logo = require('../images/dev-logo.png'));
-import '../images/arrange.svg';
-import '../images/close-icon.svg';
-import '../images/info-icon.svg';
-import '../images/pin-icon.svg';
-import '../images/reload-icon.svg';
-import '../images/search-icon.svg';
-import '../images/sound-icon.svg';
+// import '../images/arrange.svg';
+// import '../images/close-icon.svg';
+// import '../images/info-icon.svg';
+// import '../images/pin-icon.svg';
+// import '../images/reload-icon.svg';
+// import '../images/search-icon.svg';
+// import '../images/sound-icon.svg';
 
 export default class ActiveTabs extends React.Component {
   constructor(props) {
@@ -152,8 +152,6 @@ export default class ActiveTabs extends React.Component {
     return true;
   }
   processSelectedTabs(action, selection = this.state.selectedTabs) {
-    // let selection = this.state.tabs.filter(tab => selection.includes(tab.id));
-    // console.log(selection,selection,this.state.selectedTabs,this.state.tabs.map(tab=>tab.id));
     switch (action) {
       case 'closeSelected':
         let message = 'Are you sure you want to close selected tabs';
@@ -177,7 +175,6 @@ export default class ActiveTabs extends React.Component {
 
       //Mute
       case 'muteSelected':
-        //console.log("muting");
         for (let tab of selection) this.muteTab(tab);
         break;
       case 'unmuteSelected':
@@ -242,7 +239,7 @@ export default class ActiveTabs extends React.Component {
             type: 'basic',
             iconUrl: '../images/logo.svg',
             title: 'Settings Saved',
-            message: 'Search settings updated'
+            message: 'Search settings updated',
           },
           function(notificationId) {}
         );
@@ -279,21 +276,35 @@ export default class ActiveTabs extends React.Component {
     // console.log(this.state.tabs.length,this.props.tabs.length);
     return [
       <header className="page-header" key={1}>
-        <nav className="navbar">
+        <nav className="navbar navbar-expand-lg navbar-expand-md">
           <div className="navbar-brand ">
             <a href="#" className="pull-left logo" style={{ marginTop: '10px' }}>
               <img src={logo} alt="" style={{ height: '40px', width: 'auto' }} />
             </a>
-            <div id="go-to-tabs">
-              Tabs{' '}
-              <span
-                className={`active-tab-counter badge ` + (window.tabs.length > 50 ? 'badge-danger' : 'badge-success')}
-              >
-                {window.tabs.length ? window.tabs.length : ''}
-              </span>
-              <span className="sr-only">(current)</span>
-            </div>
           </div>
+          <div className="collapse navbar-collapse" id="navbarNav">
+            <ul className="navbar-nav">
+              <li className="nav-item active">
+                <a className="nav-link text-white font-weight-bold" href="/tabs.html" id="go-to-tabs">
+                  Tabs
+                  <span
+                    className={
+                      `active-tab-counter badge ` + (window.tabs.length > 50 ? 'badge-danger' : 'badge-success')
+                    }
+                  >
+                    {window.tabs.length ? window.tabs.length : ''}
+                  </span>
+                  <span className="sr-only">(current)</span>
+                </a>
+              </li>
+              <li className="nav-item">
+                <a className="nav-link text-white" href="/sessions.html">
+                  Sessions
+                </a>
+              </li>
+            </ul>
+          </div>
+
           <Search
             regex={this.state.preferences.search.regex}
             ignoreCase={this.state.preferences.search.ignoreCase}
@@ -321,13 +332,6 @@ export default class ActiveTabs extends React.Component {
             </li>
 
             <li className="nav-item dropdown">
-              {/*<a className="nav-link dropdown-toggle" href='#' title="Rearrange/Sort Tabs" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                  <i className="fas fa-sort fa-fw" /> Rearrange by
-                </a>
-                <div className="dropdown-menu">
-                  <a className="dropdown-item" id="rearrange-url-btn" href="#" title="Rearrange with respect of URL" onClick={this.sortBy.bind(null,'url')}>URL</a>
-                  <a className="dropdown-item" id="rearrange-title-btn" href="#" title="Rearrange with respect of Title" onClick={this.sortBy.bind(null,'title')}>Title</a>
-                </div>*/}
               <div className="input-group" style={{ width: 'auto', marginRight: '15px' }}>
                 <a
                   className="form-control"

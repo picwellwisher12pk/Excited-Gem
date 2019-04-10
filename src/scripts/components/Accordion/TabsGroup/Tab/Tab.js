@@ -51,8 +51,20 @@ export default class Tab extends React.Component {
       title = this.state.title.replace(regex, `<mark>${window.searchTerm}</mark>`);
       url = this.state.url.replace(regex, `<mark>${window.searchTerm}</mark>`);
     }
+    let audible = this.state.audible || this.state.muted;
     let linkProps = null;
     let actionButtons = null;
+    let audioIcon = '';
+    if (!audible) {
+      audioIcon = `fal fa-volume`;
+    }
+    if (audible && !this.props.muted) {
+      audioIcon = `fas fa-volume`;
+    }
+    if (audible && this.props.muted) {
+      audioIcon = `fas fa-volume-slash`;
+    }
+
     if (this.props.activeTab) {
       linkProps = { onClick: this.focusTab.bind(null, this.props.id) };
       actionButtons = [
@@ -69,7 +81,7 @@ export default class Tab extends React.Component {
           className={`clickable sound-tab` + (audible ? ` active` : ` disabled`)}
           onClick={() => this.props.toggleMute(this.props.id)}
         >
-          <i className={`fw-fw ` + (!this.state.muted ? `far fa-volume-up` : `far fa-volume-mute`)} />
+          <i className={audioIcon} style={{ width: '30px', textAlign: 'center' }} />
         </li>,
         <li
           title="Close Tab"
@@ -100,7 +112,7 @@ export default class Tab extends React.Component {
     let pinned = this.state.pinned;
     let loading = this.state.status == 'loading';
     let discarded = this.state.discarded;
-    let audible = this.state.audible || this.state.muted;
+
     return (
       <li
         key={this.props.id}
@@ -116,7 +128,7 @@ export default class Tab extends React.Component {
             className="checkbox"
           />
         </label>
-        <a title={url} {...linkProps} dangerouslySetInnerHTML={{ __html: title }} />
+        <a className="clickable" title={url} {...linkProps} dangerouslySetInnerHTML={{ __html: title }} />
         <span
           className="tab-url trimmed dimmed clip"
           dangerouslySetInnerHTML={{ __html: url }}
