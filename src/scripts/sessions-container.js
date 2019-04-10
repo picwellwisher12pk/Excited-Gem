@@ -3,27 +3,25 @@ const $ = (jQuery = require('jquery'));
 const bootstrap = require('bootstrap');
 import React from 'react';
 import ReactDOM from 'react-dom';
-import * as general from './components/general.js';
-import Sessions from './react-components/session.js';
-import packagedAndBroadcast from './components/communications.js';
-import { saveSessions, getSessions } from './components/getsetSessions.js';
+// import * as general from './components/general.js';
+import Sessions from './react-components/session';
+import { saveSessions, getSessions } from './components/getsetSessions';
 
 //Styles
-import '../styles/bootstrap.scss';
+import '../styles/fontawesome5/fa-solid.scss';
+import '../styles/fontawesome5/fa-light.scss';
+import '../styles/fontawesome5/fa-regular.scss';
 import '../styles/fontawesome5.scss';
 import '../styles/eg.scss';
 
-const sender = 'content';
-
-// let sessions = Sessions;
-
 $(document).ready(function() {
-  let sessions = ReactDOM.render(<Sessions />, document.getElementById('all-sessions'));
-  getSessions(sessions);
+  $('.collapse').collapse();
+  window.sessions = ReactDOM.render(<Sessions />, document.getElementById('all-sessions'));
+  getSessions().then(items => window.sessions.setState({ data: items }));
 
   $('#saveSessions-btn').on('click', function(e) {
     e.preventDefault();
-    packagedAndBroadcast(sender, 'background', 'saveSessions', null);
+    saveSessions(sessions);
   });
 
   $('#saveSessionsAndClose-btn').on('click', function() {

@@ -7,6 +7,7 @@
 //
 // Styleguide 2.1.3.
 .search-bar {
+    position: relative;
     border: none;
     border-radius: 0;
     padding: 10px 15px;
@@ -16,8 +17,8 @@
         height: 40px !important;
         padding-left: 45px;
         box-shadow: none;
-        font-family: "Roboto Light",arial,sans-serif;
-        background-image: url('/images/search-icon.svg');
+        font-family: "Roboto Light", arial, sans-serif;
+        // background-image: url('/images/search-icon.svg');
         background-position: 15px center;
         background-repeat: no-repeat;
         background-size: 16px;
@@ -42,6 +43,7 @@
         border-radius: 4px 0 0 4px;
     }
     .filter-tabs {
+        position: relative;
         background-color: #FFF;
         transition: all 0.3s;
         width: 100%;
@@ -53,23 +55,34 @@
         &:focus {
             box-shadow: 0 2px 8px 0 rgba(0, 0, 0, 0.3);
         }
+        .icon {
+            position: absolute;
+            left: 15px;
+            top: 15px;
+            z-index: 100;
+        }
         .input-group-append {
             border: none;
             background: none;
             position: relative;
-            .input-group-text{
-              background-color: transparent;
-              border: none;
-              padding: 0.6rem 0.3rem;
-              padding-right: 1rem;
+            .input-group-text {
+                background-color: transparent;
+                border: none;
+                padding: 0.6rem 0.3rem;
+                padding-right: 1rem;
             }
         }
-      .custom-control-label{
-        user-select: none;
-      }
-      .custom-control-label::before,.custom-control-label::after{
-        top: .85rem;
-        left: -1rem;
-      }
+        .custom-control-label {
+            user-select: none;
+        }
+        .custom-control-label::before,
+        .custom-control-label::after {
+            top: .85rem;
+            left: -1rem;
+        }
     }
+}
+
+.cp {
+    cursor: pointer;
 }

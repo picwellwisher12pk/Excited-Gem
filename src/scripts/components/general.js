@@ -1,13 +1,11 @@
 let env = require('../../../utils/env');
-let client =  env.browserClient === 'firefox' ? browser : chrome;
-window.development = env.NODE_ENV==="development";
-export let homepageURL = client.extension.getURL('tabs.html');
+var browser = require('webextension-polyfill');
+window.development = env.NODE_ENV === 'development';
+export let homepageURL = browser.extension.getURL('tabs.html');
 let refinedTabs;
-// let allSessions = {
-//   // sessions
-// };
-let ignoredUrlPatterns = ['chrome://*', 'chrome-extension://*', 'http(s)?://localhost*'];
-let ignoredDataKeys = [
+
+export let ignoredUrlPatterns = ['chrome://*', 'chrome-extension://*', 'http(s)?://localhost*'];
+export let ignoredDataKeys = [
   'active',
   'autoDiscardable',
   'discarded',
@@ -54,8 +52,8 @@ export function removeKeys(keysToRemove, object) {
  * @param  {String} message [description]
  */
 export function saveData(data, message = 'Data saved') {
-  client.storage.local.set(data, () => {
-    client.notifications.create(
+  browser.storage.local.set(data, () => {
+    browser.notifications.create(
       'reminder',
       {
         type: 'basic',
@@ -173,11 +171,11 @@ export function getValue(object, path) {
   return o;
 }
 export function log() {
-    let trace = false;
+  let trace = false;
   if (window.development || window.debug) {
     console.group(arguments[0]);
     console.log(Array.prototype.slice.call(arguments));
-    trace ? console.trace(): '';
+    trace ? console.trace() : '';
     console.groupEnd();
   }
 }
@@ -213,8 +211,8 @@ export function timeConverter(UNIX_timestamp) {
 // Hide method from for-in loops
 Object.defineProperty(Array.prototype, 'equals', { enumerable: false });
 
-function quicksort(sortby,array) {
-  log("quicksort array",array);
+function quicksort(sortby, array) {
+  log('quicksort array', array);
   if (array.length <= 1) return array;
   let pivot = array[0];
   let left = [];
@@ -222,17 +220,17 @@ function quicksort(sortby,array) {
   for (let i = 1; i < array.length; i++) {
     array[i][sortby] < pivot[sortby] ? left.push(array[i]) : right.push(array[i]);
   }
-  log('left:',left,'right:',right);
-  return quicksort(sortby,left).concat(pivot, quicksort(sortby, right));
-};
+  log('left:', left, 'right:', right);
+  return quicksort(sortby, left).concat(pivot, quicksort(sortby, right));
+}
 
 export function sortTabs(sortby) {
-  let tabsList = quicksort(sortby,window.tabs);
-  log("after quicksort",tabsList);
+  let tabsList = quicksort(sortby, window.tabs);
+  log('after quicksort', tabsList);
   for (let i = 0; i < tabsList.length; i++) {
     let { id } = tabsList[i];
     setTimeout(() => {
-      client.tabs.move(id, { index: i });
+      browser.tabs.move(id, { index: i });
     }, sortDelay);
   }
 }
@@ -260,6 +258,3 @@ export function santizeTabs(tabs, ignoredUrlPatterns) {
   });
   return refinedTabs;
 }
-
-
-

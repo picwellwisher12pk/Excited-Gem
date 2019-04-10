@@ -2,40 +2,25 @@
 <html lang="en">
 
 <head>
-    <title>Excited Gem | Sessions</title>
-    <style>
-        .tabGroupTitleText {
-            font-family: 'Open Sans', 'Helvetica Neue', Arial, sans-serif;
-            color: #444;
-        }
-    </style>
+    <title>
+        <%= htmlWebpackPlugin.options.title %>
+    </title>
 </head>
 
 <body class="eg">
     <!-- Page Header -->
     <header class="page-header">
-        <nav class="navbar">
-            <div class="container-fluid">
-                <!-- Brand and toggle get grouped for better mobile display-->
-                <div class="navbar-header pull-left">
-                    <button type="button" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1" aria-expanded="false" class="navbar-toggle collapsed"><span class="sr-only">Toggle navigation</span><span class="icon-bar"></span><span class="icon-bar"></span><span class="icon-bar"></span></button>
-                    <a href="#" class="navbar-brand"><img src="images/gem.svg" alt="" width="31"></a>
-                    <ul class="nav navbar-nav" style="margin-top:10px">
-
-                        <li class="sessions active"><a href="sessions.html" class="">Sessions</a></li>
-                    </ul>
-
-                </div>
-                <!-- <section class="search-bar pull-right col-sm-10" style="padding-right: 0;">
-                    <div id="filter-tabs" class="input-group filter-tabs">
-                        <input id="quicksearch-input" type="text" placeholder="Search in Tab URL or Title" aria-label="..." class="quicksearch-input form-control regex">
-                        <span class="input-group-addon option-regex">
-                        <input id="filter-type-option-id" type="checkbox" aria-label="..."> Regex</span>
-                        <span class="input-group-addon option-case-sensitive">
-                        <input id="filterCase-option-id" type="checkbox" aria-label="..."> Case Sensitive
-                        </span>
-                    </div>
-                </section> -->
+        <nav class="navbar navbar-expand-lg navbar-expand-md">
+            <div class="navbar-brand ">
+                <a href="#" class="pull-left logo" style="margin-top: 10px;"><img src="images/logo.png" alt="" style="height: 40px; width: auto;"></a>
+            </div>
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav">
+                    <li class="nav-item active"><a class="nav-link text-white" href="/tabs.html" id="go-to-tabs">Tabs<span
+                class="sr-only">(current)</span></a>
+                    </li>
+                    <li class="nav-item"><a class="nav-link text-white font-weight-bold" href="/sessions.html">Sessions</a></li>
+                </ul>
             </div>
         </nav>
 
@@ -56,16 +41,16 @@
                         <i class="fas fa-save fa-fw"></i> Save Session
                     </a>
                 </li>
-                <li role="presentation">
+                <!-- <li role="presentation">
                     <a id="saveSessions-btn" href="#" title="Save Active Tabs opened in all Chrome windows">
                         <i class="fas fa-chevron-up fa-fw"></i> Collapse All
                     </a>
-                </li>
-                <li role="presentation">
+                </li> -->
+                <!-- <li role="presentation">
                     <a id="saveSessions-btn" href="#" title="Save Active Tabs opened in all Chrome windows">
                         <i class="fas fa-chevron-down fa-fw"></i> Expand All
                     </a>
-                </li>
+                </li> -->
                 <!-- <li role="presentation">
                     <a id="saveSessionsAndClose-btn" href="#" title="Save Active Tabs opened in all Chrome windows and close Chrome">
                         <span aria-hidden="true" class="glyphicon glyphicon-save"> </span> Save Session and Close Chrome
@@ -84,6 +69,7 @@
     </div>
     <div id="react-container"></div>
 </body>
-<div id="infoModal" tabindex="-1" role="dialog" aria-labelledby="mySmallModalLabel" class="modal bs-example-modal-sm"></div>
+<div id="infoModal" tabindex="-1" role="dialog" aria-labelledby="mySmallModalLabel" class="modal bs-example-modal-sm">
+</div>
 
 </html>

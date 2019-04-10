@@ -1,37 +1,39 @@
 import React from 'react';
-import ReactDOM from 'react-dom';
-import { timeConverter } from '../components/general.js';
-import Tab from './tab.js';
-import packagedAndBroadcast from '../components/communications.js';
+var browser = require('webextension-polyfill');
+import { timeConverter } from '../components/general';
+import Tab from '../components/Accordion/Tabsgroup/Tab/';
+import { renameSession, removeSessions, removeTab } from '../components/getsetSessions';
+// import { Scrollbars } from 'react-custom-scrollbars';
+// let browser = require('webextension-polyfill');
 export default class Sessions extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
       data: this.props.data,
-      name: this.props.data.name,
-      id: this.props.data.created,
     };
+    this.updateSessions = this.updateSessions.bind(this);
   }
-
+  updateSessions(data) {
+    this.setState({ data });
+  }
   handleClick() {
     console.log(this); // null
   }
-
   render() {
     let _this = this;
     let sessions = this.state.data;
-    console.log('sessions.js', sessions);
+    if (sessions == []) return 'No Session Saved.';
     return (
-      <div className="panel-group" id="accordion" role="tablist" aria-multiselectable="true">
+      <div className="accordion" id="accordion" role="tablist" aria-multiselectable="true">
         {sessions.map(function(value, index) {
-          return <Session key={index} data={value} />;
+          return <Session key={index} data={value} updateSessions={_this.updateSessions} />;
         })}
       </div>
     );
   }
 }
 Sessions.propTypes = {
-  data: React.PropTypes.array.isRequired,
+  // data: React.PropTypes.array.isRequired,
 };
 Sessions.defaultProps = {
   data: [],
@@ -41,56 +43,117 @@ class Session extends React.Component {
     super(props);
     this.state = {
       data: this.props.data,
+      id: this.props.created,
+      name: this.props.data.name,
+      show: false,
     };
   }
-  exposeSessionNameInput() {
-    $('.eg .sessions .panel-group .panel-heading input.form-control')
-      .removeAttr('readOnly')
-      .toggleClass('col-sm-10')
-      .focus();
-    $('.eg .sessions .panel-group .panel-heading .session-name button.btn-success.save')
-      .show('fast')
-      .toggleClass('col-sm-2');
-    $('.eg .sessions .panel-group .panel-heading .session-name button.btn-primary').hide();
+  updateSessions(data) {
+    this.props.updateSessions(data);
   }
-  renameSession(id) {
-    this.setState({ name: event.target.value });
+  restoreSession(data, removeSession, sessionID) {
+    Object.keys(data.windows).forEach((keyWindow, indexWindow) => {
+      browser.windows
+        .create({
+          url: [...data.windows[keyWindow].map(tab => tab.url)],
+        })
+        .then(
+          windowInfo => {
+            if (removeSession) {
+              console.log(`Created new tab: ${windowInfo.id}`);
+              removeSessions(sessionID).then(items => this.props.updateSessions(items));
+            }
+          },
+          error => console.error(`Error: ${error}`)
+        );
+    });
   }
   render() {
     let _this = this;
-    let data = _this.state.data;
+    let data = _this.props.data;
+    let dateTime = timeConverter(this.props.data.created);
+    let nameSpan = this.props.data.name ? <span className="session-name">{this.props.data.name}</span> : '';
     return (
-      <div key={data.created} data-id={data.created} className="panel panel-default">
-        <div className="panel-heading clearfix cf" role="tab">
-          <h4 className="panel-title ">
-            <a
-              role="button"
+      <div key={data.created} data-id={data.created} className="card">
+        <div className="card-header clearfix cf" id={data.created}>
+          <h5 className="mb-0 float-left">
+            <button
+              className="btn btn-link"
+              type="button"
               data-toggle="collapse"
-              data-parent="#accordion"
-              href={`#` + data.created}
+              data-target={`#collapse` + dateTime}
               aria-expanded="true"
+              aria-controls={`collapse` + dateTime}
               aria-controls={data.created}
+              onClick={() => _this.setState({ show: !_this.state.show })}
             >
-              {/* {timeConverter(created_at)} */}
-              {timeConverter(_this.state.data.created)}
-            </a>
+              {nameSpan}
+              <span className="session-datetime">{dateTime}</span>
+            </button>
             <span className="pull-right">
-              {data.windows.map(function(value, index) {
+              {Object.keys(data.windows).map(function(key, index) {
                 return (
-                  <small className="label label-success" key={index}>
-                    Window {index}: {value.length}
+                  <small title="Tab count for window" className="session-tab-count badge badge-success" key={index}>
+                    {data.windows[key].length}
                   </small>
                 );
               })}
             </span>
-          </h4>
-        </div>
-        <div id={data.created} className="panel-collapse collapse in" role="tabpanel" aria-labelledby="headingOne">
-          <div className="panel-body">
-            {data.windows.map(function(value, index) {
-              return <SessionsTabs data={value} key={index} windowID={index} />;
-            })}
+          </h5>
+          <div className="float-right">
+            <button
+              className="btn btn-sm btn-link"
+              title="Restore Tabs and witout deleting"
+              onClick={() => this.restoreSession(data)}
+            >
+              <i className="fal fa-external-link-square" />
+            </button>
+            <button
+              className="btn btn-sm btn-link"
+              title="Restore Tabs and remove them"
+              onClick={() => {
+                this.restoreSession(data, true, data.created).then(items => this.props.updateSessions(items));
+              }}
+            >
+              <i className="fal fa-external-link" />
+            </button>
+            <button
+              className="btn btn-sm btn-link"
+              title="Rename/Retitle Session "
+              onClick={() => {
+                let sessionName = prompt('Please enter name for your session');
+                renameSession(data.created, sessionName).then(items => this.props.updateSessions(items));
+              }}
+            >
+              <i className="fal fa-pen" />
+            </button>
+            <button
+              className="btn btn-sm btn-link text-danger"
+              title="Remove Session"
+              onClick={() => {
+                removeSessions(data.created).then(items => this.props.updateSessions(items));
+              }}
+            >
+              <i className="fal fa-times" />
+            </button>
           </div>
+        </div>
+        <div
+          id={data.created}
+          className={`collapse` + (_this.state.show ? `show` : ``)}
+          data-parent="#accordion"
+          aria-labelledby={data.created}
+          id={`collapse` + dateTime}
+        >
+          {Object.keys(data.windows).map((key, index) => (
+            <SessionsTabs
+              data={data.windows[key]}
+              key={index}
+              windowID={key}
+              sessionID={data.created}
+              updateSessions={_this.updateSessions}
+            />
+          ))}
         </div>
       </div>
     );
@@ -103,18 +166,30 @@ class SessionsTabs extends React.Component {
     this.state = {
       data: this.props.data,
       windowID: this.props.windowID,
+      sessionID: this.props.sessionID,
     };
+    this.removeTab = this.removeTab.bind(this);
   }
-
+  removeTab(tabURL) {
+    removeTab(tabURL, this.props.windowID, this.props.sessionID).then(items => window.sessions.updateSessions(items));
+  }
   render() {
     let _this = this;
-    let data = _this.state.data;
-    // console.log("session tabs", data);
+    let data = _this.props.data;
+
     return (
-      <ul className="list-group" id={_this.props.windowID}>
+      <ul className="list-group list-group-flush" id={_this.props.windowID}>
         {data.map(function(value, index) {
-          // console.log(value);
-          return <Tab key={value.id} id={value.id} favIconUrl={value.favIconUrl} url={value.url} title={value.title} />;
+          return (
+            <Tab
+              key={value.index}
+              id={value.id}
+              favIconUrl={value.favIconUrl}
+              url={value.url}
+              removeTab={_this.removeTab}
+              title={value.title}
+            />
+          );
         })}
       </ul>
     );
