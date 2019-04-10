@@ -1,6 +1,7 @@
+Big thanks to [BrowserStack](http://browserstack.com/) for the support. Because Excited gem is an extension for browsers, there was need to test the UI and features in multiple browsers across multiple devices and OS. There is where [BrowserStack](http://browserstack.com/) comes in. I am using [BrowserStack](http://browserstack.com/) for to test my extension on different browsers.
 # Excited Gem
 
-This repo is a quest to improve the famous extension for Chrome "OneTab" with respect to UI and UX along with some more useful options for regular Chrome users and developers/programmers.
+This repo is a quest to improve the famous extension for Chrome "OneTab" with respect to UI and UX along with some more useful options for regular Chrome/Firefox users and developers/programmers.
 
 ## Idea
 The thought to make such a thing happened when I faced few problems while using Chrome browser. I love to read and research a lot. And while doing that I end opening more than 50 tabs. Mostly 60 or 70. It is then when I start having problem of managing my tabs. With so many tabs stacked up, it was hard to know which tab was which. Sometimes I accidently closed a tab in try to select it.
