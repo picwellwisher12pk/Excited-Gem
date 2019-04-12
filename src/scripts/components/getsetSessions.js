@@ -2,7 +2,24 @@ let browser = require('webextension-polyfill');
 // let allSessions = {
 //   sessions: [],
 // };
-
+export function saveTabs(tabs) {
+  let session = {
+    created: +new Date(),
+    modified: null,
+    name: '',
+    windows: {},
+  };
+  for (let i = 0; i < tabs.length; i++) {
+    let strippedTabs = tabs.map((cur, index) => {
+      let tab = {};
+      tab['url'] = cur.url;
+      tab['title'] = cur.title;
+      return tab;
+    });
+    session.windows[0] = strippedTabs;
+  }
+  setIncStorage('sessions', session, window.sessions);
+}
 export function saveSessions(sessionsComponent) {
   browser.windows.getAll({ populate: true }).then(function(windows) {
     // let sessionsArray = [];
@@ -17,8 +34,6 @@ export function saveSessions(sessionsComponent) {
         let tab = {};
         tab['url'] = cur.url;
         tab['title'] = cur.title;
-        // tab['favIconUrl'] = cur.favIconUrl;
-        // tab['windowId'][cur.windowId] = cur.windowId;
         return tab;
       });
       session.windows[windows[i].id] = strippedTabs;
@@ -61,23 +76,21 @@ function setIncStorage(storagekey, newdata, sessionsComponent) {
             type: 'basic',
             iconUrl: '../images/extension-icon48.png',
             title: 'Data saved',
-            message: 'A new Session has been saved!',
+            message: 'A new Session has been saved!'
           })
           .then(function(notificationId) {});
       });
     } else {
-      // console.log('else');
       sessionsArray.push(newdata);
-      // console.log(sessionsArray, newdata);
       jsonObj[storagekey] = sessionsArray;
       browser.storage.local.set(jsonObj).then(function() {
-        sessionsComponent.setState({ data: sessionsArray });
+        if (sessionsComponent) sessionsComponent.setState({ data: sessionsArray });
         browser.notifications
           .create('reminder', {
             type: 'basic',
             iconUrl: '../images/extension-icon48.png',
             title: 'Data saved',
-            message: 'First session has been saved.'
+            message: 'Session has been saved.'
           })
           .then(function(notificationId) {});
       });
