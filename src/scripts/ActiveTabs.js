@@ -1,47 +1,40 @@
 //Scripts and Modules
 // import { preferences } from './defaultPreferences';
-const bootstrap = require('bootstrap');
+const bootstrap = require("bootstrap");
 // const debug = require('debug')('activetabs');
-import { Scrollbars } from 'react-custom-scrollbars';
-import React from 'react';
-import PropTypes from 'prop-types';
-import 'react-devtools';
-import { CSSTransition } from 'react-transition-group';
-let browser = require('webextension-polyfill');
+import { Scrollbars } from "react-custom-scrollbars";
+import React from "react";
+import PropTypes from "prop-types";
+import "react-devtools";
+import { CSSTransition } from "react-transition-group";
+let browser = require("webextension-polyfill");
 
 //JS libraries
-import { updateTabs, getTabs } from './components/browserActions';
-import { sortTabs } from './components/general.js';
+import { updateTabs, getTabs } from "./components/browserActions";
+import { sortTabs } from "./components/general.js";
 
 // React Components
-import Search from './components/Header/Search/index';
-import Tabsgroup from './components/Accordion/TabsGroup/index';
-import Tab from './components/Accordion/TabsGroup/Tab/index';
-import WindowSelector from './components/WindowSelector';
+import Search from "./components/Header/Search/index";
+import Tabsgroup from "./components/Accordion/TabsGroup/index";
+import Tab from "./components/Accordion/TabsGroup/Tab/index";
+import WindowSelector from "./components/WindowSelector";
 // import ErrorBoundary from './ErrorBoundary';
 
 //Styles
-import '../styles/fontawesome5/fa-solid.scss';
-import '../styles/fontawesome5/fa-regular.scss';
-import '../styles/fontawesome5/fa-light.scss';
-import '../styles/fontawesome5.scss';
-import '../styles/eg.scss';
+import "../styles/fontawesome5/fa-solid.scss";
+import "../styles/fontawesome5/fa-regular.scss";
+import "../styles/fontawesome5/fa-light.scss";
+import "../styles/fontawesome5.scss";
+import "../styles/eg.scss";
 
 //Images
 let logo;
-NODE_ENV === 'production'
-  ? (logo = require('../images/logo.svg'))
-  : (logo = require('../images/dev-logo.svg'));
-NODE_ENV === 'production'
-  ? (logo = require('../images/logo.png'))
-  : (logo = require('../images/dev-logo.png'));
-// import '../images/arrange.svg';
-// import '../images/close-icon.svg';
-// import '../images/info-icon.svg';
-// import '../images/pin-icon.svg';
-// import '../images/reload-icon.svg';
-// import '../images/search-icon.svg';
-// import '../images/sound-icon.svg';
+NODE_ENV === "production"
+  ? (logo = require("../images/logo.svg"))
+  : (logo = require("../images/dev-logo.svg"));
+NODE_ENV === "production"
+  ? (logo = require("../images/logo.png"))
+  : (logo = require("../images/dev-logo.png"));
 
 export default class ActiveTabs extends React.Component {
   constructor(props) {
@@ -52,13 +45,40 @@ export default class ActiveTabs extends React.Component {
       selectedTabs: [],
       allMuted: false,
       allSelected: false,
-      allPinned: false,
+      allPinned: false
     };
     this.setPreferences = this.setPreferences.bind(this);
     this.closeTab = this.closeTab.bind(this);
     this.searchInTabs = this.searchInTabs.bind(this);
     this.updateSelectedTabs = this.updateSelectedTabs.bind(this);
     this.togglePin = this.togglePin.bind(this);
+    const menu = document.querySelector("#context-menu");
+    let menuVisible = false;
+
+    const toggleMenu = command => {
+      menu.style.display = command === "show" ? "block" : "none";
+      menuVisible = !menuVisible;
+    };
+
+    const setPosition = ({ top, left }) => {
+      menu.style.left = `${left}px`;
+      menu.style.top = `${top}px`;
+      toggleMenu("show");
+    };
+
+    window.addEventListener("click", e => {
+      if (menuVisible) toggleMenu("hide");
+    });
+
+    window.addEventListener("contextmenu", e => {
+      e.preventDefault();
+      const origin = {
+        left: e.pageX,
+        top: e.pageY
+      };
+      setPosition(origin);
+      return false;
+    });
   }
   static getDerivedStateFromProps(nextProps, prevState) {
     // console.log(nextProps,prevState);
@@ -78,8 +98,8 @@ export default class ActiveTabs extends React.Component {
     let tempArray = this.state.selectedTabs;
     !selected ? tempArray.splice(tempArray.indexOf(id), 1) : tempArray.push(id);
     tempArray.length > 0
-      ? $('#selection-action').addClass('selection-active')
-      : $('#selection-action').removeClass('selection-active');
+      ? $("#selection-action").addClass("selection-active")
+      : $("#selection-action").removeClass("selection-active");
     this.setState({ selectedTabs: tempArray });
     this.setState({ tabs: window.tabs });
   }
@@ -92,13 +112,14 @@ export default class ActiveTabs extends React.Component {
   //Close
   closeTab(key, promptForClosure = this.state.preferences.promptForClosure) {
     if (promptForClosure) {
-      if (!confirm(`Are you sure you want to close the following tab\n` + key)) return false;
+      if (!confirm(`Are you sure you want to close the following tab\n` + key))
+        return false;
     }
     browser.tabs.remove(parseInt(key));
   }
   //Pinned
   pinTab(tabId) {
-    console.info('pinning');
+    console.info("pinning");
     browser.tabs.update(tabId, { pinned: true });
     getTabs().then(
       tabs => {
@@ -108,7 +129,7 @@ export default class ActiveTabs extends React.Component {
     );
   }
   unpinTab(tabId) {
-    console.info('unpinning');
+    console.info("unpinning");
     browser.tabs.update(tabId, { pinned: false });
     getTabs().then(
       tabs => {
@@ -153,48 +174,60 @@ export default class ActiveTabs extends React.Component {
   }
   processSelectedTabs(action, selection = this.state.selectedTabs) {
     switch (action) {
-      case 'closeSelected':
-        let message = 'Are you sure you want to close selected tabs';
+      case "closeSelected":
+        let message = "Are you sure you want to close selected tabs";
         if (selection.length == this.state.tabs.length)
-          message = 'Are you sure you want to close all the tabs? This will also close this window.';
+          message =
+            "Are you sure you want to close all the tabs? This will also close this window.";
         if (!confirm(message)) return false;
         for (let id of selection) this.closeTab(id, false);
         this.setState({ selectedTabs: [] });
-        $('#selection-action').removeClass('selection-active');
+        $("#selection-action").removeClass("selection-active");
         break;
+      case "toNewWindow":
+        let targetWindow = browser.windows.create();
+        targetWindow.then(windowInfo => {
+          browser.tabs.move(selection, { windowId: windowInfo.id, index: 0 });
+        });
 
-      case 'pinSelected':
+      case "toSession":
+
+      case "pinSelected":
         for (let tab of selection) this.pinTab(tab);
         break;
-      case 'unpinSelected':
+      case "unpinSelected":
         for (let tab of selection) this.unpinTab(tab);
         break;
-      case 'togglePinSelected':
-        for (let tab of selection) !tab.pinned ? this.pinTab(tab) : this.unpinTab(tab);
+      case "togglePinSelected":
+        for (let tab of selection)
+          !tab.pinned ? this.pinTab(tab) : this.unpinTab(tab);
         break;
 
       //Mute
-      case 'muteSelected':
+      case "muteSelected":
         for (let tab of selection) this.muteTab(tab);
         break;
-      case 'unmuteSelected':
+      case "unmuteSelected":
         for (let tab of selection) this.unmuteTab(tab);
         break;
-      case 'toggleMuteSelected':
-        for (let tab of selection) !tab.mutedInfo.muted ? this.muteTab(tab) : this.unmuteTab(tab);
+      case "toggleMuteSelected":
+        for (let tab of selection)
+          !tab.mutedInfo.muted ? this.muteTab(tab) : this.unmuteTab(tab);
         break;
 
       //Selection
-      case 'selectAll':
+      case "selectAll":
         this.setState({ selectedTabs: this.filterTabs().map(tab => tab.id) });
-        $('#selection-action').addClass('selection-active');
+        $("#selection-action").addClass("selection-active");
         break;
-      case 'selectNone':
+      case "selectNone":
         this.setState({ selectedTabs: [] });
-        $('#selection-action').removeClass('selection-active');
+        $("#selection-action").removeClass("selection-active");
         break;
-      case 'invertSelection':
-        let inverted = this.state.tabs.filter(tab => !this.state.selectedTabs.includes(tab.id)).map(tab => tab.id);
+      case "invertSelection":
+        let inverted = this.state.tabs
+          .filter(tab => !this.state.selectedTabs.includes(tab.id))
+          .map(tab => tab.id);
         this.setState({ selectedTabs: inverted });
         break;
     }
@@ -203,10 +236,13 @@ export default class ActiveTabs extends React.Component {
     sortTabs(parameter);
   }
   filterTabs() {
-    if (window.searchTerm == '') return window.tabs;
+    if (window.searchTerm == "") return window.tabs;
     let filteredTabs = window.tabs.filter(tab => {
       if (this.state.preferences.search.regex) {
-        let regex = new RegExp(window.searchTerm, this.state.preferences.search.ignoreCase ? 'i' : '');
+        let regex = new RegExp(
+          window.searchTerm,
+          this.state.preferences.search.ignoreCase ? "i" : ""
+        );
         if (this.state.preferences.search.searchIn[0]) {
           if (regex.test(tab.title)) return true;
         }
@@ -229,17 +265,17 @@ export default class ActiveTabs extends React.Component {
     this.forceUpdate();
   }
   setPreferences(prefSection, key, value) {
-    browser.storage.local.get('preferences').then(result => {
+    browser.storage.local.get("preferences").then(result => {
       let jsonObj = result;
-      jsonObj['preferences'][prefSection][key] = value;
+      jsonObj["preferences"][prefSection][key] = value;
       browser.storage.local.set(jsonObj).then(tempResult => {
         browser.notifications.create(
-          'reminder',
+          "reminder",
           {
-            type: 'basic',
-            iconUrl: '../images/logo.svg',
-            title: 'Settings Saved',
-            message: 'Search settings updated',
+            type: "basic",
+            iconUrl: "../images/logo.svg",
+            title: "Settings Saved",
+            message: "Search settings updated"
           },
           function(notificationId) {}
         );
@@ -248,7 +284,8 @@ export default class ActiveTabs extends React.Component {
   }
   tabTemplate(tab) {
     let checked = false;
-    if (this.state.selectedTabs) checked = this.state.selectedTabs.includes(tab.id);
+    if (this.state.selectedTabs)
+      checked = this.state.selectedTabs.includes(tab.id);
     return (
       <Tab
         id={tab.id}
@@ -278,21 +315,36 @@ export default class ActiveTabs extends React.Component {
       <header className="page-header" key={1}>
         <nav className="navbar navbar-expand-lg navbar-expand-md">
           <div className="navbar-brand ">
-            <a href="#" className="pull-left logo" style={{ marginTop: '10px' }}>
-              <img src={logo} alt="" style={{ height: '40px', width: 'auto' }} />
+            <a
+              href="#"
+              className="pull-left logo"
+              style={{ marginTop: "10px" }}
+            >
+              <img
+                src={logo}
+                alt=""
+                style={{ height: "40px", width: "auto" }}
+              />
             </a>
           </div>
           <div className="collapse navbar-collapse" id="navbarNav">
             <ul className="navbar-nav">
               <li className="nav-item active">
-                <a className="nav-link text-white font-weight-bold" href="/tabs.html" id="go-to-tabs">
+                <a
+                  className="nav-link text-white font-weight-bold"
+                  href="/tabs.html"
+                  id="go-to-tabs"
+                >
                   Tabs
                   <span
                     className={
-                      `active-tab-counter badge ` + (window.tabs.length > 50 ? 'badge-danger' : 'badge-success')
+                      `active-tab-counter badge ` +
+                      (window.tabs.length > 50
+                        ? "badge-danger"
+                        : "badge-success")
                     }
                   >
-                    {window.tabs.length ? window.tabs.length : ''}
+                    {window.tabs.length ? window.tabs.length : ""}
                   </span>
                   <span className="sr-only">(current)</span>
                 </a>
@@ -313,32 +365,48 @@ export default class ActiveTabs extends React.Component {
             setPreferences={this.setPreferences}
           />
         </nav>
-        <section className="context-actions navbar container-fluid" id="selection-action">
+        <section
+          className="context-actions navbar container-fluid"
+          id="selection-action"
+        >
           <ul className="nav nav-pills pull-left">
             <li className="nav-item">
               <a
                 className="nav-link"
                 onClick={() => {
                   !this.state.allSelected
-                    ? this.processSelectedTabs('selectAll', this.state.tabs.map(tab => tab.id))
-                    : this.processSelectedTabs('selectNone', this.state.tabs.map(tab => tab.id));
+                    ? this.processSelectedTabs(
+                        "selectAll",
+                        this.state.tabs.map(tab => tab.id)
+                      )
+                    : this.processSelectedTabs(
+                        "selectNone",
+                        this.state.tabs.map(tab => tab.id)
+                      );
 
                   this.setState({ allSelected: !this.state.allSelected });
                 }}
                 title="Select All"
               >
-                <input type="checkbox" checked={this.state.allSelected} readOnly />
+                <input
+                  type="checkbox"
+                  checked={this.state.allSelected}
+                  readOnly
+                />
               </a>
             </li>
 
             <li className="nav-item dropdown">
-              <div className="input-group" style={{ width: 'auto', marginRight: '15px' }}>
+              <div
+                className="input-group"
+                style={{ width: "auto", marginRight: "15px" }}
+              >
                 <a
                   className="form-control"
-                  onClick={() => this.processSelectedTabs('togglePinSelected')}
+                  onClick={() => this.processSelectedTabs("togglePinSelected")}
                   href="#"
                   title="Toggle Pin selected tab"
-                  style={{ border: 'none' }}
+                  style={{ border: "none" }}
                 >
                   Sort by
                 </a>
@@ -347,7 +415,7 @@ export default class ActiveTabs extends React.Component {
                     className="btn btn-default"
                     type="button"
                     title="Pin Selected"
-                    onClick={this.sortBy.bind(null, 'title')}
+                    onClick={this.sortBy.bind(null, "title")}
                   >
                     Title
                   </button>
@@ -355,7 +423,7 @@ export default class ActiveTabs extends React.Component {
                     className="btn btn-default"
                     type="button"
                     title="Unpin Selected"
-                    onClick={this.sortBy.bind(null, 'url')}
+                    onClick={this.sortBy.bind(null, "url")}
                   >
                     URL
                   </button>
@@ -365,13 +433,16 @@ export default class ActiveTabs extends React.Component {
             <WindowSelector />
           </ul>
           <div className="nav context-actions selection-action">
-            <div className="input-group" style={{ width: 'auto', marginRight: '15px' }}>
+            <div
+              className="input-group"
+              style={{ width: "auto", marginRight: "15px" }}
+            >
               <a
                 className="form-control"
-                onClick={() => this.processSelectedTabs('togglePinSelected')}
+                onClick={() => this.processSelectedTabs("togglePinSelected")}
                 href="#"
                 title="Toggle Pin selected tab"
-                style={{ border: 'none' }}
+                style={{ border: "none" }}
               >
                 Un/Pin Selected
               </a>
@@ -380,8 +451,8 @@ export default class ActiveTabs extends React.Component {
                   className="btn btn-default"
                   type="button"
                   title="Unpin Selected"
-                  onClick={() => this.processSelectedTabs('unpinSelected')}
-                  style={{ backgroundColor: 'white' }}
+                  onClick={() => this.processSelectedTabs("unpinSelected")}
+                  style={{ backgroundColor: "white" }}
                 >
                   <i className="fal fa-map-marker-slash" />
                 </button>
@@ -389,20 +460,23 @@ export default class ActiveTabs extends React.Component {
                   className="btn btn-default"
                   type="button"
                   title="Pin Selected"
-                  onClick={() => this.processSelectedTabs('pinSelected')}
-                  style={{ backgroundColor: 'white' }}
+                  onClick={() => this.processSelectedTabs("pinSelected")}
+                  style={{ backgroundColor: "white" }}
                 >
                   <i className="fas fa-map-marker fa-fw" />
                 </button>
               </div>
             </div>
-            <div className="input-group" style={{ width: 'auto', marginRight: '15px' }}>
+            <div
+              className="input-group"
+              style={{ width: "auto", marginRight: "15px" }}
+            >
               <a
                 className="form-control"
-                onClick={() => this.processSelectedTabs('toggleMuteSelected')}
+                onClick={() => this.processSelectedTabs("toggleMuteSelected")}
                 href="#"
                 title="Toggle Pin selected tab"
-                style={{ border: 'none' }}
+                style={{ border: "none" }}
               >
                 Un/Mute Selected
               </a>
@@ -411,8 +485,8 @@ export default class ActiveTabs extends React.Component {
                   className="btn btn-default"
                   type="button"
                   title="Mute Selected"
-                  onClick={() => this.processSelectedTabs('muteSelected')}
-                  style={{ backgroundColor: 'white' }}
+                  onClick={() => this.processSelectedTabs("muteSelected")}
+                  style={{ backgroundColor: "white" }}
                 >
                   <i className="fal fa-volume-slash" />
                 </button>
@@ -420,8 +494,8 @@ export default class ActiveTabs extends React.Component {
                   className="btn btn-default"
                   type="button"
                   title="Unmute Selected"
-                  onClick={() => this.processSelectedTabs('unmuteSelected')}
-                  style={{ backgroundColor: 'white' }}
+                  onClick={() => this.processSelectedTabs("unmuteSelected")}
+                  style={{ backgroundColor: "white" }}
                 >
                   <i className="fas fa-volume-up" />
                 </button>
@@ -431,11 +505,41 @@ export default class ActiveTabs extends React.Component {
               className="btn btn-default"
               type="button"
               title="Close Selected"
-              onClick={() => this.processSelectedTabs('closeSelected')}
-              style={{ backgroundColor: 'white' }}
+              onClick={() => this.processSelectedTabs("closeSelected")}
+              style={{ backgroundColor: "white" }}
             >
               <i className="fas fa-times text-danger" />
             </button>
+            <div className="dropdown">
+              <a
+                className="btn btn-secondary dropdown-toggle"
+                onClick={() => this.processSelectedTabs("")}
+                role="button"
+                id="dropdownMenuLink"
+                data-toggle="dropdown"
+                aria-haspopup="true"
+                aria-expanded="false"
+              >
+                With Selected
+              </a>
+
+              <div className="dropdown-menu" aria-labelledby="dropdownMenuLink">
+                <a
+                  className="dropdown-item"
+                  href="#"
+                  onClick={() => this.processSelectedTabs("toNewWindow")}
+                >
+                  Move to New Window
+                </a>
+                <a
+                  className="dropdown-item"
+                  href="#"
+                  onClick={() => this.processSelectedTabs("toSession")}
+                >
+                  Make Session/Saved Tabs
+                </a>
+              </div>
+            </div>
           </div>
           <ul className="nav nav-pills">
             <li role="presentation" className="nav-item">
@@ -456,14 +560,26 @@ export default class ActiveTabs extends React.Component {
                 href="#"
                 onClick={() => {
                   !this.state.allPinned
-                    ? this.processSelectedTabs('pinSelected', this.filterTabs().map(tab => tab.id))
-                    : this.processSelectedTabs('unpinSelected', this.filterTabs().map(tab => tab.id));
+                    ? this.processSelectedTabs(
+                        "pinSelected",
+                        this.filterTabs().map(tab => tab.id)
+                      )
+                    : this.processSelectedTabs(
+                        "unpinSelected",
+                        this.filterTabs().map(tab => tab.id)
+                      );
                   this.setState({ allPinned: !this.state.allPinned });
                 }}
                 title={!this.state.allPinned ? `Pin All` : `Unpin All`}
                 className="nav-link"
               >
-                <i className={!this.state.allPinned ? `fal fa-map-marker` : `fal fa-map-marker-slash`} />
+                <i
+                  className={
+                    !this.state.allPinned
+                      ? `fal fa-map-marker`
+                      : `fal fa-map-marker-slash`
+                  }
+                />
               </a>
             </li>
             <li style={{ marginRight: 18 }} className="nav-item">
@@ -472,13 +588,26 @@ export default class ActiveTabs extends React.Component {
                 className="nav-link"
                 onClick={event => {
                   !this.state.allMuted
-                    ? this.processSelectedTabs('muteSelected', this.filterTabs().map(tab => tab.id))
-                    : this.processSelectedTabs('unmuteSelected', this.filterTabs().map(tab => tab.id));
+                    ? this.processSelectedTabs(
+                        "muteSelected",
+                        this.filterTabs().map(tab => tab.id)
+                      )
+                    : this.processSelectedTabs(
+                        "unmuteSelected",
+                        this.filterTabs().map(tab => tab.id)
+                      );
                   this.setState({ allMuted: !this.state.allMuted });
                 }}
                 title={!this.state.allMuted ? `Mute All` : `Unmute All`}
               >
-                <i className={`fal fa-fw ` + (!this.state.allMuted ? `fa-volume-up` : `fa-volume-up-slash`)} />
+                <i
+                  className={
+                    `fal fa-fw ` +
+                    (!this.state.allMuted
+                      ? `fa-volume-up`
+                      : `fa-volume-up-slash`)
+                  }
+                />
               </a>
             </li>
             <li style={{ marginRight: 0 }} className="nav-item">
@@ -486,53 +615,25 @@ export default class ActiveTabs extends React.Component {
                 href="#"
                 title="Close All"
                 className="nav-link"
-                onClick={() => this.processSelectedTabs('closeSelected', this.filterTabs().map(tab => tab.id))}
+                onClick={() =>
+                  this.processSelectedTabs(
+                    "closeSelected",
+                    this.filterTabs().map(tab => tab.id)
+                  )
+                }
               >
                 <i className="fal fa-times fw-fw" />
               </a>
             </li>
           </ul>
         </section>
-        {/*<section className={`context-actions container-fluid selection-action navbar navbar-dark`}>
-            <ul className="nav nav-pills pull-left">
-              <li role="presentation" className="nav-item dropdown">
-                <a data-toggle="dropdown" href="#" role="button" aria-haspopup="true" aria-expanded="false"
-                   title="Selection of Tabs" className="dropdown-toggle nav-link">
-                  Selection <span className="caret"></span></a>
-                <ul className="dropdown-menu">
-                  <li className="dropdown-item"><a onClick={()=>this.processSelectedTabs('selectAll')} href="#" title="Select All">Select All</a></li>
-                  <li className="dropdown-item"><a onClick={()=>this.processSelectedTabs('selectNone')} href="#" title="Clear Selection/ Select None">Select None </a></li>
-                  <li className="dropdown-item"><a onClick={()=>this.processSelectedTabs('invertSelection')} href="#" title="Toggle Selection">Invert Selection </a></li>
-                </ul>
-              </li>
-              <li role="presentation" className="nav-item dropdown">
-                <a data-toggle="dropdown" href="#" role="button" aria-haspopup="true" aria-expanded="false"
-                   title="Unpin/Pin Selected Tabs" className="dropdown-toggle nav-link">
-                  Unpin/Pin <span className="caret"></span></a>
-                <ul className="dropdown-menu">
-                  <li className="dropdown-item"><a onClick={()=>this.processSelectedTabs('pinSelected')} href="#" title="Pin all selected tabs">Pin selected</a></li>
-                  <li className="dropdown-item"><a onClick={()=>this.processSelectedTabs('unpinSelected')} href="#" title="Unpin all selected tabs">Unpin selected </a></li>
-                  <li className="dropdown-item"><a onClick={()=>this.processSelectedTabs('togglePinSelected')} href="#" title="Toggle Pin selected tab">Toggle pin selected </a></li>
-                </ul>
-              </li>
-              <li role="presentation" className="nav-item dropdown">
-                <a data-toggle="dropdown" href="#" role="button" aria-haspopup="true" aria-expanded="false"
-                   title="Unmute/Mute Selected Tabs" className="dropdown-toggle nav-link">
-                  Unmute/Mute <span className="caret"></span></a>
-                <ul className="dropdown-menu">
-                  <li className="dropdown-item"><a onClick={()=>this.processSelectedTabs('muteSelected')} href="#" title="Mute all selected tabs">Mute</a></li>
-                  <li className="dropdown-item"><a onClick={()=>this.processSelectedTabs('unmuteSelected')} href="#" title="Unmute all selected tabs">Unmute</a></li>
-                  <li className="dropdown-item"><a onClick={()=>this.processSelectedTabs('toggleMuteSelected')} href="#" title="Toggle Mute selected tab">Toggle mute</a></li>
-                </ul>
-              </li>
-              <li className="nav-item"><a href="#" className="nav-link" onClick={()=> this.processSelectedTabs('closeSelected')}>Close</a></li>
-            </ul>
-
-          </section>*/}
       </header>,
-      <Scrollbars autoHeight={false} autoHeightMax={'auto'}>
+      <Scrollbars autoHeight={false} autoHeightMax={"auto"}>
         <div className="tabs-list-container" key={2}>
-          <Tabsgroup preferences={this.props.preferences} tabs={this.state.tabs}>
+          <Tabsgroup
+            preferences={this.props.preferences}
+            tabs={this.state.tabs}
+          >
             {this.filterTabs().map(
               tab => (
                 <CSSTransition
@@ -552,15 +653,15 @@ export default class ActiveTabs extends React.Component {
             )}
           </Tabsgroup>
         </div>
-      </Scrollbars>,
+      </Scrollbars>
     ];
   }
 }
 
 ActiveTabs.propTypes = {
   preferences: PropTypes.object,
-  tabs: PropTypes.array,
+  tabs: PropTypes.array
 };
 ActiveTabs.defaultProps = {
-  tabs: [],
+  tabs: []
 };
