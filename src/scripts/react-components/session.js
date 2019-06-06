@@ -1,7 +1,7 @@
 import React from 'react';
 var browser = require('webextension-polyfill');
 import { timeConverter } from '../components/general';
-import Tab from '../components/Accordion/Tabsgroup/Tab/';
+import Tab from '../components/Accordion/TabsGroup/Tab/';
 import { renameSession, removeSessions, removeTab } from '../components/getsetSessions';
 // import { Scrollbars } from 'react-custom-scrollbars';
 // let browser = require('webextension-polyfill');
