@@ -269,7 +269,7 @@ export default class ActiveTabs extends React.Component {
             type: 'basic',
             iconUrl: '../images/logo.svg',
             title: 'Settings Saved',
-            message: 'Search settings updated',
+            message: 'Search settings updated'
           },
           function(notificationId) {}
         );
@@ -362,19 +362,25 @@ export default class ActiveTabs extends React.Component {
             </li>
 
             <li className="nav-item dropdown">
-              <div className="input-group" style={{ width: 'auto', marginRight: '15px' }}>
+              <div
+                className="input-group"
+                style={{
+                  width: 'auto',
+                  marginRight: '15px',
+                  border: '1px solid #7cbbff'
+                }}
+              >
                 <a
-                  className="form-control"
-                  onClick={() => this.processSelectedTabs('togglePinSelected')}
+                  className="form-control bg-transparent text-white"
                   href="#"
-                  title="Toggle Pin selected tab"
+                  title="Sort Tabs"
                   style={{ border: 'none' }}
                 >
-                  Sort by
+                  <i className="fal fa-sort" />
                 </a>
                 <div className="input-group-append" id="button-addon4">
                   <button
-                    className="btn btn-default"
+                    className="btn btn-link text-white"
                     type="button"
                     title="Pin Selected"
                     onClick={this.sortBy.bind(null, 'title')}
@@ -382,7 +388,7 @@ export default class ActiveTabs extends React.Component {
                     Title
                   </button>
                   <button
-                    className="btn btn-default"
+                    className="btn btn-link text-white"
                     type="button"
                     title="Unpin Selected"
                     onClick={this.sortBy.bind(null, 'url')}
