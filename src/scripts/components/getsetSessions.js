@@ -1,7 +1,5 @@
 let browser = require('webextension-polyfill');
-// let allSessions = {
-//   sessions: [],
-// };
+
 export function saveTabs(tabs) {
   let session = {
     created: +new Date(),
@@ -10,7 +8,7 @@ export function saveTabs(tabs) {
     windows: {},
   };
   for (let i = 0; i < tabs.length; i++) {
-    let strippedTabs = tabs.map((cur, index) => {
+    let strippedTabs = tabs.map(cur => {
       let tab = {};
       tab['url'] = cur.url;
       tab['title'] = cur.title;
@@ -22,7 +20,6 @@ export function saveTabs(tabs) {
 }
 export function saveSessions(sessionsComponent) {
   browser.windows.getAll({ populate: true }).then(function(windows) {
-    // let sessionsArray = [];
     let session = {
       created: +new Date(),
       modified: null,
@@ -30,7 +27,7 @@ export function saveSessions(sessionsComponent) {
       windows: {},
     };
     for (let i = 0; i < windows.length; i++) {
-      let strippedTabs = windows[i].tabs.map((cur, index) => {
+      let strippedTabs = windows[i].tabs.map((cur) => {
         let tab = {};
         tab['url'] = cur.url;
         tab['title'] = cur.title;
@@ -38,7 +35,6 @@ export function saveSessions(sessionsComponent) {
       });
       session.windows[windows[i].id] = strippedTabs;
     }
-    // sessionsArray.push(session);
     setIncStorage('sessions', session, sessionsComponent);
     console.info('Session saved:', session);
   });
@@ -60,15 +56,14 @@ export function getSessions() {
 
 function setIncStorage(storagekey, newdata, sessionsComponent) {
   browser.storage.local.get([storagekey]).then(function(result) {
-    //result[storagekey] ,oldData, = Array
     let sessionsArray = [];
     let oldData = result[storagekey] ? result[storagekey] : null;
     let jsonObj = {};
-    console.log(oldData);
+    // log(oldData);
     if (oldData) {
       sessionsArray = [...oldData, newdata];
       jsonObj[storagekey] = sessionsArray;
-      console.log(jsonObj);
+      // log(jsonObj);
       browser.storage.local.set(jsonObj).then(function() {
         sessionsComponent.setState({ data: sessionsArray });
         browser.notifications
@@ -90,7 +85,7 @@ function setIncStorage(storagekey, newdata, sessionsComponent) {
             type: 'basic',
             iconUrl: '../images/extension-icon48.png',
             title: 'Data saved',
-            message: 'Session has been saved.'
+            message: 'Session has been saved.',
           })
           .then(function(notificationId) {});
       });

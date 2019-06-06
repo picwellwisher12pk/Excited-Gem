@@ -51,6 +51,8 @@ export default class Tab extends React.Component {
       title = this.state.title.replace(regex, `<mark>${window.searchTerm}</mark>`);
       url = this.state.url.replace(regex, `<mark>${window.searchTerm}</mark>`);
     }
+    let pinned = this.state.pinned;
+
     let audible = this.state.audible || this.state.muted;
     let linkProps = null;
     let actionButtons = null;
@@ -74,7 +76,10 @@ export default class Tab extends React.Component {
           onClick={() => this.props.togglePin(this.props.id)}
           aria-label="pinned"
         >
-          <i className="far fa-map-marker fw-fw" />
+          <i
+            className={`fa-fw ` + (pinned ? `fas fa-map-marker` : `fal fa-map-marker-slash`)}
+            style={{ width: '30px' }}
+          />
         </li>,
         <li
           title="Un/Mute Tab"
@@ -109,7 +114,6 @@ export default class Tab extends React.Component {
     }
 
     let checked = this.state.checked;
-    let pinned = this.state.pinned;
     let loading = this.state.status == 'loading';
     let discarded = this.state.discarded;
 
