@@ -1,25 +1,25 @@
 exports.preferences = {
-  search:{
-    regex : true,
-    ignoreCase : true,
-    searchIn: [true,true] // title,url
+  search: {
+    regex: true,
+    ignoreCase: true,
+    searchIn: [true, true], // title,url
   },
-  defaultTabsFrom : "current",
+  searchTerm: '',
+  defaultTabsFrom: 'current',
   tempTabsFrom: 'current',
   tabsGroup: {
-    promptForClosure :true,/**/
+    promptForClosure: true /**/,
     tabsListAnimation: true,
     tabSortAnimation: true,
     //selection by ckeckbox/hover mode/click mode
     selectionBy: 'checkbox',
-    display:{
+    display: {
       favicon: true,
       title: true,
-      url:true,
-      pin:true,
+      url: true,
+      pin: true,
       sound: true,
       // close:true
-    }
-  }
-
+    },
+  },
 };

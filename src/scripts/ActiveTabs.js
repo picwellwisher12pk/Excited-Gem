@@ -2,17 +2,17 @@
 const bootstrap = require('bootstrap');
 // const debug = require('debug')('activetabs');
 import React from 'react';
-import PropTypes from 'prop-types';
+import { connect } from 'react-redux';
 import 'react-devtools';
-import { TransitionGroup, CSSTransition } from 'react-transition-group';
+// import { TransitionGroup, CSSTransition } from 'react-transition-group';
 let browser = require('webextension-polyfill');
 import { DragDropContext, Droppable, Draggable } from 'react-beautiful-dnd';
 
 //JS libraries
 import { updateTabs, getTabs } from './components/browserActions';
 import { sortTabs } from './components/general.js';
-
 // React Components
+import ACTIONS from './modules/action';
 import Search from './components/Header/Search/index';
 import Tabsgroup from './components/Accordion/TabsGroup/index';
 import Tab from './components/Accordion/TabsGroup/Tab/index';
@@ -35,55 +35,96 @@ import '../images/reload-icon.svg';
 import '../images/search-icon.svg';
 import '../images/sound-icon.svg';
 
-export default class ActiveTabs extends React.Component {
+function reorder(list, startIndex, endIndex) {
+  const result = Array.from(list);
+  const [removed] = result.splice(startIndex, 1);
+  result.splice(endIndex, 0, removed);
+  return result;
+}
+
+class ActiveTabs extends React.Component {
   constructor(props) {
     super(props);
-    this.state = {
-      tabs: [],
-      preferences: {},
-      selectedTabs: [],
-      allMuted: false,
-      allSelected: false,
-      allPinned: false,
-    };
+    this.state = { ...this.props };
+    // this.state = {
+    //   selectedTabs: [],
+    //   allMuted: false,
+    //   allSelected: false,
+    //   allPinned: false,
+    // };
     this.setPreferences = this.setPreferences.bind(this);
     this.closeTab = this.closeTab.bind(this);
     this.searchInTabs = this.searchInTabs.bind(this);
     this.updateSelectedTabs = this.updateSelectedTabs.bind(this);
     this.togglePin = this.togglePin.bind(this);
     this.onDragEnd = this.onDragEnd.bind(this);
+    this.isAllMuted = this.isAllMuted.bind(this);
+    // console.log('props', props);
   }
-  static getDerivedStateFromProps(nextProps, prevState) {
-    console.log(nextProps, prevState);
-    return nextProps;
-  }
+  // static getDerivedStateFromProps(nextProps, prevState) {
+  //   console.log(nextProps, prevState);
+  //   return nextProps;
+  // }
   componentDidMount(a, b) {
-    this.setState({ allMuted: this.isAllMuted() });
-    this.setState({ allPinned: this.isAllPinned() });
-    this.setState({ allPinned: this.isAllSelected() });
-    this.setState({ tabs: window.tabs });
-    this.setState({ preferences: this.props.preferences });
-    console.log('mounted', window.tabs, this.state.tabs);
+    // this.setState({ allMuted: this.isAllMuted() });
+    // this.setState({ allPinned: this.isAllPinned() });
+    // this.setState({ allPinned: this.isAllSelected() });
+    // this.setState({ tabs: this.props.tabs });
+    // this.setState({ preferences: this.props.preferences });
+    // debugger;
   }
   componentDidUpdate(a, b) {}
+  shouldComponentUpdate(nextProps, nextState) {
+    console.info(
+      'next props:',
+      nextProps.tabs.map((tab, index) => {
+        if (index > 6) return;
+        return tab.title;
+      })
+    );
+    console.info(
+      'next state:',
+      nextState.tabs.map((tab, index) => {
+        if (index > 6) return;
+        return tab.title;
+      })
+    );
+    console.info(
+      'this props:',
+      this.props.tabs.map((tab, index) => {
+        if (index > 6) return;
+        return tab.title;
+      })
+    );
+    console.info(
+      'this state:',
+      this.state.tabs.map((tab, index) => {
+        if (index > 6) return;
+        return tab.title;
+      })
+    );
+    const isSame = nextProps.tabs.join('') === nextState.tabs.join('');
+    console.info('issame', isSame);
+    return !isSame;
+  }
 
   updateSelectedTabs(id, selected) {
-    let tempArray = this.state.selectedTabs;
+    let tempArray = this.props.selectedTabs;
     !selected ? tempArray.splice(tempArray.indexOf(id), 1) : tempArray.push(id);
     tempArray.length > 0
       ? $('#selection-action').addClass('selection-active')
       : $('#selection-action').removeClass('selection-active');
     this.setState({ selectedTabs: tempArray });
-    this.setState({ tabs: window.tabs });
+    this.setState({ tabs: this.props.tabs });
   }
   isAllSelected() {
-    for (let tab of window.tabs) {
+    for (let tab of this.props.tabs) {
       if (!tab.checked) return false;
     }
     return true;
   }
   //Close
-  closeTab(key, promptForClosure = this.state.preferences.promptForClosure) {
+  closeTab(key, promptForClosure = this.props.preferences.promptForClosure) {
     if (promptForClosure) {
       if (!confirm(`Are you sure you want to close the following tab\n` + key)) return false;
     }
@@ -111,11 +152,11 @@ export default class ActiveTabs extends React.Component {
     );
   }
   togglePin(tabId) {
-    let tab = this.state.tabs.filter(tab => tab.id == tabId);
-    tab[0].pinned ? this.unpinTab(tabId) : this.pinTab(tabId);
+    let tabTemp = this.props.tabs.filter(tab => tab.id == tabId);
+    tabTemp[0].pinned ? this.unpinTab(tabId) : this.pinTab(tabId);
   }
   isAllPinned() {
-    for (let tab of window.tabs) {
+    for (let tab of this.props.tabs) {
       if (!tab.pinned) return false;
     }
     return true;
@@ -139,25 +180,25 @@ export default class ActiveTabs extends React.Component {
     );
   }
   isAllMuted() {
-    for (let tab of window.tabs) {
+    // const tabs = this.props.tabs.then(tabs => tabs);
+    for (let tab of props.tabs) {
       if (!tab.mutedInfo.muted) return false;
     }
     return true;
   }
-  processSelectedTabs(action, selection = this.state.selectedTabs) {
-    // let selection = this.state.tabs.filter(tab => selection.includes(tab.id));
-    console.log(selection, selection, this.state.selectedTabs, this.state.tabs.map(tab => tab.id));
+  processSelectedTabs(action, selection = this.props.selectedTabs) {
+    // let selection = this.props.tabs.filter(tab => selection.includes(tab.id));
+    console.log(selection, selection, this.props.selectedTabs, this.props.tabs.map(tab => tab.id));
     switch (action) {
       case 'closeSelected':
         let message = 'Are you sure you want to close selected tabs';
-        if (selection.length == this.state.tabs.length)
+        if (selection.length == this.props.tabs.length)
           message = 'Are you sure you want to close all the tabs? This will also close this window.';
         if (!confirm(message)) return false;
         for (let id of selection) this.closeTab(id, false);
         this.setState({ selectedTabs: [] });
         $('#selection-action').removeClass('selection-active');
         break;
-
       case 'pinSelected':
         for (let tab of selection) this.pinTab(tab);
         break;
@@ -190,7 +231,7 @@ export default class ActiveTabs extends React.Component {
         $('#selection-action').removeClass('selection-active');
         break;
       case 'invertSelection':
-        let inverted = this.state.tabs.filter(tab => !this.state.selectedTabs.includes(tab.id)).map(tab => tab.id);
+        let inverted = this.props.tabs.filter(tab => !this.props.selectedTabs.includes(tab.id)).map(tab => tab.id);
         this.setState({ selectedTabs: inverted });
         break;
     }
@@ -199,29 +240,30 @@ export default class ActiveTabs extends React.Component {
     sortTabs(parameter);
   }
   filterTabs() {
-    if (window.searchTerm == '') return window.tabs;
-    let filteredTabs = window.tabs.filter(tab => {
-      if (this.state.preferences.search.regex) {
-        let regex = new RegExp(window.searchTerm, this.state.preferences.search.ignoreCase ? 'i' : '');
-        if (this.state.preferences.search.searchIn[0]) {
+    if (this.props.searchTerm == '') return this.props.tabs;
+    let filteredTabs = this.props.tabs.filter(tab => {
+      if (this.props.preferences.search.regex) {
+        let regex = new RegExp(this.props.searchTerm, this.props.preferences.search.ignoreCase ? 'i' : '');
+        if (this.props.preferences.search.searchIn[0]) {
           if (regex.test(tab.title)) return true;
         }
-        if (this.state.preferences.search.searchIn[1]) {
+        if (this.props.preferences.search.searchIn[1]) {
           if (regex.test(tab.url)) return true;
         }
       } else {
-        if (this.state.preferences.search.searchIn[0]) {
-          return tab.title.indexOf(window.searchTerm) >= 0;
+        if (this.props.preferences.search.searchIn[0]) {
+          return tab.title.indexOf(this.props.searchTerm) >= 0;
         }
-        if (this.state.preferences.search.searchIn[1]) {
-          return tab.url.indexOf(window.searchTerm) >= 0;
+        if (this.props.preferences.search.searchIn[1]) {
+          return tab.url.indexOf(this.props.searchTerm) >= 0;
         }
       }
     });
     return filteredTabs;
   }
+
   searchInTabs(searchTerm) {
-    window.searchTerm = searchTerm;
+    this.props.searchTerm = searchTerm;
     this.forceUpdate();
   }
   setPreferences(prefSection, key, value) {
@@ -242,23 +284,14 @@ export default class ActiveTabs extends React.Component {
       });
     });
   }
-  tabTemplate(tab) {
+  tabTemplate(tab, index) {
+    // console.log("tabtemplate",tab.index,index);
     let checked = false;
-    if (this.state.selectedTabs) checked = this.state.selectedTabs.includes(tab.id);
+    if (this.props.selectedTabs) checked = this.props.selectedTabs.includes(tab.id);
     return (
       <Tab
-        id={tab.id}
-        indexkey={tab.index}
-        key={tab.id}
-        pinned={tab.pinned}
-        audible={tab.audible}
-        muted={tab.mutedInfo.muted}
-        position={tab.index}
-        url={tab.url}
-        title={tab.title}
-        discarded={tab.discarded}
-        favIconUrl={tab.favIconUrl}
-        status={tab.status}
+        key={tab.index}
+        {...tab}
         checked={checked}
         closeTab={this.closeTab}
         togglePin={this.togglePin}
@@ -267,21 +300,22 @@ export default class ActiveTabs extends React.Component {
       />
     );
   }
-  reorder(list, startIndex, endIndex) {
-    const result = Array.from(list);
-    const [removed] = result.splice(startIndex, 1);
-    result.splice(endIndex, 0, removed);
-    return result;
-  }
+
   onDragEnd(result) {
+    const { destination, source, draggableId } = result;
     if (!result.destination) return;
-    browser.tabs.move(result.draggableId, { index: result.destination.index });
-    window.activeTabs.setState({tabs:window.tabs});
+
+    if (destination.droppableId === source.droppableId && destination.index === source.index) {
+      return;
+    }
+    const tabs = reorder(this.filterTabs(), source.index, destination.index);
+    this.props.reorderTabs(tabs);
+    // browser.tabs.move(result.draggableId, { index: result.destination.index });
   }
   render() {
-    console.log(this.state.tabs.length, this.props.tabs.length);
+    console.info('Rendering', this.props);
     return [
-      <header className="page-header" key={1}>
+      <header className="page-header" key={'header'}>
         <nav className="navbar">
           <div className="navbar-brand ">
             <a href="#" className="pull-left logo" style={{ marginTop: '10px' }}>
@@ -290,18 +324,19 @@ export default class ActiveTabs extends React.Component {
             <div id="go-to-tabs">
               Tabs
               <span
-                className={`active-tab-counter badge ` + (window.tabs.length > 50 ? 'badge-danger' : 'badge-success')}
+                className={
+                  `active-tab-counter badge ` + (this.props.tabs.length > 50 ? 'badge-danger' : 'badge-success')
+                }
               >
-
-                {window.tabs.length ? window.tabs.length : ''}
+                {this.props.tabs.length ? this.props.tabs.length : ''}
               </span>
               <span className="sr-only"> (current) </span>
             </div>
           </div>
           <Search
-            regex={this.state.preferences.search.regex}
-            ignoreCase={this.state.preferences.search.ignoreCase}
-            searchIn={this.state.preferences.search.searchIn}
+            regex={this.props.preferences.search.regex}
+            ignoreCase={this.props.preferences.search.ignoreCase}
+            searchIn={this.props.preferences.search.searchIn}
             searchInTabs={this.searchInTabs}
             setPreferences={this.setPreferences}
           />
@@ -312,15 +347,15 @@ export default class ActiveTabs extends React.Component {
               <a
                 className="nav-link"
                 onClick={() => {
-                  !this.state.allSelected
-                    ? this.processSelectedTabs('selectAll', this.state.tabs.map(tab => tab.id))
-                    : this.processSelectedTabs('selectNone', this.state.tabs.map(tab => tab.id));
+                  !this.props.allSelected
+                    ? this.processSelectedTabs('selectAll', this.props.tabs.map(tab => tab.id))
+                    : this.processSelectedTabs('selectNone', this.props.tabs.map(tab => tab.id));
 
-                  this.setState({ allSelected: !this.state.allSelected });
+                  this.setState({ allSelected: !this.props.allSelected });
                 }}
                 title="Select All"
               >
-                <input type="checkbox" checked={this.state.allSelected} readOnly />
+                <input type="checkbox" checked={this.props.allSelected} readOnly />
               </a>
             </li>
             <li className="nav-item dropdown">
@@ -437,7 +472,7 @@ export default class ActiveTabs extends React.Component {
                 href="#"
                 onClick={() => {
                   updateTabs();
-                  this.setState({ tabs: window.tabs });
+                  this.setState({ tabs: this.props.tabs });
                 }}
               >
                 <i className="fas fa-sync-alt fa-fw fa-sm" />
@@ -447,15 +482,15 @@ export default class ActiveTabs extends React.Component {
               <a
                 href="#"
                 onClick={() => {
-                  !this.state.allPinned
+                  !this.props.allPinned
                     ? this.processSelectedTabs('pinSelected', this.filterTabs().map(tab => tab.id))
                     : this.processSelectedTabs('unpinSelected', this.filterTabs().map(tab => tab.id));
-                  this.setState({ allPinned: !this.state.allPinned });
+                  this.setState({ allPinned: !this.props.allPinned });
                 }}
-                title={!this.state.allPinned ? `Pin All` : `Unpin All`}
+                title={!this.props.allPinned ? `Pin All` : `Unpin All`}
                 className="nav-link"
               >
-                <i className={!this.state.allPinned ? `far fa-thumbtack` : `fa fa-thumbtack`} />
+                <i className={!this.props.allPinned ? `far fa-thumbtack` : `fa fa-thumbtack`} />
               </a>
             </li>
             <li style={{ marginRight: 18 }} className="nav-item">
@@ -463,15 +498,14 @@ export default class ActiveTabs extends React.Component {
                 href="#"
                 className="nav-link"
                 onClick={event => {
-                  !this.state.allMuted
+                  !this.props.allMuted
                     ? this.processSelectedTabs('muteSelected', this.filterTabs().map(tab => tab.id))
                     : this.processSelectedTabs('unmuteSelected', this.filterTabs().map(tab => tab.id));
-                  this.setState({ allMuted: !this.state.allMuted });
+                  this.setState({ allMuted: !this.props.allMuted });
                 }}
-                title={!this.state.allMuted ? `Mute All` : `Unmute All`}
+                title={!this.props.allMuted ? `Mute All` : `Unmute All`}
               >
-
-                <i className={`fa fa-fw ` + (!this.state.allMuted ? `fa-volume-up` : `fa-volume-mute`)} />
+                <i className={`fa fa-fw ` + (!this.props.allMuted ? `fa-volume-up` : `fa-volume-mute`)} />
               </a>
             </li>
             <li style={{ marginRight: 0 }} className="nav-item">
@@ -487,25 +521,11 @@ export default class ActiveTabs extends React.Component {
           </ul>
         </section>
       </header>,
-      <div className="tabs-list-container">
-        <DragDropContext onDragEnd={ this.onDragEnd } key={2} id={'activeTabs'}>
-            <Tabsgroup preferences={this.props.preferences} tabs={this.state.tabs} id={'tabsGroup'}>
-            {this.filterTabs().map(
-              tab => (
-                <CSSTransition
-                  transitionName="fade"
-                  classNames="fade"
-                  appear={this.state.preferences.tabsGroup.tabsListAnimation}
-                  exit={false}
-                  key={tab.id}
-                  timeout={{ enter: 200, exit: 0 }}
-                  id={'csstransition'}
-                >
-
-                  {this.tabTemplate(tab)}
-                </CSSTransition>
-              )
-            )}
+      ,
+      <div className="tabs-list-container" key={'activetablist'}>
+        <DragDropContext onDragEnd={this.onDragEnd} key={'ddcontext'} id={'activeTabs'}>
+          <Tabsgroup preferences={this.props.preferences} id={'tabsGroup'}>
+            {this.filterTabs().map(tab => this.tabTemplate(tab))}
           </Tabsgroup>
         </DragDropContext>
       </div>,
@@ -513,10 +533,14 @@ export default class ActiveTabs extends React.Component {
   }
 }
 
-ActiveTabs.propTypes = {
-  preferences: PropTypes.object,
-  tabs: PropTypes.array,
+const mapStateToProps = function(state) {
+  return {
+    tabs: state.tabs,
+    preferences: state.preferences,
+  };
 };
-ActiveTabs.defaultProps = {
-  tabs: [],
-};
+const mapDispatchToProps = dispatch => ({
+  reorderTabs: tabs => dispatch(ACTIONS.reorderTabs(tabs)),
+  deleteItem: id => dispatch(ACTIONS.deleteItem(id)),
+});
+export default connect(mapStateToProps, mapDispatchToProps)(ActiveTabs);

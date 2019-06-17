@@ -4,7 +4,6 @@ import { TransitionGroup, CSSTransition } from 'react-transition-group';
 import { DragDropContext, Droppable, Draggable } from 'react-beautiful-dnd';
 import Tab from './Tab/index';
 import {log} from '../../general';
-var browser = require("webextension-polyfill");
 
 export default class TabsGroup extends React.Component {
   constructor(props) {
@@ -32,7 +31,10 @@ export default class TabsGroup extends React.Component {
     return (
       <Droppable droppableId="droppable" id={'droppable'}>
         {(provided, snapshot) => (
-          <ul className="tab tabs-list sortable selectable" ref={provided.innerRef} id={'droppableUL'}>
+          <ul className="tab tabs-list sortable selectable"
+          ref={provided.innerRef}
+          {...provided.droppableProps}
+          id={'droppableUL'}>
           {this.props.children}
           {provided.placeholder}
           </ul>

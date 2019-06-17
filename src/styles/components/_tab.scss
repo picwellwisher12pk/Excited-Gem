@@ -20,8 +20,7 @@
     background-color: #fff;
     &.idle .tab-name,
     &.idle .tab-url,
-    &.idle .tab-favicon
-    {
+    &.idle .tab-favicon {
         opacity: 0.5;
     }
     &.selected {
@@ -53,40 +52,40 @@
             -o-transition: all 0.2s;
             transition: all 0.2s;
         }
-        .checkbox{
-          opacity: 0;
-          width: 16px;
-          height: 16px;
-          -webkit-transition: all 0.2s;
-          -moz-transition: all 0.2s;
-          -ms-transition: all 0.2s;
-          -o-transition: all 0.2s;
-          transition: all 0.2s;
-          position: absolute;
-          left: 11px;
-          top: 15px;
-        }
-        &:hover{
-          .checkbox{
-            opacity: 1;
-            //left: 12px;
-          }
-          img{
+        .checkbox {
             opacity: 0;
-          }
+            width: 16px;
+            height: 16px;
+            -webkit-transition: all 0.2s;
+            -moz-transition: all 0.2s;
+            -ms-transition: all 0.2s;
+            -o-transition: all 0.2s;
+            transition: all 0.2s;
+            position: absolute;
+            left: 11px;
+            top: 15px;
+        }
+        &:hover {
+            .checkbox {
+                opacity: 1;
+                //left: 12px;
+            }
+            img {
+                opacity: 0;
+            }
         }
     }
-    &.checked{
-           background-color: #dcffba;
-         }
-    &.checked .tab-favicon{
-      .checkbox{
-        opacity: 1;
-        //left: 12px;
-      }
-      img{
-        opacity: 0;
-      }
+    &.checked {
+        background-color: #dcffba;
+    }
+    &.checked .tab-favicon {
+        .checkbox {
+            opacity: 1;
+            //left: 12px;
+        }
+        img {
+            opacity: 0;
+        }
     }
     .glyphicon {
         padding-left: 5px;
@@ -102,15 +101,11 @@
         margin-left: 15px;
     }
     .tab-url {
-        word-wrap: break-word;
-        overflow: hidden;
-        text-overflow: ellipsis;
-        text-align: left;
-        white-space: nowrap;
         flex: 1;
     }
     .tab-name {
         flex-shrink: 0;
+        max-width: 600px;
     }
     .tab-name:hover {
         color: blue;
@@ -124,6 +119,14 @@
             width: auto;
         }
     }
+}
+
+.clip {
+    word-wrap: break-word;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    text-align: left;
+    white-space: nowrap;
 }
 
 .tab-actions {
@@ -140,9 +143,9 @@
         &:last-child {
             margin-right: 0;
         }
-      i{
-        padding: 6px;
-      }
+        i {
+            padding: 6px;
+        }
     }
     li.active {
         //width: auto !important;

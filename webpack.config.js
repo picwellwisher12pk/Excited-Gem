@@ -1,7 +1,7 @@
+require('dotenv').config();
 let webpack = require('webpack'),
   path = require('path'),
   fileSystem = require('fs'),
-  env = require('./utils/env'),
   HtmlWebpackPlugin = require('html-webpack-plugin'),
   ExtractTextPlugin = require('extract-text-webpack-plugin'),
   WriteFilePlugin = require('write-file-webpack-plugin'),
@@ -10,7 +10,7 @@ let webpack = require('webpack'),
 // load the secrets
 alias = {};
 
-let secretsPath = path.join(__dirname, 'secrets.' + env.NODE_ENV + '.js');
+let secretsPath = path.join(__dirname, 'secrets.' + process.env.NODE_ENV + '.js');
 
 let images = ['jpg', 'jpeg', 'png', 'gif', 'svg'];
 let fonts = ['eot', 'otf', 'ttf', 'woff', 'woff2'];
@@ -19,7 +19,7 @@ let fileExtensions = ['jpg', 'jpeg', 'png', 'gif', 'eot', 'otf', 'svg', 'ttf', '
 if (fileSystem.existsSync(secretsPath)) {
   alias['secrets'] = secretsPath;
 }
-if (env.browserClient === 'chrome' || env.browserClient === 'all') {
+if (process.env.BROWSERCLIENT === 'chrome' || process.env.BROWSERCLIENT === 'all') {
   exports.chromeConfig = [
     {
       context: __dirname,
@@ -93,7 +93,7 @@ if (env.browserClient === 'chrome' || env.browserClient === 'all') {
         }),
         // expose and write the allowed env vars on the compiled bundle
         new webpack.DefinePlugin({
-          'process.env.NODE_ENV': JSON.stringify(env.NODE_ENV),
+          'process.process.env.NODE_ENV': JSON.stringify(process.env.NODE_ENV),
           CLIENT: 'chrome',
         }),
 
@@ -108,7 +108,7 @@ if (env.browserClient === 'chrome' || env.browserClient === 'all') {
         new WriteFilePlugin(), //Writes files to target directory during development build phase.
         new WebpackBar({ profile: true }),
       ],
-      devtool: env.NODE_ENV === 'development' ? 'cheap-module-eval-source-map' : 'cheap-source-map',
+      devtool: 'cheap-module-eval-source-map',
     },
     /*    {
                       entry: path.join(__dirname, 'src', 'manifest.json'),
@@ -120,7 +120,7 @@ if (env.browserClient === 'chrome' || env.browserClient === 'all') {
   ];
 }
 
-if (env.browserClient === 'firefox' || env.browserClient === 'all') {
+if (process.env.BROWSERCLIENT === 'firefox' || process.env.BROWSERCLIENT === 'all') {
   console.log('making firefox build');
   exports.firefoxConfig = [
     {
@@ -195,15 +195,15 @@ if (env.browserClient === 'firefox' || env.browserClient === 'all') {
         }),
         // expose and write the allowed env vars on the compiled bundle
         new webpack.DefinePlugin({
-          NODE_ENV: JSON.stringify(env.NODE_ENV),
+          NODE_ENV: JSON.stringify(process.env.NODE_ENV),
         }),
 
         new HtmlWebpackPlugin({
           title: 'Excited Gem | Tabs',
-          logotype: env.NODE_ENV === 'development' ? 'dev-logo.svg' : 'logo.svg',
+          logotype: process.env.NODE_ENV === 'development' ? 'dev-logo.svg' : 'logo.svg',
           template: path.join(__dirname, 'src', 'tabs.ejs'),
           filename: 'tabs.html',
-          favicon: env.NODE_ENV === 'development' ? 'src/images/dev-logo.svg' : 'src/images/logo.svg',
+          favicon: process.env.NODE_ENV === 'development' ? 'src/images/dev-logo.svg' : 'src/images/logo.svg',
           chunks: ['tabs'],
         }),
         new WriteFilePlugin(), //Writes files to target directory during development build phase.
@@ -217,6 +217,6 @@ if (env.browserClient === 'firefox' || env.browserClient === 'all') {
                         filename: '[name].json',
                       },
                     },*/
-    { devtool: env.NODE_ENV === 'development' ? 'eval-source-map' : 'cheap-source-map' },
+    { devtool: 'eval-source-map' },
   ];
 }
