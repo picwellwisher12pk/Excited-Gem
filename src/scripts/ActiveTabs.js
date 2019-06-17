@@ -41,7 +41,16 @@ function reorder(list, startIndex, endIndex) {
   result.splice(endIndex, 0, removed);
   return result;
 }
-
+function objectsAreSame(x, y) {
+      var objectsAreSame = true;
+      for(var propertyName in x) {
+          if(x[propertyName] !== y[propertyName]) {
+            objectsAreSame = false;
+            break;
+          }
+      }
+      return objectsAreSame;
+    }
 class ActiveTabs extends React.Component {
   constructor(props) {
     super(props);
@@ -75,37 +84,28 @@ class ActiveTabs extends React.Component {
   }
   componentDidUpdate(a, b) {}
   shouldComponentUpdate(nextProps, nextState) {
-    console.info(
-      'next props:',
-      nextProps.tabs.map((tab, index) => {
-        if (index > 6) return;
-        return tab.title;
-      })
-    );
-    console.info(
-      'next state:',
-      nextState.tabs.map((tab, index) => {
-        if (index > 6) return;
-        return tab.title;
-      })
-    );
-    console.info(
-      'this props:',
-      this.props.tabs.map((tab, index) => {
-        if (index > 6) return;
-        return tab.title;
-      })
-    );
-    console.info(
-      'this state:',
-      this.state.tabs.map((tab, index) => {
-        if (index > 6) return;
-        return tab.title;
-      })
-    );
-    const isSame = nextProps.tabs.join('') === nextState.tabs.join('');
-    console.info('issame', isSame);
-    return !isSame;
+    // console.info(
+    //   'next props:',
+    //   nextProps.tabs.map((tab, index) => {
+    //     if (index > 6) return;
+    //     return tab.title;
+    //   })
+    // );
+    // console.info(
+    //   'next state:',
+    //   nextState.tabs.map((tab, index) => {
+    //     if (index > 6) return;
+    //     return tab.title;
+    //   })
+    // );
+
+    nextProps.tabs.forEach(tab => {
+      
+    });
+    if (nextProps.tabs.length != nextState.tabs.length) return true;
+    for(let i=0;i<nextProps.tabs.length;i++ ){
+      if(!objectsAreSame(nextProps.tabs[i],nextState.tabs[i])) return true;
+    }
   }
 
   updateSelectedTabs(id, selected) {
@@ -240,7 +240,7 @@ class ActiveTabs extends React.Component {
     sortTabs(parameter);
   }
   filterTabs() {
-    if (this.props.searchTerm == '') return this.props.tabs;
+    if (this.props.searchTerm == '') return this.state.tabs;
     let filteredTabs = this.props.tabs.filter(tab => {
       if (this.props.preferences.search.regex) {
         let regex = new RegExp(this.props.searchTerm, this.props.preferences.search.ignoreCase ? 'i' : '');
