@@ -1,15 +1,14 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { TransitionGroup, CSSTransition } from 'react-transition-group';
-import { DragDropContext, Droppable, Draggable } from 'react-beautiful-dnd';
 import Tab from './Tab/index';
-import {log} from '../../general';
+import { log } from '../../general';
 
 export default class TabsGroup extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      selectedTabs: []
+      selectedTabs: [],
     };
     this.render = this.render.bind(this);
   }
@@ -18,7 +17,7 @@ export default class TabsGroup extends React.Component {
   //   // return nextProps;
   // }
   componentDidMount() {
-    console.log("tabsgroup mounted:",this.state.tabs);
+    console.log('tabsgroup mounted:', this.state.tabs);
   }
 
   render() {
@@ -26,21 +25,12 @@ export default class TabsGroup extends React.Component {
     const animated = `<TransitionGroup component="ul" className="tab tabs-list sortable selectable">
               ${this.props.children}
             </TransitionGroup>`;
-    // const { innerRef } = this.props;
-    // const staticList = `<ul className="tab tabs-list sortable selectable" ref=${provided.innerRef}> ${this.props.children}</ul>`;
+
     return (
-      <Droppable droppableId="droppable" id={'droppable'}>
-        {(provided, snapshot) => (
-          <ul className="tab tabs-list sortable selectable"
-          ref={provided.innerRef}
-          {...provided.droppableProps}
-          id={'droppableUL'}>
-          {this.props.children}
-          {provided.placeholder}
-          </ul>
-          )}
-      </Droppable>
-      );
+      <ul className="tab tabs-list sortable selectable" id={'droppableUL'}>
+        {this.props.children}
+      </ul>
+    );
   }
 }
 TabsGroup.propTypes = {

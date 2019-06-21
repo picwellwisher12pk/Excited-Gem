@@ -6,16 +6,18 @@ import { connect } from 'react-redux';
 import 'react-devtools';
 // import { TransitionGroup, CSSTransition } from 'react-transition-group';
 let browser = require('webextension-polyfill');
-import { DragDropContext, Droppable, Draggable } from 'react-beautiful-dnd';
+import { DndProvider } from 'react-dnd';
+import HTML5Backend from 'react-dnd-html5-backend';
+import update from 'immutability-helper';
 
 //JS libraries
 import { updateTabs, getTabs } from './components/browserActions';
 import { sortTabs } from './components/general.js';
 // React Components
 import ACTIONS from './modules/action';
-import Search from './components/Header/Search/index';
+import Search from './components/Header/Search/Search';
 import Tabsgroup from './components/Accordion/TabsGroup/index';
-import Tab from './components/Accordion/TabsGroup/Tab/index';
+import Tab from './components/Accordion/TabsGroup/Tab/Tab';
 import WindowSelector from './components/WindowSelector';
 
 //Styles
@@ -42,15 +44,15 @@ function reorder(list, startIndex, endIndex) {
   return result;
 }
 function objectsAreSame(x, y) {
-      var objectsAreSame = true;
-      for(var propertyName in x) {
-          if(x[propertyName] !== y[propertyName]) {
-            objectsAreSame = false;
-            break;
-          }
-      }
-      return objectsAreSame;
+  var objectsAreSame = true;
+  for (var propertyName in x) {
+    if (x[propertyName] !== y[propertyName]) {
+      objectsAreSame = false;
+      break;
     }
+  }
+  return objectsAreSame;
+}
 class ActiveTabs extends React.Component {
   constructor(props) {
     super(props);
@@ -99,12 +101,10 @@ class ActiveTabs extends React.Component {
     //   })
     // );
 
-    nextProps.tabs.forEach(tab => {
-      
-    });
+    nextProps.tabs.forEach(tab => {});
     if (nextProps.tabs.length != nextState.tabs.length) return true;
-    for(let i=0;i<nextProps.tabs.length;i++ ){
-      if(!objectsAreSame(nextProps.tabs[i],nextState.tabs[i])) return true;
+    for (let i = 0; i < nextProps.tabs.length; i++) {
+      if (!objectsAreSame(nextProps.tabs[i], nextState.tabs[i])) return true;
     }
   }
 
@@ -240,7 +240,7 @@ class ActiveTabs extends React.Component {
     sortTabs(parameter);
   }
   filterTabs() {
-    if (this.props.searchTerm == '') return this.state.tabs;
+    if (this.props.searchTerm == '') return this.props.tabs;
     let filteredTabs = this.props.tabs.filter(tab => {
       if (this.props.preferences.search.regex) {
         let regex = new RegExp(this.props.searchTerm, this.props.preferences.search.ignoreCase ? 'i' : '');
@@ -284,6 +284,18 @@ class ActiveTabs extends React.Component {
       });
     });
   }
+  dragTab(dragIndex, hoverIndex) {
+    const { tabs } = this.props;
+    const dragCard = tabs[dragIndex];
+
+    this.setState(
+      update(this.state, {
+        tabs: {
+          $splice: [[dragIndex, 1], [hoverIndex, 0, dragCard]],
+        },
+      })
+    );
+  }
   tabTemplate(tab, index) {
     // console.log("tabtemplate",tab.index,index);
     let checked = false;
@@ -292,6 +304,7 @@ class ActiveTabs extends React.Component {
       <Tab
         key={tab.index}
         {...tab}
+        dragTab={this.dragTab}
         checked={checked}
         closeTab={this.closeTab}
         togglePin={this.togglePin}
@@ -523,11 +536,11 @@ class ActiveTabs extends React.Component {
       </header>,
       ,
       <div className="tabs-list-container" key={'activetablist'}>
-        <DragDropContext onDragEnd={this.onDragEnd} key={'ddcontext'} id={'activeTabs'}>
+        <DndProvider backend={HTML5Backend}>
           <Tabsgroup preferences={this.props.preferences} id={'tabsGroup'}>
             {this.filterTabs().map(tab => this.tabTemplate(tab))}
           </Tabsgroup>
-        </DragDropContext>
+        </DndProvider>
       </div>,
     ];
   }

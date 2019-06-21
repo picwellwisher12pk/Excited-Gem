@@ -69,10 +69,8 @@ if (process.env.BROWSERCLIENT === 'chrome' || process.env.BROWSERCLIENT === 'all
           {
             test: /\.(js)$/,
             loader: 'babel-loader',
-            exclude: /node_modules/,
-            query: {
-              presets: ['stage-3', 'env', 'react'],
-            },
+            exclude: /node_modules/
+            
           },
         ],
       },
@@ -172,9 +170,7 @@ if (process.env.BROWSERCLIENT === 'firefox' || process.env.BROWSERCLIENT === 'al
             test: /\.js$/,
             loader: 'babel-loader',
             exclude: /node_modules/,
-            query: {
-              presets: ['stage-3', 'env', 'react'],
-            },
+            include: /node_modules\/(?!(react-dnd|react-dnd-html5-backend)\/).*/,
           },
         ],
       },
