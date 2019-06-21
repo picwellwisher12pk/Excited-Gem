@@ -1,8 +1,6 @@
 let env = require('../../utils/env');
-let client =  env.browserClient == 'firefox' ? browser : chrome;
+let client = env.browserClient == 'firefox' ? browser : chrome;
 window.homepageOpened = null;
-
-
 
 //Scripts and Modules
 //Vendors
@@ -10,13 +8,14 @@ window.homepageOpened = null;
 const bootstrap = require('bootstrap');
 
 // import offCanvasNav from "./vendor/codedrops/sidebarEffects";
-import React from 'react';
+import React, { Component } from 'react';
+import { Provider } from 'react-redux';
 import 'react-devtools';
 import ReactDOM from 'react-dom';
 
 //JS libraries
 // import packagedAndBroadcast from './components/communications.js';
-import {updateTabs,getTabs,setTabCountInBadge} from './components/browserActions';
+import { updateTabs, getTabs, setTabCountInBadge } from './components/browserActions';
 import * as general from './components/general.js';
 // import selectTab from './components/tabSelection.js';
 // require("./components/general.js");
@@ -49,30 +48,34 @@ import '../images/sound-icon.svg';
 
 window.tabsList = [];
 window.tabsgroup = null;
-const menu = document.querySelector(".context-menu");
+const menu = document.querySelector('.context-menu');
 let menuVisible = false;
 const toggleMenu = command => {
-  menu.style.display = command === "show" ? "block" : "none";
+  menu.style.display = command === 'show' ? 'block' : 'none';
   menuVisible = !menuVisible;
 };
-window.addEventListener("click", e => {
-  if(menuVisible)toggleMenu("hide");
+window.addEventListener('click', e => {
+  if (menuVisible) toggleMenu('hide');
 });
 const setPosition = ({ top, left }) => {
   menu.style.left = `${left}px`;
   menu.style.top = `${top}px`;
-  toggleMenu("show");
+  toggleMenu('show');
 };
 if (document.addEventListener) {
-  document.addEventListener('contextmenu', function(e) {
-  e.preventDefault();
-    const origin = {
-      left: e.pageX,
-      top: e.pageY
-    };
-    setPosition(origin);
-    return false;
-  }, false);
+  document.addEventListener(
+    'contextmenu',
+    function(e) {
+      e.preventDefault();
+      const origin = {
+        left: e.pageX,
+        top: e.pageY,
+      };
+      setPosition(origin);
+      return false;
+    },
+    false
+  );
 } else {
   document.attachEvent('oncontextmenu', function() {
     alert("You've tried to open context menu");
@@ -82,9 +85,14 @@ if (document.addEventListener) {
 
 // NavigationReference = ReactDOM.render(<Navigation />, document.getElementById('navigation'));
 // infoModal = ReactDOM.render(<InfoModal />, document.getElementById('infoModal'));
-window.tabsgroup = ReactDOM.render(<TabsGroup />, document.getElementById('active-tabs-list-container'));
+window.tabsgroup = ReactDOM.render(
+  <Provider store={store}>
+    <TabsGroup />
+  </Provider>,
+  document.getElementById('active-tabs-list-container')
+);
 
-$('#refreshActiveTabs').on('click', updateTabs( window.tabsgroup));
-$('#closeSelectedBtn').on('click', (e)=>{
+$('#refreshActiveTabs').on('click', updateTabs(window.tabsgroup));
+$('#closeSelectedBtn').on('click', e => {
   window.tabsgroup.processSelectedTabs('close');
 });

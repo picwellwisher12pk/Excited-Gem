@@ -1,10 +1,11 @@
 // let console.log = require('console.log')('tab');
-import React from 'react';
-import PropTypes from 'prop-types';
-import { log } from '../../../general';
-let browser = require('webextension-polyfill');
+import React, { Component, Fragment } from "react";
+import PropTypes from "prop-types";
+import { Draggable } from "react-beautiful-dnd";
+import { log } from "../../../general";
+let browser = require("webextension-polyfill");
 
-export default class Tab extends React.Component {
+export default class Tab extends Component {
   constructor(props) {
     super(props);
     this.state = { ...this.props };
@@ -15,6 +16,8 @@ export default class Tab extends React.Component {
   }
   isChecked(event) {
     const value = event.target.checked;
+    log("tabjs. this is checked", value);
+    // this.setState({checked: value});
     this.props.updateSelectedTabs(this.props.id, value);
   }
   componentWillReceiveProps(props) {
@@ -44,19 +47,21 @@ export default class Tab extends React.Component {
     }
   }
   render() {
-    let title = this.state.title;
-    let url = this.state.url;
+    let { title, url, checked, pinned, discarded } = this.props;
     if (window.searchTerm) {
-      let regex = new RegExp(window.searchTerm, 'gi');
-      title = this.state.title.replace(regex, `<mark>${window.searchTerm}</mark>`);
-      url = this.state.url.replace(regex, `<mark>${window.searchTerm}</mark>`);
+      let regex = new RegExp(window.searchTerm, "gi");
+      title = this.props.title.replace(
+        regex,
+        `<mark>${window.searchTerm}</mark>`
+      );
+      url = this.props.url.replace(regex, `<mark>${window.searchTerm}</mark>`);
+      log("title url postprocess", title, url);
     }
-    let pinned = this.state.pinned;
-
-    let audible = this.state.audible || this.state.muted;
+    let loading = this.state.status == "loading";
+    let audible = this.props.audible || this.props.muted;
     let linkProps = null;
     let actionButtons = null;
-    let audioIcon = '';
+    let audioIcon = "";
     if (!audible) {
       audioIcon = `fal fa-volume`;
     }
@@ -77,16 +82,24 @@ export default class Tab extends React.Component {
           aria-label="pinned"
         >
           <i
-            className={`fa-fw ` + (pinned ? `fas fa-map-marker` : `fal fa-map-marker-slash`)}
-            style={{ width: '30px' }}
+            className={
+              `fa-fw ` +
+              (pinned ? `fas fa-map-marker` : `fal fa-map-marker-slash`)
+            }
+            style={{ width: "30px" }}
           />
         </li>,
         <li
           title="Un/Mute Tab"
-          className={`clickable sound-tab` + (audible ? ` active` : ` disabled`)}
+          className={
+            `clickable sound-tab` + (audible ? ` active` : ` disabled`)
+          }
           onClick={() => this.props.toggleMute(this.props.id)}
         >
-          <i className={audioIcon} style={{ width: '30px', textAlign: 'center' }} />
+          <i
+            className={audioIcon}
+            style={{ width: "30px", textAlign: "center" }}
+          />
         </li>,
         <li
           title="Close Tab"
@@ -96,10 +109,10 @@ export default class Tab extends React.Component {
           data-command="remove"
         >
           <i className="far fa-times fw-fw" />
-        </li>,
+        </li>
       ];
     } else {
-      linkProps = { href: this.props.url, target: '_blank' };
+      linkProps = { href: this.props.url, target: "_blank" };
       actionButtons = (
         <li
           title="Remove"
@@ -113,39 +126,62 @@ export default class Tab extends React.Component {
       );
     }
 
-    let checked = this.state.checked;
-    let loading = this.state.status == 'loading';
-    let discarded = this.state.discarded;
-
     return (
-      <li
-        key={this.props.id}
+      <Draggable
+        draggableId={this.props.id}
+        key={this.props.index}
         data-id={this.props.id}
-        className={`tab-item` + (checked ? ` checked` : ` `) + (loading || discarded ? ` idle` : ` `)}
+        id={this.props.id}
+        index={this.props.index}
+        className={
+          `tab-item` +
+          (checked ? ` checked` : ` `) +
+          (loading || discarded ? ` idle` : ` `)
+        }
       >
-        <label className="tab-favicon" aria-label="favicon">
-          <img src={this.state.favicon} />
-          <input
-            type="checkbox"
-            onChange={this.isChecked.bind(this)}
-            checked={this.state.checked}
-            className="checkbox"
-          />
-        </label>
-        <a className="clickable" title={url} {...linkProps} dangerouslySetInnerHTML={{ __html: title }} />
-        <span
-          className="tab-url trimmed dimmed clip"
-          dangerouslySetInnerHTML={{ __html: url }}
-          onClick={this.focusTab.bind(null, this.props.id)}
-        />
-        <ul className=" tab-actions" role="group" aria-label="options">
-          {/* <li title="Tab Information" className="clickable">
-            onClick={this.infoModal.bind(null, this.state.data)}
-          <i className="fa fa-info-circle fw-fw" />
-          </li> */}
-          {actionButtons}
-        </ul>
-      </li>
+        {(provided, snapshot) => (
+          <li
+            {...provided.draggableProps}
+            {...provided.dragHandleProps}
+            ref={provided.innerRef}
+            id={`draggable-` + this.props.index}
+            // draggableId={this.props.id}
+            className={
+              `tab-item` +
+              (checked ? ` checked` : ` `) +
+              (loading || discarded ? ` idle` : ` `)
+            }
+          >
+            <label className="tab-favicon" aria-label="favicon">
+              <img src={this.state.favicon} />
+              <input
+                type="checkbox"
+                onChange={this.isChecked.bind(this)}
+                checked={this.state.checked}
+                className="checkbox"
+              />
+            </label>
+            <a
+              className="clickable"
+              title={url}
+              {...linkProps}
+              dangerouslySetInnerHTML={{ __html: title }}
+            />
+            <span
+              className="tab-url trimmed dimmed clip"
+              dangerouslySetInnerHTML={{ __html: url }}
+              onClick={this.focusTab.bind(null, this.props.id)}
+            />
+            <ul className=" tab-actions" role="group" aria-label="options">
+              {/* <li title="Tab Information" className="clickable">
+              onClick={this.infoModal.bind(null, this.state.data)}
+            <i className="fa fa-info-circle fw-fw" />
+            </li> */}
+              {actionButtons}
+            </ul>
+          </li>
+        )}
+      </Draggable>
     );
   }
 }
@@ -154,9 +190,9 @@ Tab.propTypes = {
   url: PropTypes.string,
   title: PropTypes.string,
   pinned: PropTypes.bool,
-  position: PropTypes.number,
+  index: PropTypes.number,
   favicon: PropTypes.string,
   audible: PropTypes.bool,
   status: PropTypes.string,
-  checked: PropTypes.bool,
+  checked: PropTypes.bool
 };
