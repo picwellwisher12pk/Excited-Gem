@@ -15,26 +15,26 @@ function updateTabs(store, eventName) {
 }
 let TabsApp;
 configureStore().then(store => {
-  function onRemoved(tabId, removeInfo) {
-    console.log(ACTIONS.updateActiveTabs);
-    updateTabs(store, 'Tab Removed/Detached');
-  }
-  browser.tabs.onRemoved.addListener(onRemoved);
-  browser.tabs.onDetached.addListener(onRemoved);
+  console.log("store",store.getState());
+    function onRemoved(tabId, removeInfo) {
+      console.log(ACTIONS.updateActiveTabs);
+      updateTabs(store, 'Tab Removed/Detached');
+    }
+    browser.tabs.onRemoved.addListener(onRemoved);
+    browser.tabs.onDetached.addListener(onRemoved);
 
-  browser.tabs.onCreated.addListener(() => {
-    updateTabs(store, 'Tab Created');
-  });
-  browser.tabs.onAttached.addListener(() => {
-    updateTabs(store, 'Tab Attached');
-  });
-  browser.tabs.onUpdated.addListener((tabId, changeInfo, tabInfo) => {
-    updateTabs(store, 'Tab Updated');
-  });
-  browser.tabs.onMoved.addListener((tabId, changeInfo, tabInfo) => {
-    updateTabs(store, 'Tab Moved');
-  });
-});
+    browser.tabs.onCreated.addListener(() => {
+      updateTabs(store, 'Tab Created');
+    });
+    browser.tabs.onAttached.addListener(() => {
+      updateTabs(store, 'Tab Attached');
+    });
+    browser.tabs.onUpdated.addListener((tabId, changeInfo, tabInfo) => {
+      updateTabs(store, 'Tab Updated');
+    });
+    browser.tabs.onMoved.addListener((tabId, changeInfo, tabInfo) => {
+      updateTabs(store, 'Tab Moved');
+    });
 
   TabsApp = render(
     <Provider store={store}>
@@ -42,6 +42,7 @@ configureStore().then(store => {
     </Provider>,
     document.querySelector('#root')
   );
+
 });
 
 export default TabsApp;

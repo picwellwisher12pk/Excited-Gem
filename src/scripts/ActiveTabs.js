@@ -3,13 +3,11 @@ const bootstrap = require('bootstrap');
 // const debug = require('debug')('activetabs');
 import { Scrollbars } from 'react-custom-scrollbars';
 import React from 'react';
-import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import 'react-devtools';
-import { CSSTransition } from 'react-transition-group';
 let browser = require('webextension-polyfill');
 // import { TransitionGroup, CSSTransition } from 'react-transition-group';
-import { DragDropContext, Droppable, Draggable } from 'react-beautiful-dnd';
+import { DragDropContext } from 'react-beautiful-dnd';
 
 //JS libraries
 import { updateTabs, getTabs } from './components/browserActions';
@@ -33,12 +31,8 @@ import '../styles/eg.scss';
 
 //Images
 let logo;
-NODE_ENV === 'production'
-  ? (logo = require('../images/logo.svg'))
-  : (logo = require('../images/dev-logo.svg'));
-NODE_ENV === 'production'
-  ? (logo = require('../images/logo.png'))
-  : (logo = require('../images/dev-logo.png'));
+NODE_ENV === 'production' ? (logo = require('../images/logo.svg')) : (logo = require('../images/dev-logo.svg'));
+NODE_ENV === 'production' ? (logo = require('../images/logo.png')) : (logo = require('../images/dev-logo.png'));
 NODE_ENV === 'production' ? (logo = require('../images/logo.png')) : (logo = require('../images/dev-logo.png'));
 import '../images/arrange.svg';
 import '../images/close-icon.svg';
@@ -48,7 +42,6 @@ import '../images/reload-icon.svg';
 import '../images/search-icon.svg';
 import '../images/sound-icon.svg';
 
-
 function reorder(list, startIndex, endIndex) {
   const result = Array.from(list);
   const [removed] = result.splice(startIndex, 1);
@@ -56,19 +49,19 @@ function reorder(list, startIndex, endIndex) {
   return result;
 }
 function objectsAreSame(x, y) {
-      var objectsAreSame = true;
-      for(var propertyName in x) {
-          if(x[propertyName] !== y[propertyName]) {
-            objectsAreSame = false;
-            break;
-          }
-      }
-      return objectsAreSame;
+  var objectsAreSame = true;
+  for (var propertyName in x) {
+    if (x[propertyName] !== y[propertyName]) {
+      objectsAreSame = false;
+      break;
     }
-export default class ActiveTabs extends React.Component {
+  }
+  return objectsAreSame;
+}
+class ActiveTabs extends React.Component {
   constructor(props) {
     super(props);
-     this.state = { ...this.props };
+    this.state = { ...this.props };
     // this.state = {
     //   selectedTabs: [],
     //   allMuted: false,
@@ -77,7 +70,7 @@ export default class ActiveTabs extends React.Component {
     // };
 
     this.closeTab = this.closeTab.bind(this);
-    this.isAllMuted = this.isAllMuted.bind(this)
+    this.isAllMuted = this.isAllMuted.bind(this);
     this.onDragEnd = this.onDragEnd.bind(this);
     this.searchInTabs = this.searchInTabs.bind(this);
     this.updateSelectedTabs = this.updateSelectedTabs.bind(this);
@@ -85,7 +78,6 @@ export default class ActiveTabs extends React.Component {
     this.togglePin = this.togglePin.bind(this);
     const menu = document.querySelector('#context-menu');
     let menuVisible = false;
-
 
     const toggleMenu = command => {
       menu.style.display = command === 'show' ? 'block' : 'none';
@@ -122,18 +114,25 @@ export default class ActiveTabs extends React.Component {
     // debugger;
   }
   shouldComponentUpdate(nextProps, nextState) {
-    nextProps.tabs.forEach(tab => {
+    nextProps.tabs.forEach(tab => {});
+    //if nextstate is not set forget and return True
+    if (nextState.tabs != undefined) {
 
-    });
-    if (nextProps.tabs.length != nextState.tabs.length) return true;
-    for(let i=0;i<nextProps.tabs.length;i++ ){
-      if(!objectsAreSame(nextProps.tabs[i],nextState.tabs[i])) return true;
+      //Check if previous state and next state is different in leghth
+      //then return true to rerender the component
+      if (nextProps.tabs.length != nextState.tabs.length) return true;
+      //If lenght is same check all tabs one bye one to look for differences.
+      //If even one of tab is different in terms of any property, name or loading state etc , then return true to rerender
+      for (let i = 0; i < nextProps.tabs.length; i++) {
+        if (!objectsAreSame(nextProps.tabs[i], nextState.tabs[i])) return true;
+      }
     }
+    return false;
   }
 
   //Creating SelectedTabs status
   updateSelectedTabs(id, selected) {
-    let tempArray = this.state.selectedTabs;
+    let tempArray = this.props.selectedTabs;
     !selected ? tempArray.splice(tempArray.indexOf(id), 1) : tempArray.push(id);
     tempArray.length > 0
       ? $('#selection-action').addClass('selection-active')
@@ -205,7 +204,7 @@ export default class ActiveTabs extends React.Component {
   }
   isAllMuted() {
     // const tabs = this.props.tabs.then(tabs => tabs);
-    for (let tab of props.tabs) {
+    for (let tab of this.props.tabs) {
       if (!tab.mutedInfo.muted) return false;
     }
     return true;
@@ -271,7 +270,7 @@ export default class ActiveTabs extends React.Component {
     sortTabs(parameter);
   }
   filterTabs() {
-    if (this.props.searchTerm == '') return this.state.tabs;
+    if (this.props.searchTerm == '') return this.props.tabs;
     let filteredTabs = this.props.tabs.filter(tab => {
       if (this.props.preferences.search.regex) {
         let regex = new RegExp(this.props.searchTerm, this.props.preferences.search.ignoreCase ? 'i' : '');
@@ -308,7 +307,7 @@ export default class ActiveTabs extends React.Component {
             type: 'basic',
             iconUrl: '../images/logo.svg',
             title: 'Settings Saved',
-            message: 'Search settings updated'
+            message: 'Search settings updated',
           },
           function(notificationId) {}
         );
@@ -316,13 +315,13 @@ export default class ActiveTabs extends React.Component {
     });
   }
   tabTemplate(tab, index) {
-    // console.log("tabtemplate",tab.index,index);
     let checked = false;
     if (this.props.selectedTabs) checked = this.props.selectedTabs.includes(tab.id);
     return (
       <Tab
         key={tab.index}
         {...tab}
+        activeTab={true}
         checked={checked}
         closeTab={this.closeTab}
         togglePin={this.togglePin}
@@ -344,7 +343,6 @@ export default class ActiveTabs extends React.Component {
     // browser.tabs.move(result.draggableId, { index: result.destination.index });
   }
   render() {
-    console.info('Rendering', this.props);
     return [
       <header className="page-header" key={'header'}>
         <nav className="navbar">
@@ -408,7 +406,7 @@ export default class ActiveTabs extends React.Component {
                 style={{
                   width: 'auto',
                   marginRight: '15px',
-                  border: '1px solid #7cbbff'
+                  border: '1px solid #7cbbff',
                 }}
               >
                 <a
@@ -593,27 +591,13 @@ export default class ActiveTabs extends React.Component {
           </ul>
         </section>
       </header>,
-      <Scrollbars autoHeight={false} autoHeightMax={'auto'}>
+      <Scrollbars autoHeight={false} autoHeightMax={'auto'} key={'scrollbar'}>
         <div className="tabs-list-container" key={'activetablist'}>
           <DragDropContext onDragEnd={this.onDragEnd} key={'ddcontext'} id={'activeTabs'}>
             <Tabsgroup preferences={this.props.preferences} id={'tabsgroup'}>
-              {this.filterTabs().map(
-                tab => (
-                  <CSSTransition
-                    transitionName="fade"
-                    classNames="fade"
-                    appear={
-                      this.state.preferences.tabsGroup.tabsListAnimation // console.log(tab.title);
-                    }
-                    exit={false}
-                    key={tab.id}
-                    timeout={{ enter: 200, exit: 0 }}
-                  >
-                    {this.tabTemplate(tab)}
-                  </CSSTransition>
-                ),
-                this
-              )}
+              {this.filterTabs().map(tab => {
+                return this.tabTemplate(tab);
+              }, this)}
             </Tabsgroup>
           </DragDropContext>
         </div>

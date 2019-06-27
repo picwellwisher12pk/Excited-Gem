@@ -1,15 +1,14 @@
-import React from "react";
-import PropTypes from "prop-types";
-import { TransitionGroup, CSSTransition } from "react-transition-group";
-import { DragDropContext, Droppable, Draggable } from "react-beautiful-dnd";
-import Tab from "./Tab/index";
-import { log } from "../../general";
+import React from 'react';
+import PropTypes from 'prop-types';
+import { Droppable } from 'react-beautiful-dnd';
+// import Tab from './Tab/index';
+import { log } from '../../general';
 
 export default class TabsGroup extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      selectedTabs: []
+      selectedTabs: [],
     };
     this.render = this.render.bind(this);
   }
@@ -26,19 +25,19 @@ export default class TabsGroup extends React.Component {
 
   render() {
     // console.log("tabgroup this props children",this.state.tabs,this.props.children);
-    const animated = `<TransitionGroup component="ul" className="tab tabs-list sortable selectable">
-              ${this.props.children}
-            </TransitionGroup>`;
+    // const animated = `<TransitionGroup component="ul" className="tab tabs-list sortable selectable">
+    //           ${this.props.children}
+    //         </TransitionGroup>`;
     // const { innerRef } = this.props;
     // const staticList = `<ul className="tab tabs-list sortable selectable" ref=${provided.innerRef}> ${this.props.children}</ul>`;
     return (
-      <Droppable droppableId="droppable" id={"droppable"}>
-        {(provided, snapshot) => (
+      <Droppable droppableId="droppable" id={'droppable'}>
+        {provided => (
           <ul
             className="tab tabs-list sortable selectable"
             ref={provided.innerRef}
             {...provided.droppableProps}
-            id={"droppableUL"}
+            id={'droppableUL'}
           >
             {this.props.children}
             {provided.placeholder}
@@ -50,5 +49,5 @@ export default class TabsGroup extends React.Component {
 }
 TabsGroup.propTypes = {
   preferences: PropTypes.object,
-  tabs: PropTypes.array
+  tabs: PropTypes.array,
 };

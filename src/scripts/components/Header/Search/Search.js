@@ -13,13 +13,10 @@ export default class Search extends React.Component {
     this.searchField = React.createRef();
     this.title = React.createRef();
     this.url = React.createRef();
-    console.log('search', this.state.searchIn);
   }
   onKeyUpped(event) {
     // console.info('keypressed', event.target, this);
-    this.searchField.current.value != ''
-      ? this.setState({ empty: false })
-      : this.setState({ empty: true });
+    this.searchField.current.value != '' ? this.setState({ empty: false }) : this.setState({ empty: true });
     if (event.keyCode == 27) {
       // console.log('escaped');
       this.clear();

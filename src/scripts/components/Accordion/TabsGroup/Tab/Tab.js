@@ -1,38 +1,38 @@
-// let console.log = require('console.log')('tab');
-import React, { Component, Fragment } from "react";
-import PropTypes from "prop-types";
-import { Draggable } from "react-beautiful-dnd";
-import { log } from "../../../general";
-let browser = require("webextension-polyfill");
+import React, { Component } from 'react';
+import PropTypes from 'prop-types';
+import { Draggable } from 'react-beautiful-dnd';
+import { log } from '../../../general';
+let browser = require('webextension-polyfill');
 
-export default class Tab extends Component {
+class Tab extends Component {
   constructor(props) {
     super(props);
     this.state = { ...this.props };
     this.isChecked = this.isChecked.bind(this);
   }
+
+  /**
+   *  Click on a tab to focus that tab on browser
+   *
+   * @param {*} id
+   * @memberof Tab
+   */
   focusTab(id) {
     browser.tabs.update(id, { active: true });
   }
   isChecked(event) {
     const value = event.target.checked;
-    log("tabjs. this is checked", value);
-    // this.setState({checked: value});
     this.props.updateSelectedTabs(this.props.id, value);
   }
-  componentWillReceiveProps(props) {
-    // console.log("Tab.js getting new props:",props);
-  }
-  componentWillUnmount() {
-    // console.log("Tab.js unmounting:");
-  }
-  componentDidUpdate(props, state, snapshot) {
-    // console.log("Tab.js updated",props,state);
-  }
+
   componentWillReceiveProps(props) {
     this.setState({ url: props.url });
     this.setState({ title: props.title });
     this.setState({ favicon: props.favIconUrl });
+
+    //Tabs are either ActiveTabs that is tabs representing on browser
+    // Or Links/Tabs on session stored
+
     if (props.activeTab) {
       this.setState({ id: props.id });
       if (props.key) this.setState({ key: props.key });
@@ -49,19 +49,16 @@ export default class Tab extends Component {
   render() {
     let { title, url, checked, pinned, discarded } = this.props;
     if (window.searchTerm) {
-      let regex = new RegExp(window.searchTerm, "gi");
-      title = this.props.title.replace(
-        regex,
-        `<mark>${window.searchTerm}</mark>`
-      );
+      let regex = new RegExp(window.searchTerm, 'gi');
+      title = this.props.title.replace(regex, `<mark>${window.searchTerm}</mark>`);
       url = this.props.url.replace(regex, `<mark>${window.searchTerm}</mark>`);
-      log("title url postprocess", title, url);
+      log('title url postprocess', title, url);
     }
-    let loading = this.state.status == "loading";
+    let loading = this.state.status == 'loading';
     let audible = this.props.audible || this.props.muted;
     let linkProps = null;
     let actionButtons = null;
-    let audioIcon = "";
+    let audioIcon = '';
     if (!audible) {
       audioIcon = `fal fa-volume`;
     }
@@ -76,32 +73,27 @@ export default class Tab extends Component {
       linkProps = { onClick: this.focusTab.bind(null, this.props.id) };
       actionButtons = [
         <li
+          key={1}
           title="Un/Pin Tab"
           className={`clickable pin-tab` + (pinned ? ` active` : ` disabled`)}
           onClick={() => this.props.togglePin(this.props.id)}
           aria-label="pinned"
         >
           <i
-            className={
-              `fa-fw ` +
-              (pinned ? `fas fa-map-marker` : `fal fa-map-marker-slash`)
-            }
-            style={{ width: "30px" }}
+            className={`fa-fw ` + (pinned ? `fas fa-map-marker` : `fal fa-map-marker-slash`)}
+            style={{ width: '30px' }}
           />
         </li>,
         <li
+          key={2}
           title="Un/Mute Tab"
-          className={
-            `clickable sound-tab` + (audible ? ` active` : ` disabled`)
-          }
+          className={`clickable sound-tab` + (audible ? ` active` : ` disabled`)}
           onClick={() => this.props.toggleMute(this.props.id)}
         >
-          <i
-            className={audioIcon}
-            style={{ width: "30px", textAlign: "center" }}
-          />
+          <i className={audioIcon} style={{ width: '30px', textAlign: 'center' }} />
         </li>,
         <li
+          key={3}
           title="Close Tab"
           className="clickable remove-tab"
           data-id={this.props.id}
@@ -109,10 +101,10 @@ export default class Tab extends Component {
           data-command="remove"
         >
           <i className="far fa-times fw-fw" />
-        </li>
+        </li>,
       ];
     } else {
-      linkProps = { href: this.props.url, target: "_blank" };
+      linkProps = { href: this.props.url, target: '_blank' };
       actionButtons = (
         <li
           title="Remove"
@@ -133,11 +125,7 @@ export default class Tab extends Component {
         data-id={this.props.id}
         id={this.props.id}
         index={this.props.index}
-        className={
-          `tab-item` +
-          (checked ? ` checked` : ` `) +
-          (loading || discarded ? ` idle` : ` `)
-        }
+        className={`tab-item` + (checked ? ` checked` : ` `) + (loading || discarded ? ` idle` : ` `)}
       >
         {(provided, snapshot) => (
           <li
@@ -146,11 +134,8 @@ export default class Tab extends Component {
             ref={provided.innerRef}
             id={`draggable-` + this.props.index}
             // draggableId={this.props.id}
-            className={
-              `tab-item` +
-              (checked ? ` checked` : ` `) +
-              (loading || discarded ? ` idle` : ` `)
-            }
+            key={this.props.index}
+            className={`tab-item` + (checked ? ` checked` : ` `) + (loading || discarded ? ` idle` : ` `)}
           >
             <label className="tab-favicon" aria-label="favicon">
               <img src={this.state.favicon} />
@@ -161,12 +146,7 @@ export default class Tab extends Component {
                 className="checkbox"
               />
             </label>
-            <a
-              className="clickable"
-              title={url}
-              {...linkProps}
-              dangerouslySetInnerHTML={{ __html: title }}
-            />
+            <a className="clickable" title={url} {...linkProps} dangerouslySetInnerHTML={{ __html: title }} />
             <span
               className="tab-url trimmed dimmed clip"
               dangerouslySetInnerHTML={{ __html: url }}
@@ -194,5 +174,6 @@ Tab.propTypes = {
   favicon: PropTypes.string,
   audible: PropTypes.bool,
   status: PropTypes.string,
-  checked: PropTypes.bool
+  checked: PropTypes.bool,
 };
+export default Tab;
