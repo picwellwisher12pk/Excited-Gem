@@ -124,7 +124,7 @@ export function propertyToArray(array, property) {
 // Hide method from for-in loops
 Object.defineProperty(Array.prototype, 'equals', { enumerable: false });
 // module.exports = general;
-export function hasClass(elem, className) {
+export function hasClass2(elem, className) {
   return elem.className.split(' ').indexOf(className) > -1;
 }
 
@@ -223,7 +223,23 @@ function quicksort(sortby, array) {
   log('left:', left, 'right:', right);
   return quicksort(sortby, left).concat(pivot, quicksort(sortby, right));
 }
+function hasClass(el, className) {
+  if (el.classList) return el.classList.contains(className);
+  return !!el.className.match(new RegExp('(\\s|^)' + className + '(\\s|$)'));
+}
 
+export function addClass(el, className) {
+  if (el.classList) el.classList.add(className);
+  else if (!hasClass(el, className)) el.className += ' ' + className;
+}
+
+export function removeClass(el, className) {
+  if (el.classList) el.classList.remove(className);
+  else if (hasClass(el, className)) {
+    var reg = new RegExp('(\\s|^)' + className + '(\\s|$)');
+    el.className = el.className.replace(reg, ' ');
+  }
+}
 export function sortTabs(sortby) {
   let tabsList = quicksort(sortby, window.tabs);
   log('after quicksort', tabsList);

@@ -1,10 +1,10 @@
-import React from 'react';
+import React,{PureComponent} from 'react';
 import PropTypes from 'prop-types';
 import { Droppable } from 'react-beautiful-dnd';
 // import Tab from './Tab/index';
 import { log } from '../../general';
 
-export default class TabsGroup extends React.Component {
+export default class TabsGroup extends PureComponent {
   constructor(props) {
     super(props);
     this.state = {

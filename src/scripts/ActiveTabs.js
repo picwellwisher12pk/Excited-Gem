@@ -1,8 +1,8 @@
 //Scripts and Modules
-const bootstrap = require('bootstrap');
+// const bootstrap = require('bootstrap');
 // const debug = require('debug')('activetabs');
 import { Scrollbars } from 'react-custom-scrollbars';
-import React from 'react';
+import React, { PureComponent, Component } from 'react';
 import { connect } from 'react-redux';
 import 'react-devtools';
 let browser = require('webextension-polyfill');
@@ -11,7 +11,7 @@ import { DragDropContext } from 'react-beautiful-dnd';
 
 //JS libraries
 import { updateTabs, getTabs } from './components/browserActions';
-import { sortTabs } from './components/general.js';
+import { sortTabs, addClass, removeClass } from './components/general.js';
 import { saveTabs } from './components/getsetSessions';
 
 // React Components
@@ -58,7 +58,7 @@ function objectsAreSame(x, y) {
   }
   return objectsAreSame;
 }
-class ActiveTabs extends React.Component {
+class ActiveTabs extends Component {
   constructor(props) {
     super(props);
     this.state = { ...this.props };
@@ -117,7 +117,6 @@ class ActiveTabs extends React.Component {
     nextProps.tabs.forEach(tab => {});
     //if nextstate is not set forget and return True
     if (nextState.tabs != undefined) {
-
       //Check if previous state and next state is different in leghth
       //then return true to rerender the component
       if (nextProps.tabs.length != nextState.tabs.length) return true;
@@ -135,8 +134,8 @@ class ActiveTabs extends React.Component {
     let tempArray = this.props.selectedTabs;
     !selected ? tempArray.splice(tempArray.indexOf(id), 1) : tempArray.push(id);
     tempArray.length > 0
-      ? $('#selection-action').addClass('selection-active')
-      : $('#selection-action').removeClass('selection-active');
+      ? addClass(document.querySelectorAll('#selection-action'), 'selection-active')
+      : removeClass(document.querySelectorAll('#selection-action'), 'selection-active');
     this.setState({ selectedTabs: tempArray });
     this.setState({ tabs: this.props.tabs });
   }
@@ -218,7 +217,7 @@ class ActiveTabs extends React.Component {
         if (!confirm(message)) return false;
         for (let id of selection) this.closeTab(id, false);
         this.setState({ selectedTabs: [] });
-        $('#selection-action').removeClass('selection-active');
+        removeClass(document.querySelectorAll('#selection-action'), 'selection-active');
         break;
       case 'toNewWindow':
         let targetWindow = browser.windows.create();
@@ -254,11 +253,11 @@ class ActiveTabs extends React.Component {
       //Selection
       case 'selectAll':
         this.setState({ selectedTabs: this.filterTabs().map(tab => tab.id) });
-        $('#selection-action').addClass('selection-active');
+        addClass(document.querySelectorAll('#selection-action'), 'selection-active');
         break;
       case 'selectNone':
         this.setState({ selectedTabs: [] });
-        $('#selection-action').removeClass('selection-active');
+        removeClass(document.querySelectorAll('#selection-action'), 'selection-active');
         break;
       case 'invertSelection':
         let inverted = this.props.tabs.filter(tab => !this.props.selectedTabs.includes(tab.id)).map(tab => tab.id);
@@ -595,9 +594,7 @@ class ActiveTabs extends React.Component {
         <div className="tabs-list-container" key={'activetablist'}>
           <DragDropContext onDragEnd={this.onDragEnd} key={'ddcontext'} id={'activeTabs'}>
             <Tabsgroup preferences={this.props.preferences} id={'tabsgroup'}>
-              {this.filterTabs().map(tab => {
-                return this.tabTemplate(tab);
-              }, this)}
+              {this.filterTabs().map(tab => this.tabTemplate(tab), this)}
             </Tabsgroup>
           </DragDropContext>
         </div>
