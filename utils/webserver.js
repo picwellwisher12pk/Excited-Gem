@@ -29,7 +29,7 @@ if (process.env.BROWSERCLIENT === 'firefox' || process.env.BROWSERCLIENT === 'al
     contentBase: path.join(__dirname, '../firefox'),
     headers: { 'Access-Control-Allow-Origin': '*' },
   });
-  firefoxServer.listen(process.env.PORT);
+  // firefoxServer.listen(process.env.PORT);
 }
 //Chrome
 if (process.env.BROWSERCLIENT === 'chrome' || process.env.BROWSERCLIENT === 'all') {

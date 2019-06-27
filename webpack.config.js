@@ -262,11 +262,11 @@ if (
       context: __dirname,
       entry: {
         tabs: [
-          "@babel/polyfill",
+          // "@babel/polyfill",
           path.join(__dirname, "src", "scripts", "TabsApp.js")
         ],
         sessions: [
-          "@babel/polyfill",
+          // "@babel/polyfill",
           path.join(__dirname, "src", "scripts", "sessions-container.js")
         ],
         background: path.join(__dirname, "src", "scripts", "background.js")
@@ -314,9 +314,6 @@ if (
             test: /\.js$/,
             loader: "babel-loader",
             exclude: /node_modules/,
-            query: {
-              presets: ["stage-3", "env", "react"]
-            }
           }
         ]
       },
