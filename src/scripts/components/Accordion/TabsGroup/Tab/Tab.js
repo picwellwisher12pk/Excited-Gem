@@ -1,9 +1,27 @@
-import React, { PureComponent } from 'react';
+import React, {PureComponent} from 'react';
 import PropTypes from 'prop-types';
-import { Draggable } from 'react-beautiful-dnd';
-import { log } from '../../../general';
+import {FontAwesomeIcon as FA} from '@fortawesome/react-fontawesome';
+import {faVolume} from '@fortawesome/pro-regular-svg-icons/faVolume';
+import {faVolumeOff} from '@fortawesome/pro-regular-svg-icons/faVolumeOff';
+import {faVolumeSlash} from '@fortawesome/pro-regular-svg-icons/faVolumeSlash';
+import {faTimes} from '@fortawesome/pro-regular-svg-icons/faTimes';
+import {faThumbtack} from '@fortawesome/pro-regular-svg-icons/faThumbtack';
+import {Draggable} from 'react-beautiful-dnd';
+import {log} from '../../../general';
+
+
 let browser = require('webextension-polyfill');
 
+/**
+ *  Click on a tab to focus that tab on browser
+ *  Browser Action
+ *
+ * @param {*} id
+ * @memberof Tab
+ */
+function focusTab(id) {
+  browser.tabs.update(id, {active: true});
+}
 class Tab extends PureComponent {
   constructor(props) {
     super(props);
@@ -11,15 +29,7 @@ class Tab extends PureComponent {
     this.isChecked = this.isChecked.bind(this);
   }
 
-  /**
-   *  Click on a tab to focus that tab on browser
-   *
-   * @param {*} id
-   * @memberof Tab
-   */
-  focusTab(id) {
-    browser.tabs.update(id, { active: true });
-  }
+
   isChecked(event) {
     const value = event.target.checked;
     this.props.updateSelectedTabs(this.props.id, value);
@@ -54,23 +64,24 @@ class Tab extends PureComponent {
       url = this.props.url.replace(regex, `<mark>${window.searchTerm}</mark>`);
       log('title url postprocess', title, url);
     }
-    let loading = this.state.status == 'loading';
+    let loading = this.state.status === 'loading';
     let audible = this.props.audible || this.props.muted;
     let linkProps = null;
     let actionButtons = null;
     let audioIcon = '';
     if (!audible) {
-      audioIcon = `fal fa-volume`;
+      // audioIcon = <img src={'icons/volume-off.svg'} style={{ width: '30px' }} />;
+      audioIcon = <FA icon={faVolumeOff} fixedWidth/>;
     }
     if (audible && !this.props.muted) {
-      audioIcon = `fas fa-volume`;
+      audioIcon = <FA icon={faVolume} fixedWidth/>;
     }
     if (audible && this.props.muted) {
-      audioIcon = `fas fa-volume-slash`;
+      audioIcon = <FA icon={faVolumeSlash} fixedWidth/>;
     }
 
     if (this.props.activeTab) {
-      linkProps = { onClick: this.focusTab.bind(null, this.props.id) };
+      linkProps = {onClick: focusTab.bind(null, this.props.id)};
       actionButtons = [
         <li
           key={1}
@@ -79,10 +90,7 @@ class Tab extends PureComponent {
           onClick={() => this.props.togglePin(this.props.id)}
           aria-label="pinned"
         >
-          <i
-            className={`fa-fw ` + (pinned ? `fas fa-map-marker` : `fal fa-map-marker-slash`)}
-            style={{ width: '30px' }}
-          />
+          <FA icon={faThumbtack} fixedWidth/>
         </li>,
         <li
           key={2}
@@ -90,7 +98,7 @@ class Tab extends PureComponent {
           className={`clickable sound-tab` + (audible ? ` active` : ` disabled`)}
           onClick={() => this.props.toggleMute(this.props.id)}
         >
-          <i className={audioIcon} style={{ width: '30px', textAlign: 'center' }} />
+          {audioIcon}
         </li>,
         <li
           key={3}
@@ -100,7 +108,7 @@ class Tab extends PureComponent {
           onClick={() => this.props.closeTab(this.props.id)}
           data-command="remove"
         >
-          <i className="far fa-times fw-fw" />
+          <FA icon={faTimes}/>
         </li>,
       ];
     } else {
@@ -127,7 +135,7 @@ class Tab extends PureComponent {
         index={this.props.index}
         className={`tab-item` + (checked ? ` checked` : ` `) + (loading || discarded ? ` idle` : ` `)}
       >
-        {(provided, snapshot) => (
+        {(provided) => (
           <li
             {...provided.draggableProps}
             {...provided.dragHandleProps}
@@ -138,7 +146,7 @@ class Tab extends PureComponent {
             className={`tab-item` + (checked ? ` checked` : ` `) + (loading || discarded ? ` idle` : ` `)}
           >
             <label className="tab-favicon" aria-label="favicon">
-              <img src={this.state.favicon} />
+              <img src={this.state.favicon} alt={`Site Favicon`}/>
               <input
                 type="checkbox"
                 onChange={this.isChecked.bind(this)}
@@ -150,7 +158,9 @@ class Tab extends PureComponent {
             <span
               className="tab-url trimmed dimmed clip"
               dangerouslySetInnerHTML={{ __html: url }}
-              onClick={this.focusTab.bind(null, this.props.id)}
+              onClick={() => {
+                focusTab(this.props.id)
+              }}
             />
             <ul className=" tab-actions" role="group" aria-label="options">
               {/* <li title="Tab Information" className="clickable">

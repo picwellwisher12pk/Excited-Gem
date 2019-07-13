@@ -1,6 +1,5 @@
 // import ACTIONS from './action';
 import _ from 'lodash';
-import { getTabs } from '../components/browserActions';
 
 const rootReducer = (state = {}, action) => {
   switch (action.type) {
@@ -8,6 +7,12 @@ const rootReducer = (state = {}, action) => {
       let newState = _.cloneDeep(state);
       newState.tabs = [];
       newState.tabs = _.cloneDeep(action.payload);
+      return newState;
+    }
+    case 'UPDATE_SEARCH_TERM': {
+      let newState = _.cloneDeep(state);
+      action.payload !== '' ? newState.preferences.search.empty = false : newState.preferences.search.empty = true;
+      newState.preferences.searchTerm = action.payload;
       return newState;
     }
 

@@ -3,6 +3,7 @@ exports.preferences = {
     regex: true,
     ignoreCase: true,
     searchIn: [true, true], // title,url
+    empty: true,
   },
   searchTerm: '',
   defaultTabsFrom: 'current',

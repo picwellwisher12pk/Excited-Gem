@@ -1,46 +1,28 @@
 //Scripts and Modules
-// const bootstrap = require('bootstrap');
-// const debug = require('debug')('activetabs');
-import { Scrollbars } from 'react-custom-scrollbars';
-import React, { PureComponent, Component } from 'react';
-import { connect } from 'react-redux';
+import {Scrollbars} from 'react-custom-scrollbars';
+import {PureComponent} from 'react';
+import {connect} from 'react-redux';
 import 'react-devtools';
-let browser = require('webextension-polyfill');
 // import { TransitionGroup, CSSTransition } from 'react-transition-group';
-import { DragDropContext } from 'react-beautiful-dnd';
-
+import {DragDropContext} from 'react-beautiful-dnd';
 //JS libraries
-import { updateTabs, getTabs } from './components/browserActions';
-import { sortTabs, addClass, removeClass } from './components/general.js';
-import { saveTabs } from './components/getsetSessions';
-
+import {getTabs} from './components/browserActions';
+import {addClass, removeClass} from './components/general.js';
+import {saveTabs} from './components/getsetSessions';
+import '../images/logo.png';
+import '../images/dev-logo.png';
 // React Components
 import ACTIONS from './modules/action';
-import Search from './components/Header/Search/index';
+
+import Header from './components/Header/Header';
 import Tabsgroup from './components/Accordion/TabsGroup/index';
 import Tab from './components/Accordion/TabsGroup/Tab/index';
-import WindowSelector from './components/WindowSelector';
-// import ErrorBoundary from './ErrorBoundary';
-
 //Styles
-import '../styles/fontawesome5/fa-solid.scss';
-import '../styles/fontawesome5/fa-regular.scss';
-import '../styles/fontawesome5/fa-light.scss';
-import '../styles/fontawesome5.scss';
 import '../styles/eg.scss';
 
-//Images
-let logo;
-NODE_ENV === 'production' ? (logo = require('../images/logo.svg')) : (logo = require('../images/dev-logo.svg'));
-NODE_ENV === 'production' ? (logo = require('../images/logo.png')) : (logo = require('../images/dev-logo.png'));
-NODE_ENV === 'production' ? (logo = require('../images/logo.png')) : (logo = require('../images/dev-logo.png'));
-import '../images/arrange.svg';
-import '../images/close-icon.svg';
-import '../images/info-icon.svg';
-import '../images/pin-icon.svg';
-import '../images/reload-icon.svg';
-import '../images/search-icon.svg';
-import '../images/sound-icon.svg';
+let browser = require('webextension-polyfill');
+
+// import ErrorBoundary from './ErrorBoundary';
 
 function reorder(list, startIndex, endIndex) {
   const result = Array.from(list);
@@ -48,20 +30,11 @@ function reorder(list, startIndex, endIndex) {
   result.splice(endIndex, 0, removed);
   return result;
 }
-function objectsAreSame(x, y) {
-  var objectsAreSame = true;
-  for (var propertyName in x) {
-    if (x[propertyName] !== y[propertyName]) {
-      objectsAreSame = false;
-      break;
-    }
-  }
-  return objectsAreSame;
-}
-class ActiveTabs extends Component {
+
+class ActiveTabs extends PureComponent {
   constructor(props) {
     super(props);
-    this.state = { ...this.props };
+    // this.state = { ...this.props };
     // this.state = {
     //   selectedTabs: [],
     //   allMuted: false,
@@ -72,7 +45,6 @@ class ActiveTabs extends Component {
     this.closeTab = this.closeTab.bind(this);
     this.isAllMuted = this.isAllMuted.bind(this);
     this.onDragEnd = this.onDragEnd.bind(this);
-    this.searchInTabs = this.searchInTabs.bind(this);
     this.updateSelectedTabs = this.updateSelectedTabs.bind(this);
     this.setPreferences = this.setPreferences.bind(this);
     this.togglePin = this.togglePin.bind(this);
@@ -90,7 +62,7 @@ class ActiveTabs extends Component {
       toggleMenu('show');
     };
 
-    window.addEventListener('click', e => {
+    window.addEventListener('click', () => {
       if (menuVisible) toggleMenu('hide');
     });
 
@@ -113,21 +85,23 @@ class ActiveTabs extends Component {
     this.setState({ preferences: this.props.preferences });
     // debugger;
   }
-  shouldComponentUpdate(nextProps, nextState) {
-    nextProps.tabs.forEach(tab => {});
-    //if nextstate is not set forget and return True
-    if (nextState.tabs != undefined) {
-      //Check if previous state and next state is different in leghth
-      //then return true to rerender the component
-      if (nextProps.tabs.length != nextState.tabs.length) return true;
-      //If lenght is same check all tabs one bye one to look for differences.
-      //If even one of tab is different in terms of any property, name or loading state etc , then return true to rerender
-      for (let i = 0; i < nextProps.tabs.length; i++) {
-        if (!objectsAreSame(nextProps.tabs[i], nextState.tabs[i])) return true;
-      }
-    }
-    return false;
-  }
+
+  // shouldComponentUpdate(nextProps, nextState) {
+  //   console.log('activeTabs SHOULDCOMPONENTUPDATE', nextProps, nextState);
+  //   nextProps.tabs.forEach(tab => {});
+  //   //if nextstate is not set forget and return True
+  //   if (nextState.tabs != undefined) {
+  //     //Check if previous state and next state is different in leghth
+  //     //then return true to rerender the component
+  //     if (nextProps.tabs.length != nextState.tabs.length) return true;
+  //     //If lenght is same check all tabs one bye one to look for differences.
+  //     //If even one of tab is different in terms of any property, name or loading state etc , then return true to rerender
+  //     for (let i = 0; i < nextProps.tabs.length; i++) {
+  //       if (!objectsAreSame(nextProps.tabs[i], nextState.tabs[i])) return true;
+  //     }
+  //   }
+  //   return false;
+  // }
 
   //Creating SelectedTabs status
   updateSelectedTabs(id, selected) {
@@ -174,7 +148,7 @@ class ActiveTabs extends Component {
     );
   }
   togglePin(tabId) {
-    let tabTemp = this.props.tabs.filter(tab => tab.id == tabId);
+    let tabTemp = this.props.tabs.filter(tab => tab.id === tabId);
     tabTemp[0].pinned ? this.unpinTab(tabId) : this.pinTab(tabId);
   }
   isAllPinned() {
@@ -212,7 +186,7 @@ class ActiveTabs extends Component {
     switch (action) {
       case 'closeSelected':
         let message = 'Are you sure you want to close selected tabs';
-        if (selection.length == this.props.tabs.length)
+        if (selection.length === this.props.tabs.length)
           message = 'Are you sure you want to close all the tabs? This will also close this window.';
         if (!confirm(message)) return false;
         for (let id of selection) this.closeTab(id, false);
@@ -224,10 +198,10 @@ class ActiveTabs extends Component {
         targetWindow.then(windowInfo => {
           browser.tabs.move(selection, { windowId: windowInfo.id, index: 0 });
         });
-
+        break;
       case 'toSession':
-        saveTabs(selection.map(selectedTab => this.state.tabs.find(o => selectedTab == o.id)));
-
+        saveTabs(selection.map(selectedTab => this.state.tabs.find(o => selectedTab === o.id)));
+        break;
       case 'pinSelected':
         for (let tab of selection) this.pinTab(tab);
         break;
@@ -265,14 +239,12 @@ class ActiveTabs extends Component {
         break;
     }
   }
-  sortBy(parameter) {
-    sortTabs(parameter);
-  }
+
   filterTabs() {
-    if (this.props.searchTerm == '') return this.props.tabs;
-    let filteredTabs = this.props.tabs.filter(tab => {
+    if (this.props.preferences.searchTerm === '') return this.props.tabs;
+    return this.props.tabs.filter(tab => {
       if (this.props.preferences.search.regex) {
-        let regex = new RegExp(this.props.searchTerm, this.props.preferences.search.ignoreCase ? 'i' : '');
+        let regex = new RegExp(this.props.preferences.searchTerm, this.props.preferences.search.ignoreCase ? 'i' : '');
         if (this.props.preferences.search.searchIn[0]) {
           if (regex.test(tab.title)) return true;
         }
@@ -281,25 +253,19 @@ class ActiveTabs extends Component {
         }
       } else {
         if (this.props.preferences.search.searchIn[0]) {
-          return tab.title.indexOf(this.props.searchTerm) >= 0;
+          return tab.title.indexOf(this.props.preferences.searchTerm) >= 0;
         }
         if (this.props.preferences.search.searchIn[1]) {
-          return tab.url.indexOf(this.props.searchTerm) >= 0;
+          return tab.url.indexOf(this.props.preferences.searchTerm) >= 0;
         }
       }
     });
-    return filteredTabs;
-  }
-
-  searchInTabs(searchTerm) {
-    this.props.searchTerm = searchTerm;
-    this.forceUpdate();
   }
   setPreferences(prefSection, key, value) {
     browser.storage.local.get('preferences').then(result => {
       let jsonObj = result;
       jsonObj['preferences'][prefSection][key] = value;
-      browser.storage.local.set(jsonObj).then(tempResult => {
+      browser.storage.local.set(jsonObj).then(() => {
         browser.notifications.create(
           'reminder',
           {
@@ -313,7 +279,8 @@ class ActiveTabs extends Component {
       });
     });
   }
-  tabTemplate(tab, index) {
+
+  tabTemplate(tab) {
     let checked = false;
     if (this.props.selectedTabs) checked = this.props.selectedTabs.includes(tab.id);
     return (
@@ -331,7 +298,7 @@ class ActiveTabs extends Component {
   }
 
   onDragEnd(result) {
-    const { destination, source, draggableId } = result;
+    const {destination, source} = result;
     if (!result.destination) return;
 
     if (destination.droppableId === source.droppableId && destination.index === source.index) {
@@ -339,257 +306,12 @@ class ActiveTabs extends Component {
     }
     const tabs = reorder(this.filterTabs(), source.index, destination.index);
     this.props.reorderTabs(tabs);
-    // browser.tabs.move(result.draggableId, { index: result.destination.index });
+    browser.tabs.move(result.draggableId, {index: result.destination.index});
   }
   render() {
     return [
-      <header className="page-header" key={'header'}>
-        <nav className="navbar">
-          <div className="navbar-brand ">
-            <a href="#" className="pull-left logo" style={{ marginTop: '10px' }}>
-              <img src={logo} alt="" style={{ height: '40px', width: 'auto' }} />
-            </a>
-          </div>
-          <div className="collapse navbar-collapse" id="navbarNav">
-            <ul className="navbar-nav">
-              <li className="nav-item active">
-                <a className="nav-link text-white font-weight-bold" href="/tabs.html" id="go-to-tabs">
-                  Tabs
-                  <span
-                    className={
-                      `active-tab-counter badge ` + (this.props.tabs.length > 50 ? 'badge-danger' : 'badge-success')
-                    }
-                  >
-                    {this.props.tabs.length ? this.props.tabs.length : ''}
-                  </span>
-                  <span className="sr-only">(current)</span>
-                </a>
-              </li>
-              <li className="nav-item">
-                <a className="nav-link text-white" href="/sessions.html">
-                  Sessions
-                </a>
-              </li>
-            </ul>
-          </div>
-
-          <Search
-            regex={this.props.preferences.search.regex}
-            ignoreCase={this.props.preferences.search.ignoreCase}
-            searchIn={this.props.preferences.search.searchIn}
-            searchInTabs={this.searchInTabs}
-            setPreferences={this.setPreferences}
-          />
-        </nav>
-        <section className="context-actions navbar container-fluid" id="selection-action">
-          <ul className="nav nav-pills pull-left">
-            <li className="nav-item">
-              <a
-                className="nav-link"
-                onClick={() => {
-                  !this.state.allSelected
-                    ? this.processSelectedTabs('selectAll', this.props.tabs.map(tab => tab.id))
-                    : this.processSelectedTabs('selectNone', this.props.tabs.map(tab => tab.id));
-
-                  this.setState({ allSelected: !this.props.allSelected });
-                }}
-                title="Select All"
-              >
-                <input type="checkbox" checked={this.props.allSelected} readOnly />
-              </a>
-            </li>
-
-            <li className="nav-item dropdown">
-              <div
-                className="input-group"
-                style={{
-                  width: 'auto',
-                  marginRight: '15px',
-                  border: '1px solid #7cbbff',
-                }}
-              >
-                <a
-                  className="form-control bg-transparent text-white"
-                  href="#"
-                  title="Sort Tabs"
-                  style={{ border: 'none' }}
-                >
-                  <i className="fal fa-sort" />
-                </a>
-                <div className="input-group-append" id="button-addon4">
-                  <button
-                    className="btn btn-link text-white"
-                    type="button"
-                    title="Pin Selected"
-                    onClick={this.sortBy.bind(null, 'title')}
-                  >
-                    Title
-                  </button>
-                  <button
-                    className="btn btn-link text-white"
-                    type="button"
-                    title="Unpin Selected"
-                    onClick={this.sortBy.bind(null, 'url')}
-                  >
-                    URL
-                  </button>
-                </div>
-              </div>
-            </li>
-            <WindowSelector />
-          </ul>
-          <div className="nav context-actions selection-action">
-            <div className="input-group" style={{ width: 'auto', marginRight: '15px' }}>
-              <a
-                className="form-control"
-                onClick={() => this.processSelectedTabs('togglePinSelected')}
-                href="#"
-                title="Toggle Pin selected tab"
-                style={{ border: 'none' }}
-              >
-                Un/Pin Selected
-              </a>
-              <div className="input-group-append" id="button-addon4">
-                <button
-                  className="btn btn-default"
-                  type="button"
-                  title="Unpin Selected"
-                  onClick={() => this.processSelectedTabs('unpinSelected')}
-                  style={{ backgroundColor: 'white' }}
-                >
-                  <i className="fal fa-map-marker-slash" />
-                </button>
-                <button
-                  className="btn btn-default"
-                  type="button"
-                  title="Pin Selected"
-                  onClick={() => this.processSelectedTabs('pinSelected')}
-                  style={{ backgroundColor: 'white' }}
-                >
-                  <i className="fas fa-map-marker fa-fw" />
-                </button>
-              </div>
-            </div>
-            <div className="input-group" style={{ width: 'auto', marginRight: '15px' }}>
-              <a
-                className="form-control"
-                onClick={() => this.processSelectedTabs('toggleMuteSelected')}
-                href="#"
-                title="Toggle Pin selected tab"
-                style={{ border: 'none' }}
-              >
-                Un/Mute Selected
-              </a>
-              <div className="input-group-append" id="button-addon4">
-                <button
-                  className="btn btn-default"
-                  type="button"
-                  title="Mute Selected"
-                  onClick={() => this.processSelectedTabs('muteSelected')}
-                  style={{ backgroundColor: 'white' }}
-                >
-                  <i className="fal fa-volume-slash" />
-                </button>
-                <button
-                  className="btn btn-default"
-                  type="button"
-                  title="Unmute Selected"
-                  onClick={() => this.processSelectedTabs('unmuteSelected')}
-                  style={{ backgroundColor: 'white' }}
-                >
-                  <i className="fas fa-volume-up" />
-                </button>
-              </div>
-            </div>
-            <button
-              className="btn btn-default"
-              type="button"
-              title="Close Selected"
-              onClick={() => this.processSelectedTabs('closeSelected')}
-              style={{ backgroundColor: 'white' }}
-            >
-              <i className="fas fa-times text-danger" />
-            </button>
-            <div className="dropdown">
-              <a
-                className="btn btn-secondary dropdown-toggle"
-                onClick={() => this.processSelectedTabs('')}
-                role="button"
-                id="dropdownMenuLink"
-                data-toggle="dropdown"
-                aria-haspopup="true"
-                aria-expanded="false"
-              >
-                With Selected
-              </a>
-
-              <div className="dropdown-menu" aria-labelledby="dropdownMenuLink">
-                <a className="dropdown-item" href="#" onClick={() => this.processSelectedTabs('toNewWindow')}>
-                  Move to New Window
-                </a>
-                <a className="dropdown-item" href="#" onClick={() => this.processSelectedTabs('toSession')}>
-                  Make Session/Saved Tabs
-                </a>
-              </div>
-            </div>
-          </div>
-          <ul className="nav nav-pills">
-            <li role="presentation" className="nav-item">
-              <a
-                className="nav-link refreshActiveTabs"
-                title="Refresh Excited Gem Tabs"
-                href="#"
-                onClick={() => {
-                  updateTabs();
-                  this.setState({ tabs: this.props.tabs });
-                }}
-              >
-                <i className="fas fa-sync-alt fa-fw fa-sm" />
-              </a>
-            </li>
-            <li style={{ marginRight: 18 }} className="nav-item">
-              <a
-                href="#"
-                onClick={() => {
-                  !this.props.allPinned
-                    ? this.processSelectedTabs('pinSelected', this.filterTabs().map(tab => tab.id))
-                    : this.processSelectedTabs('unpinSelected', this.filterTabs().map(tab => tab.id));
-                  this.setState({ allPinned: !this.props.allPinned });
-                }}
-                title={!this.props.allPinned ? `Pin All` : `Unpin All`}
-                className="nav-link"
-              >
-                <i className={!this.props.allPinned ? `far fa-thumbtack` : `fa fa-thumbtack`} />
-              </a>
-            </li>
-            <li style={{ marginRight: 18 }} className="nav-item">
-              <a
-                href="#"
-                className="nav-link"
-                onClick={event => {
-                  !this.props.allMuted
-                    ? this.processSelectedTabs('muteSelected', this.filterTabs().map(tab => tab.id))
-                    : this.processSelectedTabs('unmuteSelected', this.filterTabs().map(tab => tab.id));
-                  this.setState({ allMuted: !this.props.allMuted });
-                }}
-                title={!this.props.allMuted ? `Mute All` : `Unmute All`}
-              >
-                <i className={`fal fa-fw ` + (!this.props.allMuted ? `fa-volume-up` : `fa-volume-up-slash`)} />
-              </a>
-            </li>
-            <li style={{ marginRight: 0 }} className="nav-item">
-              <a
-                href="#"
-                title="Close All"
-                className="nav-link"
-                onClick={() => this.processSelectedTabs('closeSelected', this.filterTabs().map(tab => tab.id))}
-              >
-                <i className="fal fa-times fw-fw" />
-              </a>
-            </li>
-          </ul>
-        </section>
-      </header>,
+      <Header key={'header'} tabs={this.props.tabs} preferences={this.props.preferences}
+              searchInTabs={this.searchInTabs}/>,
       <Scrollbars autoHeight={false} autoHeightMax={'auto'} key={'scrollbar'}>
         <div className="tabs-list-container" key={'activetablist'}>
           <DragDropContext onDragEnd={this.onDragEnd} key={'ddcontext'} id={'activeTabs'}>
@@ -612,5 +334,6 @@ const mapStateToProps = function(state) {
 const mapDispatchToProps = dispatch => ({
   reorderTabs: tabs => dispatch(ACTIONS.reorderTabs(tabs)),
   deleteItem: id => dispatch(ACTIONS.deleteItem(id)),
+  searchInTabs: searchTerm => dispatch(ACTIONS.searchInTabs(searchTerm)),
 });
 export default connect(mapStateToProps, mapDispatchToProps)(ActiveTabs);

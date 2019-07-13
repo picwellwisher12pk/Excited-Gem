@@ -1,23 +1,22 @@
 import React from 'react';
-import PropTypes from 'prop-types';
+import {connect} from 'react-redux';
+import ACTIONS from '../../../modules/action';
 import ErrorBoundary from '../../../ErrorBoundary';
-export default class Search extends React.Component {
+import {FontAwesomeIcon as FA} from '@fortawesome/react-fontawesome';
+import {faSearch} from '@fortawesome/pro-light-svg-icons/faSearch';
+import {faTimes} from '@fortawesome/pro-light-svg-icons/faTimes';
+
+class Search extends React.Component {
   constructor(props) {
     super(props);
-    this.state = {
-      regex: this.props.regex,
-      ignoreCase: this.props.ignoreCase,
-      searchIn: this.props.searchIn,
-      empty: true,
-    };
     this.searchField = React.createRef();
     this.title = React.createRef();
     this.url = React.createRef();
   }
   onKeyUpped(event) {
     // console.info('keypressed', event.target, this);
-    this.searchField.current.value != '' ? this.setState({ empty: false }) : this.setState({ empty: true });
-    if (event.keyCode == 27) {
+    this.searchField.current.value !== '' ? this.setState({empty: false}) : this.setState({empty: true});
+    if (event.keyCode === 27) {
       // console.log('escaped');
       this.clear();
       this.props.searchInTabs('');
@@ -42,23 +41,24 @@ export default class Search extends React.Component {
     this.props.searchInTabs(this.searchField.current.value);
   }
   render() {
-    let searchIn = this.state.searchIn;
-    let placeholder = 'Search in ';
-    placeholder += this.state.searchIn[0] ? 'Titles' : '';
-    placeholder += this.state.searchIn[0] && this.state.searchIn[1] ? ' and ' : '';
-    placeholder += this.state.searchIn[1] ? 'URLs' : '';
-    // console.log("Search Render");
 
+    let searchIn = this.props.searchIn;
+    let placeholder = 'Search in ';
+    placeholder += this.props.searchIn[0] ? 'Titles' : '';
+    placeholder += this.props.searchIn[0] && this.props.searchIn[1] ? ' and ' : '';
+    placeholder += this.props.searchIn[1] ? 'URLs' : '';
+    console.log("Search Render", this.props.empty);
+    let iconInSearch = this.props.empty ?
+      <FA icon={faSearch} className={`text-secondary`} style={{width: '40px', height: '43px', padding: '12px'}}/> :
+      <FA icon={faTimes} className={`text-danger cp`} style={{width: '40px', height: '43px', padding: '12px'}}
+          onClick={() => {
+            if (!this.props.empty) this.clear()
+          }}/>;
     return (
       <ErrorBoundary>
         <section className="search-bar" style={{ width: '66%', paddingRight: 0 }}>
           <div id="filter-tabs" className="input-group filter-tabs">
-            <i
-              className={'icon fal ' + (this.state.empty ? 'fa-search text-secondary' : 'fa-times text-danger cp')}
-              onClick={() => {
-                if (!this.state.empty) this.clear();
-              }}
-            />
+            {iconInSearch}
             <input
               id="quicksearch-input"
               type="text"
@@ -107,33 +107,23 @@ export default class Search extends React.Component {
                 </label>
               </div>
             </div>
-            {/*<div className="input-group-append" style={{position: "relative"}}>*/}
-            {/*<button className="btn btn-warning dropdown-toggle" type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Search From</button>*/}
-            {/*<div className="dropdown-menu dropdown-menu-right">*/}
-            {/*<div className="px-4 py-3">*/}
-            {/*<div className="form-check">*/}
-            {/*<input type="checkbox" className="form-check-input" id="dropdownCheck2" defaultChecked={urlChecked ? 'checked': ''}/>*/}
-            {/*<label className="form-check-label" htmlFor="dropdownCheck2">*/}
-            {/*URL*/}
-            {/*</label>*/}
-            {/*</div>*/}
-            {/*<div className="form-check">*/}
-            {/*<input type="checkbox" className="form-check-input" id="dropdownCheck2" defaultChecked={titleChecked ? 'checked':''} />*/}
-            {/*<label className="form-check-label" htmlFor="dropdownCheck2">*/}
-            {/*Title*/}
-            {/*</label>*/}
-            {/*</div>*/}
-            {/*</div>*/}
-            {/*</div>*/}
-            {/*</div>*/}
           </div>
         </section>
       </ErrorBoundary>
     );
   }
 }
-Search.propTypes = {
-  regex: PropTypes.bool,
-  case: PropTypes.bool,
-  searchIn: PropTypes.array,
+
+
+const mapStateToProps = function (state) {
+  return {
+    regex: state.preferences.search.regex,
+    ignoreCase: state.preferences.search.ignoreCase,
+    searchIn: state.preferences.search.searchIn,
+    empty: state.preferences.search.empty,
+  };
 };
+const mapDispatchToProps = dispatch => ({
+  searchInTabs: searchTerm => dispatch(ACTIONS.searchInTabs(searchTerm)),
+});
+export default connect(mapStateToProps, mapDispatchToProps)(Search);
