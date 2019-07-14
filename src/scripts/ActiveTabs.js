@@ -43,10 +43,12 @@ class ActiveTabs extends PureComponent {
     // };
 
     this.closeTab = this.closeTab.bind(this);
+    this.toggleMute = this.toggleMute.bind(this);
     this.isAllMuted = this.isAllMuted.bind(this);
     this.onDragEnd = this.onDragEnd.bind(this);
     this.updateSelectedTabs = this.updateSelectedTabs.bind(this);
     this.setPreferences = this.setPreferences.bind(this);
+    this.processSelectedTabs = this.processSelectedTabs.bind(this);
     this.togglePin = this.togglePin.bind(this);
     const menu = document.querySelector('#context-menu');
     let menuVisible = false;
@@ -110,7 +112,7 @@ class ActiveTabs extends PureComponent {
     tempArray.length > 0
       ? addClass(document.querySelector('#selection-action'), 'selection-active')
       : removeClass(document.querySelector('#selection-action'), 'selection-active');
-    this.props.updateSelectedtabsAction(tempArray);
+    this.props.updateSelectedTabsAction(tempArray);
   }
   isAllSelected() {
     for (let tab of this.props.tabs) {
@@ -167,12 +169,7 @@ class ActiveTabs extends PureComponent {
     browser.tabs.get(id).then(tab => {
       browser.tabs.update(parseInt(id), { muted: !tab.mutedInfo.muted });
     });
-    getTabs().then(
-      tabs => {
-        this.setState({ tabs: tabs });
-      },
-      error => log(`Error: ${error}`)
-    );
+    this.props.updateActiveTabs();
   }
   isAllMuted() {
     // const tabs = this.props.tabs.then(tabs => tabs);
@@ -283,7 +280,6 @@ class ActiveTabs extends PureComponent {
 
   tabTemplate(tab) {
     let checked = false;
-    console.log(this.props.selectedTabs);
     if (this.props.selectedTabs !== []) checked = this.props.selectedTabs.includes(tab.id);
     return (
       <Tab
@@ -313,7 +309,9 @@ class ActiveTabs extends PureComponent {
   render() {
     return [
       <Header key={'header'} tabs={this.props.tabs} preferences={this.props.preferences}
-              searchInTabs={this.searchInTabs}/>,
+              searchInTabs={this.searchInTabs}
+              processSelectedTabs={this.processSelectedTabs}
+      />,
       <Scrollbars autoHeight={false} autoHeightMax={'auto'} key={'scrollbar'}>
         <div className="tabs-list-container" key={'activetablist'}>
           <DragDropContext onDragEnd={this.onDragEnd} key={'ddcontext'} id={'activeTabs'}>
@@ -338,6 +336,7 @@ const mapDispatchToProps = dispatch => ({
   reorderTabs: tabs => dispatch(ACTIONS.reorderTabs(tabs)),
   deleteItem: id => dispatch(ACTIONS.deleteItem(id)),
   searchInTabs: searchTerm => dispatch(ACTIONS.searchInTabs(searchTerm)),
-  updateSelectedtabsAction: selectedTabs => dispatch(ACTIONS.updateSelectedTabsAction(selectedTabs)),
+  updateActiveTabs: () => dispatch(ACTIONS.updateActiveTabs()),
+  updateSelectedTabsAction: selectedTabs => dispatch(ACTIONS.updateSelectedTabsAction(selectedTabs)),
 });
 export default connect(mapStateToProps, mapDispatchToProps)(ActiveTabs);

@@ -1,4 +1,13 @@
 import React from 'react';
+import {FontAwesomeIcon as FA} from '@fortawesome/react-fontawesome';
+import {faVolume} from '@fortawesome/pro-solid-svg-icons/faVolume';
+import {faVolumeSlash} from '@fortawesome/pro-solid-svg-icons/faVolumeSlash';
+import {faShareSquare} from '@fortawesome/pro-solid-svg-icons/faShareSquare';
+import {faSave} from '@fortawesome/pro-solid-svg-icons/faSave';
+import {faTimes} from '@fortawesome/pro-light-svg-icons/faTimes';
+import {faSyncAlt} from '@fortawesome/pro-regular-svg-icons/faSyncAlt';
+import {faThumbtack} from '@fortawesome/pro-light-svg-icons/faThumbtack';
+import {faThumbtack as fasThumbtack} from '@fortawesome/pro-solid-svg-icons/faThumbtack';
 
 import {sortTabs} from '../general.js';
 import Search from './Search/index';
@@ -13,6 +22,8 @@ const Header = props => {
   const sortBy = parameter => {
     sortTabs(parameter, props.tabs);
   };
+  let iconPinned = props.allPinned ? <FA icon={faThumbtack}/> : <FA icon={fasThumbtack}/>;
+  let iconSound = props.allMuted ? <FA icon={faVolume}/> : <FA icon={faVolumeSlash}/>;
   return (
     <header className="page-header" key={'header'}>
       <nav className="navbar">
@@ -57,8 +68,8 @@ const Header = props => {
               className="nav-link"
               onClick={() => {
                 !this.state.allSelected
-                  ? this.processSelectedTabs('selectAll', props.tabs.map(tab => tab.id))
-                  : this.processSelectedTabs('selectNone', props.tabs.map(tab => tab.id));
+                  ? props.processSelectedTabs('selectAll', props.tabs.map(tab => tab.id))
+                  : props.processSelectedTabs('selectNone', props.tabs.map(tab => tab.id));
 
                 this.setState({allSelected: !props.allSelected});
               }}
@@ -111,7 +122,7 @@ const Header = props => {
           <div className="input-group" style={{width: 'auto', marginRight: '15px'}}>
             <a
               className="form-control"
-              onClick={() => this.processSelectedTabs('togglePinSelected')}
+              onClick={() => props.processSelectedTabs('togglePinSelected')}
               href="#"
               title="Toggle Pin selected tab"
               style={{border: 'none'}}
@@ -123,26 +134,26 @@ const Header = props => {
                 className="btn btn-default"
                 type="button"
                 title="Unpin Selected"
-                onClick={() => this.processSelectedTabs('unpinSelected')}
+                onClick={() => props.processSelectedTabs('unpinSelected')}
                 style={{backgroundColor: 'white'}}
               >
-                <i className="fal fa-map-marker-slash"/>
+                <FA icon={faThumbtack}/>
               </button>
               <button
                 className="btn btn-default"
                 type="button"
                 title="Pin Selected"
-                onClick={() => this.processSelectedTabs('pinSelected')}
+                onClick={() => props.processSelectedTabs('pinSelected')}
                 style={{backgroundColor: 'white'}}
               >
-                <i className="fas fa-map-marker fa-fw"/>
+                <FA icon={fasThumbtack}/>
               </button>
             </div>
           </div>
           <div className="input-group" style={{width: 'auto', marginRight: '15px'}}>
             <a
               className="form-control"
-              onClick={() => this.processSelectedTabs('toggleMuteSelected')}
+              onClick={() => props.processSelectedTabs('toggleMuteSelected')}
               href="#"
               title="Toggle Pin selected tab"
               style={{border: 'none'}}
@@ -154,18 +165,19 @@ const Header = props => {
                 className="btn btn-default"
                 type="button"
                 title="Mute Selected"
-                onClick={() => this.processSelectedTabs('muteSelected')}
+                onClick={() => props.processSelectedTabs('muteSelected')}
                 style={{backgroundColor: 'white'}}
               >
-                <i className="fal fa-volume-slash"/>
+                <FA icon={faVolumeSlash}/>
               </button>
               <button
                 className="btn btn-default"
                 type="button"
                 title="Unmute Selected"
-                onClick={() => this.processSelectedTabs('unmuteSelected')}
+                onClick={() => props.processSelectedTabs('unmuteSelected')}
                 style={{backgroundColor: 'white'}}
               >
+                <FA icon={faVolume}/>
                 <i className="fas fa-volume-up"/>
               </button>
             </div>
@@ -174,32 +186,18 @@ const Header = props => {
             className="btn btn-default"
             type="button"
             title="Close Selected"
-            onClick={() => this.processSelectedTabs('closeSelected')}
+            onClick={() => props.processSelectedTabs('closeSelected')}
             style={{backgroundColor: 'white'}}
           >
-            <i className="fas fa-times text-danger"/>
+            <FA icon={faTimes} className={'text-danger'}/>
           </button>
-          <div className="dropdown">
-            <a
-              className="btn btn-secondary dropdown-toggle"
-              onClick={() => this.processSelectedTabs('')}
-              role="button"
-              id="dropdownMenuLink"
-              data-toggle="dropdown"
-              aria-haspopup="true"
-              aria-expanded="false"
-            >
-              With Selected
-            </a>
-
-            <div className="dropdown-menu" aria-labelledby="dropdownMenuLink">
-              <a className="dropdown-item" href="#" onClick={() => this.processSelectedTabs('toNewWindow')}>
-                Move to New Window
-              </a>
-              <a className="dropdown-item" href="#" onClick={() => this.processSelectedTabs('toSession')}>
-                Make Session/Saved Tabs
-              </a>
-            </div>
+          <div className={'input-group-append'}>
+            <button className="btn btn-default" onClick={() => props.processSelectedTabs('toNewWindow')}>
+              <FA icon={faShareSquare}/>
+            </button>
+            <button className="btn btn-default" onClick={() => props.processSelectedTabs('toSession')}>
+              <FA icon={faSave}/>
+            </button>
           </div>
         </div>
         <ul className="nav nav-pills">
@@ -213,7 +211,7 @@ const Header = props => {
                 this.setState({tabs: props.tabs});
               }}
             >
-              <i className="fas fa-sync-alt fa-fw fa-sm"/>
+              <FA icon={faSyncAlt} fixedWidth/>
             </a>
           </li>
           <li style={{marginRight: 18}} className="nav-item">
@@ -221,14 +219,14 @@ const Header = props => {
               href="#"
               onClick={() => {
                 !props.allPinned
-                  ? this.processSelectedTabs('pinSelected', this.filterTabs().map(tab => tab.id))
-                  : this.processSelectedTabs('unpinSelected', this.filterTabs().map(tab => tab.id));
+                  ? props.processSelectedTabs('pinSelected', this.filterTabs().map(tab => tab.id))
+                  : props.processSelectedTabs('unpinSelected', this.filterTabs().map(tab => tab.id));
                 this.setState({allPinned: !props.allPinned});
               }}
               title={!props.allPinned ? `Pin All` : `Unpin All`}
               className="nav-link"
             >
-              <i className={!props.allPinned ? `far fa-thumbtack` : `fa fa-thumbtack`}/>
+              {iconPinned}
             </a>
           </li>
           <li style={{marginRight: 18}} className="nav-item">
@@ -237,13 +235,13 @@ const Header = props => {
               className="nav-link"
               onClick={() => {
                 !props.allMuted
-                  ? this.processSelectedTabs('muteSelected', this.filterTabs().map(tab => tab.id))
-                  : this.processSelectedTabs('unmuteSelected', this.filterTabs().map(tab => tab.id));
+                  ? props.processSelectedTabs('muteSelected', this.filterTabs().map(tab => tab.id))
+                  : props.processSelectedTabs('unmuteSelected', this.filterTabs().map(tab => tab.id));
                 this.setState({allMuted: !props.allMuted});
               }}
               title={!props.allMuted ? `Mute All` : `Unmute All`}
             >
-              <i className={`fal fa-fw ` + (!props.allMuted ? `fa-volume-up` : `fa-volume-up-slash`)}/>
+              {iconSound}
             </a>
           </li>
           <li style={{marginRight: 0}} className="nav-item">
@@ -251,9 +249,9 @@ const Header = props => {
               href="#"
               title="Close All"
               className="nav-link"
-              onClick={() => this.processSelectedTabs('closeSelected', this.filterTabs().map(tab => tab.id))}
+              onClick={() => props.processSelectedTabs('closeSelected', this.filterTabs().map(tab => tab.id))}
             >
-              <i className="fal fa-times fw-fw"/>
+              <FA icon={faTimes}/>
             </a>
           </li>
         </ul>
