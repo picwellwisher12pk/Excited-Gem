@@ -15,6 +15,11 @@ const rootReducer = (state = {}, action) => {
       newState.preferences.searchTerm = action.payload;
       return newState;
     }
+    case 'UPDATE_SELECTED_TABS': {
+      let newState = _.cloneDeep(state);
+      newState.selectedTabs = action.payload;
+      return newState;
+    }
     case 'TOGGLE_SEARCH_IN': {
       let newState = _.cloneDeep(state);
       newState.preferences.search.searchIn = action.payload;

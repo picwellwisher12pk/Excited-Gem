@@ -1,5 +1,4 @@
 import React, {PureComponent} from 'react';
-import PropTypes from 'prop-types';
 import {FontAwesomeIcon as FA} from '@fortawesome/react-fontawesome';
 import {faVolume} from '@fortawesome/pro-regular-svg-icons/faVolume';
 import {faVolumeOff} from '@fortawesome/pro-regular-svg-icons/faVolumeOff';
@@ -8,6 +7,8 @@ import {faTimes} from '@fortawesome/pro-regular-svg-icons/faTimes';
 import {faThumbtack} from '@fortawesome/pro-regular-svg-icons/faThumbtack';
 import {Draggable} from 'react-beautiful-dnd';
 import {log} from '../../../general';
+import {connect} from 'react-redux';
+import ACTIONS from '../../../../modules/action';
 
 
 let browser = require('webextension-polyfill');
@@ -25,7 +26,7 @@ function focusTab(id) {
 class Tab extends PureComponent {
   constructor(props) {
     super(props);
-    this.state = { ...this.props };
+    // this.state = { ...this.props };
     this.isChecked = this.isChecked.bind(this);
   }
 
@@ -64,7 +65,7 @@ class Tab extends PureComponent {
       url = this.props.url.replace(regex, `<mark>${window.searchTerm}</mark>`);
       log('title url postprocess', title, url);
     }
-    let loading = this.state.status === 'loading';
+    let loading = this.props.status === 'loading';
     let audible = this.props.audible || this.props.muted;
     let linkProps = null;
     let actionButtons = null;
@@ -146,11 +147,11 @@ class Tab extends PureComponent {
             className={`tab-item` + (checked ? ` checked` : ` `) + (loading || discarded ? ` idle` : ` `)}
           >
             <label className="tab-favicon" aria-label="favicon">
-              <img src={this.state.favicon}/>
+              <img src={this.props.favicon}/>
               <input
                 type="checkbox"
                 onChange={this.isChecked.bind(this)}
-                checked={this.state.checked}
+                checked={this.props.checked}
                 className="checkbox"
               />
             </label>
@@ -176,14 +177,9 @@ class Tab extends PureComponent {
   }
 }
 
-Tab.propTypes = {
-  url: PropTypes.string,
-  title: PropTypes.string,
-  pinned: PropTypes.bool,
-  index: PropTypes.number,
-  favicon: PropTypes.string,
-  audible: PropTypes.bool,
-  status: PropTypes.string,
-  checked: PropTypes.bool,
-};
-export default Tab;
+const mapDispatchToProps = dispatch => ({
+  searchInTabs: searchTerm => dispatch(ACTIONS.searchInTabs(searchTerm)),
+  toggleSearchInAction: searchInArray => dispatch(ACTIONS.toggleSearchInAction(searchInArray)),
+
+});
+export default connect(null, mapDispatchToProps)(Tab);

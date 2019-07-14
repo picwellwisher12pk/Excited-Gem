@@ -108,10 +108,9 @@ class ActiveTabs extends PureComponent {
     let tempArray = this.props.selectedTabs;
     !selected ? tempArray.splice(tempArray.indexOf(id), 1) : tempArray.push(id);
     tempArray.length > 0
-      ? addClass(document.querySelectorAll('#selection-action'), 'selection-active')
-      : removeClass(document.querySelectorAll('#selection-action'), 'selection-active');
-    this.setState({ selectedTabs: tempArray });
-    this.setState({ tabs: this.props.tabs });
+      ? addClass(document.querySelector('#selection-action'), 'selection-active')
+      : removeClass(document.querySelector('#selection-action'), 'selection-active');
+    this.props.updateSelectedtabsAction(tempArray);
   }
   isAllSelected() {
     for (let tab of this.props.tabs) {
@@ -245,9 +244,11 @@ class ActiveTabs extends PureComponent {
     return this.props.tabs.filter(tab => {
       if (this.props.preferences.search.regex) {
         let regex = new RegExp(this.props.preferences.searchTerm, this.props.preferences.search.ignoreCase ? 'i' : '');
+        console.log('search in title', this.props.preferences.search.searchIn[0]);
         if (this.props.preferences.search.searchIn[0]) {
           if (regex.test(tab.title)) return true;
         }
+        console.log('search in url', this.props.preferences.search.searchIn[1]);
         if (this.props.preferences.search.searchIn[1]) {
           if (regex.test(tab.url)) return true;
         }
@@ -282,7 +283,8 @@ class ActiveTabs extends PureComponent {
 
   tabTemplate(tab) {
     let checked = false;
-    if (this.props.selectedTabs) checked = this.props.selectedTabs.includes(tab.id);
+    console.log(this.props.selectedTabs);
+    if (this.props.selectedTabs !== []) checked = this.props.selectedTabs.includes(tab.id);
     return (
       <Tab
         key={tab.index}
@@ -329,11 +331,13 @@ const mapStateToProps = function(state) {
   return {
     tabs: state.tabs,
     preferences: state.preferences,
+    selectedTabs: state.preferences.selectedTabs
   };
 };
 const mapDispatchToProps = dispatch => ({
   reorderTabs: tabs => dispatch(ACTIONS.reorderTabs(tabs)),
   deleteItem: id => dispatch(ACTIONS.deleteItem(id)),
   searchInTabs: searchTerm => dispatch(ACTIONS.searchInTabs(searchTerm)),
+  updateSelectedtabsAction: selectedTabs => dispatch(ACTIONS.updateSelectedTabsAction(selectedTabs)),
 });
 export default connect(mapStateToProps, mapDispatchToProps)(ActiveTabs);

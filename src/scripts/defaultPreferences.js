@@ -23,4 +23,5 @@ exports.preferences = {
       // close:true
     },
   },
+  selectedTabs: []
 };
