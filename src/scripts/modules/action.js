@@ -3,6 +3,7 @@ import {getTabs} from '../components/browserActions';
 const Types = {
   UPDATE_ACTIVE_TABS: 'UPDATE_ACTIVE_TABS',
   UPDATE_SEARCH_TERM: 'UPDATE_SEARCH_TERM',
+  TOGGLE_SEARCH_IN: 'TOGGLE_SEARCH_IN',
 };
 // actions
 const updateActiveTabsAction = tabs => ({
@@ -12,6 +13,10 @@ const updateActiveTabsAction = tabs => ({
 const updateSearchTermAction = searchTerm => ({
   type: Types.UPDATE_SEARCH_TERM,
   payload: searchTerm,
+});
+const toggleSearchInAction = searchInArray => ({
+  type: Types.TOGGLE_SEARCH_IN,
+  payload: searchInArray
 });
 const updateActiveTabs = () => dispatch => {
   getTabs().then(tabs => {
@@ -28,5 +33,6 @@ export default {
   Types,
   updateActiveTabs,
   reorderTabs,
-  searchInTabs
+  searchInTabs,
+  toggleSearchInAction
 };

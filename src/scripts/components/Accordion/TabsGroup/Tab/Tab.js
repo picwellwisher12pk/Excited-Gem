@@ -146,7 +146,7 @@ class Tab extends PureComponent {
             className={`tab-item` + (checked ? ` checked` : ` `) + (loading || discarded ? ` idle` : ` `)}
           >
             <label className="tab-favicon" aria-label="favicon">
-              <img src={this.state.favicon} alt={`Site Favicon`}/>
+              <img src={this.state.favicon}/>
               <input
                 type="checkbox"
                 onChange={this.isChecked.bind(this)}

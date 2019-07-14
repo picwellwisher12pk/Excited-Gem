@@ -35,10 +35,11 @@ class Search extends React.Component {
       alert("Sorry! You can't uncheck both Title and URL at the same time. One must remain checked.");
       return false;
     }
-    let searchIn = this.state.searchIn;
-    searchIn[number] = !this.state.searchIn[number];
-    this.props.setPreferences('search', 'searchIn', searchIn);
-    this.props.searchInTabs(this.searchField.current.value);
+    let searchIn = this.props.searchIn;
+    searchIn[number] = !this.props.searchIn[number];
+    // this.props.setPreferences('search', 'searchIn', searchIn);
+    this.props.toggleSearchInAction(searchIn);
+    // this.props.searchInTabs(this.searchField.current.value);
   }
   render() {
 
@@ -59,6 +60,8 @@ class Search extends React.Component {
         <section className="search-bar" style={{ width: '66%', paddingRight: 0 }}>
           <div id="filter-tabs" className="input-group filter-tabs">
             {iconInSearch}
+            <i className={`quicksearch-input form-control`}
+               style={{maxWidth: '10px', border: 'none', lineHeight: '28px'}}>/</i>
             <input
               id="quicksearch-input"
               type="text"
@@ -73,6 +76,8 @@ class Search extends React.Component {
               }}
               autoFocus
             />
+            <i className={`quicksearch-input form-control`}
+               style={{maxWidth: '10px', border: 'none', lineHeight: '28px'}}>/</i>
             <div className="input-group-append option-regex">
               <div className="custom-control custom-checkbox ">
                 <input
@@ -125,5 +130,6 @@ const mapStateToProps = function (state) {
 };
 const mapDispatchToProps = dispatch => ({
   searchInTabs: searchTerm => dispatch(ACTIONS.searchInTabs(searchTerm)),
+  toggleSearchInAction: searchInArray => dispatch(ACTIONS.toggleSearchInAction(searchInArray))
 });
 export default connect(mapStateToProps, mapDispatchToProps)(Search);
