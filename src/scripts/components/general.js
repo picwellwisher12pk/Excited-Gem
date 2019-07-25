@@ -38,7 +38,7 @@ export function matchKeys(property, keysToRemove) {
   }
 }
 export function removeKeys(keysToRemove, object) {
-  var tempObject = new Object();
+  var tempObject = {};
   for (let property in object) {
     if (matchKeys(property, keysToRemove)) continue;
     tempObject[property] = object[property];
@@ -240,8 +240,9 @@ export function removeClass(el, className) {
     el.className = el.className.replace(reg, ' ');
   }
 }
-export function sortTabs(sortby) {
-  let tabsList = quicksort(sortby, window.tabs);
+
+export function sortTabs(sortby, tabs) {
+  let tabsList = quicksort(sortby, tabs);
   log('after quicksort', tabsList);
   for (let i = 0; i < tabsList.length; i++) {
     let { id } = tabsList[i];

@@ -1,17 +1,14 @@
 //Vendors
-const $ = (jQuery = require('jquery'));
-const bootstrap = require('bootstrap');
 import React from 'react';
 import ReactDOM from 'react-dom';
 // import * as general from './components/general.js';
 import Sessions from './react-components/session';
-import { saveSessions, getSessions } from './components/getsetSessions';
-
+import {getSessions, saveSessions} from './components/getsetSessions';
 //Styles
-import '../styles/fontawesome5/fa-solid.scss';
-import '../styles/fontawesome5/fa-light.scss';
-import '../styles/fontawesome5/fa-regular.scss';
-import '../styles/fontawesome5.scss';
+// import '../styles/fontawesome5/fa-solid.scss';
+// import '../styles/fontawesome5/fa-light.scss';
+// import '../styles/fontawesome5/fa-regular.scss';
+// import '../styles/fontawesome5.scss';
 import '../styles/eg.scss';
 
 $(document).ready(function() {

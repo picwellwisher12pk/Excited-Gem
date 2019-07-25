@@ -33,7 +33,6 @@ configureStore().then(store => {
   browser.tabs.onMoved.addListener(() => {
     updateTabs(store, 'Tab Moved');
   });
-
   TabsApp = render(
     <Provider store={store}>
       <ActiveTabs />

@@ -1,16 +1,15 @@
-import { createStore, applyMiddleware, combineReducers } from 'redux';
-
+import {applyMiddleware, createStore} from 'redux';
 // Logger with default options
-import logger from 'redux-logger';
-// import thunk from 'redux-thunk';
-
 import rootReducer from './reducer';
+import {getTabs} from '../components/browserActions';
+import {preferences} from '../defaultPreferences';
+// import thunk from 'redux-thunk';
 // import * as asyncInitialState from 'redux-async-initial-state';
-
-import { getTabs } from '../components/browserActions';
-import { preferences } from '../defaultPreferences';
 const thunk = store => next => action => (typeof action === 'function' ? action(store.dispatch) : next(action));
-let middlewares = [thunk, logger];
+let middlewares = [
+  thunk,
+  // logger
+];
 
 // const addLoggingToDispatch = store => {
 //   const rawDispatch = store.dispatch;

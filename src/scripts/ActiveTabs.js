@@ -1,14 +1,14 @@
 //Scripts and Modules
-import {Scrollbars} from 'react-custom-scrollbars';
-import {PureComponent} from 'react';
-import {connect} from 'react-redux';
+import { Scrollbars } from 'react-custom-scrollbars';
+import { PureComponent } from 'react';
+import { connect } from 'react-redux';
 import 'react-devtools';
 // import { TransitionGroup, CSSTransition } from 'react-transition-group';
-import {DragDropContext} from 'react-beautiful-dnd';
+import { DragDropContext } from 'react-beautiful-dnd';
 //JS libraries
-import {getTabs} from './components/browserActions';
-import {addClass, removeClass} from './components/general.js';
-import {saveTabs} from './components/getsetSessions';
+import { getTabs } from './components/browserActions';
+import { addClass, removeClass } from './components/general.js';
+import { saveTabs } from './components/getsetSessions';
 import '../images/logo.png';
 import '../images/dev-logo.png';
 // React Components
@@ -296,7 +296,7 @@ class ActiveTabs extends PureComponent {
   }
 
   onDragEnd(result) {
-    const {destination, source} = result;
+    const { destination, source } = result;
     if (!result.destination) return;
 
     if (destination.droppableId === source.droppableId && destination.index === source.index) {
@@ -304,13 +304,16 @@ class ActiveTabs extends PureComponent {
     }
     const tabs = reorder(this.filterTabs(), source.index, destination.index);
     this.props.reorderTabs(tabs);
-    browser.tabs.move(result.draggableId, {index: result.destination.index});
+    browser.tabs.move(result.draggableId, { index: result.destination.index });
   }
   render() {
     return [
-      <Header key={'header'} tabs={this.props.tabs} preferences={this.props.preferences}
-              searchInTabs={this.searchInTabs}
-              processSelectedTabs={this.processSelectedTabs}
+      <Header
+        key={'header'}
+        tabs={this.props.tabs}
+        preferences={this.props.preferences}
+        searchInTabs={this.searchInTabs}
+        processSelectedTabs={this.processSelectedTabs}
       />,
       <Scrollbars autoHeight={false} autoHeightMax={'auto'} key={'scrollbar'}>
         <div className="tabs-list-container" key={'activetablist'}>
@@ -319,7 +322,7 @@ class ActiveTabs extends PureComponent {
               {this.filterTabs().map(tab => this.tabTemplate(tab), this)}
             </Tabsgroup>
           </DragDropContext>
-        </div>
+        </div>,
       </Scrollbars>,
     ];
   }
@@ -329,7 +332,7 @@ const mapStateToProps = function(state) {
   return {
     tabs: state.tabs,
     preferences: state.preferences,
-    selectedTabs: state.preferences.selectedTabs
+    selectedTabs: state.preferences.selectedTabs,
   };
 };
 const mapDispatchToProps = dispatch => ({
