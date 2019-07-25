@@ -1,0 +1,10 @@
+diff a/package.json b/package.json	(rejected hunks)
+@@ -44,7 +44,7 @@
+         "eslint": "^4.19.1",
+         "eslint-plugin-prettier": "^2.7.0",
+         "fix": "0.0.6",
+-        "jquery": "^3.3.1",
++        "jquery": "^3.4.1",
+         "prop-types": "^15.6.2",
+         "react": "^16.6.3",
+         "react-beautiful-dnd": "^10.0.2",
