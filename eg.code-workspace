@@ -1,24 +1,25 @@
 {
-	"folders": [
-		{
-			"path": "."
-		}
-	],
-	"settings": {
-		"window.zoomLevel": 0,
-		"workbench.editor.tabSizing": "shrink",
-		"html.format.enable": true,
-		"workbench.activityBar.visible": true,
-		"workbench.sideBar.location": "left",
-		"extensions.ignoreRecommendations": false,
-		"workbench.colorTheme": "Default Dark+",
-		"workbench.editor.tabCloseButton": "off",
-		"emmet.includeLanguages": {
-			"javascript": "javascriptreact"
-		},
-		"workbench.editor.enablePreviewFromQuickOpen": false,
-		"window.title": "${dirty} ${activeEditorMedium}${separator}${rootName}",
-		"eslint.alwaysShowStatus": true,
-		"mocha.enabled": false
-	}
+  "folders": [
+    {
+      "path": "."
+    }
+  ],
+  "settings": {
+    "window.zoomLevel": -1,
+    "workbench.editor.tabSizing": "shrink",
+    "html.format.enable": true,
+    "workbench.activityBar.visible": true,
+    "workbench.sideBar.location": "left",
+    "extensions.ignoreRecommendations": true,
+    "workbench.colorTheme": "Cobalt2",
+    "workbench.editor.tabCloseButton": "off",
+    "emmet.includeLanguages": {
+      "javascript": "javascriptreact"
+    },
+    "workbench.editor.enablePreviewFromQuickOpen": false,
+    "window.title": "${dirty} ${activeEditorMedium}${separator}${rootName}",
+    "eslint.alwaysShowStatus": true,
+    "mocha.enabled": true,
+    "workbench.colorCustomizations": {}
+  }
 }
