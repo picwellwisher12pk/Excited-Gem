@@ -13,27 +13,9 @@ import ACTIONS from '../../../../modules/action';
 
 let browser = require('webextension-polyfill');
 
-/**
- *  Click on a tab to focus that tab on browser
- *  Browser Action
- *
- * @param {*} id
- * @memberof Tab
- */
-function focusTab(id) {
-  browser.tabs.update(id, {active: true});
-}
 class Tab extends PureComponent {
   constructor(props) {
     super(props);
-    // this.state = { ...this.props };
-    this.isChecked = this.isChecked.bind(this);
-  }
-
-
-  isChecked(event) {
-    const value = event.target.checked;
-    this.props.updateSelectedTabs(this.props.id, value);
   }
 
   componentWillReceiveProps(props) {
@@ -59,10 +41,10 @@ class Tab extends PureComponent {
   }
   render() {
     let { title, url, checked, pinned, discarded } = this.props;
-    if (window.searchTerm) {
-      let regex = new RegExp(window.searchTerm, 'gi');
-      title = this.props.title.replace(regex, `<mark>${window.searchTerm}</mark>`);
-      url = this.props.url.replace(regex, `<mark>${window.searchTerm}</mark>`);
+    if (this.props.searchTerm) {
+      let regex = new RegExp(this.props.searchTerm, 'gi');
+      title = this.props.title.replace(regex, `<mark>${this.props.searchTerm}</mark>`);
+      url = this.props.url.replace(regex, `<mark>${this.props.searchTerm}</mark>`);
       log('title url postprocess', title, url);
     }
     let loading = this.props.status === 'loading';
@@ -139,7 +121,7 @@ class Tab extends PureComponent {
         index={this.props.index}
         className={`tab-item` + (checked ? ` checked` : ` `) + (loading || discarded ? ` idle` : ` `)}
       >
-        {(provided) => (
+        {provided => (
           <li
             {...provided.draggableProps}
             {...provided.dragHandleProps}
@@ -150,21 +132,24 @@ class Tab extends PureComponent {
             className={`tab-item` + (checked ? ` checked` : ` `) + (loading || discarded ? ` idle` : ` `)}
           >
             <label className="tab-favicon" aria-label="favicon">
-              <img src={this.props.favicon}/>
+              <img src={this.props.favIconUrl} />
               <input
                 type="checkbox"
-                onChange={this.isChecked.bind(this)}
+                onChange={() => this.props.updateSelectedTabs(this.props.id, !this.props.checked)}
                 checked={this.props.checked}
                 className="checkbox"
               />
             </label>
-            <a className="clickable" title={url} {...linkProps} dangerouslySetInnerHTML={{ __html: title }} />
+            <a
+              className="clickable tab-title clip"
+              title={url}
+              {...linkProps}
+              dangerouslySetInnerHTML={{ __html: title }}
+            />
             <span
               className="tab-url trimmed dimmed clip"
               dangerouslySetInnerHTML={{ __html: url }}
-              onClick={() => {
-                focusTab(this.props.id)
-              }}
+              onClick={() => browser.tabs.update(this.props.id, { active: true })}
             />
             <ul className=" tab-actions" role="group" aria-label="options">
               {/* <li title="Tab Information" className="clickable">
@@ -179,10 +164,13 @@ class Tab extends PureComponent {
     );
   }
 }
-
+const mapStateToProps = function(state) {
+  return {
+    searchTerm: state.preferences.searchTerm,
+  };
+};
 const mapDispatchToProps = dispatch => ({
   searchInTabs: searchTerm => dispatch(ACTIONS.searchInTabs(searchTerm)),
   toggleSearchInAction: searchInArray => dispatch(ACTIONS.toggleSearchInAction(searchInArray)),
-
 });
-export default connect(null, mapDispatchToProps)(Tab);
+export default connect(mapStateToProps, mapDispatchToProps)(Tab);
