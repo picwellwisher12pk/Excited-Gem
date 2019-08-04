@@ -1,14 +1,15 @@
+'use strict';
 //Scripts and Modules
-import {Scrollbars} from 'react-custom-scrollbars';
-import {PureComponent} from 'react';
-import {connect} from 'react-redux';
+import { Scrollbars } from 'react-custom-scrollbars';
+import { PureComponent } from 'react';
+import { connect } from 'react-redux';
 import 'react-devtools';
 // import { TransitionGroup, CSSTransition } from 'react-transition-group';
-import {DragDropContext} from 'react-beautiful-dnd';
+import { DragDropContext } from 'react-beautiful-dnd';
 //JS libraries
-import {getTabs} from './components/browserActions';
-import {addClass, removeClass} from './components/general.js';
-import {saveTabs} from './components/getsetSessions';
+import { getTabs } from './components/browserActions';
+import { addClass, removeClass } from './components/general.js';
+import { saveTabs } from './components/getsetSessions';
 import '../images/logo.png';
 import '../images/dev-logo.png';
 // React Components
@@ -82,8 +83,7 @@ class ActiveTabs extends PureComponent {
   componentDidMount(a, b) {
     this.setState({ allMuted: this.isAllMuted() });
     this.setState({ allPinned: this.isAllPinned() });
-    this.setState({ allPinned: this.isAllSelected() });
-    this.setState({ tabs: window.tabs });
+    this.setState({ allSelected: this.isAllSelected() });
     this.setState({ preferences: this.props.preferences });
     // debugger;
   }
@@ -241,20 +241,18 @@ class ActiveTabs extends PureComponent {
     return this.props.tabs.filter(tab => {
       if (this.props.preferences.search.regex) {
         let regex = new RegExp(this.props.preferences.searchTerm, this.props.preferences.search.ignoreCase ? 'i' : '');
-        console.log('search in title', this.props.preferences.search.searchIn[0]);
         if (this.props.preferences.search.searchIn[0]) {
           if (regex.test(tab.title)) return true;
         }
-        console.log('search in url', this.props.preferences.search.searchIn[1]);
         if (this.props.preferences.search.searchIn[1]) {
           if (regex.test(tab.url)) return true;
         }
       } else {
         if (this.props.preferences.search.searchIn[0]) {
-          return tab.title.indexOf(this.props.preferences.searchTerm) >= 0;
+          return tab.title.includes(this.props.preferences.searchTerm);
         }
         if (this.props.preferences.search.searchIn[1]) {
-          return tab.url.indexOf(this.props.preferences.searchTerm) >= 0;
+          return tab.url.includes(this.props.preferences.searchTerm);
         }
       }
     });
@@ -296,7 +294,7 @@ class ActiveTabs extends PureComponent {
   }
 
   onDragEnd(result) {
-    const {destination, source} = result;
+    const { destination, source } = result;
     if (!result.destination) return;
 
     if (destination.droppableId === source.droppableId && destination.index === source.index) {
@@ -304,13 +302,17 @@ class ActiveTabs extends PureComponent {
     }
     const tabs = reorder(this.filterTabs(), source.index, destination.index);
     this.props.reorderTabs(tabs);
-    browser.tabs.move(result.draggableId, {index: result.destination.index});
+    browser.tabs.move(result.draggableId, { index: result.destination.index });
   }
   render() {
+    console.log(this.filterTabs());
     return [
-      <Header key={'header'} tabs={this.props.tabs} preferences={this.props.preferences}
-              searchInTabs={this.searchInTabs}
-              processSelectedTabs={this.processSelectedTabs}
+      <Header
+        key={'header'}
+        tabs={this.props.tabs}
+        preferences={this.props.preferences}
+        searchInTabs={this.searchInTabs}
+        processSelectedTabs={this.processSelectedTabs}
       />,
       <Scrollbars autoHeight={false} autoHeightMax={'auto'} key={'scrollbar'}>
         <div className="tabs-list-container" key={'activetablist'}>
@@ -319,7 +321,7 @@ class ActiveTabs extends PureComponent {
               {this.filterTabs().map(tab => this.tabTemplate(tab), this)}
             </Tabsgroup>
           </DragDropContext>
-        </div>
+        </div>,
       </Scrollbars>,
     ];
   }
@@ -329,7 +331,7 @@ const mapStateToProps = function(state) {
   return {
     tabs: state.tabs,
     preferences: state.preferences,
-    selectedTabs: state.preferences.selectedTabs
+    selectedTabs: state.preferences.selectedTabs,
   };
 };
 const mapDispatchToProps = dispatch => ({
