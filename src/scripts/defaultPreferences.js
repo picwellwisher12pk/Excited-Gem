@@ -1,6 +1,6 @@
 exports.preferences = {
   search: {
-    regex: true,
+    regex: false,
     ignoreCase: true,
     searchIn: [true, true], // title,url
     empty: true,
@@ -23,5 +23,5 @@ exports.preferences = {
       // close:true
     },
   },
-  selectedTabs: []
+  selectedTabs: [],
 };

@@ -1,14 +1,14 @@
-import React, {PureComponent} from 'react';
-import {FontAwesomeIcon as FA} from '@fortawesome/react-fontawesome';
-import {faVolume} from '@fortawesome/pro-solid-svg-icons/faVolume';
-import {faVolumeOff} from '@fortawesome/pro-light-svg-icons/faVolumeOff';
-import {faVolumeSlash} from '@fortawesome/pro-solid-svg-icons/faVolumeSlash';
-import {faTimes} from '@fortawesome/pro-light-svg-icons/faTimes';
-import {faThumbtack} from '@fortawesome/pro-light-svg-icons/faThumbtack';
-import {faThumbtack as fasThumbtack} from '@fortawesome/pro-solid-svg-icons/faThumbtack';
-import {Draggable} from 'react-beautiful-dnd';
-import {log} from '../../../general';
-import {connect} from 'react-redux';
+import React, { PureComponent } from 'react';
+import { FontAwesomeIcon as FA } from '@fortawesome/react-fontawesome';
+import { faVolume } from '@fortawesome/pro-solid-svg-icons/faVolume';
+import { faVolumeOff } from '@fortawesome/pro-light-svg-icons/faVolumeOff';
+import { faVolumeSlash } from '@fortawesome/pro-solid-svg-icons/faVolumeSlash';
+import { faTimes } from '@fortawesome/pro-light-svg-icons/faTimes';
+import { faThumbtack } from '@fortawesome/pro-light-svg-icons/faThumbtack';
+import { faThumbtack as fasThumbtack } from '@fortawesome/pro-solid-svg-icons/faThumbtack';
+import { Draggable } from 'react-beautiful-dnd';
+import { log } from '../../../general';
+import { connect } from 'react-redux';
 import ACTIONS from '../../../../modules/action';
 
 let browser = require('webextension-polyfill');
@@ -54,20 +54,22 @@ class Tab extends PureComponent {
     let audioIcon = '';
     if (!audible) {
       // audioIcon = <img src={'icons/volume-off.svg'} style={{ width: '30px' }} />;
-      audioIcon = <FA icon={faVolumeOff} className={'text-info'} fixedWidth/>;
+      audioIcon = <FA icon={faVolumeOff} className={'text-info'} fixedWidth />;
     }
     if (audible && !this.props.muted) {
-      audioIcon = <FA icon={faVolume} className={'text-info'} fixedWidth/>;
+      audioIcon = <FA icon={faVolume} className={'text-info'} fixedWidth />;
     }
-    console.log("muted?:", audible, this.props.mutedInfo.muted);
+    console.log('muted?:', audible, this.props.mutedInfo.muted);
     if (audible && this.props.mutedInfo.muted) {
-      audioIcon = <FA icon={faVolumeSlash} className={'text-info'} fixedWidth/>;
+      audioIcon = <FA icon={faVolumeSlash} className={'text-info'} fixedWidth />;
     }
-    let iconPinned = pinned ?
-      <FA icon={fasThumbtack} className={'text-primary'} fixedWidth/> :
-      <FA icon={faThumbtack} className={'text-primary'} fixedWidth/>;
+    let iconPinned = pinned ? (
+      <FA icon={fasThumbtack} className={'text-primary'} fixedWidth />
+    ) : (
+      <FA icon={faThumbtack} className={'text-primary'} fixedWidth />
+    );
     if (this.props.activeTab) {
-      linkProps = {onClick: focusTab.bind(null, this.props.id)};
+      linkProps = { onClick: focusTab.bind(null, this.props.id) };
       actionButtons = [
         <li
           key={1}
@@ -94,7 +96,7 @@ class Tab extends PureComponent {
           onClick={() => this.props.closeTab(this.props.id)}
           data-command="remove"
         >
-          <FA icon={faTimes} className={'text-danger'}/>
+          <FA icon={faTimes} className={'text-danger'} />
         </li>,
       ];
     } else {
@@ -107,7 +109,7 @@ class Tab extends PureComponent {
           onClick={() => this.props.removeTab(this.props.url)}
           data-command="remove"
         >
-          <FA icon={faTimes}/>
+          <FA icon={faTimes} />
         </li>
       );
     }
