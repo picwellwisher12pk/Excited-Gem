@@ -51,3 +51,7 @@ firefox/
 chrome/
 .idea/watcherTasks.xml
 build.zip
+src/images/solid/
+src/images/regular/
+src/images/light/
+*.zip
