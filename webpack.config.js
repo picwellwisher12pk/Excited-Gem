@@ -34,10 +34,7 @@ exports.general = [
   {
     context: __dirname,
     entry: {
-      tabs: [
-        // "@babel/polyfill",
-        path.join(__dirname, 'src', 'scripts', 'TabsApp.js'),
-      ],
+      tabs: ['@babel/polyfill', path.join(__dirname, 'src', 'scripts', 'TabsApp.js')],
       sessions: [
         // "@babel/polyfill",
         path.join(__dirname, 'src', 'scripts', 'sessions-container.js'),
@@ -62,7 +59,7 @@ exports.general = [
             {
               loader: 'postcss-loader', // Run post css actions
               options: {
-                plugins: function () {
+                plugins: function() {
                   // post css plugins, can be exported to postcss.config.js
                   return [require('precss'), require('autoprefixer')];
                 },
@@ -131,10 +128,10 @@ exports.general = [
         chunks: ['sessions'],
       }),
       new WriteFilePlugin(), //Writes files to target directory during development build phase.
-      new WebpackBar({profile: true}),
-      new BundleAnalyzerPlugin({analyzerPort: 3030}),
-      new Visualizer({filename: './statistics.html'}), //Pie
-      new LodashModuleReplacementPlugin({collections: true}),
+      new WebpackBar({ profile: true }),
+      new BundleAnalyzerPlugin({ analyzerPort: 3030 }),
+      new Visualizer({ filename: './statistics.html' }), //Pie
+      new LodashModuleReplacementPlugin({ collections: true }),
       // new DashboardPlugin(),//cli based dashboard
       new Jarvis({
         port: 1337, // optional: set a port
@@ -142,5 +139,5 @@ exports.general = [
     ],
   },
 
-  {devtool: 'eval-source-map'},
+  { devtool: 'eval-source-map' },
 ];

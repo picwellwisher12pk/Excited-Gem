@@ -1,4 +1,4 @@
-import React,{PureComponent} from 'react';
+import React, { PureComponent } from 'react';
 import PropTypes from 'prop-types';
 import { Droppable } from 'react-beautiful-dnd';
 // import Tab from './Tab/index';
@@ -47,7 +47,7 @@ export default class TabsGroup extends PureComponent {
     );
   }
 }
-TabsGroup.propTypes = {
-  preferences: PropTypes.object,
-  tabs: PropTypes.array,
-};
+// TabsGroup.propTypes = {
+//   preferences: PropTypes.object,
+//   tabs: PropTypes.array,
+// };

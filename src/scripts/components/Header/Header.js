@@ -16,10 +16,7 @@ import { sortTabs } from '../general.js';
 import Search from './Search/index';
 import WindowSelector from '../WindowSelector';
 //Images
-let logo;
-NODE_ENV === 'production'
-  ? (logo = require('../../../images/logo.svg'))
-  : (logo = require('../../../images/dev-logo.svg'));
+let logo = require(`../../../images/${NODE_ENV !== 'production' && 'dev'}-logo.svg`);
 
 const Header = props => {
   const sortBy = parameter => {

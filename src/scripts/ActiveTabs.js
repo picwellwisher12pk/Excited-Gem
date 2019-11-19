@@ -305,7 +305,6 @@ class ActiveTabs extends PureComponent {
     browser.tabs.move(result.draggableId, { index: result.destination.index });
   }
   render() {
-    console.log(this.filterTabs());
     return [
       <Header
         key={'header'}

@@ -14,14 +14,8 @@ import ACTIONS from '../../../../modules/action';
 let browser = require('webextension-polyfill');
 
 class Tab extends PureComponent {
-  constructor(props) {
-    super(props);
-  }
-
   componentWillReceiveProps(props) {
-    this.setState({ url: props.url });
-    this.setState({ title: props.title });
-    this.setState({ favicon: props.favIconUrl });
+    this.setState({ url: props.url, title: props.title, favicon: props.favIconUrl });
 
     //Tabs are either ActiveTabs that is tabs representing on browser
     // Or Links/Tabs on session stored
@@ -29,14 +23,16 @@ class Tab extends PureComponent {
     if (props.activeTab) {
       this.setState({ id: props.id });
       if (props.key) this.setState({ key: props.key });
-      this.setState({ indexkey: props.indexkey });
-      this.setState({ discarded: props.discarded });
-      this.setState({ pinned: props.pinned });
-      this.setState({ position: props.position });
-      this.setState({ audible: props.audible });
-      this.setState({ muted: props.muted });
-      this.setState({ checked: props.checked });
-      this.setState({ status: props.status });
+      this.setState({
+        indexkey: props.indexkey,
+        discarded: props.discarded,
+        pinned: props.pinned,
+        position: props.position,
+        audible: props.audible,
+        muted: props.muted,
+        checked: props.checked,
+        status: props.status,
+      });
     }
   }
   render() {
@@ -45,31 +41,19 @@ class Tab extends PureComponent {
       let regex = new RegExp(this.props.searchTerm, 'gi');
       title = this.props.title.replace(regex, `<mark>${this.props.searchTerm}</mark>`);
       url = this.props.url.replace(regex, `<mark>${this.props.searchTerm}</mark>`);
-      log('title url postprocess', title, url);
     }
     let loading = this.props.status === 'loading';
     let audible = this.props.audible || this.props.muted;
     let linkProps = null;
     let actionButtons = null;
     let audioIcon = '';
-    if (!audible) {
-      // audioIcon = <img src={'icons/volume-off.svg'} style={{ width: '30px' }} />;
-      audioIcon = <FA icon={faVolumeOff} className={'text-info'} fixedWidth />;
-    }
-    if (audible && !this.props.muted) {
-      audioIcon = <FA icon={faVolume} className={'text-info'} fixedWidth />;
-    }
-    console.log('muted?:', audible, this.props.mutedInfo.muted);
-    if (audible && this.props.mutedInfo.muted) {
+    if (!audible) audioIcon = <FA icon={faVolumeOff} className={'text-info'} fixedWidth />;
+    if (audible && !this.props.muted) audioIcon = <FA icon={faVolume} className={'text-info'} fixedWidth />;
+    if (audible && this.props.mutedInfo.muted)
       audioIcon = <FA icon={faVolumeSlash} className={'text-info'} fixedWidth />;
-    }
-    let iconPinned = pinned ? (
-      <FA icon={fasThumbtack} className={'text-primary'} fixedWidth />
-    ) : (
-      <FA icon={faThumbtack} className={'text-primary'} fixedWidth />
-    );
+    let iconPinned = <FA icon={pinned ? fasThumbtack : faThumbtack} className={'text-primary'} fixedWidth />;
     if (this.props.activeTab) {
-      linkProps = { onClick: focusTab.bind(null, this.props.id) };
+      linkProps = { onClick: () => browser.tabs.update(this.props.id, { active: true }) };
       actionButtons = [
         <li
           key={1}
@@ -100,7 +84,6 @@ class Tab extends PureComponent {
         </li>,
       ];
     } else {
-      linkProps = { href: this.props.url, target: '_blank' };
       actionButtons = (
         <li
           title="Remove"
@@ -121,7 +104,7 @@ class Tab extends PureComponent {
         data-id={this.props.id}
         id={this.props.id}
         index={this.props.index}
-        className={`tab-item` + (checked ? ` checked` : ` `) + (loading || discarded ? ` idle` : ` `)}
+        className={`tab-item ` + (checked && ` checked`) + (loading || discarded ? ` idle` : ` `)}
       >
         {provided => (
           <li
@@ -131,7 +114,7 @@ class Tab extends PureComponent {
             id={`draggable-` + this.props.index}
             // draggableId={this.props.id}
             key={this.props.index}
-            className={`tab-item` + (checked ? ` checked` : ` `) + (loading || discarded ? ` idle` : ` `)}
+            className={`tab-item ` + (checked && ` checked`) + (loading || discarded ? ` idle` : ` `)}
           >
             <label className="tab-favicon" aria-label="favicon">
               <img src={this.props.favIconUrl} />
@@ -142,12 +125,7 @@ class Tab extends PureComponent {
                 className="checkbox"
               />
             </label>
-            <a
-              className="clickable tab-title clip"
-              title={url}
-              {...linkProps}
-              dangerouslySetInnerHTML={{ __html: title }}
-            />
+            <a className="clickable tab-title clip" title={url} dangerouslySetInnerHTML={{ __html: title }} />
             <span
               className="tab-url trimmed dimmed clip"
               dangerouslySetInnerHTML={{ __html: url }}

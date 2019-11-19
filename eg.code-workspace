@@ -11,7 +11,7 @@
     "workbench.activityBar.visible": true,
     "workbench.sideBar.location": "left",
     "extensions.ignoreRecommendations": true,
-    "workbench.colorTheme": "Cobalt2",
+    // "workbench.colorTheme": "Default Dark+",
     "workbench.editor.tabCloseButton": "off",
     "emmet.includeLanguages": {
       "javascript": "javascriptreact"
