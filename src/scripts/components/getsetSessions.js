@@ -1,4 +1,7 @@
 let browser = require('webextension-polyfill');
+let allSessions = {
+  sessions: [],
+};
 
 export function saveTabs(tabs) {
   let session = {
@@ -24,7 +27,7 @@ export function saveSessions(sessionsComponent) {
       created: +new Date(),
       modified: null,
       name: '',
-      windows: {},
+      windows: [],
     };
     for (let i = 0; i < windows.length; i++) {
       let strippedTabs = windows[i].tabs.map((cur) => {
@@ -76,7 +79,9 @@ function setIncStorage(storagekey, newdata, sessionsComponent) {
           .then(function(notificationId) {});
       });
     } else {
+      console.log('else');
       sessionsArray.push(newdata);
+      console.log(sessionsArray, newdata);
       jsonObj[storagekey] = sessionsArray;
       browser.storage.local.set(jsonObj).then(function() {
         if (sessionsComponent) sessionsComponent.setState({ data: sessionsArray });
