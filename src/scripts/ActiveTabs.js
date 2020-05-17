@@ -85,27 +85,9 @@ class ActiveTabs extends PureComponent {
     this.setState({ allPinned: this.isAllPinned() });
     this.setState({ allSelected: this.isAllSelected() });
     this.setState({ preferences: this.props.preferences });
-    // debugger;
   }
 
-  // shouldComponentUpdate(nextProps, nextState) {
-  //   console.log('activeTabs SHOULDCOMPONENTUPDATE', nextProps, nextState);
-  //   nextProps.tabs.forEach(tab => {});
-  //   //if nextstate is not set forget and return True
-  //   if (nextState.tabs != undefined) {
-  //     //Check if previous state and next state is different in leghth
-  //     //then return true to rerender the component
-  //     if (nextProps.tabs.length != nextState.tabs.length) return true;
-  //     //If lenght is same check all tabs one bye one to look for differences.
-  //     //If even one of tab is different in terms of any property, name or loading state etc , then return true to rerender
-  //     for (let i = 0; i < nextProps.tabs.length; i++) {
-  //       if (!objectsAreSame(nextProps.tabs[i], nextState.tabs[i])) return true;
-  //     }
-  //   }
-  //   return false;
-  // }
-
-  //Creating SelectedTabs status
+    //Creating SelectedTabs status
   updateSelectedTabs(id, selected) {
     let tempArray = this.props.selectedTabs;
     !selected ? tempArray.splice(tempArray.indexOf(id), 1) : tempArray.push(id);
@@ -133,7 +115,7 @@ class ActiveTabs extends PureComponent {
     browser.tabs.update(tabId, { pinned: true });
     getTabs().then(
       tabs => {
-        this.setState({ tabs: tabs });
+        this.setState({tabs});
       },
       error => log(`Error: ${error}`)
     );
@@ -143,7 +125,7 @@ class ActiveTabs extends PureComponent {
     browser.tabs.update(tabId, { pinned: false });
     getTabs().then(
       tabs => {
-        this.setState({ tabs: tabs });
+        this.setState({tabs});
       },
       error => log(`Error: ${error}`)
     );
@@ -266,7 +248,7 @@ class ActiveTabs extends PureComponent {
           'reminder',
           {
             type: 'basic',
-            iconUrl: '../images/logo.svg',
+            iconUrl: '../images/logo.png',
             title: 'Settings Saved',
             message: 'Search settings updated',
           },

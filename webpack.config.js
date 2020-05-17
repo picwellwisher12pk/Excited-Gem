@@ -1,28 +1,31 @@
-require('dotenv').config();
-let webpack = require('webpack'),
-  path = require('path'),
-  LodashModuleReplacementPlugin = require('lodash-webpack-plugin'),
-  fileSystem = require('fs'),
-  Jarvis = require('webpack-jarvis'), //Browser based dashboard
-  DashboardPlugin = require('webpack-dashboard/plugin'), //Webpack cli based dashboard
-  BundleAnalyzerPlugin = require('webpack-bundle-analyzer').BundleAnalyzerPlugin, //Bundle analyzer
-  env = require('./utils/env'),
-  HtmlWebpackPlugin = require('html-webpack-plugin'),
-  ExtractTextPlugin = require('extract-text-webpack-plugin'),
+require("dotenv").config();
+let webpack = require("webpack"),
+  path = require("path"),
+  LodashModuleReplacementPlugin = require("lodash-webpack-plugin"),
+  fileSystem = require("fs"),
+  Jarvis = require("webpack-jarvis"), //Browser based dashboard
+  DashboardPlugin = require("webpack-dashboard/plugin"), //Webpack cli based dashboard
+  BundleAnalyzerPlugin = require("webpack-bundle-analyzer")
+    .BundleAnalyzerPlugin, //Bundle analyzer
+  env = require("./utils/env"),
+  HtmlWebpackPlugin = require("html-webpack-plugin"),
+  ExtractTextPlugin = require("extract-text-webpack-plugin"),
   MiniCssExtractPlugin = require("mini-css-extract-plugin"),
-  Visualizer = require('webpack-visualizer-plugin'),
-  WriteFilePlugin = require('write-file-webpack-plugin'),
-  WebpackBar = require('webpackbar');
+  Visualizer = require("webpack-visualizer-plugin"),
+  WriteFilePlugin = require("write-file-webpack-plugin"),
+  ChromeExtensionReloader  = require('webpack-chrome-extension-reloader'),
+  WebpackBar = require("webpackbar");
 
 
+require('./utils/prepare');
 // Get the root path (assuming your webpack config is in the root of your project!)
 const currentPath = path.join(__dirname);
 
 // Create the fallback path (the production .env)
-const basePath = currentPath + '/.env';
+const basePath = currentPath + "/.env";
 
 // We're concatenating the environment name to our filename to specify the correct env file!
-const envPath = basePath + '.' + process.env.NODE_ENV;
+const envPath = basePath + "." + process.env.NODE_ENV;
 
 // Check if the file exists, otherwise fall back to the production .env
 const finalPath = fileSystem.existsSync(envPath) ? envPath : basePath;
@@ -39,251 +42,178 @@ const envKeys = Object.keys(env).reduce((prev, next) => {
 // load the secrets
 alias = {};
 
-let secretsPath = path.join(__dirname, 'secrets.' + env.NODE_ENV + '.js');
+let secretsPath = path.join(__dirname, "secrets." + env.NODE_ENV + ".js");
 
-let images = ['jpg', 'jpeg', 'png', 'gif'];
-let icons = ['svg'];
-let fonts = ['eot', 'otf', 'ttf', 'woff', 'woff2'];
-let fileExtensions = ['jpg', 'jpeg', 'png', 'gif', 'eot', 'otf', 'svg', 'ttf', 'woff', 'woff2'];
-let logoFile = (logoType = 'png') => {
-  if (logoType === 'svg') return process.env.NODE_ENV === 'development' ? 'dev-logo.svg' : 'logo.svg';
-  else return process.env.NODE_ENV === 'development' ? 'dev-logo.png' : 'logo.png';
+let images = ["jpg", "jpeg", "png", "gif"];
+let icons = ["svg"];
+let fonts = ["eot", "otf", "ttf", "woff", "woff2"];
+let fileExtensions = [
+  "jpg",
+  "jpeg",
+  "png",
+  "gif",
+  "eot",
+  "otf",
+  "svg",
+  "ttf",
+  "woff",
+  "woff2",
+];
+let logoFile = (logoType = "png") => {
+  if (logoType === "svg")
+    return process.env.NODE_ENV === "development" ? "dev-logo.png" : "logo.png";
+  else
+    return process.env.NODE_ENV === "development" ? "dev-logo.png" : "logo.png";
 };
-let faviconFile = process.env.NODE_ENV === 'development' ? 'src/images/dev-logo.svg' : 'src/images/logo.svg';
+let faviconFile =
+  process.env.NODE_ENV === "development"
+    ? "src/images/dev-logo.png"
+    : "src/images/logo.png";
 
 if (fileSystem.existsSync(secretsPath)) {
-  alias['secrets'] = secretsPath;
-}
-if (env.browserClient === 'chrome' || env.browserClient === 'all') {
-  exports.chromeConfig = [{
-
-    context: __dirname,
-    entry: {
-      tabs: ['@babel/polyfill', path.join(__dirname, 'src', 'scripts', 'TabsApp.js')],
-      sessions: [
-        // "@babel/polyfill",
-        path.join(__dirname, 'src', 'scripts', 'sessions-container.js'),
-      ],
-      background: path.join(__dirname, 'src', 'scripts', 'background.js'),
-    },
-    output: {
-      path: path.join(__dirname, 'chrome'),
-        filename
-    :
-      'js/[name].js',
-    }
-  ,
-    module: {
-      rules: [
-        {
-          test: /\.(scss)$/,
-          use: [{
-            loader: 'style-loader', // inject CSS to page
-          }, {
-            loader: 'css-loader', // translates CSS into CommonJS modules
-          }, {
-            loader: 'postcss-loader', // Run post css actions
-            options: {
-              plugins: function () { // post css plugins, can be exported to postcss.config.js
-                return [
-                  require('precss'),
-                  require('autoprefixer')
-                ];
-              }
-            }
-          }, {
-            loader: 'sass-loader' // compiles Sass to CSS
-          }]
-        },
-        {
-          test: new RegExp('.(' + images.join('|') + ')$'),
-          loader: 'file-loader?name=images/[name].[ext]',
-          exclude: /node_modules/,
-        },
-        {
-          test: new RegExp('.(' + fonts.join('|') + ')$'),
-          loader: 'file-loader?name=/fonts/[name].[ext]',
-          exclude: /node_modules/,
-        },
-        {
-          test: /\.js$/,
-          loader: 'babel-loader',
-          exclude: /node_modules/,
-          query: {
-            presets: ['stage-3', 'env', 'react'],
-          },
-        },
-      ],
-    }
-  ,
-    resolve: {
-      alias: alias,
-        extensions
-    :
-      fileExtensions.map(extension => '.' + extension).concat(['.jsx', '.js', '.css']),
-        modules
-    :
-      ['path.resolve(__dirname, "src")', 'node_modules', path.resolve(__dirname, 'chrome')],
-        descriptionFiles
-    :
-      ['package.json'],
-        moduleExtensions
-    :
-      ['-loader'],
-    }
-  ,
-    plugins: [
-      new webpack.ProvidePlugin({
-        $: 'jquery',
-        jQuery: 'jquery',
-      }),
-      new ExtractTextPlugin({
-        filename: 'css/[name].css',
-      }),
-      // expose and write the allowed env vars on the compiled bundle
-      new webpack.DefinePlugin({
-        'process.env.NODE_ENV': JSON.stringify(env.NODE_ENV),
-        CLIENT: 'chrome',
-      }),
-
-      new HtmlWebpackPlugin({
-        title: 'Excited Gem | Tabs',
-        logotype: 'dev-logo.svg',
-        template: path.join(__dirname, 'src', 'tabs.ejs'),
-        filename: 'tabs.html',
-        favicon: 'src/images/dev-logo.svg',
-        chunks: ['tabs'],
-      }),
-      new WriteFilePlugin(), //Writes files to target directory during development build phase.
-      new WebpackBar({profile: true}),
-    ],
-    devtool: env.NODE_ENV === 'development' ? 'cheap-module-eval-source-map' : 'cheap-source-map'
-  },
-/*    {
-      entry: path.join(__dirname, 'src', 'manifest.json'),
-      output: {
-        path: path.join(__dirname, 'chrome'),
-        filename: '[name].json',
-      },
-    },*/
-  ]
+  alias["secrets"] = secretsPath;
 }
 
-if (env.browserClient === 'firefox' || env.browserClient === 'all') {
-  console.log("making firefox build");
-  exports.firefoxConfig = [
+  // console.log(path.resolve(__dirname, "src", "scripts", "TabsApp.js"));
+  module.exports =
     {
+      mode:'development',
       context: __dirname,
       entry: {
-        tabs: ["@babel/polyfill", path.join(__dirname, 'src', 'scripts', 'TabsApp.js')],
-        sessions: ["@babel/polyfill", path.join(__dirname, 'src', 'scripts', 'sessions-container.js')],
-        background: path.join(__dirname, 'src', 'scripts', 'background.js')
+        tabs: ["@babel/polyfill", path.resolve(__dirname, "src", "scripts","TabsApp.js")],
+        sessions: [
+        "@babel/polyfill",
+          path.resolve(__dirname, "src", "scripts", "sessions-container.js"),
+        ],
+        background: ["@babel/polyfill", path.resolve(__dirname, "src", "scripts","background.js")],
       },
       output: {
-        path: path.join(__dirname, 'firefox'),
-        filename: 'js/[name].js',
+        path: path.resolve(__dirname, "dist"),
+        filename: "js/[name].js",
       },
       module: {
         rules: [
           {
             test: /\.(scss)$/,
-            use: [{
-              loader: 'style-loader', // inject CSS to page
-            }, {
-              loader: 'css-loader', // translates CSS into CommonJS modules
-            }, {
-              loader: 'postcss-loader', // Run post css actions
-              options: {
-                plugins: function () { // post css plugins, can be exported to postcss.config.js
-                  return [
-                    require('precss'),
-                    require('autoprefixer')
-                  ];
-                }
-              }
-            }, {
-              loader: 'sass-loader' // compiles Sass to CSS
-            }]
+            use: [
+              {
+                loader: "style-loader", // inject CSS to page
+              },
+              {
+                loader: "css-loader", // translates CSS into CommonJS modules
+              },
+              {
+                loader: "postcss-loader", // Run post css actions
+                options: {
+                  plugins: function () {
+                    // post css plugins, can be exported to postcss.config.js
+                    return [require("precss"), require("autoprefixer")];
+                  },
+                },
+              },
+              {
+                loader: "sass-loader", // compiles Sass to CSS
+              },
+            ],
           },
           {
-            test: new RegExp('.(' + images.join('|') + ')$'),
-            loader: 'file-loader?name=images/[name].[ext]',
+            test: new RegExp(".(" + images.join("|") + ")$"),
+            loader: "file-loader?name=images/[name].[ext]",
             exclude: /node_modules/,
           },
           {
-            test: new RegExp('.(' + fonts.join('|') + ')$'),
-            loader: 'file-loader?name=/fonts/[name].[ext]',
+            test: new RegExp(".(" + fonts.join("|") + ")$"),
+            loader: "file-loader?name=/fonts/[name].[ext]",
             exclude: /node_modules/,
           },
           {
             test: /\.js$/,
-            loader: 'babel-loader',
+            loader: "babel-loader",
             exclude: /node_modules/,
             query: {
-              presets: ['stage-3', 'env', 'react'],
+              presets: ["@babel/preset-env", "@babel/preset-react"],
             },
           },
         ],
       },
       resolve: {
         alias: alias,
-        extensions: fileExtensions.map(extension => '.' + extension).concat(['.jsx', '.js', '.css']),
-        modules: ['path.resolve(__dirname, "src")', 'node_modules', path.resolve(__dirname, 'firefox')],
-        descriptionFiles: ['package.json'],
-        moduleExtensions: ['-loader'],
+        extensions: fileExtensions
+          .map((extension) => "." + extension)
+          .concat([".jsx", ".js", ".css"]),
+        modules: [
+          'path.resolve(__dirname, "./src")',
+          "node_modules",
+          path.resolve(__dirname, "dist"),
+        ],
+        descriptionFiles: ["package.json"],
+        moduleExtensions: ["-loader"],
       },
       plugins: [
         new webpack.ProvidePlugin({
-          $: 'jquery',
-          jQuery: 'jquery',
-          React: 'react'
+          $: "jquery",
+          jQuery: "jquery",
+          React: "react",
         }),
         // new ExtractTextPlugin({
         //   filename: 'css/[name].css',
         // }),
         new MiniCssExtractPlugin({
-          filename: 'css/[name].css',
+          filename: "css/[name].css",
         }),
         // expose and write the allowed env vars on the compiled bundle
         new webpack.DefinePlugin(envKeys),
         new webpack.DefinePlugin({
-          NODE_ENV: JSON.stringify(env.NODE_ENV)
+          "process.env.NODE_ENV": JSON.stringify(env.NODE_ENV),
+          NODE_ENV: JSON.stringify(env.NODE_ENV),
         }),
 
         new HtmlWebpackPlugin({
-          title: 'Excited Gem | Tabs',
-          logotype: env.NODE_ENV === 'development' ? 'dev-logo.svg' : 'logo.svg',
-          template: path.join(__dirname, 'src', 'tabs.ejs'),
-          filename: 'tabs.html',
-          favicon: env.NODE_ENV === 'development' ? 'src/images/dev-logo.svg' : 'src/images/logo.svg',
-          chunks: ['tabs'],
+          title: "Excited Gem | Tabs",
+          logotype:
+            env.NODE_ENV === "development" ? "dev-logo.png" : "logo.png",
+          template: path.join(__dirname, "./src", "tabs.ejs"),
+          filename: "tabs.html",
+          favicon:
+            env.NODE_ENV === "development"
+              ? "./src/images/dev-logo.png"
+              : "./src/images/logo.png",
+          chunks: ["tabs"],
         }),
         new HtmlWebpackPlugin({
-          title: 'Excited Gem | Sessions',
-          logotype: env.NODE_ENV === 'development' ? 'dev-logo.svg' : 'logo.svg',
-          template: path.join(__dirname, 'src', 'sessions.ejs'),
-          filename: 'sessions.html',
-          favicon: env.NODE_ENV === 'development' ? 'src/images/dev-logo.svg' : 'src/images/logo.svg',
-          chunks: ['sessions'],
+          title: "Excited Gem | Sessions",
+          logotype:
+            env.NODE_ENV === "development" ? "dev-logo.png" : "logo.png",
+          template: path.join(__dirname, "./src", "sessions.ejs"),
+          filename: "sessions.html",
+          favicon:
+            env.NODE_ENV === "development"
+              ? "./src/images/dev-logo.png"
+              : "./src/images/logo.png",
+          chunks: ["sessions"],
         }),
+        new ChromeExtensionReloader(),
         new WriteFilePlugin(), //Writes files to target directory during development build phase.
-        new WebpackBar({profile: true}),
+        new WebpackBar({ profile: true }),
         new BundleAnalyzerPlugin({ analyzerPort: 3030 }),
-        new Visualizer({ filename: './statistics.html' }), //Pie
+        new Visualizer({ filename: "./statistics.html" }), //Pie
         new LodashModuleReplacementPlugin({ collections: true }),
-        // new DashboardPlugin(),//cli based dashboard
+        new DashboardPlugin(),//cli based dashboard
         new Jarvis({
           port: 1337, // optional: set a port
         }),
       ],
-    },
-/*    {
-      entry: path.join(__dirname, 'src', 'manifest.json'),
-      output: {
-        path: path.join(__dirname, 'firefox'),
-        filename: '[name].json',
-      },
-    },*/
-    {devtool: env.NODE_ENV === 'development' ? 'eval-source-map' : 'cheap-source-map'}
-  ];
-}
+
+    /*    {
+        entry: path.join(__dirname, 'src', 'manifest.json'),
+        output: {
+            path: path.join(__dirname, 'firefox'),
+          filename: '[name].json',
+        },
+      },*/
+
+      devtool:
+        env.NODE_ENV === "development" ? "source-map" : "cheap-source-map",
+    }
+  ;
+
