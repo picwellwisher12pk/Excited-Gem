@@ -1,8 +1,9 @@
 import React from 'react';
-var browser = require('webextension-polyfill');
-import { timeConverter } from '../components/general';
+import {timeConverter} from '../components/general';
 import Tab from '../components/Accordion/TabsGroup/Tab/';
-import { renameSession, removeSessions, removeTab } from '../components/getsetSessions';
+import {removeSessions, removeTab, renameSession} from '../components/getsetSessions';
+
+var browser = require('webextension-polyfill');
 // import { Scrollbars } from 'react-custom-scrollbars';
 // let browser = require('webextension-polyfill');
 export default class Sessions extends React.Component {
@@ -22,7 +23,7 @@ export default class Sessions extends React.Component {
   render() {
     let _this = this;
     let sessions = this.state.data;
-    if (sessions == []) return 'No Session Saved.';
+    if (sessions === []) return 'No Session Saved.';
     return (
       <div className="accordion" id="accordion" role="tablist" aria-multiselectable="true">
         {sessions.map(function(value, index) {
@@ -84,7 +85,6 @@ class Session extends React.Component {
               data-target={`#collapse` + dateTime}
               aria-expanded="true"
               aria-controls={`collapse` + dateTime}
-              aria-controls={data.created}
               onClick={() => _this.setState({ show: !_this.state.show })}
             >
               {nameSpan}

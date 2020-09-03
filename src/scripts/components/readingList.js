@@ -4,17 +4,17 @@
   let readinglistsCounter;
 
 let renderReadingLists = (items)=>{
-    console.log("Getting Reading list",items);
+  console.log("Getting Reading list", items);
+  itemGroup = items.readinglists;
+  if (items.readinglists === undefined) {
+    itemGroup = [];
+    readinglistsCounter = 0;
+  } else {
     itemGroup = items.readinglists;
-    if(items.readinglists == undefined){
-         itemGroup = [];
-         readinglistsCounter = 0;
-    }else{
-        itemGroup = items.readinglists;
-        readinglistsCounter = items.readinglists.length;
-    }
-    return items.readinglists;
-    ReadingLists.setState({data:itemGroup});
+    readinglistsCounter = items.readinglists.length;
+  }
+  ReadingLists.setState({data: itemGroup});
+  return items.readinglists;
 }
 let getReadingLists = () => {
       chrome.storage.local.get("readinglists", renderReadingLists(items));

@@ -1,15 +1,15 @@
 'use strict';
 //Scripts and Modules
-import { Scrollbars } from 'react-custom-scrollbars';
-import { PureComponent } from 'react';
-import { connect } from 'react-redux';
+import {Scrollbars} from 'react-custom-scrollbars';
+import {PureComponent} from 'react';
+import {connect} from 'react-redux';
 import 'react-devtools';
 // import { TransitionGroup, CSSTransition } from 'react-transition-group';
-import { DragDropContext } from 'react-beautiful-dnd';
+import {DragDropContext} from 'react-beautiful-dnd';
 //JS libraries
-import { getTabs } from './components/browserActions';
-import { addClass, removeClass } from './components/general.js';
-import { saveTabs } from './components/getsetSessions';
+import {getTabs} from './components/browserActions';
+import {addClass, removeClass} from './components/general.js';
+import {saveTabs} from './components/getsetSessions';
 import '../images/logo.png';
 import '../images/dev-logo.png';
 // React Components
@@ -222,13 +222,18 @@ class ActiveTabs extends PureComponent {
     if (this.props.preferences.searchTerm === '') return this.props.tabs;
     return this.props.tabs.filter(tab => {
       if (this.props.preferences.search.regex) {
-        let regex = new RegExp(this.props.preferences.searchTerm, this.props.preferences.search.ignoreCase ? 'i' : '');
-        if (this.props.preferences.search.searchIn[0]) {
-          if (regex.test(tab.title)) return true;
+        try {
+          let regex = new RegExp(this.props.preferences.searchTerm, this.props.preferences.search.ignoreCase ? 'i' : '');
+          if (this.props.preferences.search.searchIn[0]) {
+            if (regex.test(tab.title)) return true;
+          }
+          if (this.props.preferences.search.searchIn[1]) {
+            if (regex.test(tab.url)) return true;
+          }
+        } catch (error) {
+          console.log("search error:", error);
         }
-        if (this.props.preferences.search.searchIn[1]) {
-          if (regex.test(tab.url)) return true;
-        }
+
       } else {
         if (this.props.preferences.search.searchIn[0]) {
           return tab.title.includes(this.props.preferences.searchTerm);

@@ -1,22 +1,23 @@
 /* eslint-disable no-unused-expressions */
 /* eslint-disable no-unused-vars */
 import React from 'react';
-import { FontAwesomeIcon as FA } from '@fortawesome/react-fontawesome';
-import { faVolume } from '@fortawesome/pro-solid-svg-icons/faVolume';
-import { faVolumeSlash } from '@fortawesome/pro-solid-svg-icons/faVolumeSlash';
-import { faShareSquare } from '@fortawesome/pro-solid-svg-icons/faShareSquare';
-import { faSave } from '@fortawesome/pro-solid-svg-icons/faSave';
-import { faTimes } from '@fortawesome/pro-light-svg-icons/faTimes';
-import { faSyncAlt } from '@fortawesome/pro-regular-svg-icons/faSyncAlt';
-import { faThumbtack } from '@fortawesome/pro-light-svg-icons/faThumbtack';
-import { faThumbtack as fasThumbtack } from '@fortawesome/pro-solid-svg-icons/faThumbtack';
-import { connect } from 'react-redux';
+import {FontAwesomeIcon as FA} from '@fortawesome/react-fontawesome';
+import {faVolume} from '@fortawesome/pro-solid-svg-icons/faVolume';
+import {faSort} from '@fortawesome/pro-solid-svg-icons/faSort';
+import {faVolumeSlash} from '@fortawesome/pro-solid-svg-icons/faVolumeSlash';
+import {faShareSquare} from '@fortawesome/pro-solid-svg-icons/faShareSquare';
+import {faSave} from '@fortawesome/pro-solid-svg-icons/faSave';
+import {faTimes} from '@fortawesome/pro-light-svg-icons/faTimes';
+import {faSyncAlt} from '@fortawesome/pro-regular-svg-icons/faSyncAlt';
+import {faThumbtack} from '@fortawesome/pro-light-svg-icons/faThumbtack';
+import {faThumbtack as fasThumbtack} from '@fortawesome/pro-solid-svg-icons/faThumbtack';
+import {connect} from 'react-redux';
 
-import { sortTabs } from '../general.js';
+import {sortTabs} from '../general.js';
 import Search from './Search/index';
 import WindowSelector from '../WindowSelector';
 //Images
-let logo = require(`../../../images/${NODE_ENV !== 'production' && 'dev'}-logo.svg`);
+let logo = require(`../../../images/${NODE_ENV !== 'production' && 'dev'}-logo.png`);
 
 const Header = props => {
   const sortBy = parameter => {
@@ -94,13 +95,13 @@ const Header = props => {
                 title="Sort Tabs"
                 style={{ border: 'none' }}
               >
-                <i className="fal fa-sort" />
+                <FA icon={faSort}/>
               </a>
               <div className="input-group-append" id="button-addon4">
                 <button
                   className="btn btn-link text-white"
                   type="button"
-                  title="Pin Selected"
+                  title="Sort by Title"
                   onClick={() => sortBy('title')}
                 >
                   Title
@@ -108,10 +109,10 @@ const Header = props => {
                 <button
                   className="btn btn-link text-white"
                   type="button"
-                  title="Unpin Selected"
+                  title="Sort by URL"
                   onClick={() => sortBy('url')}
                 >
-                  URL
+                  URLs
                 </button>
               </div>
             </div>
@@ -123,7 +124,7 @@ const Header = props => {
             <a
               className="form-control"
               onClick={() => props.processSelectedTabs('togglePinSelected')}
-              href="#"
+              // href="#"
               title="Toggle Pin selected tab"
               style={{ border: 'none' }}
             >

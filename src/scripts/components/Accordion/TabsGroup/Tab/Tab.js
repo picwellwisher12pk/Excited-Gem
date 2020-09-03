@@ -1,21 +1,20 @@
-import React, { PureComponent } from 'react';
-import { FontAwesomeIcon as FA } from '@fortawesome/react-fontawesome';
-import { faVolume } from '@fortawesome/pro-solid-svg-icons/faVolume';
-import { faVolumeOff } from '@fortawesome/pro-light-svg-icons/faVolumeOff';
-import { faVolumeSlash } from '@fortawesome/pro-solid-svg-icons/faVolumeSlash';
-import { faTimes } from '@fortawesome/pro-light-svg-icons/faTimes';
-import { faThumbtack } from '@fortawesome/pro-light-svg-icons/faThumbtack';
-import { faThumbtack as fasThumbtack } from '@fortawesome/pro-solid-svg-icons/faThumbtack';
-import { Draggable } from 'react-beautiful-dnd';
-import { log } from '../../../general';
-import { connect } from 'react-redux';
+import React, {PureComponent} from 'react';
+import {FontAwesomeIcon as FA} from '@fortawesome/react-fontawesome';
+import {faVolume} from '@fortawesome/pro-solid-svg-icons/faVolume';
+import {faVolumeOff} from '@fortawesome/pro-light-svg-icons/faVolumeOff';
+import {faVolumeSlash} from '@fortawesome/pro-solid-svg-icons/faVolumeSlash';
+import {faTimes} from '@fortawesome/pro-light-svg-icons/faTimes';
+import {faThumbtack} from '@fortawesome/pro-light-svg-icons/faThumbtack';
+import {faThumbtack as fasThumbtack} from '@fortawesome/pro-solid-svg-icons/faThumbtack';
+import {Draggable} from 'react-beautiful-dnd';
+import {connect} from 'react-redux';
 import ACTIONS from '../../../../modules/action';
 
 let browser = require('webextension-polyfill');
 
 class Tab extends PureComponent {
   componentWillReceiveProps(props) {
-    this.setState({ url: props.url, title: props.title, favicon: props.favIconUrl });
+    this.setState({url: props.url, title: props.title, favicon: props.favIconUrl});
 
     //Tabs are either ActiveTabs that is tabs representing on browser
     // Or Links/Tabs on session stored
@@ -36,24 +35,30 @@ class Tab extends PureComponent {
     }
   }
   render() {
-    let { title, url, checked, pinned, discarded } = this.props;
+    let {title, url, checked, pinned, discarded} = this.props;
     if (this.props.searchTerm) {
-      let regex = new RegExp(this.props.searchTerm, 'gi');
-      title = this.props.title.replace(regex, `<mark>${this.props.searchTerm}</mark>`);
-      url = this.props.url.replace(regex, `<mark>${this.props.searchTerm}</mark>`);
+      const {searchTerm} = this.props;
+      let regex;
+      console.log("search term", searchTerm);
+      try {
+        regex = new RegExp(searchTerm, 'gi');
+      } catch (e) {
+        console.log("search term", searchTerm);
+        console.log("Bad Regular Expressions:", e);
+      }
+
+      title = this.props.title.replace(regex, `<mark>${searchTerm}</mark>`);
+      url = this.props.url.replace(regex, `<mark>${searchTerm}</mark>`);
     }
-    let loading = this.props.status === 'loading';
-    let audible = this.props.audible || this.props.muted;
-    let linkProps = null;
-    let actionButtons = null;
-    let audioIcon = '';
-    if (!audible) audioIcon = <FA icon={faVolumeOff} className={'text-info'} fixedWidth />;
-    if (audible && !this.props.muted) audioIcon = <FA icon={faVolume} className={'text-info'} fixedWidth />;
+    let loading = this.props.status === 'loading', audible = this.props.audible || this.props.muted, linkProps = null,
+      actionButtons = null, audioIcon = '';
+    if (!audible) audioIcon = <FA icon={faVolumeOff} className={'text-info'} fixedWidth/>;
+    if (audible && !this.props.muted) audioIcon = <FA icon={faVolume} className={'text-info'} fixedWidth/>;
     if (audible && this.props.mutedInfo.muted)
-      audioIcon = <FA icon={faVolumeSlash} className={'text-info'} fixedWidth />;
-    let iconPinned = <FA icon={pinned ? fasThumbtack : faThumbtack} className={'text-primary'} fixedWidth />;
+      audioIcon = <FA icon={faVolumeSlash} className={'text-info'} fixedWidth/>;
+    let iconPinned = <FA icon={pinned ? fasThumbtack : faThumbtack} className={'text-primary'} fixedWidth/>;
     if (this.props.activeTab) {
-      linkProps = { onClick: () => browser.tabs.update(this.props.id, { active: true }) };
+      // linkProps = {onClick: () => browser.tabs.update(this.props.id, {active: true})};
       actionButtons = [
         <li
           key={1}
@@ -112,12 +117,11 @@ class Tab extends PureComponent {
             {...provided.dragHandleProps}
             ref={provided.innerRef}
             id={`draggable-` + this.props.index}
-            // draggableId={this.props.id}
             key={this.props.index}
             className={`tab-item ` + (checked && ` checked`) + (loading || discarded ? ` idle` : ` `)}
           >
             <label className="tab-favicon" aria-label="favicon">
-              <img src={this.props.favIconUrl} />
+              <img src={this.props.favIconUrl} alt={title}/>
               <input
                 type="checkbox"
                 onChange={() => this.props.updateSelectedTabs(this.props.id, !this.props.checked)}
@@ -132,10 +136,6 @@ class Tab extends PureComponent {
               onClick={() => browser.tabs.update(this.props.id, { active: true })}
             />
             <ul className=" tab-actions" role="group" aria-label="options">
-              {/* <li title="Tab Information" className="clickable">
-              onClick={this.infoModal.bind(null, this.state.data)}
-            <i className="fa fa-info-circle fw-fw" />
-            </li> */}
               {actionButtons}
             </ul>
           </li>
