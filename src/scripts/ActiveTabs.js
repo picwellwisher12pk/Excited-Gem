@@ -265,7 +265,7 @@ class ActiveTabs extends PureComponent {
 
   tabTemplate(tab) {
     let checked = false;
-    if (this.props.selectedTabs !== []) checked = this.props.selectedTabs.includes(tab.id);
+    if (this.props.selectedTabs.length === 0) checked = this.props.selectedTabs.includes(tab.id);
     return (
       <Tab
         key={tab.index}
