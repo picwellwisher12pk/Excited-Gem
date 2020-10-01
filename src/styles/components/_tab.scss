@@ -1,22 +1,17 @@
 @import "../bootstrap/_variables";
 .tab-item {
-    padding-left: 15px;
-    padding: 10px 10px 0;
-    margin-bottom: -1px;
-    border: 1px solid #ddd;
-    display: flex;
-    flex: 1;
-    width: 100%;
-    border-radius: 0;
-    text-overflow: ellipsis;
-    white-space: nowrap;
-    transition: all 0.4s;
-    position: relative;
-    -webkit-transition: all 0.3s;
-    -moz-transition: all 0.3s;
-    -ms-transition: all 0.3s;
-    -o-transition: all 0.3s;
-    transition: all 0.3s;
+  padding: 10px 10px 0;
+  padding-left: 15px;
+  margin-bottom: -1px;
+  border: 1px solid #ddd;
+  display: flex;
+  flex: 1;
+  width: 100%;
+  border-radius: 0;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  position: relative;
+  transition: all 0.3s;
     background-color: #fff;
     &.idle .tab-name,
     &.idle .tab-url,
@@ -40,29 +35,27 @@
         }
     }
     img {
-        width: 16px;
-        height: 16px;
-        margin: 0 5px;
+      width: 16px;
+      height: 16px;
+      margin: 0 5px;
+
+      &[src=""], &[src^="chrome-extension://"] {
+        display: inline-block;
+        border: 1px solid gray;
+        text-indent: -9999px;
+      }
     }
     .tab-favicon {
         margin-right: 15px;
         width: 16px;
         img {
             margin: 0;
-            -webkit-transition: all 0.2s;
-            -moz-transition: all 0.2s;
-            -ms-transition: all 0.2s;
-            -o-transition: all 0.2s;
             transition: all 0.2s;
         }
         .checkbox {
             opacity: 0;
             width: 16px;
             height: 16px;
-            -webkit-transition: all 0.2s;
-            -moz-transition: all 0.2s;
-            -ms-transition: all 0.2s;
-            -o-transition: all 0.2s;
             transition: all 0.2s;
             position: absolute;
             left: 11px;
