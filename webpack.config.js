@@ -18,6 +18,7 @@ let webpack = require("webpack"),
 
 
 require('./utils/prepare');
+
 // Get the root path (assuming your webpack config is in the root of your project!)
 const currentPath = path.join(__dirname);
 
@@ -47,23 +48,10 @@ let secretsPath = path.join(__dirname, "secrets." + env.NODE_ENV + ".js");
 let images = ["jpg", "jpeg", "png", "gif"];
 let icons = ["svg"];
 let fonts = ["eot", "otf", "ttf", "woff", "woff2"];
-let fileExtensions = [
-  "jpg",
-  "jpeg",
-  "png",
-  "gif",
-  "eot",
-  "otf",
-  "svg",
-  "ttf",
-  "woff",
-  "woff2",
-];
+let fileExtensions = ["jpg", "jpeg", "png", "gif", "eot", "otf", "svg", "ttf", "woff", "woff2",];
 let logoFile = (logoType = "png") => {
-  if (logoType === "svg")
-    return process.env.NODE_ENV === "development" ? "dev-logo.png" : "logo.png";
-  else
-    return process.env.NODE_ENV === "development" ? "dev-logo.png" : "logo.png";
+  if (logoType === "svg") return process.env.NODE_ENV === "development" ? "dev-logo.png" : "logo.png";
+  else return process.env.NODE_ENV === "development" ? "dev-logo.png" : "logo.png";
 };
 let faviconFile =
   process.env.NODE_ENV === "development"
@@ -80,12 +68,12 @@ if (fileSystem.existsSync(secretsPath)) {
       mode:'development',
       context: __dirname,
       entry: {
-        tabs: ["@babel/polyfill", path.resolve(__dirname, "src", "scripts","TabsApp.js")],
-        sessions: [
-        "@babel/polyfill",
-          path.resolve(__dirname, "src", "scripts", "sessions-container.js"),
-        ],
-        background: ["@babel/polyfill", path.resolve(__dirname, "src", "scripts","background.js")],
+        tabs: ["@babel/polyfill", path.resolve(__dirname, "src", "scripts", "TabsApp.js")],
+        // sessions: [
+        // "@babel/polyfill",
+        //   path.resolve(__dirname, "src", "scripts", "sessions-container.js"),
+        // ],
+        background: ["@babel/polyfill", path.resolve(__dirname, "src", "scripts", "background.js")],
       },
       output: {
         path: path.resolve(__dirname, "dist"),
@@ -119,6 +107,7 @@ if (fileSystem.existsSync(secretsPath)) {
           {
             test: new RegExp(".(" + images.join("|") + ")$"),
             loader: "file-loader?name=images/[name].[ext]",
+            // options:{esModule:false},
             exclude: /node_modules/,
           },
           {

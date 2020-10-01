@@ -30,7 +30,7 @@ const Header = props => {
       <nav className="navbar">
         <div className="navbar-brand ">
           <a href="#" className="pull-left logo" style={{ marginTop: '10px' }}>
-            <img src={logo} alt="" style={{ height: '40px', width: 'auto' }} />
+            <img src={logo.default} alt="" style={{height: '40px', width: 'auto'}}/>
           </a>
         </div>
         <div className="collapse navbar-collapse" id="navbarNav">
