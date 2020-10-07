@@ -13,43 +13,42 @@ import ACTIONS from '../../../../modules/action';
 let browser = require('webextension-polyfill');
 
 class Tab extends PureComponent {
-  componentWillReceiveProps(props) {
-    this.setState({url: props.url, title: props.title, favicon: props.favIconUrl});
-
-    //Tabs are either ActiveTabs that is tabs representing on browser
-    // Or Links/Tabs on session stored
-
-    if (props.activeTab) {
-      this.setState({ id: props.id });
-      if (props.key) this.setState({ key: props.key });
-      this.setState({
-        indexkey: props.indexkey,
-        discarded: props.discarded,
-        pinned: props.pinned,
-        position: props.position,
-        audible: props.audible,
-        muted: props.muted,
-        checked: props.checked,
-        status: props.status,
-      });
-    }
-  }
+  // componentWillReceiveProps(props) {
+  //   this.setState({url: props.url, title: props.title, favicon: props.favIconUrl});
+  //
+  //   //Tabs are either ActiveTabs that is tabs representing on browser
+  //   // Or Links/Tabs on session stored
+  //
+  //   if (props.activeTab) {
+  //     this.setState({ id: props.id });
+  //     if (props.key) this.setState({ key: props.key });
+  //     this.setState({
+  //       indexkey: props.indexkey,
+  //       discarded: props.discarded,
+  //       pinned: props.pinned,
+  //       position: props.position,
+  //       audible: props.audible,
+  //       muted: props.muted,
+  //       checked: props.checked,
+  //       status: props.status,
+  //     });
+  //   }
+  // }
   render() {
     let {title, url, checked, pinned, discarded} = this.props;
+    //Search Highlighting;
     if (this.props.searchTerm) {
       const {searchTerm} = this.props;
       let regex;
-      console.log("search term", searchTerm);
       try {
         regex = new RegExp(searchTerm, 'gi');
       } catch (e) {
-        console.log("search term", searchTerm);
-        console.log("Bad Regular Expressions:", e);
+        console.log("Bad Regular Expressions:", e, searchTerm);
       }
-
       title = this.props.title.replace(regex, `<mark>${searchTerm}</mark>`);
       url = this.props.url.replace(regex, `<mark>${searchTerm}</mark>`);
     }
+
     let loading = this.props.status === 'loading', audible = this.props.audible || this.props.muted, linkProps = null,
       actionButtons = null, audioIcon = '';
     if (!audible) audioIcon = <FA icon={faVolumeOff} className={'text-info'} fixedWidth/>;
@@ -57,8 +56,9 @@ class Tab extends PureComponent {
     if (audible && this.props.mutedInfo.muted)
       audioIcon = <FA icon={faVolumeSlash} className={'text-info'} fixedWidth/>;
     let iconPinned = <FA icon={pinned ? fasThumbtack : faThumbtack} className={'text-primary'} fixedWidth/>;
+
+    //Markup of Action bar for active tabs: Right side buttons
     if (this.props.activeTab) {
-      // linkProps = {onClick: () => browser.tabs.update(this.props.id, {active: true})};
       actionButtons = [
         <li
           key={1}
@@ -89,6 +89,7 @@ class Tab extends PureComponent {
         </li>,
       ];
     } else {
+      //Non-Active Tabs only get a remove button on action bar for now.
       actionButtons = (
         <li
           title="Remove"
@@ -101,13 +102,10 @@ class Tab extends PureComponent {
         </li>
       );
     }
-
     return (
       <Draggable
-        draggableId={this.props.id}
-        key={this.props.index}
-        data-id={this.props.id}
-        id={this.props.id}
+        draggableId={this.props.id + ""}
+        key={this.props.id}
         index={this.props.index}
         className={`tab-item ` + (checked && ` checked`) + (loading || discarded ? ` idle` : ` `)}
       >
@@ -116,8 +114,8 @@ class Tab extends PureComponent {
             {...provided.draggableProps}
             {...provided.dragHandleProps}
             ref={provided.innerRef}
-            id={`draggable-` + this.props.index}
-            key={this.props.index}
+            // id={`draggable-` + this.props.id}
+            key={this.props.id}
             className={`tab-item ` + (checked && ` checked`) + (loading || discarded ? ` idle` : ` `)}
           >
             <label className="tab-favicon" aria-label="favicon">
