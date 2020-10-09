@@ -12,6 +12,7 @@ import {addClass, removeClass} from './components/general.js';
 import {saveTabs} from './components/getsetSessions';
 import '../images/logo.png';
 import '../images/dev-logo.png';
+
 // React Components
 import ACTIONS from './modules/action';
 
@@ -35,13 +36,6 @@ function reorder(list, startIndex, endIndex) {
 class ActiveTabs extends PureComponent {
   constructor(props) {
     super(props);
-    // this.state = { ...this.props };
-    // this.state = {
-    //   selectedTabs: [],
-    //   allMuted: false,
-    //   allSelected: false,
-    //   allPinned: false,
-    // };
 
     this.closeTab = this.closeTab.bind(this);
     this.toggleMute = this.toggleMute.bind(this);
@@ -51,33 +45,36 @@ class ActiveTabs extends PureComponent {
     this.setPreferences = this.setPreferences.bind(this);
     this.processSelectedTabs = this.processSelectedTabs.bind(this);
     this.togglePin = this.togglePin.bind(this);
-    const menu = document.querySelector('#context-menu');
-    let menuVisible = false;
+    // const menu = document.querySelector('#context-menu');
+    // let menuVisible = false;
 
-    const toggleMenu = command => {
-      menu.style.display = command === 'show' ? 'block' : 'none';
-      menuVisible = !menuVisible;
-    };
+    // const toggleMenu = command => {
+    //   menu.style.display = command === 'show' ? 'block' : 'none';
+    //   menuVisible = !menuVisible;
+    // };
+    // const toggleContextMenu = (menuVisible, toggleMenu)=> {
+    //   if (menuVisible) toggleMenu('hide');
+    // };
 
-    const setPosition = ({ top, left }) => {
-      menu.style.left = `${left}px`;
-      menu.style.top = `${top}px`;
-      toggleMenu('show');
-    };
+    // const setPosition = ({ top, left }) => {
+    //   menu.style.left = `${left}px`;
+    //   menu.style.top = `${top}px`;
+    //   toggleMenu('show');
+    // };
 
-    window.addEventListener('click', () => {
-      if (menuVisible) toggleMenu('hide');
-    });
-
-    window.addEventListener('contextmenu', e => {
-      e.preventDefault();
-      const origin = {
-        left: e.pageX,
-        top: e.pageY,
-      };
-      setPosition(origin);
-      return false;
-    });
+    // window.addEventListener('click', () => {
+    //   this.toggleContextMenu(menuVisible, toggleMenu);
+    // });
+    //
+    // window.addEventListener('contextmenu', e => {
+    //   e.preventDefault();
+    //   const origin = {
+    //     left: e.pageX,
+    //     top: e.pageY,
+    //   };
+    //   setPosition(origin);
+    //   return false;
+    // });
   }
 
   componentDidMount(a, b) {
@@ -281,15 +278,15 @@ class ActiveTabs extends PureComponent {
   }
 
   onDragEnd(result) {
-    const { destination, source } = result;
+    // debugger;
+    const {destination, source} = result;
+    //If destination not present, stop!
     if (!result.destination) return;
-
-    if (destination.droppableId === source.droppableId && destination.index === source.index) {
-      return;
-    }
+    //If destination and source are same then stop!
+    if (destination.droppableId === source.droppableId && destination.index === source.index) return;
     const tabs = reorder(this.filterTabs(), source.index, destination.index);
     this.props.reorderTabs(tabs);
-    browser.tabs.move(result.draggableId, { index: result.destination.index });
+    browser.tabs.move(parseInt(result.draggableId), {index: result.destination.index});
   }
   render() {
     return [

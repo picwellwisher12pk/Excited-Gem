@@ -12,52 +12,73 @@
   white-space: nowrap;
   position: relative;
   transition: all 0.3s;
-    background-color: #fff;
-    &.idle .tab-name,
-    &.idle .tab-url,
-    &.idle .tab-favicon {
-        opacity: 0.5;
-    }
-    &.selected {
-        background-color: #acd8fb;
-    }
+  background-color: #fff;
+
+  & * {
+    -webkit-touch-callout: none; /* iOS Safari */
+    -webkit-user-select: none; /* Safari */
+    -moz-user-select: none; /* Old versions of Firefox */
+    -ms-user-select: none; /* Internet Explorer/Edge */
+    user-select: none;
+    /* Non-prefixed version, currently
+                                     supported by Chrome, Edge, Opera and Firefox */
+  }
+
+  &.idle .tab-name,
+  &.idle .tab-url,
+  &.idle .tab-favicon {
+    opacity: 0.5;
+  }
+
+  &.selected {
+    background-color: #acd8fb;
+  }
+
+  &:hover {
+    background-color: #eee;
+  }
+
+  .tab-title {
+    max-width: 50vw;
+    cursor: ns-resize;
+  }
+
+  .clickable {
+    color: #000;
+
     &:hover {
-        background-color: #eee;
+      color: #000;
+      text-decoration: none;
     }
-    .tab-title {
-        max-width: 50vw;
+  }
+
+  img, span.favicon {
+    width: 16px;
+    height: 16px;
+    margin: 0 5px;
+
+    &[src=""], &[src^="chrome-extension://"], &[src^="chrome://"] {
+      display: inline-block;
+      border: 1px solid gray;
+      text-indent: -9999px;
     }
-    .clickable {
-        color: #000;
-        &:hover {
-            color: #000;
-            text-decoration: none;
-        }
-    }
+  }
+
+  .tab-favicon {
+    margin-right: 15px;
+    width: 16px;
+
     img {
+      margin: 0;
+      transition: all 0.2s;
+    }
+
+    .checkbox {
+      opacity: 0;
       width: 16px;
       height: 16px;
-      margin: 0 5px;
-
-      &[src=""], &[src^="chrome-extension://"] {
-        display: inline-block;
-        border: 1px solid gray;
-        text-indent: -9999px;
-      }
-    }
-    .tab-favicon {
-        margin-right: 15px;
-        width: 16px;
-        img {
-            margin: 0;
-            transition: all 0.2s;
-        }
-        .checkbox {
-            opacity: 0;
-            width: 16px;
-            height: 16px;
-            transition: all 0.2s;
-            position: absolute;
+      transition: all 0.2s;
+      position: absolute;
             left: 11px;
             top: 15px;
         }
@@ -97,7 +118,9 @@
         margin-left: 15px;
     }
     .tab-url {
-        flex: 1;
+      flex: 1;
+      cursor: pointer;
+      text-decoration: underline;
     }
     .tab-name {
         flex-shrink: 0;

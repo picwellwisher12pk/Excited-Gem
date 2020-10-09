@@ -3,8 +3,8 @@ import {connect} from 'react-redux';
 import ACTIONS from '../../../modules/action';
 import ErrorBoundary from '../../../ErrorBoundary';
 import {FontAwesomeIcon as FA} from '@fortawesome/react-fontawesome';
-import {faSearch} from '@fortawesome/pro-light-svg-icons/faSearch';
-import {faTimes} from '@fortawesome/pro-light-svg-icons/faTimes';
+import {faSearch} from '@fortawesome/free-solid-svg-icons/faSearch';
+import {faTimes} from '@fortawesome/free-solid-svg-icons/faTimes';
 
 class Search extends React.Component {
   constructor(props) {
@@ -13,6 +13,7 @@ class Search extends React.Component {
     this.title = React.createRef();
     this.url = React.createRef();
   }
+
   onKeyUpped(event) {
     // console.info('keypressed', event.target, this);
     this.searchField.current.value !== '' ? this.setState({empty: false}) : this.setState({empty: true});

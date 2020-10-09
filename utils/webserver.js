@@ -20,12 +20,10 @@ for (var entryName in config.entry) {
   }
 }
 config.plugins = [new webpack.HotModuleReplacementPlugin()].concat(config.plugins || []);
-// delete config.chromeExtensionBoilerplate;
+delete config.chromeExtensionBoilerplate;
 
 var compiler = webpack(config);
 var server = new WebpackDevServer(compiler, {
-  // compress:true,
-  overlay: {warnings: false, errors: true},
   hot: true,
   contentBase: path.resolve(__dirname, '../dist'),
   headers: {

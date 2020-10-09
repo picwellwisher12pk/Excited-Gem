@@ -1,18 +1,21 @@
 import 'react-devtools';
 import React from 'react';
-import { render } from 'react-dom';
+import {render} from 'react-dom';
 //Redux
-import { Provider } from 'react-redux';
+import {Provider} from 'react-redux';
 import configureStore from './modules/store';
 import ACTIONS from './modules/action';
+
 import ActiveTabs from './ActiveTabs';
 
 var browser = require('webextension-polyfill');
 
+
 function updateTabs(store, eventName) {
   store.dispatch(ACTIONS.updateActiveTabs(eventName));
 }
-let TabsApp;
+
+export default TabsApp;
 configureStore().then(store => {
   function onRemoved() {
     updateTabs(store, 'Tab Removed/Detached');
@@ -41,4 +44,4 @@ configureStore().then(store => {
   );
 });
 
-export default TabsApp;
+// export default TabsApp;

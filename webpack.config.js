@@ -9,7 +9,7 @@ let webpack = require("webpack"),
     .BundleAnalyzerPlugin, //Bundle analyzer
   env = require("./utils/env"),
   HtmlWebpackPlugin = require("html-webpack-plugin"),
-  ExtractTextPlugin = require("extract-text-webpack-plugin"),
+  // ExtractTextPlugin = require("extract-text-webpack-plugin"),
   MiniCssExtractPlugin = require("mini-css-extract-plugin"),
   Visualizer = require("webpack-visualizer-plugin"),
   WriteFilePlugin = require("write-file-webpack-plugin"),
@@ -29,7 +29,7 @@ const basePath = currentPath + "/.env";
 const envPath = basePath + "." + process.env.NODE_ENV;
 
 // Check if the file exists, otherwise fall back to the production .env
-const finalPath = fileSystem.existsSync(envPath) ? envPath : basePath;
+// const finalPath = fileSystem.existsSync(envPath) ? envPath : basePath;
 
 // Set the path parameter in the dotenv config
 // const env = dotenv.config({ path: finalPath }).parsed;
@@ -46,27 +46,27 @@ alias = {};
 let secretsPath = path.join(__dirname, "secrets." + env.NODE_ENV + ".js");
 
 let images = ["jpg", "jpeg", "png", "gif"];
-let icons = ["svg"];
+// let icons = ["svg"];
 let fonts = ["eot", "otf", "ttf", "woff", "woff2"];
 let fileExtensions = ["jpg", "jpeg", "png", "gif", "eot", "otf", "svg", "ttf", "woff", "woff2",];
-let logoFile = (logoType = "png") => {
-  if (logoType === "svg") return process.env.NODE_ENV === "development" ? "dev-logo.png" : "logo.png";
-  else return process.env.NODE_ENV === "development" ? "dev-logo.png" : "logo.png";
-};
-let faviconFile =
-  process.env.NODE_ENV === "development"
-    ? "src/images/dev-logo.png"
-    : "src/images/logo.png";
+// let logoFile = (logoType = "png") => {
+//   if (logoType === "svg") return process.env.NODE_ENV === "development" ? "dev-logo.svg" : "logo.svg";
+//   else return process.env.NODE_ENV === "development" ? "dev-logo.png" : "logo.png";
+// };
+// let faviconFile =
+//   process.env.NODE_ENV === "development"
+//     ? "src/images/dev-logo.png"
+//     : "src/images/logo.png";
 
 if (fileSystem.existsSync(secretsPath)) {
   alias["secrets"] = secretsPath;
 }
 
-  // console.log(path.resolve(__dirname, "src", "scripts", "TabsApp.js"));
-  module.exports =
-    {
-      mode:'development',
-      context: __dirname,
+// console.log(path.resolve(__dirname, "src", "scripts", "TabsApp.js"));
+module.exports =
+  {
+    mode: 'development',
+    context: __dirname,
       entry: {
         tabs: ["@babel/polyfill", path.resolve(__dirname, "src", "scripts", "TabsApp.js")],
         // sessions: [
