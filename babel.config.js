@@ -5,7 +5,7 @@ module.exports = function(api) {
     [
       '@babel/preset-env',
       {
-        useBuiltIns: 'entry',
+        // useBuiltIns: 'entry',
       },
     ],
     '@babel/preset-react',
