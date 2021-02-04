@@ -3,7 +3,6 @@ let webpack = require("webpack"),
   path = require("path"),
   LodashModuleReplacementPlugin = require("lodash-webpack-plugin"),
   fileSystem = require("fs"),
-  Jarvis = require("webpack-jarvis"), //Browser based dashboard
   DashboardPlugin = require("webpack-dashboard/plugin"), //Webpack cli based dashboard
   BundleAnalyzerPlugin = require("webpack-bundle-analyzer")
     .BundleAnalyzerPlugin, //Bundle analyzer
@@ -11,9 +10,8 @@ let webpack = require("webpack"),
   HtmlWebpackPlugin = require("html-webpack-plugin"),
   ExtractTextPlugin = require("extract-text-webpack-plugin"),
   MiniCssExtractPlugin = require("mini-css-extract-plugin"),
-  Visualizer = require("webpack-visualizer-plugin"),
-  WriteFilePlugin = require("write-file-webpack-plugin"),
-  ChromeExtensionReloader  = require('webpack-chrome-extension-reloader'),
+  CopyPlugin = require("copy-webpack-plugin"),
+  ChromeExtensionReloader = require('webpack-chrome-extension-reloader'),
   WebpackBar = require("webpackbar");
 
 
@@ -106,22 +104,25 @@ if (fileSystem.existsSync(secretsPath)) {
           },
           {
             test: new RegExp(".(" + images.join("|") + ")$"),
-            loader: "file-loader?name=images/[name].[ext]",
+            use: [{loader: "file-loader?name=images/[name].[ext]"}],
             // options:{esModule:false},
             exclude: /node_modules/,
           },
           {
             test: new RegExp(".(" + fonts.join("|") + ")$"),
-            loader: "file-loader?name=/fonts/[name].[ext]",
+            use: [{loader: "file-loader?name=/fonts/[name].[ext]"}],
             exclude: /node_modules/,
           },
           {
             test: /\.js$/,
-            loader: "babel-loader",
+            use: [
+              {loader: "babel-loader"},
+              // {loader: "react-loader"}
+            ],
             exclude: /node_modules/,
-            query: {
-              presets: ["@babel/preset-env", "@babel/preset-react"],
-            },
+            // query: {
+            //   presets: ["@babel/preset-env", "@babel/preset-react"],
+            // },
           },
         ],
       },
@@ -136,7 +137,7 @@ if (fileSystem.existsSync(secretsPath)) {
           path.resolve(__dirname, "dist"),
         ],
         descriptionFiles: ["package.json"],
-        moduleExtensions: ["-loader"],
+        // moduleExtensions: ["-loader"],
       },
       plugins: [
         new webpack.ProvidePlugin({
@@ -182,27 +183,32 @@ if (fileSystem.existsSync(secretsPath)) {
           chunks: ["sessions"],
         }),
         new ChromeExtensionReloader(),
-        new WriteFilePlugin(), //Writes files to target directory during development build phase.
-        new WebpackBar({ profile: true }),
-        new BundleAnalyzerPlugin({ analyzerPort: 3030 }),
-        new Visualizer({ filename: "./statistics.html" }), //Pie
-        new LodashModuleReplacementPlugin({ collections: true }),
-        new DashboardPlugin(),//cli based dashboard
-        new Jarvis({
-          port: 1337, // optional: set a port
+        // new WriteFilePlugin(), //Writes files to target directory during development build phase.
+        new CopyPlugin({
+          patterns: [
+            {from: "src", to: "dist"},
+          ],
         }),
+        new WebpackBar({profile: true}),
+        new BundleAnalyzerPlugin({analyzerPort: 3030}),
+        new LodashModuleReplacementPlugin({collections: true}),
+        new DashboardPlugin(),//cli based dashboard
+        // new Jarvis({
+        //   port: 1337, // optional: set a port
+        // }),
       ],
 
-    /*    {
-        entry: path.join(__dirname, 'src', 'manifest.json'),
-        output: {
-            path: path.join(__dirname, 'firefox'),
-          filename: '[name].json',
-        },
-      },*/
+      /*    {
+          entry: path.join(__dirname, 'src', 'manifest.json'),
+          output: {
+              path: path.join(__dirname, 'firefox'),
+            filename: '[name].json',
+          },
+        },*/
 
-      devtool:
-        env.NODE_ENV === "development" ? "source-map" : "cheap-source-map",
+      // devtool:
+      //   "source-map",
+      // false,
     }
   ;
 
