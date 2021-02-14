@@ -1,6 +1,6 @@
 'use strict';
 //Scripts and Modules
-import {Scrollbars} from 'react-custom-scrollbars';
+import CustomScroll from 'react-custom-scroll';
 import {PureComponent} from 'react';
 import {connect} from 'react-redux';
 import 'react-devtools';
@@ -20,6 +20,8 @@ import Tabsgroup from './components/Accordion/TabsGroup/index';
 import Tab from './components/Accordion/TabsGroup/Tab/index';
 //Styles
 import '../styles/eg.scss';
+
+require('react-custom-scroll/dist/customScroll.css');
 
 let browser = require('webextension-polyfill');
 
@@ -300,15 +302,16 @@ class ActiveTabs extends PureComponent {
         searchInTabs={this.searchInTabs}
         processSelectedTabs={this.processSelectedTabs}
       />,
-      <Scrollbars autoHeight={false} autoHeightMax={'auto'} key={'scrollbar'}>
+      <CustomScroll heightRelativeToParent="100%">
         <div className="tabs-list-container" key={'activetablist'}>
           <DragDropContext onDragEnd={this.onDragEnd} key={'ddcontext'} id={'activeTabs'}>
             <Tabsgroup preferences={this.props.preferences} id={'tabsgroup'}>
               {this.filterTabs().map(tab => this.tabTemplate(tab), this)}
             </Tabsgroup>
           </DragDropContext>
-        </div>,
-      </Scrollbars>,
+        </div>
+        ,
+      </CustomScroll>,
     ];
   }
 }

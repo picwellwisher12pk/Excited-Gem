@@ -59,9 +59,9 @@
  }
 
  .tabs-list-container {
-     overflow-y: auto;
-     flex-grow: 1;
-     flex-shrink: 1;
+   flex: 1;
+   min-height: 0;
+   min-width: 0;
  }
 
  #feedback {
@@ -155,7 +155,6 @@
  .fade-exit {
      opacity: 1;
      background-color: yellow;
-     max-height: auto;
  }
 
  .fade-exit-active {
