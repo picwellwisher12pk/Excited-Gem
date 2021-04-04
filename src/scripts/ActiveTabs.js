@@ -11,7 +11,7 @@ import {HTML5Backend} from 'react-dnd-html5-backend'
 import '../images/logo.png';
 import '../images/dev-logo.png';
 // React Components
-import ACTIONS from './modules/action';
+import ACTIONS from './action';
 
 import Header from './components/Header/Header';
 import Tabsgroup from './components/Accordion/TabsGroup/index';
@@ -60,6 +60,7 @@ const ActiveTabs = (props) => {
 
   const tabTemplate = (tab) => {
     let checked = false;
+    //If no tab is selected, add current tab to selectedTabs
     if (props.selectedTabs.length === 0) checked = props.selectedTabs.includes(tab.id);
     return (
       <Tab

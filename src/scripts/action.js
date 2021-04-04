@@ -1,4 +1,6 @@
-import {getTabs} from '../components/browserActions';
+import {getTabs} from './components/browserActions';
+
+let browser = require('webextension-polyfill');
 // types of action
 const Types = {
   UPDATE_ACTIVE_TABS: 'UPDATE_ACTIVE_TABS',
@@ -34,8 +36,31 @@ const reorderTabs = tabs => dispatch => {
 const searchInTabs = searchTerm => dispatch => {
   dispatch(updateSearchTermAction(searchTerm));
 };
+const closeTabs = (tabIds, promptForClosure = true) => dispatch => {
+  if (promptForClosure) {
+    if (!confirm(`Are you sure you want to close the following tab\n` + tabIds)) return false;
+  }
+  return browser.tabs.remove(tabIds).then(() => {
+    return dispatch(updateActiveTabs());
+  })
+}
+const togglePin = tabId => dispatch => {
+  return browser.tabs.get(tabId).then((tab) => {
+    browser.tabs.update(parseInt(tabId), {pinned: !tab.pinned});
+    return dispatch(updateActiveTabs());
+  });
+}
+const toggleMute = tabId => dispatch => {
+  return browser.tabs.get(tabId).then((tab) => {
+    browser.tabs.update(parseInt(tabId), {muted: !tab.mutedInfo.muted});
+    return dispatch(updateActiveTabs());
+  });
+}
 export default {
   Types,
+  closeTabs,
+  togglePin,
+  toggleMute,
   updateActiveTabs,
   reorderTabs,
   searchInTabs,
