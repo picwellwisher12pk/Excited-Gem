@@ -1,17 +1,17 @@
-import React, {useRef} from 'react';
-import {useDrag, useDrop} from 'react-dnd';
-import {FontAwesomeIcon as FA} from '@fortawesome/react-fontawesome';
-import {faVolume} from '@fortawesome/pro-solid-svg-icons/faVolume';
-import {faVolumeOff} from '@fortawesome/pro-light-svg-icons/faVolumeOff';
-import {faVolumeSlash} from '@fortawesome/pro-solid-svg-icons/faVolumeSlash';
-import {faTimes} from '@fortawesome/pro-light-svg-icons/faTimes';
-import {faThumbtack} from '@fortawesome/pro-light-svg-icons/faThumbtack';
-import {faThumbtack as fasThumbtack} from '@fortawesome/pro-solid-svg-icons/faThumbtack';
-import {connect} from 'react-redux';
-import ACTIONS from '../../../../action';
-import {ItemTypes} from './ItemTypes';
+import React, {useRef} from "react";
+import {useDrag, useDrop} from "react-dnd";
+import {FontAwesomeIcon as FA} from "@fortawesome/react-fontawesome";
+import {faVolume} from "@fortawesome/pro-solid-svg-icons/faVolume";
+import {faVolumeOff} from "@fortawesome/pro-light-svg-icons/faVolumeOff";
+import {faVolumeSlash} from "@fortawesome/pro-solid-svg-icons/faVolumeSlash";
+import {faTimes} from "@fortawesome/pro-light-svg-icons/faTimes";
+import {faThumbtack} from "@fortawesome/pro-light-svg-icons/faThumbtack";
+import {faThumbtack as fasThumbtack} from "@fortawesome/pro-solid-svg-icons/faThumbtack";
+import {connect} from "react-redux";
+import ACTIONS from "../../../../action";
+import {ItemTypes} from "./ItemTypes";
 
-let browser = require('webextension-polyfill');
+let browser = require("webextension-polyfill");
 const Tab = (props) => {
   let {title, url, checked, pinned, discarded} = props;
   const ref = useRef(null);
@@ -40,7 +40,8 @@ const Tab = (props) => {
       // Determine rectangle on screen
       const hoverBoundingRect = ref.current?.getBoundingClientRect();
       // Get vertical middle
-      const hoverMiddleY = (hoverBoundingRect.bottom - hoverBoundingRect.top) / 2;
+      const hoverMiddleY =
+        (hoverBoundingRect.bottom - hoverBoundingRect.top) / 2;
       // Determine mouse position
       const clientOffset = monitor.getClientOffset();
       // Get pixels to the top
@@ -79,21 +80,30 @@ const Tab = (props) => {
     const {searchTerm} = props;
     let regex;
     try {
-      regex = new RegExp(searchTerm, 'gi');
+      regex = new RegExp(searchTerm, "gi");
     } catch (e) {
       console.error("Bad Regular Expressions:", e, searchTerm);
     }
-    title = props.title.replace(regex, `<mark>${searchTerm}</mark>`);
-    url = props.url.replace(regex, `<mark>${searchTerm}</mark>`);
+    title = props.title.replace(regex, "<mark>$&</mark>");
+    url = props.url.replace(regex, "<mark>$&</mark>");
   }
 
-  let loading = props.status === 'loading', audible = props.audible || props.muted,
-    actionButtons = null, audioIcon = '';
-  if (!audible) audioIcon = <FA icon={faVolumeOff} className={'text-info'} fixedWidth/>;
-  if (audible && !props.muted) audioIcon = <FA icon={faVolume} className={'text-info'} fixedWidth/>;
+  let loading = props.status === "loading",
+    audible = props.audible || props.muted,
+    actionButtons, audioIcon;
+  if (!audible)
+    audioIcon = <FA icon={faVolumeOff} className={"text-info"} fixedWidth/>;
+  if (audible && !props.muted)
+    audioIcon = <FA icon={faVolume} className={"text-info"} fixedWidth/>;
   if (audible && props.mutedInfo.muted)
-    audioIcon = <FA icon={faVolumeSlash} className={'text-info'} fixedWidth/>;
-  let iconPinned = <FA icon={pinned ? fasThumbtack : faThumbtack} className={'text-primary'} fixedWidth/>;
+    audioIcon = <FA icon={faVolumeSlash} className={"text-info"} fixedWidth/>;
+  let iconPinned = (
+    <FA
+      icon={pinned ? fasThumbtack : faThumbtack}
+      className={"text-primary"}
+      fixedWidth
+    />
+  );
 
   //Markup of Action bar for active tabs: Right side buttons
   if (props.activeTab) {
@@ -123,7 +133,7 @@ const Tab = (props) => {
         onClick={() => props.closeTab(props.id)}
         data-command="remove"
       >
-        <FA icon={faTimes} className={'text-danger'}/>
+        <FA icon={faTimes} className={"text-danger"}/>
       </li>,
     ];
   } else {
@@ -141,18 +151,25 @@ const Tab = (props) => {
     );
   }
   return (
-
     <li
       ref={ref}
       key={props.id}
       id={props.id}
-      className={`tab-item` + (checked ? ' checked' : '') + (loading || discarded ? ` idle` : '')}
+      className={
+        `tab-item` +
+        (checked ? " checked" : "") +
+        (loading || discarded ? ` idle` : "")
+      }
       style={{opacity}}
       data-handler-id={handlerId}
       draggable={true}
     >
       <label className="tab-favicon" aria-label="favicon">
-        <img src={props.favIconUrl} title={props.favIconUrl && title} alt={props.favIconUrl && title}/>
+        <img
+          src={props.favIconUrl}
+          title={props.favIconUrl && title}
+          alt={props.favIconUrl && title}
+        />
         <input
           type="checkbox"
           onChange={() => props.updateSelectedTabs(props.id, !props.checked)}
@@ -160,7 +177,11 @@ const Tab = (props) => {
           className="checkbox"
         />
       </label>
-      <a className="clickable tab-title clip" title={url} dangerouslySetInnerHTML={{__html: title}}/>
+      <a
+        className="clickable tab-title clip"
+        title={url}
+        dangerouslySetInnerHTML={{__html: title}}
+      />
       <span
         className="tab-url trimmed dimmed clip"
         dangerouslySetInnerHTML={{__html: url}}
@@ -170,20 +191,21 @@ const Tab = (props) => {
         {actionButtons}
       </ul>
     </li>
-
   );
-}
+};
 
 const mapStateToProps = function (state) {
   return {
-    searchTerm: state.preferences.searchTerm,
+    searchTerm: state.search.searchTerm,
   };
 };
-const mapDispatchToProps = dispatch => ({
-  closeTab: id => dispatch(ACTIONS.closeTabs(id)),
-  togglePin: id => dispatch(ACTIONS.togglePin(id)),
-  toggleMute: id => dispatch(ACTIONS.toggleMute(id)),
-  searchInTabs: searchTerm => dispatch(ACTIONS.searchInTabs(searchTerm)),
-  toggleSearchInAction: searchInArray => dispatch(ACTIONS.toggleSearchInAction(searchInArray)),
+const mapDispatchToProps = (dispatch) => ({
+  closeTab: (id) => dispatch(ACTIONS.closeTabs(id)),
+  togglePin: (id) => dispatch(ACTIONS.togglePin(id)),
+  toggleMute: (id) => dispatch(ACTIONS.toggleMute(id)),
+  searchInTabs: (searchTerm) => dispatch(ACTIONS.searchInTabs(searchTerm)),
+  // updateSelectedTabs: (id, selected) => dispatch(ACTIONS.updateSelectedTabs(id, selected)),
+  toggleSearchInAction: (searchInArray) =>
+    dispatch(ACTIONS.toggleSearchInAction(searchInArray)),
 });
 export default connect(mapStateToProps, mapDispatchToProps)(Tab);
