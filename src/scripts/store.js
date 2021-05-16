@@ -1,10 +1,28 @@
+import { configureStore } from '@reduxjs/toolkit'
+import logger from 'redux-logger';
+import tabReducer from "./tabSlice";
+import configReducer from "./configSlice";
+import searchReducer from "./searchSlice";
+
+export default configureStore({
+  reducer: {
+    tabs:tabReducer,
+    config:configReducer,
+    search:searchReducer,
+  },
+  middleware: (getDefaultMiddleware) =>
+      getDefaultMiddleware().concat(logger),
+  devTools:window.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__ && window.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__()
+});
+
+/*
 import { applyMiddleware, createStore, compose } from 'redux';
 // Logger with default options
 import rootReducer from './reducer';
-import { getTabs } from '../components/browserActions';
-import { preferences } from '../defaultPreferences';
+import { getTabs } from './components/browserActions';
+import { preferences } from './defaultPreferences';
 import { composeWithDevTools } from 'remote-redux-devtools';
-const composeEnhancers = composeWithDevTools({
+const composeEnhancers1 = composeWithDevTools({
   name: 'Android app',
   realtime: true,
   hostname: 'localhost',
@@ -12,12 +30,12 @@ const composeEnhancers = composeWithDevTools({
   maxAge: 30,
   actionsBlacklist: ['EFFECT_RESOLVED'],
 });
-// const composeEnhancers =
-//   typeof window === 'object' && window.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__
-//     ? window.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__({
-//         // Specify extension’s options like name, actionsBlacklist, actionsCreators, serialize...
-//       })
-//     : compose;
+const composeEnhancers2 =
+  typeof window === 'object' && window.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__
+    ? window.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__({
+        // Specify extension’s options like name, actionsBlacklist, actionsCreators, serialize...
+      })
+    : compose;
 
 // import thunk from 'redux-thunk';
 // import * as asyncInitialState from 'redux-async-initial-state';
@@ -54,20 +72,21 @@ const addPromiseSupportToDispatch = store => {
 };
 async function configureStore() {
   let tabs = await getTabs();
+  let selectedTabs = [];
   const defaultState = {
     tabs,
     preferences,
+    selectedTabs
   };
-  /* eslint-disable no-underscore-dangle */
+  /!* eslint-disable no-underscore-dangle *!/
   const store = createStore(
     rootReducer,
     defaultState,
-    composeEnhancers(applyMiddleware(...middlewares)),
-    window.__REDUX_DEVTOOLS_EXTENSION__ && window.__REDUX_DEVTOOLS_EXTENSION__()
+    composeEnhancers1 (applyMiddleware(...middlewares)),
   );
-  /* eslint-enable */
+  /!* eslint-enable *!/
   // store.dispatch = addLoggingToDispatch(store);
   store.dispatch = addPromiseSupportToDispatch(store);
   return store;
 }
-export default configureStore;
+export default configureStore;*/
