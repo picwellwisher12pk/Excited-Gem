@@ -1,14 +1,14 @@
 import React, { useState } from "react";
-import { FontAwesomeIcon as FA } from "@fortawesome/react-fontawesome";
-import { faVolume } from "@fortawesome/pro-solid-svg-icons/faVolume";
-import { faSort } from "@fortawesome/pro-solid-svg-icons/faSort";
-import { faVolumeSlash } from "@fortawesome/pro-solid-svg-icons/faVolumeSlash";
-import { faShareSquare } from "@fortawesome/pro-solid-svg-icons/faShareSquare";
-import { faSave } from "@fortawesome/pro-solid-svg-icons/faSave";
-import { faTimes } from "@fortawesome/pro-light-svg-icons/faTimes";
-import { faSyncAlt } from "@fortawesome/pro-regular-svg-icons/faSyncAlt";
-import { faThumbtack } from "@fortawesome/pro-light-svg-icons/faThumbtack";
-import { faThumbtack as fasThumbtack } from "@fortawesome/pro-solid-svg-icons/faThumbtack";
+// import { FontAwesomeIcon as FA } from "@fortawesome/react-fontawesome";
+// import { faVolume } from "@fortawesome/pro-solid-svg-icons/faVolume";
+// import { faSort } from "@fortawesome/pro-solid-svg-icons/faSort";
+// import { faVolumeSlash } from "@fortawesome/pro-solid-svg-icons/faVolumeSlash";
+// import { faShareSquare } from "@fortawesome/pro-solid-svg-icons/faShareSquare";
+// import { faSave } from "@fortawesome/pro-solid-svg-icons/faSave";
+// import { faTimes } from "@fortawesome/pro-light-svg-icons/faTimes";
+// import { faSyncAlt } from "@fortawesome/pro-regular-svg-icons/faSyncAlt";
+// import { faThumbtack } from "@fortawesome/pro-light-svg-icons/faThumbtack";
+// import { faThumbtack as fasThumbtack } from "@fortawesome/pro-solid-svg-icons/faThumbtack";
 import { connect } from "react-redux";
 
 import { sortTabs } from "../general.js";
@@ -95,6 +95,7 @@ const Header = (props) => {
               style={{
                 width: "auto",
                 marginRight: "15px",
+                borderRadius: "4px",
                 border: "1px solid #7cbbff",
               }}
             >
