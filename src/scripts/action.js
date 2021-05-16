@@ -1,3 +1,4 @@
+import store from './store';
 import {getTabs} from './components/browserActions';
 
 let browser = require('webextension-polyfill');
@@ -6,7 +7,9 @@ const Types = {
   UPDATE_ACTIVE_TABS: 'UPDATE_ACTIVE_TABS',
   UPDATE_SEARCH_TERM: 'UPDATE_SEARCH_TERM',
   TOGGLE_SEARCH_IN: 'TOGGLE_SEARCH_IN',
-  UPDATE_SELECTED_TABS: 'UPDATE_SELECTED_TABS'
+  UPDATE_SELECTED_TABS: 'UPDATE_SELECTED_TABS',
+  ADD_TO_SELECTED_TABS: 'ADD_TO_SELECTED_TABS',
+  REMOVE_FROM_SELECTED_TABS: 'REMOVE_FROM_SELECTED_TABS'
 };
 // actions
 const updateActiveTabsAction = tabs => ({
@@ -25,11 +28,19 @@ const updateSelectedTabsAction = selectedTabs => ({
   type: Types.UPDATE_SELECTED_TABS,
   payload: selectedTabs
 });
-const updateActiveTabs = () => dispatch => {
-  getTabs().then(tabs => {
-    dispatch(updateActiveTabsAction(tabs));
-  });
+const updateSelectedTabs = (id,selected) => dispatch =>{
+   store().then(store=>{
+     const selectedTabs = [... store.getState().selectedTabs];
+     !selected ? selectedTabs.splice(selectedTabs.indexOf(id), 1) : selectedTabs.push(id);
+     return dispatch(updateSelectedTabsAction(selectedTabs));
+   });
+
 };
+// const updateActiveTabs = () => dispatch => {
+//   getTabs().then(tabs => {
+//     dispatch(updateActiveTabsAction(tabs));
+//   });
+// };
 const reorderTabs = tabs => dispatch => {
   dispatch(updateActiveTabsAction(tabs));
 };
@@ -44,26 +55,53 @@ const closeTabs = (tabIds, promptForClosure = true) => dispatch => {
     return dispatch(updateActiveTabs());
   })
 }
+const pinTab = tabId => dispatch => {
+  return browser.tabs.get(tabId).then((tab) => {
+    browser.tabs.update(parseInt(tabId), {pinned: true});
+    return dispatch(updateActiveTabs());
+  });
+}
+const unpinTab = tabId => dispatch => {
+  return browser.tabs.get(tabId).then((tab) => {
+    browser.tabs.update(parseInt(tabId), {pinned: false});
+    return dispatch(updateActiveTabs());
+  });
+}
 const togglePin = tabId => dispatch => {
   return browser.tabs.get(tabId).then((tab) => {
-    browser.tabs.update(parseInt(tabId), {pinned: !tab.pinned});
+    !tab.pinned ? dispatch(pinTab(tabId)):dispatch(unpinTab(tabId));
+  });
+}
+const muteTab = tabId => dispatch => {
+  return browser.tabs.get(tabId).then((tab) => {
+    browser.tabs.update(parseInt(tabId), {muted: true});
+    return dispatch(updateActiveTabs());
+  });
+}
+const unmuteTab = tabId => dispatch => {
+  return browser.tabs.get(tabId).then((tab) => {
+    browser.tabs.update(parseInt(tabId), {muted: false});
     return dispatch(updateActiveTabs());
   });
 }
 const toggleMute = tabId => dispatch => {
   return browser.tabs.get(tabId).then((tab) => {
-    browser.tabs.update(parseInt(tabId), {muted: !tab.mutedInfo.muted});
-    return dispatch(updateActiveTabs());
+    !tab.mutedInfo.muted ? dispatch(muteTab(tabId)):dispatch(unmutetab(tabId));
   });
 }
 export default {
   Types,
   closeTabs,
+  pinTab,
+  unpinTab,
   togglePin,
+  muteTab,
+  unmuteTab,
   toggleMute,
-  updateActiveTabs,
+  // updateActiveTabs,
   reorderTabs,
   searchInTabs,
   toggleSearchInAction,
-  updateSelectedTabsAction
+  updateSelectedTabs,
+  updateSelectedTabsAction,
 };

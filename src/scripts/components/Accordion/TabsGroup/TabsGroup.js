@@ -1,22 +1,15 @@
 import React from 'react';
-import {Droppable} from 'react-beautiful-dnd';
 
-const TabsGroup = () => {
+const TabsGroup = (props) => {
+
   return (
-    <Droppable droppableId="droppable" id={'droppable'}>
-      {provided => (
         <ul
           className="tab tabs-list sortable selectable"
-          ref={provided.innerRef}
-          {...provided.droppableProps}
           id={'droppableUL'}
         >
-          {this.props.children}
-          {provided.placeholder}
+          {props.children}
         </ul>
-      )}
-    </Droppable>
-  );
+      )
 };
 export default TabsGroup;
 

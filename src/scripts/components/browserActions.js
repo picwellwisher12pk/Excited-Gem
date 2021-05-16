@@ -27,7 +27,7 @@ export function getAllWindowTabs() {
   return browser.tabs.query({});
 }
 export function getTabs(){
-  return preferences.defaultTabsFrom == 'current' ? browser.tabs.query({ currentWindow: true }) : browser.tabs.query({});
+  return preferences.defaultTabsFrom === 'current' ? browser.tabs.query({ currentWindow: true }) : browser.tabs.query({});
 }
 
 export function updateTabs(reactObject = window.activeTabs) {

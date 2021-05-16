@@ -1,5 +1,6 @@
 require("dotenv").config();
 let webpack = require("webpack"),
+  WebExtPlugin = require("web-ext-plugin"),
   path = require("path"),
   LodashModuleReplacementPlugin = require("lodash-webpack-plugin"),
   fileSystem = require("fs"),
@@ -79,7 +80,7 @@ module.exports = {
   entry: {
     tabs: [
       "@babel/polyfill",
-      path.resolve(__dirname, "src", "scripts", "TabsApp.js"),
+      path.resolve(__dirname, "src", "scripts", "app.js"),
     ],
     // sessions: [
     // "@babel/polyfill",
@@ -165,6 +166,7 @@ module.exports = {
     descriptionFiles: ["package.json"],
   },
   plugins: [
+    // new WebExtPlugin({ sourceDir: path.resolve(__dirname, "dist") }),
     new webpack.ProvidePlugin({
       $: "jquery",
       jQuery: "jquery",
@@ -206,11 +208,11 @@ module.exports = {
     env.NODE_ENV === "development" && new webpack.HotModuleReplacementPlugin(),
     new ChromeExtensionReloader(),
     new WriteFilePlugin(), //Writes files to target directory during development build phase.
-    new WebpackBar({profile: true}),
+    // new WebpackBar({profile: true}),
     // new BundleAnalyzerPlugin({ analyzerPort: 3030 }),
     // new Visualizer({ filename: "./statistics.html" }), //Pie
-    new LodashModuleReplacementPlugin({collections: true}),
-    new DashboardPlugin(), //cli based dashboard
+    // new LodashModuleReplacementPlugin({collections: true}),
+    // new DashboardPlugin(), //cli based dashboard
   ],
 
   /*    {

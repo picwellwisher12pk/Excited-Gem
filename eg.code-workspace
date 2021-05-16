@@ -5,7 +5,7 @@
     }
   ],
   "settings": {
-    "window.zoomLevel": -1,
+    "window.zoomLevel": 0,
     "workbench.editor.tabSizing": "shrink",
     "html.format.enable": true,
     "workbench.activityBar.visible": true,

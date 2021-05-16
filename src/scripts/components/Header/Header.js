@@ -1,47 +1,60 @@
-/* eslint-disable no-unused-expressions */
-/* eslint-disable no-unused-vars */
-import React from 'react';
-import {FontAwesomeIcon as FA} from '@fortawesome/react-fontawesome';
-import {faVolume} from '@fortawesome/pro-solid-svg-icons/faVolume';
-import {faSort} from '@fortawesome/pro-solid-svg-icons/faSort';
-import {faVolumeSlash} from '@fortawesome/pro-solid-svg-icons/faVolumeSlash';
-import {faShareSquare} from '@fortawesome/pro-solid-svg-icons/faShareSquare';
-import {faSave} from '@fortawesome/pro-solid-svg-icons/faSave';
-import {faTimes} from '@fortawesome/pro-light-svg-icons/faTimes';
-import {faSyncAlt} from '@fortawesome/pro-regular-svg-icons/faSyncAlt';
-import {faThumbtack} from '@fortawesome/pro-light-svg-icons/faThumbtack';
-import {faThumbtack as fasThumbtack} from '@fortawesome/pro-solid-svg-icons/faThumbtack';
-import {connect} from 'react-redux';
+import React, { useState } from "react";
+import { FontAwesomeIcon as FA } from "@fortawesome/react-fontawesome";
+import { faVolume } from "@fortawesome/pro-solid-svg-icons/faVolume";
+import { faSort } from "@fortawesome/pro-solid-svg-icons/faSort";
+import { faVolumeSlash } from "@fortawesome/pro-solid-svg-icons/faVolumeSlash";
+import { faShareSquare } from "@fortawesome/pro-solid-svg-icons/faShareSquare";
+import { faSave } from "@fortawesome/pro-solid-svg-icons/faSave";
+import { faTimes } from "@fortawesome/pro-light-svg-icons/faTimes";
+import { faSyncAlt } from "@fortawesome/pro-regular-svg-icons/faSyncAlt";
+import { faThumbtack } from "@fortawesome/pro-light-svg-icons/faThumbtack";
+import { faThumbtack as fasThumbtack } from "@fortawesome/pro-solid-svg-icons/faThumbtack";
+import { connect } from "react-redux";
 
-import {sortTabs} from '../general.js';
-import Search from './Search/index';
-import WindowSelector from '../WindowSelector';
+import { sortTabs } from "../general.js";
+import WindowSelector from "../WindowSelector";
 //Images
-let logo = require(`../../../images/${NODE_ENV !== 'production' && 'dev'}-logo.png`);
+let logo = require(`../../../images/${
+  NODE_ENV !== "production" && "dev"
+}-logo.png`);
 
-const Header = props => {
-  const sortBy = parameter => {
+const Header = (props) => {
+  const [allSelected, setAllSelected] = useState(props.allSelected);
+  const [allPinned, setAllPinned] = useState(props.allPinned);
+  const [allMuted, setAllMuted] = useState(props.allMuted);
+  const sortBy = (parameter) => {
     sortTabs(parameter, props.tabs);
   };
-  let iconPinned = props.allPinned ? <FA icon={faThumbtack} /> : <FA icon={fasThumbtack} />;
-  let iconSound = props.allMuted ? <FA icon={faVolume} /> : <FA icon={faVolumeSlash} />;
+  let iconPinned = <FA icon={props.allPinned ? faThumbtack : fasThumbtack} />;
+  let iconSound = <FA icon={props.allMuted ? faVolume : faVolumeSlash} />;
   return (
-    <header className="page-header" key={'header'}>
+    <header className="page-header" key={"header"}>
       <nav className="navbar">
         <div className="navbar-brand ">
-          <a href="#" className="pull-left logo" style={{ marginTop: '10px' }}>
-            <img src={logo.default} alt="" style={{height: '40px', width: 'auto'}}/>
+          <a href="#" className="pull-left logo" style={{ marginTop: "10px" }}>
+            <img
+              src={logo.default}
+              alt=""
+              style={{ height: "40px", width: "auto" }}
+            />
           </a>
         </div>
-        <div className="collapse navbar-collapse" id="navbarNav">
-          <ul className="navbar-nav">
+        <div className="d-flex flex-grow-1" id="navbarNav">
+          <ul className="d-flex">
             <li className="nav-item active">
-              <a className="nav-link text-white font-weight-bold" href="/tabs.html" id="go-to-tabs">
-                Tabs
+              <a
+                className="nav-link text-white font-weight-bold"
+                href="/tabs.html"
+                id="go-to-tabs"
+              >
+                Tabs{" "}
                 <span
-                  className={`active-tab-counter badge ` + (props.tabs.length > 50 ? 'badge-danger' : 'badge-success')}
+                  className={
+                    `active-tab-counter badge ` +
+                    (props.tabs > 50 ? "badge-danger" : "badge-success")
+                  }
                 >
-                  {props.tabs.length ? props.tabs.length : ''}
+                  {props?.tabs?.length}
                 </span>
                 <span className="sr-only">(current)</span>
               </a>
@@ -53,26 +66,22 @@ const Header = props => {
             </li>
           </ul>
         </div>
-
-        <Search
-          regex={props.preferences.search.regex}
-          ignoreCase={props.preferences.search.ignoreCase}
-          searchIn={props.preferences.search.searchIn}
-          searchInTabs={props.searchInTabs}
-          setPreferences={props.setPreferences}
-        />
+        {props.children}
       </nav>
-      <section className="context-actions navbar container-fluid" id="selection-action">
+      <section
+        className="context-actions navbar container-fluid"
+        id="selection-action"
+      >
         <ul className="nav nav-pills pull-left">
           <li className="nav-item">
             <a
               className="nav-link"
               onClick={() => {
-                !this.state.allSelected
-                  ? props.processSelectedTabs('selectAll', props.tabs.map(tab => tab.id))
-                  : props.processSelectedTabs('selectNone', props.tabs.map(tab => tab.id));
-
-                this.setState({ allSelected: !props.allSelected });
+                props.processSelectedTabs(
+                  allSelected ? "selectAll" : "selectNone",
+                  props.tabs.map((tab) => tab.id)
+                );
+                setAllSelected(!allSelected);
               }}
               title="Select All"
             >
@@ -84,25 +93,25 @@ const Header = props => {
             <div
               className="input-group"
               style={{
-                width: 'auto',
-                marginRight: '15px',
-                border: '1px solid #7cbbff',
+                width: "auto",
+                marginRight: "15px",
+                border: "1px solid #7cbbff",
               }}
             >
               <a
                 className="form-control bg-transparent text-white"
                 href="#"
                 title="Sort Tabs"
-                style={{ border: 'none' }}
+                style={{ border: "none" }}
               >
-                <FA icon={faSort}/>
+                <FA icon={faSort} />
               </a>
               <div className="input-group-append" id="button-addon4">
                 <button
                   className="btn btn-link text-white"
                   type="button"
                   title="Sort by Title"
-                  onClick={() => sortBy('title')}
+                  onClick={() => sortBy("title")}
                 >
                   Title
                 </button>
@@ -110,7 +119,7 @@ const Header = props => {
                   className="btn btn-link text-white"
                   type="button"
                   title="Sort by URL"
-                  onClick={() => sortBy('url')}
+                  onClick={() => sortBy("url")}
                 >
                   URLs
                 </button>
@@ -120,13 +129,15 @@ const Header = props => {
           <WindowSelector />
         </ul>
         <div className="nav context-actions selection-action">
-          <div className="input-group" style={{ width: 'auto', marginRight: '15px' }}>
+          <div
+            className="input-group"
+            style={{ width: "auto", marginRight: "15px" }}
+          >
             <a
               className="form-control"
-              onClick={() => props.processSelectedTabs('togglePinSelected')}
-              // href="#"
+              onClick={() => props.processSelectedTabs("togglePinSelected")}
               title="Toggle Pin selected tab"
-              style={{ border: 'none' }}
+              style={{ border: "none" }}
             >
               Un/Pin Selected
             </a>
@@ -135,8 +146,8 @@ const Header = props => {
                 className="btn btn-default"
                 type="button"
                 title="Unpin Selected"
-                onClick={() => props.processSelectedTabs('unpinSelected')}
-                style={{ backgroundColor: 'white' }}
+                onClick={() => props.processSelectedTabs("unpinSelected")}
+                style={{ backgroundColor: "white" }}
               >
                 <FA icon={faThumbtack} />
               </button>
@@ -144,20 +155,23 @@ const Header = props => {
                 className="btn btn-default"
                 type="button"
                 title="Pin Selected"
-                onClick={() => props.processSelectedTabs('pinSelected')}
-                style={{ backgroundColor: 'white' }}
+                onClick={() => props.processSelectedTabs("pinSelected")}
+                style={{ backgroundColor: "white" }}
               >
                 <FA icon={fasThumbtack} />
               </button>
             </div>
           </div>
-          <div className="input-group" style={{ width: 'auto', marginRight: '15px' }}>
+          <div
+            className="input-group"
+            style={{ width: "auto", marginRight: "15px" }}
+          >
             <a
               className="form-control"
-              onClick={() => props.processSelectedTabs('toggleMuteSelected')}
+              onClick={() => props.processSelectedTabs("toggleMuteSelected")}
               href="#"
               title="Toggle Pin selected tab"
-              style={{ border: 'none' }}
+              style={{ border: "none" }}
             >
               Un/Mute Selected
             </a>
@@ -166,8 +180,8 @@ const Header = props => {
                 className="btn btn-default"
                 type="button"
                 title="Mute Selected"
-                onClick={() => props.processSelectedTabs('muteSelected')}
-                style={{ backgroundColor: 'white' }}
+                onClick={() => props.processSelectedTabs("muteSelected")}
+                style={{ backgroundColor: "white" }}
               >
                 <FA icon={faVolumeSlash} />
               </button>
@@ -175,8 +189,8 @@ const Header = props => {
                 className="btn btn-default"
                 type="button"
                 title="Unmute Selected"
-                onClick={() => props.processSelectedTabs('unmuteSelected')}
-                style={{ backgroundColor: 'white' }}
+                onClick={() => props.processSelectedTabs("unmuteSelected")}
+                style={{ backgroundColor: "white" }}
               >
                 <FA icon={faVolume} />
                 <i className="fas fa-volume-up" />
@@ -187,16 +201,22 @@ const Header = props => {
             className="btn btn-default"
             type="button"
             title="Close Selected"
-            onClick={() => props.processSelectedTabs('closeSelected')}
-            style={{ backgroundColor: 'white' }}
+            onClick={() => props.processSelectedTabs("closeSelected")}
+            style={{ backgroundColor: "white" }}
           >
-            <FA icon={faTimes} className={'text-danger'} />
+            <FA icon={faTimes} className={"text-danger"} />
           </button>
-          <div className={'input-group-append'}>
-            <button className="btn btn-default" onClick={() => props.processSelectedTabs('toNewWindow')}>
+          <div className={"input-group-append"}>
+            <button
+              className="btn btn-default"
+              onClick={() => props.processSelectedTabs("toNewWindow")}
+            >
               <FA icon={faShareSquare} />
             </button>
-            <button className="btn btn-default" onClick={() => props.processSelectedTabs('toSession')}>
+            <button
+              className="btn btn-default"
+              onClick={() => props.processSelectedTabs("toSession")}
+            >
               <FA icon={faSave} />
             </button>
           </div>
@@ -217,12 +237,12 @@ const Header = props => {
           </li>
           <li style={{ marginRight: 18 }} className="nav-item">
             <a
-              href="#"
               onClick={() => {
-                !props.allPinned
-                  ? props.processSelectedTabs('pinSelected', this.filterTabs().map(tab => tab.id))
-                  : props.processSelectedTabs('unpinSelected', this.filterTabs().map(tab => tab.id));
-                this.setState({ allPinned: !props.allPinned });
+                props.processSelectedTabs(
+                  !props.allPinned ? "pinSelected" : "unpinSelected",
+                  this.filterTabs().map((tab) => tab.id)
+                );
+                setAllPinned(!allPinned);
               }}
               title={!props.allPinned ? `Pin All` : `Unpin All`}
               className="nav-link"
@@ -235,9 +255,10 @@ const Header = props => {
               href="#"
               className="nav-link"
               onClick={() => {
-                !props.allMuted
-                  ? props.processSelectedTabs('muteSelected', this.filterTabs().map(tab => tab.id))
-                  : props.processSelectedTabs('unmuteSelected', this.filterTabs().map(tab => tab.id));
+                props.processSelectedTabs(
+                  !props.allMuted ? "muteSelected" : "unmuteSelected",
+                  this.filterTabs().map((tab) => tab.id)
+                );
                 this.setState({ allMuted: !props.allMuted });
               }}
               title={!props.allMuted ? `Mute All` : `Unmute All`}
@@ -250,7 +271,12 @@ const Header = props => {
               href="#"
               title="Close All"
               className="nav-link"
-              onClick={() => props.processSelectedTabs('closeSelected', this.filterTabs().map(tab => tab.id))}
+              onClick={() =>
+                props.processSelectedTabs(
+                  "closeSelected",
+                  this.filterTabs().map((tab) => tab.id)
+                )
+              }
             >
               <FA icon={faTimes} />
             </a>
@@ -261,8 +287,9 @@ const Header = props => {
   );
 };
 
-const mapDispatchToProps = dispatch => ({
-  searchInTabs: searchTerm => dispatch(ACTIONS.searchInTabs(searchTerm)),
-  toggleSearchInAction: searchInArray => dispatch(ACTIONS.toggleSearchInAction(searchInArray)),
+const mapDispatchToProps = (dispatch) => ({
+  searchInTabs: (searchTerm) => dispatch(ACTIONS.searchInTabs(searchTerm)),
+  toggleSearchInAction: (searchInArray) =>
+    dispatch(ACTIONS.toggleSearchInAction(searchInArray)),
 });
 export default connect(null, mapDispatchToProps)(Header);
