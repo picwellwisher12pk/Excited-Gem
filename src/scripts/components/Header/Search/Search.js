@@ -1,9 +1,8 @@
 import React, { useCallback, useState, useEffect, useMemo } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import ErrorBoundary from "../../../ErrorBoundary";
-import { FontAwesomeIcon as FA } from "@fortawesome/react-fontawesome";
-import { faSearch } from "@fortawesome/pro-light-svg-icons/faSearch";
-import { faTimes } from "@fortawesome/pro-light-svg-icons/faTimes";
+import SearchIcon from "search.svg";
+import TimesIcon from "times.svg";
 import { updateSearchTerm } from "../../../searchSlice";
 
 const Search = (props) => {
@@ -55,16 +54,14 @@ const Search = (props) => {
   placeholder += searchIn[0] && searchIn[1] ? " and " : "";
   placeholder += searchIn[1] ? "URLs" : "";
   let iconInSearch = !searchTerm ? (
-    <FA
-      icon={faSearch}
+    <SearchIcon
       className={`text-secondary`}
       style={{ width: "40px", height: "43px", padding: "12px" }}
     />
   ) : (
-    <FA
-      icon={faTimes}
-      className={`text-danger cp`}
-      style={{ width: "40px", height: "43px", padding: "12px" }}
+    <TimesIcon
+      className={`cp`}
+      style={{ width: "40px", height: "43px", padding: "12px", fill: "red" }}
       onClick={() => {
         if (!props.empty) clear();
       }}

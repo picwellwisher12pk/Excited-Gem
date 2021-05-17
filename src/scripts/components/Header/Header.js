@@ -1,14 +1,14 @@
 import React, { useState } from "react";
-// import { FontAwesomeIcon as FA } from "@fortawesome/react-fontawesome";
-// import { faVolume } from "@fortawesome/pro-solid-svg-icons/faVolume";
-// import { faSort } from "@fortawesome/pro-solid-svg-icons/faSort";
-// import { faVolumeSlash } from "@fortawesome/pro-solid-svg-icons/faVolumeSlash";
+import VolumeOffIcon from "volume-off.svg";
+import VolumeIcon from "volume.svg";
+import VolumeSlashIcon from "volume-slash.svg";
+import TimesIcon from "times.svg";
+import ThumbtackIcon from "pin-icon.svg";
+import SortIcon from "sort.svg";
 // import { faShareSquare } from "@fortawesome/pro-solid-svg-icons/faShareSquare";
-// import { faSave } from "@fortawesome/pro-solid-svg-icons/faSave";
-// import { faTimes } from "@fortawesome/pro-light-svg-icons/faTimes";
-// import { faSyncAlt } from "@fortawesome/pro-regular-svg-icons/faSyncAlt";
-// import { faThumbtack } from "@fortawesome/pro-light-svg-icons/faThumbtack";
-// import { faThumbtack as fasThumbtack } from "@fortawesome/pro-solid-svg-icons/faThumbtack";
+import SaveIcon from "save.svg";
+import SyncAltIcon from "sync-alt.svg";
+import Thumbstack from "../../../icons/thumbtack.svg";
 import { connect } from "react-redux";
 
 import { sortTabs } from "../general.js";
@@ -25,8 +25,16 @@ const Header = (props) => {
   const sortBy = (parameter) => {
     sortTabs(parameter, props.tabs);
   };
-  let iconPinned = <FA icon={props.allPinned ? faThumbtack : fasThumbtack} />;
-  let iconSound = <FA icon={props.allMuted ? faVolume : faVolumeSlash} />;
+  let iconPinned = props.allPinned ? (
+    <Thumbstack style={{ height: 16, fill: "white" }} />
+  ) : (
+    <Thumbstack style={{ height: 16, fill: "white" }} />
+  );
+  let iconSound = props.allMuted ? (
+    <VolumeIcon style={{ height: 16, fill: "white" }} />
+  ) : (
+    <VolumeSlashIcon style={{ height: 16, fill: "white" }} />
+  );
   return (
     <header className="page-header" key={"header"}>
       <nav className="navbar">
@@ -105,7 +113,7 @@ const Header = (props) => {
                 title="Sort Tabs"
                 style={{ border: "none" }}
               >
-                <FA icon={faSort} />
+                <SortIcon style={{ height: 16 }} />
               </a>
               <div className="input-group-append" id="button-addon4">
                 <button
@@ -150,7 +158,7 @@ const Header = (props) => {
                 onClick={() => props.processSelectedTabs("unpinSelected")}
                 style={{ backgroundColor: "white" }}
               >
-                <FA icon={faThumbtack} />
+                <ThumbtackIcon style={{ height: 16 }} />
               </button>
               <button
                 className="btn btn-default"
@@ -159,7 +167,7 @@ const Header = (props) => {
                 onClick={() => props.processSelectedTabs("pinSelected")}
                 style={{ backgroundColor: "white" }}
               >
-                <FA icon={fasThumbtack} />
+                <ThumbtackIcon style={{ height: 16 }} />
               </button>
             </div>
           </div>
@@ -184,7 +192,7 @@ const Header = (props) => {
                 onClick={() => props.processSelectedTabs("muteSelected")}
                 style={{ backgroundColor: "white" }}
               >
-                <FA icon={faVolumeSlash} />
+                <VolumeSlashIcon style={{ height: 16 }} />
               </button>
               <button
                 className="btn btn-default"
@@ -193,7 +201,7 @@ const Header = (props) => {
                 onClick={() => props.processSelectedTabs("unmuteSelected")}
                 style={{ backgroundColor: "white" }}
               >
-                <FA icon={faVolume} />
+                <VolumeIcon style={{ height: 16 }} />
                 <i className="fas fa-volume-up" />
               </button>
             </div>
@@ -205,20 +213,20 @@ const Header = (props) => {
             onClick={() => props.processSelectedTabs("closeSelected")}
             style={{ backgroundColor: "white" }}
           >
-            <FA icon={faTimes} className={"text-danger"} />
+            <TimesIcon style={{ height: 16, fill: "white" }} />
           </button>
           <div className={"input-group-append"}>
-            <button
+            {/* <button
               className="btn btn-default"
               onClick={() => props.processSelectedTabs("toNewWindow")}
             >
               <FA icon={faShareSquare} />
-            </button>
+            </button> */}
             <button
               className="btn btn-default"
               onClick={() => props.processSelectedTabs("toSession")}
             >
-              <FA icon={faSave} />
+              <SaveIcon style={{ height: 16, fill: "white" }} />
             </button>
           </div>
         </div>
@@ -233,7 +241,7 @@ const Header = (props) => {
                 this.setState({ tabs: props.tabs });
               }}
             >
-              <FA icon={faSyncAlt} fixedWidth />
+              <SyncAltIcon style={{ height: 16, fill: "white" }} />
             </a>
           </li>
           <li style={{ marginRight: 18 }} className="nav-item">
@@ -279,7 +287,7 @@ const Header = (props) => {
                 )
               }
             >
-              <FA icon={faTimes} />
+              <TimesIcon style={{ height: 16, fill: "white" }} />
             </a>
           </li>
         </ul>

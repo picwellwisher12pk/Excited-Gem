@@ -1,25 +1,24 @@
-import React, {useRef} from "react";
-import {useDrag, useDrop} from "react-dnd";
-// import {FontAwesomeIcon as FA} from "@fortawesome/react-fontawesome";
-// import {faVolume} from "@fortawesome/pro-solid-svg-icons/faVolume";
-// import {faVolumeOff} from "@fortawesome/pro-light-svg-icons/faVolumeOff";
-// import {faVolumeSlash} from "@fortawesome/pro-solid-svg-icons/faVolumeSlash";
-// import {faTimes} from "@fortawesome/pro-light-svg-icons/faTimes";
-// import {faThumbtack} from "@fortawesome/pro-light-svg-icons/faThumbtack";
-// import {faThumbtack as fasThumbtack} from "@fortawesome/pro-solid-svg-icons/faThumbtack";
-import {connect} from "react-redux";
+import React, { useRef } from "react";
+import { useDrag, useDrop } from "react-dnd";
+import VolumeOffIcon from "volume-off.svg";
+import VolumeIcon from "volume.svg";
+import VolumeSlashIcon from "volume-slash.svg";
+import TimesIcon from "times.svg";
+import ThumbtackIcon from "thumbtack.svg";
+
+import { connect } from "react-redux";
 import ACTIONS from "../../../../action";
-import {ItemTypes} from "./ItemTypes";
+import { ItemTypes } from "./ItemTypes";
 
 let browser = require("webextension-polyfill");
 const Tab = (props) => {
-  let {title, url, checked, pinned, discarded} = props;
+  let { title, url, checked, pinned, discarded } = props;
   const ref = useRef(null);
   /**
    * Specifies which props to inject into your component.
    */
 
-  const [{handlerId}, drop] = useDrop({
+  const [{ handlerId }, drop] = useDrop({
     accept: ItemTypes.Tab,
     collect(monitor) {
       return {
@@ -67,8 +66,8 @@ const Tab = (props) => {
     },
   });
   // console.log('props of tabs',props);
-  const [{isDragging}, drag] = useDrag({
-    item: {type: ItemTypes.Tab, id: props.id, index: props.index},
+  const [{ isDragging }, drag] = useDrag({
+    item: { type: ItemTypes.Tab, id: props.id, index: props.index },
     collect: (monitor) => ({
       isDragging: monitor.isDragging(),
     }),
@@ -77,7 +76,7 @@ const Tab = (props) => {
   drag(drop(ref));
   //Search Highlighting;
   if (props.searchTerm) {
-    const {searchTerm} = props;
+    const { searchTerm } = props;
     let regex;
     try {
       regex = new RegExp(searchTerm, "gi");
@@ -90,19 +89,24 @@ const Tab = (props) => {
 
   let loading = props.status === "loading",
     audible = props.audible || props.muted,
-    actionButtons, audioIcon;
+    actionButtons,
+    audioIcon;
   if (!audible)
-    audioIcon = <FA icon={faVolumeOff} className={"text-info"} fixedWidth/>;
+    audioIcon = (
+      <VolumeOffIcon style={{ height: 16, fill: "gray", marginRight: 18 }} />
+    );
   if (audible && !props.muted)
-    audioIcon = <FA icon={faVolume} className={"text-info"} fixedWidth/>;
+    audioIcon = (
+      <VolumeIcon style={{ height: 16, fill: "gray", marginRight: 18 }} />
+    );
   if (audible && props.mutedInfo.muted)
-    audioIcon = <FA icon={faVolumeSlash} className={"text-info"} fixedWidth/>;
-  let iconPinned = (
-    <FA
-      icon={pinned ? fasThumbtack : faThumbtack}
-      className={"text-primary"}
-      fixedWidth
-    />
+    audioIcon = (
+      <VolumeSlashIcon style={{ height: 16, fill: "gray", marginRight: 18 }} />
+    );
+  let iconPinned = pinned ? (
+    <ThumbtackIcon style={{ height: 16, fill: "gray", marginRight: 18 }} />
+  ) : (
+    <ThumbtackIcon style={{ height: 16, fill: "gray", marginRight: 18 }} />
   );
 
   //Markup of Action bar for active tabs: Right side buttons
@@ -133,7 +137,7 @@ const Tab = (props) => {
         onClick={() => props.closeTab(props.id)}
         data-command="remove"
       >
-        <FA icon={faTimes} className={"text-danger"}/>
+        <TimesIcon style={{ height: 16, fill: "red" }} />
       </li>,
     ];
   } else {
@@ -146,7 +150,7 @@ const Tab = (props) => {
         onClick={() => props.removeTab(props.url)}
         data-command="remove"
       >
-        <FA icon={faTimes}/>
+        <TimesIcon style={{ height: 16, fill: "red" }} />
       </li>
     );
   }
@@ -160,7 +164,7 @@ const Tab = (props) => {
         (checked ? " checked" : "") +
         (loading || discarded ? ` idle` : "")
       }
-      style={{opacity}}
+      style={{ opacity }}
       data-handler-id={handlerId}
       draggable={true}
     >
@@ -180,12 +184,12 @@ const Tab = (props) => {
       <a
         className="clickable tab-title clip"
         title={url}
-        dangerouslySetInnerHTML={{__html: title}}
+        dangerouslySetInnerHTML={{ __html: title }}
       />
       <span
         className="tab-url trimmed dimmed clip"
-        dangerouslySetInnerHTML={{__html: url}}
-        onClick={() => browser.tabs.update(props.id, {active: true})}
+        dangerouslySetInnerHTML={{ __html: url }}
+        onClick={() => browser.tabs.update(props.id, { active: true })}
       />
       <ul className=" tab-actions" role="group" aria-label="options">
         {actionButtons}

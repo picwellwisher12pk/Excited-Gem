@@ -151,6 +151,10 @@ module.exports = {
           },
         ],
       },
+      {
+        test: /\.svg$/,
+        use: ["@svgr/webpack"],
+      },
     ],
   },
   resolve: {
@@ -162,6 +166,7 @@ module.exports = {
       'path.resolve(__dirname, "./src")',
       "node_modules",
       path.resolve(__dirname, "dist"),
+      path.resolve(__dirname, "src/icons"),
     ],
     descriptionFiles: ["package.json"],
   },
