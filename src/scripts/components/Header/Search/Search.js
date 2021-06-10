@@ -6,12 +6,8 @@ import TimesIcon from "times.svg";
 import { updateSearchTerm } from "../../../searchSlice";
 
 const Search = (props) => {
-  const searchTerm = useSelector((state) => state.search.searchTerm);
-  useEffect(() => {
-    return () => {};
-  }, [searchTerm]);
-
   const dispatch = useDispatch();
+  const searchTerm = useSelector((state) => state.search.searchTerm);
   const searchIn = useSelector(
     (state) => state.config.preferences.search.searchIn
   );
@@ -20,6 +16,9 @@ const Search = (props) => {
   const title = React.createRef();
   const url = React.createRef();
   const [empty, setEmpty] = useState(true);
+  useEffect(() => {
+    return () => {};
+  }, [searchTerm]);
 
   const onKeyUpped = (event) => {
     searchField.current.value !== "" ? setEmpty(false) : setEmpty(true);
