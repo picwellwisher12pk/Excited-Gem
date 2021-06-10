@@ -1,14 +1,21 @@
 "use strict";
 //Scripts and Modules
 import store from "./store";
-import React, {Profiler, useCallback, useEffect, useMemo, useState,} from "react";
-import {useSelector} from "react-redux";
-import {updateActiveTabs} from "./tabSlice";
+import React, {
+  Profiler,
+  useCallback,
+  useEffect,
+  useMemo,
+  useState,
+} from "react";
+import { useSelector } from "react-redux";
+import { updateActiveTabs } from "./tabSlice";
 import ClimbingBoxLoader from "react-spinners/ClimbingBoxLoader";
-import {asyncFilterTabs, getMetrics} from "./components/general";
-import {getTabs} from "./components/browserActions";
-import {DndProvider} from "react-dnd";
-import {HTML5Backend} from "react-dnd-html5-backend";
+import { asyncFilterTabs, getMetrics } from "./components/general";
+import { getTabs } from "./components/browserActions";
+import { DndProvider } from "react-dnd";
+import { HTML5Backend } from "react-dnd-html5-backend";
+import CustomScroll from "react-custom-scroll";
 
 //JS libraries
 import "../images/logo.png";
@@ -70,22 +77,25 @@ browser.tabs.onUpdated.addListener(() => updateTabs(getTabs, store));
 browser.tabs.onMoved.addListener(() => updateTabs(getTabs, store));
 updateTabs(getTabs, store);
 
-const TabWindowWrapper = ({tabs, loading, setLoading}) => {
+const TabWindowWrapper = ({ tabs, loading, setLoading }) => {
   const selectedTabs = useSelector((state) => state.tabs.selectedTabs);
 
   const tabTemplate = useMemo(
     () => (tab, selectedTabs, moveTab) => {
-      let checked = false;
-      //If no tab is selected, add current tab to selectedTabs
-      if (selectedTabs?.length === 0) checked = selectedTabs.includes(tab.id);
+      let selected = false;
+      //If current tab.id exists in selectedTabs array
+      if (selectedTabs.indexOf(tab.id) >= 0) selected = true;
       return (
         <Tab
           {...tab}
           key={tab.id}
-          index={tab.index}
           activeTab={true}
-          checked={checked}
+          index={tab.index}
           moveTab={moveTab}
+          selected={selected}
+          closeTab={closeTab}
+          togglePinTab={togglePinTab}
+          toggleMuteTab={toggleMuteTab}
         />
       );
     },
@@ -97,12 +107,31 @@ const TabWindowWrapper = ({tabs, loading, setLoading}) => {
   }, []);
   const moveTab = useCallback(
     (itemId, dragIndex, index) => {
-      browser.tabs.move(itemId, {index});
+      browser.tabs.move(itemId, { index });
+    },
+    [tabs]
+  );
+  const closeTab = useCallback(
+    (itemId) => {
+      browser.tabs.remove(itemId);
+    },
+    [tabs]
+  );
+  const toggleMuteTab = useCallback(
+    (itemId, status) => {
+      browser.tabs.update(itemId, { muted: !status });
+    },
+    [tabs]
+  );
+
+  const togglePinTab = useCallback(
+    (itemId, status) => {
+      browser.tabs.pin(itemId, status);
     },
     [tabs]
   );
   const tabsMemo = useMemo(() => {
-    return tabs.map((tab) => tabTemplate(tab, selectedTabs, moveTab));
+    return tabs.map((tab) => tabTemplate(tab, selectedTabs, moveTab, closeTab));
   }, [tabs]);
   return !loading ? (
     <div className="tabs-list-container">
@@ -115,7 +144,7 @@ const TabWindowWrapper = ({tabs, loading, setLoading}) => {
   ) : (
     <ClimbingBoxLoader
       color={"#12a3a9"}
-      css={{display: "block", margin: "80px auto"}}
+      css={{ display: "block", margin: "80px auto" }}
       loading={true}
       size={20}
     />
@@ -148,13 +177,15 @@ const ActiveTabs = () => {
   return (
     <Profiler id={"app"} onRender={getMetrics}>
       <Header>
-        <Search/>
+        <Search />
       </Header>
-      <TabWindowWrapper
-        tabs={filteredTabs}
-        loading={loading}
-        setLoading={setLoading}
-      />
+      <CustomScroll heightRelativeToParent="100%" keepAtBottom={true}>
+        <TabWindowWrapper
+          tabs={filteredTabs}
+          loading={loading}
+          setLoading={setLoading}
+        />
+      </CustomScroll>
     </Profiler>
   );
 };

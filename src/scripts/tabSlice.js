@@ -20,7 +20,11 @@ export const tabSlice = createSlice({
     },
     updateSelectedTabs: (state, action) => {
       let newState = _.cloneDeep(state);
-      newState.selectedTabs = action.payload;
+      let { id, selected } = action.payload;
+      selected
+        ? newState.selectedTabs.push(id)
+        : newState.selectedTabs.splice(newState.selectedTabs.indexOf(id));
+      window.selectedTabs = newState.selectedTabs;
       return newState;
     },
   },

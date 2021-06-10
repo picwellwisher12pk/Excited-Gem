@@ -5,10 +5,9 @@ import VolumeSlashIcon from "volume-slash.svg";
 import TimesIcon from "times.svg";
 import ThumbtackIcon from "pin-icon.svg";
 import SortIcon from "sort.svg";
-// import { faShareSquare } from "@fortawesome/pro-solid-svg-icons/faShareSquare";
 import SaveIcon from "save.svg";
 import SyncAltIcon from "sync-alt.svg";
-import Thumbstack from "../../../icons/thumbtack.svg";
+import Thumbstack from "thumbtack.svg";
 import { connect } from "react-redux";
 
 import { sortTabs } from "../general.js";

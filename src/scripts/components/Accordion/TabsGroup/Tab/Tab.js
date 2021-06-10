@@ -1,18 +1,22 @@
 import React, { useRef } from "react";
 import { useDrag, useDrop } from "react-dnd";
+import { useSelector, useDispatch } from "react-redux";
+import { updateSelectedTabs } from "../../../../tabSlice";
+import { ItemTypes } from "./ItemTypes";
+
+//Icons
 import VolumeOffIcon from "volume-off.svg";
 import VolumeIcon from "volume.svg";
 import VolumeSlashIcon from "volume-slash.svg";
 import TimesIcon from "times.svg";
 import ThumbtackIcon from "thumbtack.svg";
-
-import { connect } from "react-redux";
-import ACTIONS from "../../../../action";
-import { ItemTypes } from "./ItemTypes";
-
+//Polyfill
 let browser = require("webextension-polyfill");
+
 const Tab = (props) => {
-  let { title, url, checked, pinned, discarded } = props;
+  const searchTerm = useSelector((state) => state.search.searchTerm);
+  const dispatch = useDispatch();
+  let { title, url, selected, pinned, discarded } = props;
   const ref = useRef(null);
   /**
    * Specifies which props to inject into your component.
@@ -65,6 +69,10 @@ const Tab = (props) => {
       item.index = hoverIndex;
     },
   });
+  let loading = props.status === "loading",
+    audible = props.audible || props.muted,
+    actionButtons,
+    audioIcon;
   // console.log('props of tabs',props);
   const [{ isDragging }, drag] = useDrag({
     item: { type: ItemTypes.Tab, id: props.id, index: props.index },
@@ -74,9 +82,9 @@ const Tab = (props) => {
   });
   const opacity = isDragging ? 0 : 1;
   drag(drop(ref));
+
   //Search Highlighting;
-  if (props.searchTerm) {
-    const { searchTerm } = props;
+  if (searchTerm) {
     let regex;
     try {
       regex = new RegExp(searchTerm, "gi");
@@ -87,10 +95,7 @@ const Tab = (props) => {
     url = props.url.replace(regex, "<mark>$&</mark>");
   }
 
-  let loading = props.status === "loading",
-    audible = props.audible || props.muted,
-    actionButtons,
-    audioIcon;
+  //Audio Icons rendering
   if (!audible)
     audioIcon = (
       <VolumeOffIcon style={{ height: 16, fill: "gray", marginRight: 18 }} />
@@ -103,6 +108,8 @@ const Tab = (props) => {
     audioIcon = (
       <VolumeSlashIcon style={{ height: 16, fill: "gray", marginRight: 18 }} />
     );
+
+  //Pin Icon Rendering
   let iconPinned = pinned ? (
     <ThumbtackIcon style={{ height: 16, fill: "gray", marginRight: 18 }} />
   ) : (
@@ -116,7 +123,7 @@ const Tab = (props) => {
         key={1}
         title="Un/Pin Tab"
         className={`clickable pin-tab` + (pinned ? ` active` : ` disabled`)}
-        onClick={() => props.togglePin(props.id)}
+        onClick={() => props.togglePinTab(props.id, pinned)}
         aria-label="pinned"
       >
         {iconPinned}
@@ -125,7 +132,7 @@ const Tab = (props) => {
         key={2}
         title="Un/Mute Tab"
         className={`clickable sound-tab` + (audible ? ` active` : ` disabled`)}
-        onClick={() => props.toggleMute(props.id)}
+        onClick={() => props.toggleMuteTab(props.id, audible)}
       >
         {audioIcon}
       </li>,
@@ -154,6 +161,7 @@ const Tab = (props) => {
       </li>
     );
   }
+
   return (
     <li
       ref={ref}
@@ -161,33 +169,43 @@ const Tab = (props) => {
       id={props.id}
       className={
         `tab-item` +
-        (checked ? " checked" : "") +
-        (loading || discarded ? ` idle` : "")
+        (selected ? " checked" : " ") +
+        (loading ? " loading" : discarded ? " idle" : "")
       }
+      data-discarded={discarded}
       style={{ opacity }}
       data-handler-id={handlerId}
       draggable={true}
     >
       <label className="tab-favicon" aria-label="favicon">
-        <img
-          src={props.favIconUrl}
-          title={props.favIconUrl && title}
-          alt={props.favIconUrl && title}
-        />
+        {!selected && (
+          <img
+            src={props.favIconUrl}
+            title={props.favIconUrl && title}
+            alt={props.favIconUrl && title}
+          />
+        )}
+
         <input
           type="checkbox"
-          onChange={() => props.updateSelectedTabs(props.id, !props.checked)}
-          checked={props.checked}
+          onChange={() =>
+            dispatch(
+              updateSelectedTabs({ id: props.id, selected: !props.selected })
+            )
+          }
+          checked={selected}
+          selected={selected}
           className="checkbox"
         />
       </label>
       <a
-        className="clickable tab-title clip"
-        title={url}
+        className={`clickable tab-title clip font-weight-bold`}
+        style={{ opacity: discarded || loading ? 0.5 : 1 }}
+        title={props.url}
         dangerouslySetInnerHTML={{ __html: title }}
       />
       <span
-        className="tab-url trimmed dimmed clip"
+        className="tab-url trimmed clip dimmed"
         dangerouslySetInnerHTML={{ __html: url }}
         onClick={() => browser.tabs.update(props.id, { active: true })}
       />
@@ -198,18 +216,19 @@ const Tab = (props) => {
   );
 };
 
-const mapStateToProps = function (state) {
-  return {
-    searchTerm: state.search.searchTerm,
-  };
-};
-const mapDispatchToProps = (dispatch) => ({
-  closeTab: (id) => dispatch(ACTIONS.closeTabs(id)),
-  togglePin: (id) => dispatch(ACTIONS.togglePin(id)),
-  toggleMute: (id) => dispatch(ACTIONS.toggleMute(id)),
-  searchInTabs: (searchTerm) => dispatch(ACTIONS.searchInTabs(searchTerm)),
-  // updateSelectedTabs: (id, selected) => dispatch(ACTIONS.updateSelectedTabs(id, selected)),
-  toggleSearchInAction: (searchInArray) =>
-    dispatch(ACTIONS.toggleSearchInAction(searchInArray)),
-});
-export default connect(mapStateToProps, mapDispatchToProps)(Tab);
+// const mapStateToProps = function (state) {
+//   return {
+//     searchTerm: state.search.searchTerm,
+//   };
+// };
+// const mapDispatchToProps = (dispatch) => ({
+//   closeTab: (id) => dispatch(ACTIONS.closeTabs(id)),
+//   togglePinTab: (id) => dispatch(ACTIONS.togglePinTab(id)),
+//   toggleMuteTab: (id) => dispatch(ACTIONS.toggleMuteTab(id)),
+//   searchInTabs: (searchTerm) => dispatch(ACTIONS.searchInTabs(searchTerm)),
+//   updateSelectedTabs: (id, selected) =>
+//     dispatch(updateSelectedTabs(id, selected)),
+//   toggleSearchInAction: (searchInArray) =>
+//     dispatch(ACTIONS.toggleSearchInAction(searchInArray)),
+// });
+export default Tab;
