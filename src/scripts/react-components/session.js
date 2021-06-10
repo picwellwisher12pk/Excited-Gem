@@ -23,7 +23,7 @@ export default class Sessions extends React.Component {
   render() {
     let _this = this;
     let sessions = this.state.data;
-    if (sessions === []) return 'No Session Saved.';
+    if (sessions.length === 0) return 'No Session Saved.';
     return (
       <div className="accordion" id="accordion" role="tablist" aria-multiselectable="true">
         {sessions.map(function(value, index) {
@@ -53,7 +53,7 @@ class Session extends React.Component {
     this.props.updateSessions(data);
   }
   restoreSession(data, removeSession, sessionID) {
-    Object.keys(data.windows).forEach((keyWindow, indexWindow) => {
+    Object.keys(data.windows).forEach((keyWindow) => {
       browser.windows
         .create({
           url: [...data.windows[keyWindow].map(tab => tab.url)],
@@ -143,7 +143,7 @@ class Session extends React.Component {
           className={`collapse` + (_this.state.show ? `show` : ``)}
           data-parent="#accordion"
           aria-labelledby={data.created}
-          id={`collapse` + dateTime}
+          // id={`collapse` + dateTime}
         >
           {Object.keys(data.windows).map((key, index) => (
             <SessionsTabs
@@ -179,7 +179,7 @@ class SessionsTabs extends React.Component {
 
     return (
       <ul className="list-group list-group-flush" id={_this.props.windowID}>
-        {data.map(function(value, index) {
+        {data.map(function (value) {
           return (
             <Tab
               key={value.index}

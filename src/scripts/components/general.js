@@ -30,16 +30,14 @@ export function compareURL(a, b) {
   if (a.url > b.url) return 1;
   return 0;
 }
-
 export function compareTitle(a, b) {
   if (a.title.toLowerCase() < b.title.toLowerCase()) return -1;
   if (a.title.toLowerCase() > b.title.toLowerCase()) return 1;
   return 0;
 }
-
 export function matchKeys(property, keysToRemove) {
   for (let i = 0; i < keysToRemove.length; i++) {
-    if (property == keysToRemove[i]) return true;
+    if (property === keysToRemove[i]) return true;
   }
 }
 
@@ -51,7 +49,6 @@ export function removeKeys(keysToRemove, object) {
   }
   return tempObject;
 }
-
 /**
  * [saveData description]
  * @param  {String/Object/Array} data    [description]
@@ -84,21 +81,20 @@ Array.prototype.equals = (array) => {
   if (!array) return false;
 
   // compare lengths - can save a lot of time
-  if (this.length != array.length) return false;
+  if (this.length !== array.length) return false;
 
   for (var i = 0, l = this.length; i < l; i++) {
     // Check if we have nested arrays
     if (this[i] instanceof Array && array[i] instanceof Array) {
       // recurse into the nested arrays
       if (!this[i].equals(array[i])) return false;
-    } else if (this[i] != array[i]) {
+    } else if (this[i] !== array[i]) {
       // Warning - two different object instances will never be equal: {x:20} != {x:20}
       return false;
     }
   }
   return true;
 };
-
 export function arraysAreIdentical(arr1, arr2) {
   if (arr1.length !== arr2.length) return false;
   for (var i = 0, len = arr1.length; i < len; i++) {
@@ -273,13 +269,6 @@ export function sortTabs(sortby, tabs) {
   browser.runtime.sendMessage(query);
   return query;
 }*/
-
-/**
- * Remove tab objects from tab array based on ignore group
- * @param  {Array of Objects} tabs               [description]
- * @param  {Array} ignoredUrlPatterns [description]
- * @return {Array of Object}   Returns neat array after removing ignored urls
- */
 export function santizeTabs(tabs, ignoredUrlPatterns) {
   refinedTabs = tabs.filter((tab) => {
     let patLength = ignoredUrlPatterns.length;

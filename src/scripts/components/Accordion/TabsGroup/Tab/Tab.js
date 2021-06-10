@@ -122,8 +122,8 @@ const Tab = (props) => {
       <li
         key={1}
         title="Un/Pin Tab"
-        className={`clickable pin-tab` + (pinned ? ` active` : ` disabled`)}
-        onClick={() => props.togglePinTab(props.id, pinned)}
+        className={`clickable pin-tab ${pinned ? ' active' : ' disabled'}`}
+        onClick={() => props.togglePinTab(props.id)}
         aria-label="pinned"
       >
         {iconPinned}

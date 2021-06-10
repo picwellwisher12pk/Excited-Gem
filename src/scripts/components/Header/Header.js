@@ -74,6 +74,16 @@ const Header = (props) => {
           </ul>
         </div>
         {props.children}
+        {/* {Brand(logo)} */}
+        {/* {Navigation(props)}
+
+        <Search
+          regex={props.preferences.search.regex}
+          ignoreCase={props.preferences.search.ignoreCase}
+          searchIn={props.preferences.search.searchIn}
+          searchInTabs={props.searchInTabs}
+          setPreferences={props.setPreferences}
+        /> */}
       </nav>
       <section
         className="context-actions navbar container-fluid"
@@ -92,11 +102,11 @@ const Header = (props) => {
               }}
               title="Select All"
             >
-              <input type="checkbox" checked={props.allSelected} readOnly />
+              <input type="checkbox" checked={props.allSelected} readOnly/>
             </a>
           </li>
 
-          <li className="nav-item dropdown">
+          <li className="nav-item dropdown" key={"sortSection"}>
             <div
               className="input-group"
               style={{
@@ -134,7 +144,7 @@ const Header = (props) => {
               </div>
             </div>
           </li>
-          <WindowSelector />
+          <WindowSelector key={'windowSelector'}/>
         </ul>
         <div className="nav context-actions selection-action">
           <div
@@ -237,13 +247,13 @@ const Header = (props) => {
               href="#"
               onClick={() => {
                 updateTabs();
-                this.setState({ tabs: props.tabs });
+                this.setState({tabs: props.tabs});
               }}
             >
               <SyncAltIcon style={{ height: 16, fill: "white" }} />
             </a>
           </li>
-          <li style={{ marginRight: 18 }} className="nav-item">
+          <li style={{marginRight: 18}} className="nav-item">
             <a
               onClick={() => {
                 props.processSelectedTabs(
@@ -258,7 +268,7 @@ const Header = (props) => {
               {iconPinned}
             </a>
           </li>
-          <li style={{ marginRight: 18 }} className="nav-item">
+          <li style={{marginRight: 18}} className="nav-item">
             <a
               href="#"
               className="nav-link"
@@ -274,7 +284,7 @@ const Header = (props) => {
               {iconSound}
             </a>
           </li>
-          <li style={{ marginRight: 0 }} className="nav-item">
+          <li style={{marginRight: 0}} className="nav-item">
             <a
               href="#"
               title="Close All"
