@@ -8,16 +8,20 @@ import SortIcon from "sort.svg";
 import SaveIcon from "save.svg";
 import SyncAltIcon from "sync-alt.svg";
 import Thumbstack from "thumbtack.svg";
-import { connect } from "react-redux";
+import { connect, useSelector, useDispatch } from "react-redux";
+// import { updateSelectedTabs } from "../../tabSlice.js";
 
 import { sortTabs } from "../general.js";
 import WindowSelector from "../WindowSelector";
+let browser = require("webextension-polyfill");
+
 //Images
 let logo = require(`../../../images/${
   NODE_ENV !== "production" && "dev"
 }-logo.png`);
 
 const Header = (props) => {
+  const selectedTabs = useSelector((state) => state.tabs.selectedTabs);
   const [allSelected, setAllSelected] = useState(props.allSelected);
   const [allPinned, setAllPinned] = useState(props.allPinned);
   const [allMuted, setAllMuted] = useState(props.allMuted);
@@ -102,7 +106,7 @@ const Header = (props) => {
               }}
               title="Select All"
             >
-              <input type="checkbox" checked={props.allSelected} readOnly/>
+              <input type="checkbox" checked={props.allSelected} readOnly />
             </a>
           </li>
 
@@ -144,7 +148,7 @@ const Header = (props) => {
               </div>
             </div>
           </li>
-          <WindowSelector key={'windowSelector'}/>
+          <WindowSelector key={"windowSelector"} />
         </ul>
         <div className="nav context-actions selection-action">
           <div
@@ -247,13 +251,13 @@ const Header = (props) => {
               href="#"
               onClick={() => {
                 updateTabs();
-                this.setState({tabs: props.tabs});
+                this.setState({ tabs: props.tabs });
               }}
             >
               <SyncAltIcon style={{ height: 16, fill: "white" }} />
             </a>
           </li>
-          <li style={{marginRight: 18}} className="nav-item">
+          <li style={{ marginRight: 18 }} className="nav-item">
             <a
               onClick={() => {
                 props.processSelectedTabs(
@@ -268,7 +272,7 @@ const Header = (props) => {
               {iconPinned}
             </a>
           </li>
-          <li style={{marginRight: 18}} className="nav-item">
+          <li style={{ marginRight: 18 }} className="nav-item">
             <a
               href="#"
               className="nav-link"
@@ -284,17 +288,18 @@ const Header = (props) => {
               {iconSound}
             </a>
           </li>
-          <li style={{marginRight: 0}} className="nav-item">
+          <li style={{ marginRight: 0 }} className="nav-item">
             <a
               href="#"
               title="Close All"
               className="nav-link"
-              onClick={() =>
-                props.processSelectedTabs(
-                  "closeSelected",
-                  this.filterTabs().map((tab) => tab.id)
-                )
-              }
+              onClick={() => {
+                let ids =
+                  selectedTabs.length === 0
+                    ? window.filteredTabs.map((tab) => tab.id)
+                    : selectedTabs;
+                browser.tabs.remove(ids);
+              }}
             >
               <TimesIcon style={{ height: 16, fill: "white" }} />
             </a>

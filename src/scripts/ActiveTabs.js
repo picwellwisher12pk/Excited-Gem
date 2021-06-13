@@ -161,6 +161,7 @@ const ActiveTabs = () => {
   const findFilteredTabs = useMemo(
     () => async (searchTerm, searchPref, tabs, setLoading) => {
       let tempTabs = await asyncFilterTabs(searchTerm, searchPref, tabs);
+      window.filteredTabs = tempTabs;
       setFilteredTabs(tempTabs);
       setLoading(false);
     },
