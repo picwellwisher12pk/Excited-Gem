@@ -23,14 +23,24 @@ export const tabSlice = createSlice({
       let { id, selected } = action.payload;
       selected
         ? newState.selectedTabs.push(id)
-        : newState.selectedTabs.splice(newState.selectedTabs.indexOf(id));
+        : newState.selectedTabs.splice(newState.selectedTabs.indexOf(id), 1);
       window.selectedTabs = newState.selectedTabs;
+      return newState;
+    },
+    clearSelectedTabs: (state) => {
+      let newState = _.cloneDeep(state);
+      newState.selectedTabs = [];
+      window.selectedTabs = [];
       return newState;
     },
   },
 });
 
 // Action creators are generated for each case reducer function
-export const { updateActiveTabs, updateSelectedTabs } = tabSlice.actions;
+export const {
+  updateActiveTabs,
+  updateSelectedTabs,
+  clearSelectedTabs,
+} = tabSlice.actions;
 
 export default tabSlice.reducer;

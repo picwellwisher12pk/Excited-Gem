@@ -9,7 +9,7 @@ import SaveIcon from "save.svg";
 import SyncAltIcon from "sync-alt.svg";
 import Thumbstack from "thumbtack.svg";
 import { connect, useSelector, useDispatch } from "react-redux";
-// import { updateSelectedTabs } from "../../tabSlice.js";
+import { clearSelectedTabs } from "../../tabSlice.js";
 
 import { sortTabs } from "../general.js";
 import WindowSelector from "../WindowSelector";
@@ -21,6 +21,7 @@ let logo = require(`../../../images/${
 }-logo.png`);
 
 const Header = (props) => {
+  const dispatch = useDispatch();
   const selectedTabs = useSelector((state) => state.tabs.selectedTabs);
   const [allSelected, setAllSelected] = useState(props.allSelected);
   const [allPinned, setAllPinned] = useState(props.allPinned);
@@ -298,6 +299,7 @@ const Header = (props) => {
                   selectedTabs.length === 0
                     ? window.filteredTabs.map((tab) => tab.id)
                     : selectedTabs;
+                dispatch(clearSelectedTabs());
                 browser.tabs.remove(ids);
               }}
             >
