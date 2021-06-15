@@ -7,9 +7,10 @@ import { ItemTypes } from "./ItemTypes";
 //Icons
 import VolumeOffIcon from "volume-off.svg";
 import VolumeIcon from "volume.svg";
-import VolumeSlashIcon from "volume-slash.svg";
+import VolumeMuteIcon from "volume-mute.svg";
 import TimesIcon from "times.svg";
 import ThumbtackIcon from "thumbtack.svg";
+import ThumbtackActiveIcon from "thumbtack-active.svg";
 //Polyfill
 let browser = require("webextension-polyfill");
 
@@ -37,9 +38,8 @@ const Tab = (props) => {
       const dragIndex = item.index;
       const hoverIndex = props.index;
       // Don't replace items with themselves
-      if (dragIndex === hoverIndex) {
-        return;
-      }
+      if (dragIndex === hoverIndex) return;
+
       // Determine rectangle on screen
       const hoverBoundingRect = ref.current?.getBoundingClientRect();
       // Get vertical middle
@@ -97,23 +97,17 @@ const Tab = (props) => {
 
   //Audio Icons rendering
   if (!audible)
-    audioIcon = (
-      <VolumeOffIcon style={{ height: 16, fill: "gray", marginRight: 18 }} />
-    );
+    audioIcon = <VolumeOffIcon style={{ height: 16, fill: "gray" }} />;
   if (audible && !props.muted)
-    audioIcon = (
-      <VolumeIcon style={{ height: 16, fill: "gray", marginRight: 18 }} />
-    );
+    audioIcon = <VolumeIcon style={{ height: 16, fill: "gray" }} />;
   if (audible && props.mutedInfo.muted)
-    audioIcon = (
-      <VolumeSlashIcon style={{ height: 16, fill: "gray", marginRight: 18 }} />
-    );
+    audioIcon = <VolumeMuteIcon style={{ height: 16, fill: "gray" }} />;
 
   //Pin Icon Rendering
   let iconPinned = pinned ? (
-    <ThumbtackIcon style={{ height: 16, fill: "gray", marginRight: 18 }} />
+    <ThumbtackActiveIcon style={{ height: 16, fill: "gray" }} />
   ) : (
-    <ThumbtackIcon style={{ height: 16, fill: "gray", marginRight: 18 }} />
+    <ThumbtackIcon style={{ height: 16, fill: "gray" }} />
   );
 
   //Markup of Action bar for active tabs: Right side buttons
@@ -122,11 +116,11 @@ const Tab = (props) => {
       <li
         key={1}
         title="Un/Pin Tab"
-        className={`clickable pin-tab ${pinned ? ' active' : ' disabled'}`}
+        className={`clickable pin-tab ${pinned ? " active" : " disabled"}`}
         onClick={() => props.togglePinTab(props.id)}
         aria-label="pinned"
       >
-        {iconPinned}
+        <button className="btn btn-sm">{iconPinned}</button>
       </li>,
       <li
         key={2}
@@ -134,7 +128,9 @@ const Tab = (props) => {
         className={`clickable sound-tab` + (audible ? ` active` : ` disabled`)}
         onClick={() => props.toggleMuteTab(props.id, audible)}
       >
-        {audioIcon}
+        <button className="btn btn-sm" style={{ minWidth: 33 }}>
+          {audioIcon}
+        </button>
       </li>,
       <li
         key={3}
@@ -144,7 +140,9 @@ const Tab = (props) => {
         onClick={() => props.closeTab(props.id)}
         data-command="remove"
       >
-        <TimesIcon style={{ height: 16, fill: "red" }} />
+        <button className="btn btn-sm">
+          <TimesIcon style={{ height: 16, fill: "red" }} />
+        </button>
       </li>,
     ];
   } else {
@@ -198,18 +196,18 @@ const Tab = (props) => {
           className="checkbox"
         />
       </label>
-      <a
-        className={`clickable tab-title clip font-weight-bold`}
+      <span
+        className={`tab-title clip font-weight-bold`}
         style={{ opacity: discarded || loading ? 0.5 : 1 }}
         title={props.url}
         dangerouslySetInnerHTML={{ __html: title }}
       />
       <span
-        className="tab-url trimmed clip dimmed"
+        className="clickable tab-url trimmed clip dimmed"
         dangerouslySetInnerHTML={{ __html: url }}
         onClick={() => browser.tabs.update(props.id, { active: true })}
       />
-      <ul className=" tab-actions" role="group" aria-label="options">
+      <ul className="tab-actions" role="group" aria-label="options">
         {actionButtons}
       </ul>
     </li>

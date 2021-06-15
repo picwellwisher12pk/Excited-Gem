@@ -1,16 +1,16 @@
 import React, { useState } from "react";
 import VolumeOffIcon from "volume-off.svg";
 import VolumeIcon from "volume.svg";
-import VolumeSlashIcon from "volume-slash.svg";
+import VolumeSlashIcon from "volume-mute.svg";
 import TimesIcon from "times.svg";
-import ThumbtackIcon from "pin-icon.svg";
 import SortIcon from "sort.svg";
 import SaveIcon from "save.svg";
 import SyncAltIcon from "sync-alt.svg";
-import Thumbstack from "thumbtack.svg";
+import ThumbtackIcon from "thumbtack-active.svg";
 import { connect, useSelector, useDispatch } from "react-redux";
 import { clearSelectedTabs } from "../../tabSlice.js";
 
+import Brand from "./Brand";
 import { sortTabs } from "../general.js";
 import WindowSelector from "../WindowSelector";
 let browser = require("webextension-polyfill");
@@ -30,9 +30,9 @@ const Header = (props) => {
     sortTabs(parameter, props.tabs);
   };
   let iconPinned = props.allPinned ? (
-    <Thumbstack style={{ height: 16, fill: "white" }} />
+    <ThumbtackIcon style={{ height: 16, fill: "white" }} />
   ) : (
-    <Thumbstack style={{ height: 16, fill: "white" }} />
+    <ThumbtackIcon style={{ height: 16, fill: "white" }} />
   );
   let iconSound = props.allMuted ? (
     <VolumeIcon style={{ height: 16, fill: "white" }} />
@@ -42,15 +42,7 @@ const Header = (props) => {
   return (
     <header className="page-header" key={"header"}>
       <nav className="navbar">
-        <div className="navbar-brand ">
-          <a href="#" className="pull-left logo" style={{ marginTop: "10px" }}>
-            <img
-              src={logo.default}
-              alt=""
-              style={{ height: "40px", width: "auto" }}
-            />
-          </a>
-        </div>
+        {Brand(logo)}
         <div className="d-flex flex-grow-1" id="navbarNav">
           <ul className="d-flex">
             <li className="nav-item active">
@@ -79,7 +71,7 @@ const Header = (props) => {
           </ul>
         </div>
         {props.children}
-        {/* {Brand(logo)} */}
+
         {/* {Navigation(props)}
 
         <Search
@@ -244,22 +236,21 @@ const Header = (props) => {
             </button>
           </div>
         </div>
-        <ul className="nav nav-pills">
-          <li role="presentation" className="nav-item">
-            <a
-              className="nav-link refreshActiveTabs"
+        <ul className="tab-actions">
+          <li>
+            <button
+              className="btn btn-sm bg-transparent refreshActiveTabs"
               title="Refresh Excited Gem Tabs"
-              href="#"
               onClick={() => {
                 updateTabs();
                 this.setState({ tabs: props.tabs });
               }}
             >
               <SyncAltIcon style={{ height: 16, fill: "white" }} />
-            </a>
+            </button>
           </li>
-          <li style={{ marginRight: 18 }} className="nav-item">
-            <a
+          <li>
+            <button
               onClick={() => {
                 props.processSelectedTabs(
                   !props.allPinned ? "pinSelected" : "unpinSelected",
@@ -268,15 +259,14 @@ const Header = (props) => {
                 setAllPinned(!allPinned);
               }}
               title={!props.allPinned ? `Pin All` : `Unpin All`}
-              className="nav-link"
+              className="btn btn-sm bg-transparent"
             >
               {iconPinned}
-            </a>
+            </button>
           </li>
-          <li style={{ marginRight: 18 }} className="nav-item">
-            <a
-              href="#"
-              className="nav-link"
+          <li>
+            <button
+              className="btn btn-sm bg-transparent "
               onClick={() => {
                 props.processSelectedTabs(
                   !props.allMuted ? "muteSelected" : "unmuteSelected",
@@ -285,15 +275,15 @@ const Header = (props) => {
                 this.setState({ allMuted: !props.allMuted });
               }}
               title={!props.allMuted ? `Mute All` : `Unmute All`}
+              style={{ minWidth: 33 }}
             >
               {iconSound}
-            </a>
+            </button>
           </li>
-          <li style={{ marginRight: 0 }} className="nav-item">
-            <a
-              href="#"
+          <li>
+            <button
               title="Close All"
-              className="nav-link"
+              className="btn btn-sm bg-transparent"
               onClick={() => {
                 let ids =
                   selectedTabs.length === 0
@@ -304,7 +294,7 @@ const Header = (props) => {
               }}
             >
               <TimesIcon style={{ height: 16, fill: "white" }} />
-            </a>
+            </button>
           </li>
         </ul>
       </section>

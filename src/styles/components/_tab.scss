@@ -1,6 +1,6 @@
 @import "../bootstrap/_variables";
 .tab-item {
-  padding: 10px 10px 0;
+  padding: 10px 16px 0;
   padding-left: 15px;
   margin-bottom: -1px;
   border: 1px solid #ddd;
@@ -36,12 +36,14 @@
     }
   }
 
-  img, span.favicon {
+  img,
+  span.favicon {
     width: 16px;
     height: 16px;
     margin: 0 5px;
 
-    &[src=""], &[src^="chrome-extension://"], &[src^="chrome://"] {
+    &[src=""], &[src^="chrome-extension://"], &[src^="chrome://"]
+    {
       display: inline-block;
       border: 1px solid gray;
       text-indent: -9999px;
@@ -120,6 +122,15 @@
       width: auto;
     }
   }
+  .tab-actions {
+    li {
+      opacity: 0.4;
+    }
+    &:hover li {
+      display: inline-block;
+      opacity: 1;
+    }
+  }
 }
 
 .clip {
@@ -135,8 +146,6 @@
   overflow: hidden;
   transition: all 0.4s;
   li {
-    //width: 0;
-    opacity: 0.4;
     transition: all 0.2s;
     display: inline-block;
     overflow: hidden;
@@ -149,7 +158,6 @@
     }
   }
   li.active {
-    //width: auto !important;
     opacity: 1;
   }
   &:hover li {
