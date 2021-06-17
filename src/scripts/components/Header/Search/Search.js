@@ -39,9 +39,9 @@ const Search = (props) => {
     dispatch(updateSearchTerm(""));
   };
   const toggleSearchIn = (title, url, number, event) => {
-    let title = title.current.checked;
-    let url = url.current.checked;
-    if (!title && !url) {
+    let titleLocal = title.current.checked;
+    let urlLocal = url.current.checked;
+    if (!titleLocal && !urlLocal) {
       event.preventDefault();
       alert(
         "Sorry! You can't uncheck both Title and URL at the same time. One must remain checked."
