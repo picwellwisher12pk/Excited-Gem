@@ -3,6 +3,9 @@ import { useSelector, useDispatch } from "react-redux";
 import ErrorBoundary from "../../../ErrorBoundary";
 import SearchIcon from "search.svg";
 import TimesIcon from "times.svg";
+import VolumeIcon from "volume.svg";
+import ThumbtackActiveIcon from "thumbtack-active.svg";
+
 import { updateSearchTerm } from "../../../searchSlice";
 
 const Search = (props) => {
@@ -35,7 +38,7 @@ const Search = (props) => {
     setEmpty(true);
     dispatch(updateSearchTerm(""));
   };
-  const toggleSearchIn = (number, event) => {
+  const toggleSearchIn = (title, url, number, event) => {
     let title = title.current.checked;
     let url = url.current.checked;
     if (!title && !url) {
@@ -100,6 +103,22 @@ const Search = (props) => {
             </i>
           )}
           <div className="input-group-append option-regex">
+            <div style={{ paddingTop: 6 }}>
+              <button
+                className="btn btn-sm bg-transparent"
+                title="Search audible only"
+              >
+                <VolumeIcon style={{ height: 16, fill: "gray" }} />
+              </button>
+            </div>
+            <div className="mr-3" style={{ paddingTop: 6 }}>
+              <button
+                className="btn btn-sm bg-transparent"
+                title="Search pinned only"
+              >
+                <ThumbtackActiveIcon style={{ height: 16, fill: "gray" }} />
+              </button>
+            </div>
             <div className="custom-control custom-checkbox ">
               <input
                 type="checkbox"
@@ -108,7 +127,7 @@ const Search = (props) => {
                 ref={title}
                 defaultChecked={searchIn[0] && "checked"}
                 onClick={(e) => {
-                  toggleSearchIn(0, e);
+                  toggleSearchIn(title, url, 0, e);
                 }}
               />
               <label
@@ -128,7 +147,7 @@ const Search = (props) => {
                 ref={url}
                 defaultChecked={searchIn[1] && "checked"}
                 onClick={(e) => {
-                  toggleSearchIn(1, e);
+                  toggleSearchIn(title, url, 1, e);
                 }}
               />
               <label

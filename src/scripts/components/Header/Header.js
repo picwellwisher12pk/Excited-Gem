@@ -71,16 +71,6 @@ const Header = (props) => {
           </ul>
         </div>
         {props.children}
-
-        {/* {Navigation(props)}
-
-        <Search
-          regex={props.preferences.search.regex}
-          ignoreCase={props.preferences.search.ignoreCase}
-          searchIn={props.preferences.search.searchIn}
-          searchInTabs={props.searchInTabs}
-          setPreferences={props.setPreferences}
-        /> */}
       </nav>
       <section
         className="context-actions navbar container-fluid"
