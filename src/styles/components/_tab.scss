@@ -1,6 +1,6 @@
 @import "../bootstrap/_variables";
 .tab-item {
-  padding: 10px 16px 0;
+  padding: 0 16px 0;
   padding-left: 15px;
   margin-bottom: -1px;
   border: 1px solid #ddd;
@@ -13,7 +13,7 @@
   position: relative;
   transition: all 0.3s;
   background-color: #fff;
-  min-height: 41px;
+  min-height: 40px;
   &.idle .tab-name,
     // &.idle .tab-url,
     &.idle .tab-favicon {
@@ -52,6 +52,7 @@
   .tab-favicon {
     margin-right: 15px;
     width: 16px;
+    height: 16px;
     img {
       margin: 0;
       transition: all 0.2s;
@@ -62,8 +63,8 @@
       height: 16px;
       transition: all 0.2s;
       position: absolute;
-      left: 14px;
-      top: 15px;
+      left: 0;
+      top: 3px;
     }
     &:hover {
       .checkbox {

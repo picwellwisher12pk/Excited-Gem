@@ -31,7 +31,6 @@ const Tab = (props) => {
       };
     },
     hover(item, monitor) {
-      console.log("hover", item);
       if (!ref.current) {
         return;
       }
@@ -99,13 +98,13 @@ const Tab = (props) => {
   if (!audible)
     audioIcon = <VolumeOffIcon style={{ height: 16, fill: "gray" }} />;
   if (audible && !props.muted)
-    audioIcon = <VolumeIcon style={{ height: 16, fill: "gray" }} />;
+    audioIcon = <VolumeIcon style={{ height: 16, fill: "#0487cf" }} />;
   if (audible && props.mutedInfo.muted)
     audioIcon = <VolumeMuteIcon style={{ height: 16, fill: "gray" }} />;
 
   //Pin Icon Rendering
   let iconPinned = pinned ? (
-    <ThumbtackActiveIcon style={{ height: 16, fill: "gray" }} />
+    <ThumbtackActiveIcon style={{ height: 16, fill: "#0487cf" }} />
   ) : (
     <ThumbtackIcon style={{ height: 16, fill: "gray" }} />
   );
@@ -120,7 +119,7 @@ const Tab = (props) => {
         onClick={() => props.togglePinTab(props.id)}
         aria-label="pinned"
       >
-        <button className="btn btn-sm">{iconPinned}</button>
+        <button className="btn btn-sm py-0 bg-transparent">{iconPinned}</button>
       </li>,
       <li
         key={2}
@@ -128,7 +127,7 @@ const Tab = (props) => {
         className={`clickable sound-tab` + (audible ? ` active` : ` disabled`)}
         onClick={() => props.toggleMuteTab(props.id, audible)}
       >
-        <button className="btn btn-sm" style={{ minWidth: 33 }}>
+        <button className="btn btn-sm py-0  bg-transparent" style={{ minWidth: 33 }}>
           {audioIcon}
         </button>
       </li>,
@@ -140,7 +139,7 @@ const Tab = (props) => {
         onClick={() => props.closeTab(props.id)}
         data-command="remove"
       >
-        <button className="btn btn-sm">
+        <button className="btn btn-sm py-0 bg-transparent">
           <TimesIcon style={{ height: 16, fill: "red" }} />
         </button>
       </li>,
@@ -175,7 +174,7 @@ const Tab = (props) => {
       data-handler-id={handlerId}
       draggable={true}
     >
-      <label className="tab-favicon" aria-label="favicon">
+      <label className="tab-favicon align-self-center position-relative" aria-label="favicon">
         {!selected && (
           <img
             src={props.favIconUrl}
@@ -197,17 +196,17 @@ const Tab = (props) => {
         />
       </label>
       <span
-        className={`tab-title clip font-weight-bold`}
+        className={`tab-title clip font-weight-bold align-self-center`}
         style={{ opacity: discarded || loading ? 0.5 : 1 }}
         title={props.url}
         dangerouslySetInnerHTML={{ __html: title }}
       />
       <span
-        className="clickable tab-url trimmed clip dimmed"
+        className="clickable tab-url trimmed clip dimmed align-self-center"
         dangerouslySetInnerHTML={{ __html: url }}
         onClick={() => browser.tabs.update(props.id, { active: true })}
       />
-      <ul className="tab-actions" role="group" aria-label="options">
+      <ul className="tab-actions align-self-center" role="group" aria-label="options">
         {actionButtons}
       </ul>
     </li>

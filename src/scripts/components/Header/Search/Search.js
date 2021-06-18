@@ -9,6 +9,7 @@ import ThumbtackActiveIcon from "thumbtack-active.svg";
 import { updateSearchTerm } from "../../../searchSlice";
 
 const Search = (props) => {
+  console.log("search reloading");
   const dispatch = useDispatch();
   const searchTerm = useSelector((state) => state.search.searchTerm);
   const searchIn = useSelector(
@@ -19,9 +20,9 @@ const Search = (props) => {
   const title = React.createRef();
   const url = React.createRef();
   const [empty, setEmpty] = useState(true);
-  useEffect(() => {
-    return () => {};
-  }, [searchTerm]);
+  // useEffect(() => {
+  //   // return () => {};
+  // }, [searchTerm]);
 
   const onKeyUpped = (event) => {
     searchField.current.value !== "" ? setEmpty(false) : setEmpty(true);
@@ -108,7 +109,7 @@ const Search = (props) => {
                 className="btn btn-sm bg-transparent"
                 title="Search audible only"
               >
-                <VolumeIcon style={{ height: 16, fill: "gray" }} />
+                <VolumeIcon style={{ height: 16, fill: "#0487cf" }} />
               </button>
             </div>
             <div className="mr-3" style={{ paddingTop: 6 }}>
@@ -116,7 +117,7 @@ const Search = (props) => {
                 className="btn btn-sm bg-transparent"
                 title="Search pinned only"
               >
-                <ThumbtackActiveIcon style={{ height: 16, fill: "gray" }} />
+                <ThumbtackActiveIcon style={{ height: 16, fill: "#0487cf" }} />
               </button>
             </div>
             <div className="custom-control custom-checkbox ">

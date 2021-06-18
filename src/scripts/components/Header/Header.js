@@ -1,5 +1,5 @@
-import React, { useState } from "react";
-import VolumeOffIcon from "volume-off.svg";
+import React, { Profiler, useState } from "react";
+import {getMetrics} from "../general.js";
 import VolumeIcon from "volume.svg";
 import VolumeSlashIcon from "volume-mute.svg";
 import TimesIcon from "times.svg";
@@ -21,13 +21,16 @@ let logo = require(`../../../images/${
 }-logo.png`);
 
 const Header = (props) => {
+  let tabs = useSelector((state) => state.tabs.tabs);
+  console.log('header realoding',tabs);
   const dispatch = useDispatch();
   const selectedTabs = useSelector((state) => state.tabs.selectedTabs);
   const [allSelected, setAllSelected] = useState(props.allSelected);
   const [allPinned, setAllPinned] = useState(props.allPinned);
   const [allMuted, setAllMuted] = useState(props.allMuted);
-  const sortBy = (parameter) => {
-    sortTabs(parameter, props.tabs);
+
+  const sortBy = (sortType) => {
+    sortTabs(sortType, tabs);
   };
   let iconPinned = props.allPinned ? (
     <ThumbtackIcon style={{ height: 16, fill: "white" }} />
@@ -40,6 +43,7 @@ const Header = (props) => {
     <VolumeSlashIcon style={{ height: 16, fill: "white" }} />
   );
   return (
+    <Profiler id={'header'} onRender={getMetrics}>
     <header className="page-header" key={"header"}>
       <nav className="navbar">
         {Brand(logo)}
@@ -55,10 +59,10 @@ const Header = (props) => {
                 <span
                   className={
                     `active-tab-counter badge ` +
-                    (props.tabs > 50 ? "badge-danger" : "badge-success")
+                    (tabs?.length > 50 ? "badge-danger" : "badge-success")
                   }
                 >
-                  {props?.tabs?.length}
+                  {tabs?.length}
                 </span>
                 <span className="sr-only">(current)</span>
               </a>
@@ -289,6 +293,7 @@ const Header = (props) => {
         </ul>
       </section>
     </header>
+      </Profiler>
   );
 };
 
