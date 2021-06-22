@@ -116,10 +116,21 @@
   }
   .tab-actions {
     width: auto;
+
+    li {
+      display: none;
+    }
+
+    li.active {
+      display: inline-block;
+    }
   }
   &:hover .tab-actions {
+    display: block;
     width: auto;
+
     li {
+      display: inline-block;
       width: auto;
     }
   }
