@@ -64,7 +64,9 @@ export function saveData(data, message = "Data saved") {
         title: "Data saved",
         message: message,
       },
-      (notificationId) => {
+      (
+        // notificationId
+      ) => {
       }
     );
   });
@@ -271,13 +273,11 @@ export function sortTabs(sortby, tabs) {
 }*/
 export function santizeTabs(tabs, ignoredUrlPatterns) {
   refinedTabs = tabs.filter((tab) => {
-    let patLength = ignoredUrlPatterns.length;
     ignoredUrlPatterns;
     let url = tab.url;
     let pattern = new RegExp(ignoredUrlPatterns.join("|"), "i");
-    let matched = url.match(pattern) == null;
     // log(url,pattern,matched);
-    return matched;
+    return url.match(pattern) == null;
   });
   return refinedTabs;
 }
@@ -324,30 +324,30 @@ export function santizeTabs(tabs, ignoredUrlPatterns) {
 //Close
 
 //Pinned
-const pinTab = (tabId) => {
-  console.info("pinning");
-  browser.tabs.update(tabId, {pinned: true});
-  getTabs().then(
-    (tabs) => {
-      setState({tabs});
-    },
-    (error) => log(`Error: ${error}`)
-  );
-};
-const unpinTab = (tabId) => {
-  console.info("unpinning");
-  browser.tabs.update(tabId, {pinned: false});
-  getTabs().then(
-    (tabs) => {
-      setState({tabs});
-    },
-    (error) => log(`Error: ${error}`)
-  );
-};
-const togglePin = (tabId) => {
-  let tabTemp = props.tabs.filter((tab) => tab.id === tabId);
-  tabTemp[0].pinned ? unpinTab(tabId) : pinTab(tabId);
-};
+// const pinTab = (tabId) => {
+//   console.info("pinning");
+//   browser.tabs.update(tabId, {pinned: true});
+//   getTabs().then(
+//     (tabs) => {
+//       setState({tabs});
+//     },
+//     (error) => log(`Error: ${error}`)
+//   );
+// };
+// const unpinTab = (tabId) => {
+//   console.info("unpinning");
+//   browser.tabs.update(tabId, {pinned: false});
+//   getTabs().then(
+//     (tabs) => {
+//       setState({tabs});
+//     },
+//     (error) => log(`Error: ${error}`)
+//   );
+// };
+// const togglePin = (tabId) => {
+//   let tabTemp = props.tabs.filter((tab) => tab.id === tabId);
+//   tabTemp[0].pinned ? unpinTab(tabId) : pinTab(tabId);
+// };
 // isAllPinned() {
 //   for (let tab of props.tabs) {
 //     if (!tab.pinned) return false;
@@ -361,12 +361,12 @@ const togglePin = (tabId) => {
 // unmuteTab(id) {
 //   browser.tabs.update(parseInt(id), { muted: false });
 // }
-const toggleMute = (id) => {
-  browser.tabs.get(id).then((tab) => {
-    browser.tabs.update(parseInt(id), {muted: !tab.mutedInfo.muted});
-  });
-  props.updateActiveTabs();
-};
+// const toggleMute = (id) => {
+//   browser.tabs.get(id).then((tab) => {
+//     browser.tabs.update(parseInt(id), {muted: !tab.mutedInfo.muted});
+//   });
+//   props.updateActiveTabs();
+// };
 // isAllMuted() {
 //   // const tabs = props.tabs.then(tabs => tabs);
 //   for (let tab of props.tabs) {
@@ -452,46 +452,56 @@ const toggleMute = (id) => {
 //   });
 // }
 
-export const asyncFilterTabs = async (searchTerm, {searchIn, ignoreCase, regex}, tabs) => {
-
-  return await new Promise((resolve)=> {
-      if (searchTerm === "") return tabs;
-      const filteredTabs = tabs.filter(({title, url}) => {
-        if (regex) {
-          try {
-            let regexTest = new RegExp(searchTerm, ignoreCase ? "i" : "");
-            if (searchIn[0] && regexTest.test(title)) return true;
-            if (searchIn[1] && regexTest.test(url)) return true;
-          } catch (error) {
-            console.log("Search error:", error);
-          }
-        } else {
-          if (searchIn[0] && ignoreCase) return title.toLowerCase().includes(searchTerm.toLowerCase());
-          if (searchIn[0] && !ignoreCase) return title.includes(searchTerm);
-          if (searchIn[1]) return url.toLowerCase().includes(searchTerm.toLowerCase());
+export const asyncFilterTabs = async (
+  {searchTerm, audibleSearch, pinnedSearch},
+  {searchIn, ignoreCase, regex},
+  tabs
+) => {
+  return await new Promise((resolve) => {
+    if (searchTerm === "" && !audibleSearch && !pinnedSearch) return tabs;
+    const filteredTabs = tabs?.filter(({title, url, audible, pinned}) => {
+      const isAudible = audibleSearch ? audible === true : true;
+      const isPinned = pinnedSearch ? pinned === true : true;
+      if (regex) {
+        try {
+          let regexTest = new RegExp(searchTerm, ignoreCase ? "i" : "");
+          if (searchIn[0] && regexTest.test(title) && isAudible && isPinned) return true;
+          if (searchIn[1] && regexTest.test(url) && isAudible && isPinned) return true;
+        } catch (error) {
+          console.error("Search error:", error);
         }
-      });
-      resolve(filteredTabs);
+      } else {
+        if (searchIn[0] && !ignoreCase) return title.includes(searchTerm) && isAudible && isPinned;
+        if (searchIn[0] && ignoreCase) return title.toLowerCase().includes(searchTerm.toLowerCase()) && isAudible && isPinned;
+        if (searchIn[1]) return url.toLowerCase().includes(searchTerm.toLowerCase()) && isAudible && isPinned;
+      }
     });
-
+    resolve(filteredTabs);
+  });
 };
-export const filterTabs = (searchTerm, {searchIn, ignoreCase, regex}, tabs) => {
-      if (searchTerm === "") return tabs;
-      return tabs.filter(({title, url}) => {
-        if (regex) {
-          try {
-            let regexTest = new RegExp(searchTerm, ignoreCase ? "i" : "");
-            if (searchIn[0] && regexTest.test(title)) return true;
-            if (searchIn[1] && regexTest.test(url)) return true;
-          } catch (error) {
-            console.log("Search error:", error);
-          }
-        } else {
-          if (searchIn[0] && ignoreCase) return title.toLowerCase().includes(searchTerm.toLowerCase());
-          if (searchIn[0] && !ignoreCase) return title.includes(searchTerm);
-          if (searchIn[1]) return url.toLowerCase().includes(searchTerm.toLowerCase());
-        }
-      });
+export const filterTabs = (
+  searchTerm,
+  {searchIn, ignoreCase, regex},
+  tabs
+) => {
+  if (searchTerm === "") return tabs;
+  return tabs.filter(({title, url}) => {
+    if (regex) {
+      try {
+        let regexTest = new RegExp(searchTerm, ignoreCase ? "i" : "");
+        if (searchIn[0] && regexTest.test(title)) return true;
+        if (searchIn[1] && regexTest.test(url)) return true;
+      } catch (error) {
+        console.log("Search error:", error);
+      }
+    } else {
+      if (searchIn[0] && ignoreCase)
+        return title.toLowerCase().includes(searchTerm.toLowerCase());
+      if (searchIn[0] && !ignoreCase) return title.includes(searchTerm);
+      if (searchIn[1])
+        return url.toLowerCase().includes(searchTerm.toLowerCase());
+    }
+  });
 };
 
 export const getMetrics = (compName, mode, actualTime, baseTime) => {

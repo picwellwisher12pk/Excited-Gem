@@ -1,8 +1,9 @@
-import React, { useRef } from "react";
-import { useDrag, useDrop } from "react-dnd";
-import { useSelector, useDispatch } from "react-redux";
-import { updateSelectedTabs } from "../../../../tabSlice";
-import { ItemTypes } from "./ItemTypes";
+import React, {useRef} from "react";
+import {useDrag, useDrop} from "react-dnd";
+import {useDispatch, useSelector} from "react-redux";
+import {updateSelectedTabs} from "../../../../tabSlice";
+import {ItemTypes} from "./ItemTypes";
+import {LazyLoadImage} from 'react-lazy-load-image-component';
 
 //Icons
 import VolumeOffIcon from "volume-off.svg";
@@ -14,16 +15,18 @@ import ThumbtackActiveIcon from "thumbtack-active.svg";
 //Polyfill
 let browser = require("webextension-polyfill");
 
+const grayIcon = {height: 16, fill: "gray"};
+const blueIcon = {height: 16, fill: "#0487cf"};
 const Tab = (props) => {
   const searchTerm = useSelector((state) => state.search.searchTerm);
   const dispatch = useDispatch();
-  let { title, url, selected, pinned, discarded } = props;
+  let {title, url, selected, pinned, discarded} = props;
   const ref = useRef(null);
   /**
    * Specifies which props to inject into your component.
    */
 
-  const [{ handlerId }, drop] = useDrop({
+  const [{handlerId}, drop] = useDrop({
     accept: ItemTypes.Tab,
     collect(monitor) {
       return {
@@ -96,17 +99,17 @@ const Tab = (props) => {
 
   //Audio Icons rendering
   if (!audible)
-    audioIcon = <VolumeOffIcon style={{ height: 16, fill: "gray" }} />;
+    audioIcon = <VolumeOffIcon style={grayIcon}/>;
   if (audible && !props.muted)
-    audioIcon = <VolumeIcon style={{ height: 16, fill: "#0487cf" }} />;
+    audioIcon = <VolumeIcon style={blueIcon}/>;
   if (audible && props.mutedInfo.muted)
-    audioIcon = <VolumeMuteIcon style={{ height: 16, fill: "gray" }} />;
+    audioIcon = <VolumeMuteIcon style={grayIcon}/>;
 
   //Pin Icon Rendering
   let iconPinned = pinned ? (
-    <ThumbtackActiveIcon style={{ height: 16, fill: "#0487cf" }} />
+    <ThumbtackActiveIcon style={blueIcon}/>
   ) : (
-    <ThumbtackIcon style={{ height: 16, fill: "gray" }} />
+    <ThumbtackIcon style={grayIcon}/>
   );
 
   //Markup of Action bar for active tabs: Right side buttons
@@ -176,11 +179,12 @@ const Tab = (props) => {
     >
       <label className="tab-favicon align-self-center position-relative" aria-label="favicon">
         {!selected && (
-          <img
+
+          <LazyLoadImage
             src={props.favIconUrl}
             title={props.favIconUrl && title}
-            alt={props.favIconUrl && title}
-          />
+            alt={props.favIconUrl && title}/>
+
         )}
 
         <input
@@ -191,7 +195,6 @@ const Tab = (props) => {
             )
           }
           checked={selected}
-          selected={selected}
           className="checkbox"
         />
       </label>

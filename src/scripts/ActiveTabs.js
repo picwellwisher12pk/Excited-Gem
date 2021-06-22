@@ -1,9 +1,9 @@
 "use strict";
 //Scripts and Modules
 import store from "./store";
-import React from "react";
+import React, {useMemo} from "react";
 import {updateActiveTabs} from "./tabSlice";
-
+import {useSelector} from "react-redux";
 import {getTabs} from "./components/browserActions";
 import CustomScroll from "react-custom-scroll";
 
@@ -16,8 +16,8 @@ import Search from "./components/Header/Search/Search";
 //Styles
 import "../styles/eg.scss";
 import "react-custom-scroll/dist/customScroll.css";
+import {Navigation} from './components/Header/Navigation';
 import {TabWindowWrapper} from "./TabWindowWrapper";
-import {asyncFilterTabs} from "./components/general";
 
 const browser = require("webextension-polyfill");
 
@@ -69,13 +69,16 @@ browser.tabs.onMoved.addListener(() => updateTabs(getTabs, store));
 updateTabs(getTabs, store);
 
 const ActiveTabs = () => {
-console.log('activetab loading');
+  let tabs = useSelector((state) => state.tabs.tabs);
+  let searchTerm = useSelector((state) => state.search.searchTerm);
+
+  let navigation = useMemo(() => (<Navigation tabCount={tabs.length}/>), [tabs.length])
+  let header = useMemo(() => (<Header navigation={navigation} search={<Search/>}/>), [tabs, searchTerm]);
+  console.log('activetab loading');
 
   return (
     <>
-      <Header>
-        <Search />
-      </Header>
+      {header}
       <CustomScroll heightRelativeToParent="100%" keepAtBottom={true}>
         <TabWindowWrapper/>
       </CustomScroll>

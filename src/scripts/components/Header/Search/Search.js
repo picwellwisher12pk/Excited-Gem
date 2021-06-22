@@ -1,17 +1,20 @@
-import React, { useCallback, useState, useEffect, useMemo } from "react";
-import { useSelector, useDispatch } from "react-redux";
+import React, {useState} from "react";
+import {useDispatch, useSelector} from "react-redux";
 import ErrorBoundary from "../../../ErrorBoundary";
 import SearchIcon from "search.svg";
 import TimesIcon from "times.svg";
 import VolumeIcon from "volume.svg";
+import VolumeOffIcon from "volume-off.svg";
+import ThumbtackIcon from "thumbtack.svg";
 import ThumbtackActiveIcon from "thumbtack-active.svg";
-
-import { updateSearchTerm } from "../../../searchSlice";
+import {toggleAudible, togglePinned, updateSearchTerm} from "../../../searchSlice";
 
 const Search = (props) => {
   console.log("search reloading");
   const dispatch = useDispatch();
   const searchTerm = useSelector((state) => state.search.searchTerm);
+  const pinnedSearch = useSelector((state) => state.search.pinnedSearch);
+  const audibleSearch = useSelector((state) => state.search.audibleSearch);
   const searchIn = useSelector(
     (state) => state.config.preferences.search.searchIn
   );
@@ -108,16 +111,20 @@ const Search = (props) => {
               <button
                 className="btn btn-sm bg-transparent"
                 title="Search audible only"
+                onClick={() => dispatch(toggleAudible())}
               >
-                <VolumeIcon style={{ height: 16, fill: "#0487cf" }} />
+                {audibleSearch ? <VolumeIcon style={{height: 16, fill: "#0487cf"}}/> :
+                  <VolumeOffIcon style={{height: 16, fill: "#0487cf"}}/>}
               </button>
             </div>
             <div className="mr-3" style={{ paddingTop: 6 }}>
               <button
                 className="btn btn-sm bg-transparent"
                 title="Search pinned only"
+                onClick={() => dispatch(togglePinned())}
               >
-                <ThumbtackActiveIcon style={{ height: 16, fill: "#0487cf" }} />
+                {pinnedSearch ? <ThumbtackActiveIcon style={{height: 16, fill: "#0487cf"}}/> :
+                  <ThumbtackIcon style={{height: 16, fill: "#0487cf"}}/>}
               </button>
             </div>
             <div className="custom-control custom-checkbox ">
