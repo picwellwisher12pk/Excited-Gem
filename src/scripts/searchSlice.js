@@ -1,10 +1,12 @@
 import {createSlice} from "@reduxjs/toolkit";
 import _ from "lodash";
+import {preferences} from './defaultPreferences';
 
 export const searchSlice = createSlice({
   name: "search",
   initialState: {
-    searchTerm: "",
+    searchTerm: '',
+    searchIn: preferences.search.searchIn,
     audibleSearch: false,
     pinnedSearch: false,
   },
@@ -23,7 +25,7 @@ export const searchSlice = createSlice({
     },
     toggleSearchIn: (state, action) => {
       let newState = _.cloneDeep(state);
-      newState.preferences.search.searchIn = action.payload;
+      newState.searchIn[action.payload] = !state.searchIn[action.payload];
       return newState;
     },
     toggleAudible: (state) => {

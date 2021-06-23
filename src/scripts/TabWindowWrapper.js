@@ -8,33 +8,31 @@ import {asyncFilterTabs} from "./components/general";
 
 const browser = require("webextension-polyfill");
 
-export const TabWindowWrapper = () => {
+export const TabWindowWrapper = React.memo(() => {
   const [loading, setLoading] = useState(true);
   const tabs = useSelector((state) => state.tabs.tabs);
-  const searchPref = useSelector((state) => state.config.preferences.search);
-  const searchTerm = useSelector((state) => state.search.searchTerm);
-  const audibleSearch = useSelector((state) => state.search.audibleSearch);
-  const pinnedSearch = useSelector((state) => state.search.pinnedSearch);
+  const {ignoreCase, regex} = useSelector((state) => state.config.search);
+  const searchObject = useSelector((state) => state.search);
+  const {searchIn} = useSelector((state) => state.search);
+  const searchPref = {searchIn, ignoreCase, regex};
   const selectedTabs = useSelector((state) => state.tabs.selectedTabs);
-  const searchObject = {searchTerm, audibleSearch, pinnedSearch};
   const [filteredTabs, setFilteredTabs] = useState(tabs);
 
   const findFilteredTabs = async (searchObject, searchPref, tabs, setLoading) => {
-    let tempTabs =
-      tabs && (await asyncFilterTabs(searchObject, searchPref, tabs));
+    let tempTabs = tabs && (await asyncFilterTabs(searchObject, searchPref, tabs));
     window.filteredTabs = tempTabs;
     setFilteredTabs(tempTabs);
     setLoading(false);
   };
 
   useEffect(async () => {
-    if (searchTerm === "" && !audibleSearch && !pinnedSearch) {
+    if (searchObject.searchTerm === "" && !searchObject.audibleSearch && !searchObject.pinnedSearch) {
       setFilteredTabs(tabs);
     } else {
       setLoading(true);
       findFilteredTabs(searchObject, searchPref, tabs, setLoading);
     }
-  }, [searchTerm, audibleSearch, pinnedSearch, tabs]);
+  }, [searchObject, tabs]);
 
   const tabTemplate = (tab, selectedTabs, moveTab) => {
     let selected = false;
@@ -85,14 +83,16 @@ export const TabWindowWrapper = () => {
   );
   return !loading ? (
     <div className="tabs-list-container">
-      <DndProvider backend={HTML5Backend}>
-        <ul className="tab tabs-list sortable selectable" id={"droppableUL"}>
-          {filteredTabs?.length !== undefined &&
-          filteredTabs.map((tab) =>
-            tabTemplate(tab, selectedTabs, moveTab, closeTab)
-          )}
-        </ul>
-      </DndProvider>
+      <React.Suspense fallback={<h1>Loading profile...</h1>}>
+        <DndProvider backend={HTML5Backend}>
+          <ul className="tab tabs-list sortable selectable" id={"droppableUL"}>
+            {filteredTabs?.length !== undefined &&
+            filteredTabs.map((tab) =>
+              tabTemplate(tab, selectedTabs, moveTab, closeTab)
+            )}
+          </ul>
+        </DndProvider>
+      </React.Suspense>
     </div>
   ) : (
     <ClimbingBoxLoader
@@ -102,4 +102,4 @@ export const TabWindowWrapper = () => {
       size={20}
     />
   );
-};
+});

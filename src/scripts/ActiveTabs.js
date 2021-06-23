@@ -1,10 +1,11 @@
 "use strict";
 //Scripts and Modules
 import store from "./store";
-import React, {useMemo} from "react";
+import React, {Profiler, useMemo} from "react";
 import {updateActiveTabs} from "./tabSlice";
 import {useSelector} from "react-redux";
 import {getTabs} from "./components/browserActions";
+import {profilerCallback} from "./components/general";
 import CustomScroll from "react-custom-scroll";
 
 //JS libraries
@@ -69,18 +70,20 @@ browser.tabs.onMoved.addListener(() => updateTabs(getTabs, store));
 updateTabs(getTabs, store);
 
 const ActiveTabs = () => {
-  let tabs = useSelector((state) => state.tabs.tabs);
-  let searchTerm = useSelector((state) => state.search.searchTerm);
-
-  let navigation = useMemo(() => (<Navigation tabCount={tabs.length}/>), [tabs.length])
-  let header = useMemo(() => (<Header navigation={navigation} search={<Search/>}/>), [tabs, searchTerm]);
+  const {tabs} = useSelector((state) => state.tabs);
+  const {search} = useSelector((state) => state);
+  const navigation = useMemo(() => (<Navigation tabCount={tabs.length}/>), [tabs.length]);
+  const header = useMemo(() => (<Header navigation={navigation} search={<Search/>}/>), [tabs, search]);
   console.log('activetab loading');
+
 
   return (
     <>
       {header}
       <CustomScroll heightRelativeToParent="100%" keepAtBottom={true}>
-        <TabWindowWrapper/>
+        <Profiler id={'TabWindow:'} onRender={profilerCallback}>
+          <TabWindowWrapper/>
+        </Profiler>
       </CustomScroll>
     </>
   );

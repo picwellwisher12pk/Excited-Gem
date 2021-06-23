@@ -1,4 +1,4 @@
-import React, {useState} from "react";
+import React, {useCallback, useEffect, useState} from "react";
 import {useDispatch, useSelector} from "react-redux";
 import ErrorBoundary from "../../../ErrorBoundary";
 import SearchIcon from "search.svg";
@@ -7,26 +7,32 @@ import VolumeIcon from "volume.svg";
 import VolumeOffIcon from "volume-off.svg";
 import ThumbtackIcon from "thumbtack.svg";
 import ThumbtackActiveIcon from "thumbtack-active.svg";
-import {toggleAudible, togglePinned, updateSearchTerm} from "../../../searchSlice";
+import {toggleAudible, togglePinned, toggleSearchIn, updateSearchTerm} from "../../../searchSlice";
 
-const Search = (props) => {
+const Search = () => {
   console.log("search reloading");
   const dispatch = useDispatch();
   const searchTerm = useSelector((state) => state.search.searchTerm);
   const pinnedSearch = useSelector((state) => state.search.pinnedSearch);
   const audibleSearch = useSelector((state) => state.search.audibleSearch);
-  const searchIn = useSelector(
-    (state) => state.config.preferences.search.searchIn
-  );
-  const regex = useSelector((state) => state.config.preferences.search.regex);
+  const {searchIn} = useSelector((state) => state.search);
+  const regex = useSelector((state) => state.config.search.regex);
   const searchField = React.createRef();
   const title = React.createRef();
   const url = React.createRef();
   const [empty, setEmpty] = useState(true);
-  // useEffect(() => {
-  //   // return () => {};
-  // }, [searchTerm]);
+  const preparePlaceholder = (searchIn, initialPlaceholder = 'Search in ') => {
+    let newPlaceholder = initialPlaceholder;
+    newPlaceholder += searchIn[0] ? "Titles" : "";
+    newPlaceholder += searchIn[0] && searchIn[1] ? " and " : "";
+    newPlaceholder += searchIn[1] ? "URLs" : "";
+    return newPlaceholder;
+  }
+  const [placeholder, setPlaceholder] = useState(() => preparePlaceholder(searchIn));
 
+  useEffect(() => {
+    setPlaceholder(preparePlaceholder(searchIn));
+  }, [searchIn]);
   const onKeyUpped = (event) => {
     searchField.current.value !== "" ? setEmpty(false) : setEmpty(true);
     if (event.keyCode === 27) {
@@ -36,13 +42,12 @@ const Search = (props) => {
   const handleChange = () => {
     dispatch(updateSearchTerm(searchField.current.value));
   };
-
   const clear = () => {
     searchField.current.value = "";
     setEmpty(true);
     dispatch(updateSearchTerm(""));
   };
-  const toggleSearchIn = (title, url, number, event) => {
+  const toggleSearchInHandle = useCallback((title, url, number, event) => {
     let titleLocal = title.current.checked;
     let urlLocal = url.current.checked;
     if (!titleLocal && !urlLocal) {
@@ -52,36 +57,32 @@ const Search = (props) => {
       );
       return false;
     }
-    searchIn[number] = !searchIn[number];
-    props.toggleSearchInAction(searchIn);
-  };
-  let placeholder = "Search in ";
-  placeholder += searchIn[0] ? "Titles" : "";
-  placeholder += searchIn[0] && searchIn[1] ? " and " : "";
-  placeholder += searchIn[1] ? "URLs" : "";
+    dispatch(toggleSearchIn(number));
+  }, []);
+
   let iconInSearch = !searchTerm ? (
     <SearchIcon
       className={`text-secondary`}
-      style={{ width: "40px", height: "43px", padding: "12px" }}
+      style={{width: "40px", height: "43px", padding: "12px"}}
     />
   ) : (
     <TimesIcon
       className={`cp`}
-      style={{ width: "40px", height: "43px", padding: "12px", fill: "red" }}
+      style={{width: "40px", height: "43px", padding: "12px", fill: "red"}}
       onClick={() => {
-        if (!props.empty) clear();
+        if (!empty) clear();
       }}
     />
   );
   return (
     <ErrorBoundary>
-      <section className="search-bar" style={{ width: "66%", paddingRight: 0 }}>
+      <section className="search-bar" style={{width: "66%", paddingRight: 0}}>
         <div id="filter-tabs" className="input-group filter-tabs">
           {iconInSearch}
           {regex && (
             <i
               className={`quicksearch-input form-control`}
-              style={{ maxWidth: "10px", border: "none", lineHeight: "28px" }}
+              style={{maxWidth: "10px", border: "none", lineHeight: "28px"}}
             >
               /
             </i>
@@ -101,13 +102,13 @@ const Search = (props) => {
           {regex && (
             <i
               className={`quicksearch-input form-control`}
-              style={{ maxWidth: "10px", border: "none", lineHeight: "28px" }}
+              style={{maxWidth: "10px", border: "none", lineHeight: "28px"}}
             >
               /
             </i>
           )}
           <div className="input-group-append option-regex">
-            <div style={{ paddingTop: 6 }}>
+            <div style={{paddingTop: 6}}>
               <button
                 className="btn btn-sm bg-transparent"
                 title="Search audible only"
@@ -117,7 +118,7 @@ const Search = (props) => {
                   <VolumeOffIcon style={{height: 16, fill: "#0487cf"}}/>}
               </button>
             </div>
-            <div className="mr-3" style={{ paddingTop: 6 }}>
+            <div className="mr-3" style={{paddingTop: 6}}>
               <button
                 className="btn btn-sm bg-transparent"
                 title="Search pinned only"
@@ -135,7 +136,7 @@ const Search = (props) => {
                 ref={title}
                 defaultChecked={searchIn[0] && "checked"}
                 onClick={(e) => {
-                  toggleSearchIn(title, url, 0, e);
+                  toggleSearchInHandle(title, url, 0, e);
                 }}
               />
               <label
@@ -155,7 +156,7 @@ const Search = (props) => {
                 ref={url}
                 defaultChecked={searchIn[1] && "checked"}
                 onClick={(e) => {
-                  toggleSearchIn(title, url, 1, e);
+                  toggleSearchInHandle(title, url, 1, e);
                 }}
               />
               <label

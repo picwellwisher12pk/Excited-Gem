@@ -521,3 +521,22 @@ export function updateTabs(getTabs, store) {
     store.dispatch(updateActiveTabs(tabs));
   });
 }
+export const profilerCallback = (
+  id,
+  phase,
+  actualDuration,
+  baseDuration,
+  startTime,
+  commitTime,
+  interactions
+) => {
+  console.log(
+    "id:", id,
+    "phase:", phase,
+    "actualDuration:", actualDuration,
+    "baseDuration:", baseDuration,
+    "startTime:", startTime,
+    "commitTime:", commitTime,
+    "interactions:", interactions
+  )
+}

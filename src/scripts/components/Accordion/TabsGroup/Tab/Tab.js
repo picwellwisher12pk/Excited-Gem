@@ -18,7 +18,7 @@ let browser = require("webextension-polyfill");
 const grayIcon = {height: 16, fill: "gray"};
 const blueIcon = {height: 16, fill: "#0487cf"};
 const Tab = (props) => {
-  const searchTerm = useSelector((state) => state.search.searchTerm);
+  const {searchTerm, searchIn} = useSelector((state) => state.search);
   const dispatch = useDispatch();
   let {title, url, selected, pinned, discarded} = props;
   const ref = useRef(null);
@@ -93,8 +93,8 @@ const Tab = (props) => {
     } catch (e) {
       console.error("Bad Regular Expressions:", e, searchTerm);
     }
-    title = props.title.replace(regex, "<mark>$&</mark>");
-    url = props.url.replace(regex, "<mark>$&</mark>");
+    searchIn[0] && (title = props.title.replace(regex, "<mark>$&</mark>"));
+    searchIn[1] && (url = props.url.replace(regex, "<mark>$&</mark>"));
   }
 
   //Audio Icons rendering
@@ -231,4 +231,4 @@ const Tab = (props) => {
 //   toggleSearchInAction: (searchInArray) =>
 //     dispatch(ACTIONS.toggleSearchInAction(searchInArray)),
 // });
-export default Tab;
+export default React.memo(Tab);

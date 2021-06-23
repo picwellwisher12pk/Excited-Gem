@@ -1,9 +1,10 @@
 import {createSlice} from '@reduxjs/toolkit'
-import { preferences } from './defaultPreferences';
+import {preferences} from './defaultPreferences';
+
 export const configSlice = createSlice({
   name: 'config',
   initialState: {
-    preferences,
+    ...preferences,
   },
   reducers: {
     // Redux Toolkit allows us to write "mutating" logic in reducers. It
