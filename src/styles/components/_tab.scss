@@ -11,17 +11,24 @@
   text-overflow: ellipsis;
   white-space: nowrap;
   position: relative;
-  transition: all 0.3s;
   background-color: #fff;
-  min-height: 40px;
+  flex-basis: 40px;
+  transition: all 0.2s;
+
+  &.hidden {
+    display: none;
+  }
+
   &.idle .tab-name,
     // &.idle .tab-url,
-    &.idle .tab-favicon {
+  &.idle .tab-favicon {
     opacity: 0.5;
   }
+
   &.selected {
     background-color: #acd8fb;
   }
+
   &:hover {
     background-color: #eee;
   }

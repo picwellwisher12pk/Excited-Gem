@@ -64,10 +64,9 @@ export function saveData(data, message = "Data saved") {
         title: "Data saved",
         message: message,
       },
-      (
+      () =>
         // notificationId
-      ) => {
-      }
+        {}
     );
   });
 }
@@ -129,7 +128,7 @@ export function propertyToArray(array, property) {
 }
 
 // Hide method from for-in loops
-Object.defineProperty(Array.prototype, "equals", {enumerable: false});
+Object.defineProperty(Array.prototype, "equals", { enumerable: false });
 
 // module.exports = general;
 export function hasClass2(elem, className) {
@@ -166,7 +165,7 @@ export function setValue(object, path, value) {
 
 export function getValue(object, path) {
   var o = object;
-  path = path.replace(/\[(\w+)\]/g, ".$1");
+  path = path.replace(/\[(\w+)]/g, ".$1");
   path = path.replace(/^\./, "");
   var a = path.split(".");
   while (a.length) {
@@ -220,7 +219,7 @@ export function timeConverter(UNIX_timestamp) {
 }
 
 // Hide method from for-in loops
-Object.defineProperty(Array.prototype, "equals", {enumerable: false});
+Object.defineProperty(Array.prototype, "equals", { enumerable: false });
 
 function quicksort(sortby, array) {
   log("quicksort array", array);
@@ -259,9 +258,9 @@ export function sortTabs(sortby, tabs) {
   let tabsList = quicksort(sortby, tabs);
   log("after quicksort", tabsList);
   for (let i = 0; i < tabsList.length; i++) {
-    let {id} = tabsList[i];
+    let { id } = tabsList[i];
     setTimeout(() => {
-      browser.tabs.move(id, {index: i});
+      browser.tabs.move(id, { index: i });
     }, sortDelay);
   }
 }
@@ -453,55 +452,95 @@ export function santizeTabs(tabs, ignoredUrlPatterns) {
 // }
 
 export const asyncFilterTabs = async (
-  {searchTerm, audibleSearch, pinnedSearch},
-  {searchIn, ignoreCase, regex},
+  { searchTerm, audibleSearch, pinnedSearch },
+  { searchIn, ignoreCase, regex },
   tabs
 ) => {
   return await new Promise((resolve) => {
     if (searchTerm === "" && !audibleSearch && !pinnedSearch) return tabs;
-    const filteredTabs = tabs?.filter(({title, url, audible, pinned}) => {
-      const isAudible = audibleSearch ? audible === true : true;
-      const isPinned = pinnedSearch ? pinned === true : true;
-      if (regex) {
-        try {
-          let regexTest = new RegExp(searchTerm, ignoreCase ? "i" : "");
-          if (searchIn[0] && regexTest.test(title) && isAudible && isPinned) return true;
-          if (searchIn[1] && regexTest.test(url) && isAudible && isPinned) return true;
-        } catch (error) {
-          console.error("Search error:", error);
-        }
-      } else {
-        if (searchIn[0] && !ignoreCase) return title.includes(searchTerm) && isAudible && isPinned;
-        if (searchIn[0] && ignoreCase) return title.toLowerCase().includes(searchTerm.toLowerCase()) && isAudible && isPinned;
-        if (searchIn[1]) return url.toLowerCase().includes(searchTerm.toLowerCase()) && isAudible && isPinned;
-      }
-    });
+    const filteredTabs = reduceTabs(
+      { searchTerm, audibleSearch, pinnedSearch },
+      { searchIn, ignoreCase, regex },
+      tabs
+    );
     resolve(filteredTabs);
   });
 };
 export const filterTabs = (
-  searchTerm,
-  {searchIn, ignoreCase, regex},
+  { searchTerm, audibleSearch, pinnedSearch },
+  { searchIn, ignoreCase, regex },
   tabs
 ) => {
-  if (searchTerm === "") return tabs;
-  return tabs.filter(({title, url}) => {
+  return tabs?.filter(({ title, url, audible, pinned }) => {
+    const isAudible = audibleSearch ? audible === true : true;
+    const isPinned = pinnedSearch ? pinned === true : true;
     if (regex) {
       try {
         let regexTest = new RegExp(searchTerm, ignoreCase ? "i" : "");
-        if (searchIn[0] && regexTest.test(title)) return true;
-        if (searchIn[1] && regexTest.test(url)) return true;
+        if (searchIn[0] && regexTest.test(title) && isAudible && isPinned)
+          return true;
+        if (searchIn[1] && regexTest.test(url) && isAudible && isPinned)
+          return true;
       } catch (error) {
-        console.log("Search error:", error);
+        console.error("Search error:", error);
       }
     } else {
+      if (searchIn[0] && !ignoreCase)
+        return title.includes(searchTerm) && isAudible && isPinned;
       if (searchIn[0] && ignoreCase)
-        return title.toLowerCase().includes(searchTerm.toLowerCase());
-      if (searchIn[0] && !ignoreCase) return title.includes(searchTerm);
+        return (
+          title.toLowerCase().includes(searchTerm.toLowerCase()) &&
+          isAudible &&
+          isPinned
+        );
       if (searchIn[1])
-        return url.toLowerCase().includes(searchTerm.toLowerCase());
+        return (
+          url.toLowerCase().includes(searchTerm.toLowerCase()) &&
+          isAudible &&
+          isPinned
+        );
     }
   });
+};
+export const reduceTabs = (
+  { searchTerm, audibleSearch, pinnedSearch },
+  { searchIn, ignoreCase, regex },
+  tabs
+) => {
+  const reducer = tabs?.reduce((accumulator, tab) => {
+    const { title, url, audible, pinned } = tab;
+    let newTab = { ...tab };
+    const isAudible = audibleSearch ? audible === true : true;
+    const isPinned = pinnedSearch ? pinned === true : true;
+    if (regex) {
+      try {
+        let regexTest = new RegExp(searchTerm, ignoreCase ? "i" : "");
+        if (searchIn[0] && regexTest.test(title) && isAudible && isPinned)
+          return true;
+        if (searchIn[1] && regexTest.test(url) && isAudible && isPinned)
+          return true;
+      } catch (error) {
+        console.error("Search error:", error);
+      }
+    } else {
+      if (searchIn[0] && !ignoreCase)
+        newTab.visible = title.includes(searchTerm) && isAudible && isPinned;
+      if (searchIn[0] && ignoreCase)
+        newTab.visible =
+          title.toLowerCase().includes(searchTerm.toLowerCase()) &&
+          isAudible &&
+          isPinned;
+      if (searchIn[1])
+        newTab.visible =
+          url.toLowerCase().includes(searchTerm.toLowerCase()) &&
+          isAudible &&
+          isPinned;
+    }
+    accumulator.push(newTab);
+    return accumulator;
+  }, []);
+  console.log(reducer);
+  return reducer;
 };
 
 export const getMetrics = (compName, mode, actualTime, baseTime) => {
@@ -521,6 +560,7 @@ export function updateTabs(getTabs, store) {
     store.dispatch(updateActiveTabs(tabs));
   });
 }
+
 export const profilerCallback = (
   id,
   phase,
@@ -531,12 +571,19 @@ export const profilerCallback = (
   interactions
 ) => {
   console.log(
-    "id:", id,
-    "phase:", phase,
-    "actualDuration:", actualDuration,
-    "baseDuration:", baseDuration,
-    "startTime:", startTime,
-    "commitTime:", commitTime,
-    "interactions:", interactions
-  )
-}
+    "id:",
+    id,
+    "phase:",
+    phase,
+    "actualDuration:",
+    actualDuration,
+    "baseDuration:",
+    baseDuration,
+    "startTime:",
+    startTime,
+    "commitTime:",
+    commitTime,
+    "interactions:",
+    interactions
+  );
+};

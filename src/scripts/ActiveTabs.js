@@ -1,11 +1,11 @@
 "use strict";
 //Scripts and Modules
 import store from "./store";
-import React, {Profiler, useMemo} from "react";
-import {updateActiveTabs} from "./tabSlice";
-import {useSelector} from "react-redux";
-import {getTabs} from "./components/browserActions";
-import {profilerCallback} from "./components/general";
+import React, { Profiler, useMemo } from "react";
+import { updateActiveTabs } from "./tabSlice";
+import { useSelector } from "react-redux";
+import { getTabs } from "./components/browserActions";
+import { profilerCallback } from "./components/general";
 import CustomScroll from "react-custom-scroll";
 
 //JS libraries
@@ -17,8 +17,8 @@ import Search from "./components/Header/Search/Search";
 //Styles
 import "../styles/eg.scss";
 import "react-custom-scroll/dist/customScroll.css";
-import {Navigation} from './components/Header/Navigation';
-import {TabWindowWrapper} from "./TabWindowWrapper";
+import { Navigation } from "./components/Header/Navigation";
+import { TabWindowWrapper } from "./TabWindowWrapper";
 
 const browser = require("webextension-polyfill");
 
@@ -41,20 +41,21 @@ export function updateTabs(getTabs, store) {
             windowId,
             groupId,
           } = tab;
-          return {
-            audible,
-            discarded,
-            favIconUrl,
-            id,
-            index,
-            mutedInfo,
-            pinned,
-            status,
-            title,
-            url,
-            groupId,
-            windowId,
-          };
+          if (url)
+            return {
+              audible,
+              discarded,
+              favIconUrl,
+              id,
+              index,
+              mutedInfo,
+              pinned,
+              status,
+              title,
+              url,
+              groupId,
+              windowId,
+            };
         })
       )
     );
@@ -70,19 +71,23 @@ browser.tabs.onMoved.addListener(() => updateTabs(getTabs, store));
 updateTabs(getTabs, store);
 
 const ActiveTabs = () => {
-  const {tabs} = useSelector((state) => state.tabs);
-  const {search} = useSelector((state) => state);
-  const navigation = useMemo(() => (<Navigation tabCount={tabs.length}/>), [tabs.length]);
-  const header = useMemo(() => (<Header navigation={navigation} search={<Search/>}/>), [tabs, search]);
-  console.log('activetab loading');
-
+  const { tabs } = useSelector((state) => state.tabs);
+  const { search } = useSelector((state) => state);
+  const navigation = useMemo(() => <Navigation tabCount={tabs.length} />, [
+    tabs.length,
+  ]);
+  const header = useMemo(
+    () => <Header navigation={navigation} search={<Search />} />,
+    [tabs, search]
+  );
+  console.log("activetab loading");
 
   return (
     <>
       {header}
       <CustomScroll heightRelativeToParent="100%" keepAtBottom={true}>
-        <Profiler id={'TabWindow:'} onRender={profilerCallback}>
-          <TabWindowWrapper/>
+        <Profiler id={"TabWindow:"} onRender={profilerCallback}>
+          <TabWindowWrapper />
         </Profiler>
       </CustomScroll>
     </>
