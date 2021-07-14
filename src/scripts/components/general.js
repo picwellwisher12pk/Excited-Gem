@@ -28,11 +28,13 @@ export function compareURL(a, b) {
   if (a.url > b.url) return 1;
   return 0;
 }
+
 export function compareTitle(a, b) {
   if (a.title.toLowerCase() < b.title.toLowerCase()) return -1;
   if (a.title.toLowerCase() > b.title.toLowerCase()) return 1;
   return 0;
 }
+
 export function matchKeys(property, keysToRemove) {
   for (let i = 0; i < keysToRemove.length; i++) {
     if (property === keysToRemove[i]) return true;
@@ -505,40 +507,41 @@ export const reduceTabs = (
   { searchIn, ignoreCase, regex },
   tabs
 ) => {
-  const reducer = tabs?.reduce((accumulator, tab) => {
+  return tabs?.reduce((accumulator, tab) => {
     const { title, url, audible, pinned } = tab;
-    let newTab = { ...tab };
     const isAudible = audibleSearch ? audible === true : true;
     const isPinned = pinnedSearch ? pinned === true : true;
     if (regex) {
       try {
         let regexTest = new RegExp(searchTerm, ignoreCase ? "i" : "");
         if (searchIn[0] && regexTest.test(title) && isAudible && isPinned)
-          return true;
+          accumulator.push(tab);
         if (searchIn[1] && regexTest.test(url) && isAudible && isPinned)
-          return true;
+          accumulator.push(tab);
       } catch (error) {
         console.error("Search error:", error);
       }
     } else {
       if (searchIn[0] && !ignoreCase)
-        newTab.visible = title.includes(searchTerm) && isAudible && isPinned;
+        if (title.includes(searchTerm) && isAudible && isPinned)
+          accumulator.push(tab);
       if (searchIn[0] && ignoreCase)
-        newTab.visible =
+        if (
           title.toLowerCase().includes(searchTerm.toLowerCase()) &&
           isAudible &&
-          isPinned;
+          isPinned
+        )
+          accumulator.push(tab);
       if (searchIn[1])
-        newTab.visible =
+        if (
           url.toLowerCase().includes(searchTerm.toLowerCase()) &&
           isAudible &&
-          isPinned;
+          isPinned
+        )
+          accumulator.push(tab);
     }
-    accumulator.push(newTab);
     return accumulator;
   }, []);
-  console.log(reducer);
-  return reducer;
 };
 
 export const getMetrics = (compName, mode, actualTime, baseTime) => {
