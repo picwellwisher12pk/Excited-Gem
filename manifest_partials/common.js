@@ -1,14 +1,8 @@
 module.exports = {
-  "background": {
-    "scripts": ["js/background.js"],
-    "persistent": false
+  background: {
+    service_worker: "background-wrapper.js",
+    type: "module",
   },
 
-  "permissions": [
-    "tabs",
-    "<all_urls>",
-    "contextMenus",
-    "storage",
-    "notifications"
-  ]
-}
+  permissions: ["tabs", "contextMenus", "storage", "notifications"],
+};

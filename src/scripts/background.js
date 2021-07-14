@@ -4,12 +4,8 @@
 // const {  setTabCountInBadge,updateTabs } = require('./components/browserActions.js');
 // import './defaultPreferences';
 var browser = require("webextension-polyfill");
-import { preferences } from "./defaultPreferences";
-import {
-  getTabs,
-  setBadge,
-  setTabCountInBadge,
-} from "./components/browserActions";
+import {preferences} from "./defaultPreferences";
+import {getTabs, setBadge, setTabCountInBadge,} from "./components/browserActions";
 
 // let muteAll = (data) => {
 //   for (let i = 0; i < data.length; i++) {
@@ -84,11 +80,11 @@ browser.tabs.onAttached.addListener(() => {
 
 /* Browser Actions */
 /////////////////////
-browser.browserAction.onClicked.addListener((tab) => {
+browser.action.onClicked.addListener((tab) => {
   console.info("Extension Page opening");
   browser.tabs
-    .create({ url: browser.extension.getURL("tabs.html"), pinned: true })
-    .then((tab) => (window.homepageOpened = tab));
+    .create({ url: browser.runtime.getURL("tabs.html"), pinned: true })
+    .then((tab) => tab);
   // openExcitedGemPage();
 });
 

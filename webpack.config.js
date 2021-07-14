@@ -2,9 +2,8 @@ require("dotenv").config();
 let webpack = require("webpack"),
   WebExtPlugin = require("web-ext-plugin"),
   path = require("path"),
-  LodashModuleReplacementPlugin = require("lodash-webpack-plugin"),
   fileSystem = require("fs"),
-  DashboardPlugin = require("webpack-dashboard/plugin"), //Webpack cli based dashboard
+  // DashboardPlugin = require("webpack-dashboard/plugin"), //Webpack cli based dashboard
   //BundleAnalyzerPlugin = require("webpack-bundle-analyzer").BundleAnalyzerPlugin, //Bundle analyzer
   env = require("./utils/env"),
   HtmlWebpackPlugin = require("html-webpack-plugin"),
@@ -12,8 +11,9 @@ let webpack = require("webpack"),
   MiniCssExtractPlugin = require("mini-css-extract-plugin"),
   // Visualizer = require("webpack-visualizer-plugin"),
   WriteFilePlugin = require("write-file-webpack-plugin"),
-  ChromeExtensionReloader = require("webpack-chrome-extension-reloader"),
-  WebpackBar = require("webpackbar");
+  ExtensionReloader = require("webpack-extension-reloader"),
+  // WebpackBar = require("webpackbar"),
+  CopyPlugin = require("copy-webpack-plugin");
 
 require("./utils/prepare");
 
@@ -78,22 +78,16 @@ module.exports = {
   mode: "development",
   context: __dirname,
   entry: {
-    tabs: [
-      "@babel/polyfill",
-      path.resolve(__dirname, "src", "scripts", "app.js"),
-    ],
+    tabs: [path.resolve(__dirname, "src", "scripts", "app.js")],
     // sessions: [
     // "@babel/polyfill",
     //   path.resolve(__dirname, "src", "scripts", "sessions-container.js"),
     // ],
-    background: [
-      "@babel/polyfill",
-      path.resolve(__dirname, "src", "scripts", "background.js"),
-    ],
+    background: [path.resolve(__dirname, "src", "scripts", "background.js")],
   },
   output: {
     path: path.resolve(__dirname, "dist"),
-    filename: "js/[name].js",
+    filename: "[name].js",
   },
   module: {
     rules: [
@@ -171,7 +165,27 @@ module.exports = {
     descriptionFiles: ["package.json"],
   },
   plugins: [
-    // new WebExtPlugin({ sourceDir: path.resolve(__dirname, "dist") }),
+    new WebExtPlugin({
+      sourceDir: path.resolve(__dirname, "dist"),
+      browserConsole: true,
+    }),
+    new CopyPlugin({
+      patterns: [
+        {
+          from: path.resolve(
+            __dirname,
+            "src",
+            "scripts",
+            "background-wrapper.js"
+          ),
+          to: path.resolve(__dirname, "dist"),
+        },
+        {
+          from: path.resolve(__dirname, "src", "scripts", "background.js"),
+          to: path.resolve(__dirname, "dist"),
+        },
+      ],
+    }),
     new webpack.ProvidePlugin({
       $: "jquery",
       jQuery: "jquery",
@@ -210,8 +224,8 @@ module.exports = {
           : "./src/images/logo.png",
       chunks: ["sessions"],
     }),
-    env.NODE_ENV === "development" && new webpack.HotModuleReplacementPlugin(),
-    new ChromeExtensionReloader(),
+    // env.NODE_ENV === "development" && new webpack.HotModuleReplacementPlugin(),
+    new ExtensionReloader(),
     new WriteFilePlugin(), //Writes files to target directory during development build phase.
     // new WebpackBar({profile: true}),
     // new BundleAnalyzerPlugin({ analyzerPort: 3030 }),

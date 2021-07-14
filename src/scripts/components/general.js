@@ -1,7 +1,5 @@
-let env = require("../../../utils/env");
-var browser = require("webextension-polyfill");
-window.development = env.NODE_ENV === "development";
-export let homepageURL = browser.extension.getURL("tabs.html");
+let browser = require("webextension-polyfill");
+export let homepageURL = browser.runtime.getURL("tabs.html");
 let refinedTabs;
 
 export let ignoredUrlPatterns = [

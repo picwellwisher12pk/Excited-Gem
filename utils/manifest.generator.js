@@ -9,7 +9,7 @@ const manifest = require("../manifest_partials/common"),
 // generates the manifest file using the package.json informations
 manifest.name = myPackage.title;
 manifest.version = myPackage.version;
-manifest.manifest_version = 2;
+manifest.manifest_version = 3;
 
 manifest.description = myPackage.description;
 manifest.icons = {
@@ -17,7 +17,7 @@ manifest.icons = {
   16: logoFile,
   48: logoFile,
 };
-manifest.browser_action = {
+manifest.action = {
   default_icon: {
     19: logoFile,
     38: logoFile,
