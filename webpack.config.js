@@ -11,7 +11,7 @@ let webpack = require("webpack"),
   MiniCssExtractPlugin = require("mini-css-extract-plugin"),
   // Visualizer = require("webpack-visualizer-plugin"),
   WriteFilePlugin = require("write-file-webpack-plugin"),
-  ExtensionReloader = require("webpack-extension-reloader"),
+  // ExtensionReloader = require("webpack-extension-reloader"),
   // WebpackBar = require("webpackbar"),
   CopyPlugin = require("copy-webpack-plugin");
 
@@ -225,7 +225,7 @@ module.exports = {
       chunks: ["sessions"],
     }),
     // env.NODE_ENV === "development" && new webpack.HotModuleReplacementPlugin(),
-    new ExtensionReloader(),
+    // new ExtensionReloader(),
     new WriteFilePlugin(), //Writes files to target directory during development build phase.
     // new WebpackBar({profile: true}),
     // new BundleAnalyzerPlugin({ analyzerPort: 3030 }),
