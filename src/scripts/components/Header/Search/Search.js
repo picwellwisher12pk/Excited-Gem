@@ -1,136 +1,188 @@
-import React from 'react';
-import {connect} from 'react-redux';
-import ACTIONS from '../../../modules/action';
-import ErrorBoundary from '../../../ErrorBoundary';
-import {FontAwesomeIcon as FA} from '@fortawesome/react-fontawesome';
-import {faSearch} from '@fortawesome/free-solid-svg-icons/faSearch';
-import {faTimes} from '@fortawesome/free-solid-svg-icons/faTimes';
+import React, {useCallback, useEffect, useState} from "react";
+import {useDispatch, useSelector} from "react-redux";
+import ErrorBoundary from "../../../ErrorBoundary";
+import SearchIcon from "search.svg";
+import TimesIcon from "times.svg";
+import VolumeIcon from "volume.svg";
+import VolumeOffIcon from "volume-off.svg";
+import ThumbtackIcon from "thumbtack.svg";
+import ThumbtackActiveIcon from "thumbtack-active.svg";
+import {toggleAudible, togglePinned, toggleSearchIn, updateSearchTerm} from "../../../searchSlice";
 
-class Search extends React.Component {
-  constructor(props) {
-    super(props);
-    this.searchField = React.createRef();
-    this.title = React.createRef();
-    this.url = React.createRef();
+const Search = () => {
+  console.log("search reloading");
+  const dispatch = useDispatch();
+  const searchTerm = useSelector((state) => state.search.searchTerm);
+  const pinnedSearch = useSelector((state) => state.search.pinnedSearch);
+  const audibleSearch = useSelector((state) => state.search.audibleSearch);
+  const {searchIn} = useSelector((state) => state.search);
+  const regex = useSelector((state) => state.config.search.regex);
+  const searchField = React.createRef();
+  const title = React.createRef();
+  const url = React.createRef();
+  const [empty, setEmpty] = useState(true);
+  const preparePlaceholder = (searchIn, initialPlaceholder = 'Search in ') => {
+    let newPlaceholder = initialPlaceholder;
+    newPlaceholder += searchIn[0] ? "Titles" : "";
+    newPlaceholder += searchIn[0] && searchIn[1] ? " and " : "";
+    newPlaceholder += searchIn[1] ? "URLs" : "";
+    return newPlaceholder;
   }
+  const [placeholder, setPlaceholder] = useState(() => preparePlaceholder(searchIn));
 
-  onKeyUpped(event) {
-    // console.info('keypressed', event.target, this);
-    this.searchField.current.value !== '' ? this.setState({empty: false}) : this.setState({empty: true});
+  useEffect(() => {
+    setPlaceholder(preparePlaceholder(searchIn));
+  }, [searchIn]);
+  const onKeyUpped = (event) => {
+    searchField.current.value !== "" ? setEmpty(false) : setEmpty(true);
     if (event.keyCode === 27) {
-      // console.log('escaped');
-      this.clear();
-      this.props.searchInTabs('');
+      clear();
     }
-  }
-  clear() {
-    this.searchField.current.value = '';
-    this.setState({ empty: true });
-    this.props.searchInTabs('');
-  }
-  toggleSearchIn(number, event) {
-    let title = this.title.current.checked;
-    let url = this.url.current.checked;
-    if (!title && !url) {
+  };
+  const handleChange = () => {
+    dispatch(updateSearchTerm(searchField.current.value));
+  };
+  const clear = () => {
+    searchField.current.value = "";
+    setEmpty(true);
+    dispatch(updateSearchTerm(""));
+  };
+  const toggleSearchInHandle = useCallback((title, url, number, event) => {
+    let titleLocal = title.current.checked;
+    let urlLocal = url.current.checked;
+    if (!titleLocal && !urlLocal) {
       event.preventDefault();
-      alert("Sorry! You can't uncheck both Title and URL at the same time. One must remain checked.");
+      alert(
+        "Sorry! You can't uncheck both Title and URL at the same time. One must remain checked."
+      );
       return false;
     }
-    let searchIn = this.props.searchIn;
-    searchIn[number] = !this.props.searchIn[number];
-    // this.props.setPreferences('search', 'searchIn', searchIn);
-    this.props.toggleSearchInAction(searchIn);
-    // this.props.searchInTabs(this.searchField.current.value);
-  }
-  render() {
+    dispatch(toggleSearchIn(number));
+  }, []);
 
-    let searchIn = this.props.searchIn;
-    let placeholder = 'Search in ';
-    placeholder += this.props.searchIn[0] ? 'Titles' : '';
-    placeholder += this.props.searchIn[0] && this.props.searchIn[1] ? ' and ' : '';
-    placeholder += this.props.searchIn[1] ? 'URLs' : '';
-    console.log("Search Render", this.props.empty);
-    let iconInSearch = this.props.empty ?
-      <FA icon={faSearch} className={`text-secondary`} style={{width: '40px', height: '43px', padding: '12px'}}/> :
-      <FA icon={faTimes} className={`text-danger cp`} style={{width: '40px', height: '43px', padding: '12px'}}
-          onClick={() => {
-            if (!this.props.empty) this.clear()
-          }}/>;
-    return (
-      <ErrorBoundary>
-        <section className="search-bar" style={{ width: '66%', paddingRight: 0 }}>
-          <div id="filter-tabs" className="input-group filter-tabs">
-            {iconInSearch}
-            <i className={`quicksearch-input form-control`}
-               style={{maxWidth: '10px', border: 'none', lineHeight: '28px'}}>/</i>
-            <input
-              id="quicksearch-input"
-              type="text"
-              ref={this.searchField}
-              placeholder={placeholder}
-              className="quicksearch-input form-control regex "
-              onChange={() => {
-                this.props.searchInTabs(this.searchField.current.value);
-              }}
-              onKeyUp={event => {
-                this.onKeyUpped(event);
-              }}
-              autoFocus
-            />
-            <i className={`quicksearch-input form-control`}
-               style={{maxWidth: '10px', border: 'none', lineHeight: '28px'}}>/</i>
-            <div className="input-group-append option-regex">
-              <div className="custom-control custom-checkbox ">
-                <input
-                  type="checkbox"
-                  className="custom-control-input"
-                  id="prefTitle"
-                  ref={this.title}
-                  defaultChecked={searchIn[0] ? 'checked' : ''}
-                  onClick={e => {
-                    this.toggleSearchIn(0, e);
-                  }}
-                />
-                <label className="custom-control-label input-group-text" htmlFor="prefTitle">
-                  Title
-                </label>
-              </div>
+  let iconInSearch = !searchTerm ? (
+    <SearchIcon
+      className={`text-secondary`}
+      style={{width: "40px", height: "43px", padding: "12px"}}
+    />
+  ) : (
+    <TimesIcon
+      className={`cp`}
+      style={{width: "40px", height: "43px", padding: "12px", fill: "red"}}
+      onClick={() => {
+        if (!empty) clear();
+      }}
+    />
+  );
+  return (
+    <ErrorBoundary>
+      <section className="search-bar" style={{width: "66%", paddingRight: 0}}>
+        <div id="filter-tabs" className="input-group filter-tabs">
+          {iconInSearch}
+          {regex && (
+            <i
+              className={`quicksearch-input form-control`}
+              style={{maxWidth: "10px", border: "none", lineHeight: "28px"}}
+            >
+              /
+            </i>
+          )}
+          <input
+            id="quicksearch-input"
+            type="text"
+            ref={searchField}
+            placeholder={placeholder}
+            className="quicksearch-input form-control regex "
+            onChange={handleChange}
+            onKeyUp={(event) => {
+              onKeyUpped(event);
+            }}
+            autoFocus
+          />
+          {regex && (
+            <i
+              className={`quicksearch-input form-control`}
+              style={{maxWidth: "10px", border: "none", lineHeight: "28px"}}
+            >
+              /
+            </i>
+          )}
+          <div className="input-group-append option-regex">
+            <div style={{paddingTop: 6}}>
+              <button
+                className="btn btn-sm bg-transparent"
+                title="Search audible only"
+                onClick={() => dispatch(toggleAudible())}
+              >
+                {audibleSearch ? <VolumeIcon style={{height: 16, fill: "#0487cf"}}/> :
+                  <VolumeOffIcon style={{height: 16, fill: "#0487cf"}}/>}
+              </button>
             </div>
-            <div className="input-group-append option-case-sensitive">
-              <div className="custom-control custom-checkbox ">
-                <input
-                  type="checkbox"
-                  className="custom-control-input"
-                  id="prefURL"
-                  ref={this.url}
-                  defaultChecked={searchIn[1] ? 'checked' : ''}
-                  onClick={e => {
-                    this.toggleSearchIn(1, e);
-                  }}
-                />
-                <label className="custom-control-label input-group-text" htmlFor="prefURL">
-                  URL
-                </label>
-              </div>
+            <div className="mr-3" style={{paddingTop: 6}}>
+              <button
+                className="btn btn-sm bg-transparent"
+                title="Search pinned only"
+                onClick={() => dispatch(togglePinned())}
+              >
+                {pinnedSearch ? <ThumbtackActiveIcon style={{height: 16, fill: "#0487cf"}}/> :
+                  <ThumbtackIcon style={{height: 16, fill: "#0487cf"}}/>}
+              </button>
+            </div>
+            <div className="custom-control custom-checkbox ">
+              <input
+                type="checkbox"
+                className="custom-control-input"
+                id="prefTitle"
+                ref={title}
+                defaultChecked={searchIn[0] && "checked"}
+                onClick={(e) => {
+                  toggleSearchInHandle(title, url, 0, e);
+                }}
+              />
+              <label
+                className="custom-control-label input-group-text"
+                htmlFor="prefTitle"
+              >
+                Title
+              </label>
             </div>
           </div>
-        </section>
-      </ErrorBoundary>
-    );
-  }
-}
-
-
-const mapStateToProps = function (state) {
-  return {
-    regex: state.preferences.search.regex,
-    ignoreCase: state.preferences.search.ignoreCase,
-    searchIn: state.preferences.search.searchIn,
-    empty: state.preferences.search.empty,
-  };
+          <div className="input-group-append option-case-sensitive">
+            <div className="custom-control custom-checkbox ">
+              <input
+                type="checkbox"
+                className="custom-control-input"
+                id="prefURL"
+                ref={url}
+                defaultChecked={searchIn[1] && "checked"}
+                onClick={(e) => {
+                  toggleSearchInHandle(title, url, 1, e);
+                }}
+              />
+              <label
+                className="custom-control-label input-group-text"
+                htmlFor="prefURL"
+              >
+                URL
+              </label>
+            </div>
+          </div>
+        </div>
+      </section>
+    </ErrorBoundary>
+  );
 };
-const mapDispatchToProps = dispatch => ({
-  searchInTabs: searchTerm => dispatch(ACTIONS.searchInTabs(searchTerm)),
-  toggleSearchInAction: searchInArray => dispatch(ACTIONS.toggleSearchInAction(searchInArray))
-});
-export default connect(mapStateToProps, mapDispatchToProps)(Search);
+
+// const mapStateToProps = function (state) {
+//   return {
+//     regex: state.preferences.search.regex,
+//     ignoreCase: state.preferences.search.ignoreCase,
+//     searchIn: state.preferences.search.searchIn,
+//     empty: state.preferences.search.empty,
+//   };
+// };
+// const mapDispatchToProps = dispatch => ({
+//   searchInTabs: searchTerm => dispatch(ACTIONS.searchInTabs(searchTerm)),
+//   toggleSearchInAction: searchInArray => dispatch(ACTIONS.toggleSearchInAction(searchInArray))
+// });
+export default Search;

@@ -1,27 +1,31 @@
-module.exports = function(api) {
+module.exports = function (api) {
   api.cache(true);
 
   const presets = [
     [
-      '@babel/preset-env',
+      "@babel/preset-env",
       {
-        // useBuiltIns: 'entry',
+        targets: {
+          chrome: "80",
+        },
+        useBuiltIns: "entry",
       },
     ],
-    '@babel/preset-react',
+    "@babel/preset-react",
   ];
-  if (process.env === 'development') {
-    presets.push('react-hot');
+  if (process.env === "development") {
+    presets.push("react-hot");
   }
   const plugins = [
-    '@babel/plugin-proposal-class-properties',
-    '@babel/plugin-proposal-json-strings',
-    '@babel/plugin-proposal-object-rest-spread',
-    '@babel/plugin-syntax-dynamic-import',
-    '@babel/plugin-syntax-import-meta',
+    "@babel/plugin-proposal-class-properties",
+    "@babel/plugin-proposal-json-strings",
+    "@babel/plugin-proposal-object-rest-spread",
+    "@babel/plugin-syntax-dynamic-import",
+    "@babel/plugin-syntax-import-meta",
     "@babel/plugin-transform-react-jsx-source",
     "@babel/plugin-transform-react-jsx-self",
-    'lodash',
+    "@babel/plugin-transform-runtime",
+    "lodash",
   ];
 
   return {

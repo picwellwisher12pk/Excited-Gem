@@ -1,243 +1,243 @@
- //@import url('https://fonts.googleapis.com/css?family=Open+Sans:300,400,600,700');
- //@import url('https://fonts.googleapis.com/css?family=Roboto:100,300,400,700,900');
- $brand-primary-color: #59C50F;
- $brand-secondary-color: #D1335B;
- @import "bootstrap";
- @import 'components/reset';
- @import 'components/generics';
- @import 'components/selectable';
- @import 'components/buttons';
- @import 'components/search';
- @import 'components/tab';
- @import 'components/tabsgroup';
- @import 'components/forms';
- @import 'components/aside';
- /* Header */
+//@import url('https://fonts.googleapis.com/css?family=Open+Sans:300,400,600,700');
+//@import url('https://fonts.googleapis.com/css?family=Roboto:100,300,400,700,900');
+$brand-primary-color: #59c50f;
+$brand-secondary-color: #d1335b;
+@import "bootstrap";
+@import "components/reset";
+@import "components/generics";
+@import "components/selectable";
+@import "components/buttons";
+@import "components/search";
+@import "components/tab";
+@import "components/tabsgroup";
+@import "components/forms";
+@import "components/aside";
+/* Header */
 
- .page-header {
-     z-index: 999;
-     /* Permalink - use to edit and share this gradient: http://colorzilla.com/gradient-editor/#0082d5+0,2bd563+100 */
-     background: #0082d5;
-     /* Old browsers */
-     background: -moz-linear-gradient(top, #0082d5 0%, #12A4A6 100%);
-     /* FF3.6-15 */
-     background: -webkit-linear-gradient(top, #0082d5 0%, #12A4A6 100%);
-     /* Chrome10-25,Safari5.1-6 */
-     background: linear-gradient(to bottom, #0082d5 0%, #12A4A6 100%);
-     /* W3C, IE10+, FF16+, Chrome26+, Opera12+, Safari7+ */
-     // filter: progid: DXImageTransform.Microsoft.gradient( startColorstr='#0082d5', endColorstr='#2bd563', GradientType=0);
-     /* IE6-9 */
-     position: relative;
-     .nav>li>a {
-         color: #fff;
-     }
-     .nav-pills .nav-link.active,
-     .nav-pills .show>.nav-link {
-         background-color: transparent;
-     }
-     #go-to-tabs {
-         //  display: inline-block;
-         //  color: white;
-         //  font-weight: bold;
-         //background-color: #155c69;
-         //  border-radius: 4px;
-         //  padding: 10px 16px;
-     }
- }
+.page-header {
+  z-index: 999;
+  /* Permalink - use to edit and share this gradient: http://colorzilla.com/gradient-editor/#0082d5+0,2bd563+100 */
+  background: #0082d5;
+  /* Old browsers */
+  background: -moz-linear-gradient(top, #0082d5 0%, #12a4a6 100%);
+  /* FF3.6-15 */
+  background: -webkit-linear-gradient(top, #0082d5 0%, #12a4a6 100%);
+  /* Chrome10-25,Safari5.1-6 */
+  background: linear-gradient(to bottom, #0082d5 0%, #12a4a6 100%);
+  /* W3C, IE10+, FF16+, Chrome26+, Opera12+, Safari7+ */
+  // filter: progid: DXImageTransform.Microsoft.gradient( startColorstr='#0082d5', endColorstr='#2bd563', GradientType=0);
+  /* IE6-9 */
+  position: relative;
+  .nav > li > a {
+    color: #fff;
+  }
+  .nav-pills .nav-link.active,
+  .nav-pills .show > .nav-link {
+    background-color: transparent;
+  }
+  #go-to-tabs {
+    //  display: inline-block;
+    //  color: white;
+    //  font-weight: bold;
+    //background-color: #155c69;
+    //  border-radius: 4px;
+    //  padding: 10px 16px;
+  }
+}
 
- .modal-body {
-     overflow: hidden;
-     .table {
-         margin: 0;
-         margin-top: -15px;
-         margin-bottom: -15px;
-     }
- }
+.modal-body {
+  overflow: hidden;
+  .table {
+    margin: 0;
+    margin-top: -15px;
+    margin-bottom: -15px;
+  }
+}
 
- .label {
-     margin-left: 5px;
- }
+.label {
+  margin-left: 5px;
+}
 
- .tabs-list-container {
-     overflow-y: auto;
-     flex-grow: 1;
-     flex-shrink: 1;
- }
+.tabs-list-container {
+  flex: 1;
+  min-height: 0;
+  min-width: 0;
+}
 
- #feedback {
-     font-size: 1.4em;
- }
+#feedback {
+  font-size: 1.4em;
+}
 
- .navbar {
-     color: #fff;
-     border: none;
-     border-radius: 0;
- }
+.navbar {
+  color: #fff;
+  border: none;
+  border-radius: 0;
+}
 
- .panel-group {
-     .panel+.panel {
-         margin-top: 0;
-     }
-     .panel {
-         border-radius: 0;
-     }
-     .panel-body {
-         padding: 0;
-         .list-group {
-             border-bottom: 2px solid gray;
-             &:after {
-                 content: "Window Boundary";
-                 background-color: gray;
-                 color: #fff;
-                 display: block;
-                 text-align: right;
-                 padding-right: 15px;
-             }
-         }
-     }
-     .panel-heading {
-         h4 a {
-             text-decoration: none;
-             color: gray;
-             font-weight: normal;
-         }
-         .session-name button.btn {
-             display: none;
-         }
-         .session-name:hover button.btn.btn-primary {
-             display: block;
-             position: absolute;
-             right: 0;
-             top: 0;
-             border-radius: 50%;
-             width: 20px;
-             height: 20px;
-             padding: 0;
-             font-size: 9px
-         }
-         input.form-control[readOnly] {
-             transition: all 0.4s;
-             border: none;
-             box-shadow: none;
-         }
-     }
- }
+.panel-group {
+  .panel + .panel {
+    margin-top: 0;
+  }
+  .panel {
+    border-radius: 0;
+  }
+  .panel-body {
+    padding: 0;
+    .list-group {
+      border-bottom: 2px solid gray;
+      &:after {
+        content: "Window Boundary";
+        background-color: gray;
+        color: #fff;
+        display: block;
+        text-align: right;
+        padding-right: 15px;
+      }
+    }
+  }
+  .panel-heading {
+    h4 a {
+      text-decoration: none;
+      color: gray;
+      font-weight: normal;
+    }
+    .session-name button.btn {
+      display: none;
+    }
+    .session-name:hover button.btn.btn-primary {
+      display: block;
+      position: absolute;
+      right: 0;
+      top: 0;
+      border-radius: 50%;
+      width: 20px;
+      height: 20px;
+      padding: 0;
+      font-size: 9px;
+    }
+    input.form-control[readOnly] {
+      transition: all 0.4s;
+      border: none;
+      box-shadow: none;
+    }
+  }
+}
 
- .context-actions {
-     .nav>li>a {
-         padding: 5px 0;
-     }
-     .custom-checkbox-container {
-         padding: 0;
-         label {
-             background: none;
-             border: none;
-             color: white;
-             padding: 5px 0;
-             font-size: 14px;
-         }
-         label:before,
-         label:after {
-             top: 0.45rem;
-         }
-     }
- }
+.context-actions {
+  .nav > li > a {
+    padding: 5px 0;
+  }
+  .custom-checkbox-container {
+    padding: 0;
+    label {
+      background: none;
+      border: none;
+      color: white;
+      padding: 5px 0;
+      font-size: 14px;
+    }
+    label:before,
+    label:after {
+      top: 0.45rem;
+    }
+  }
+}
 
- .fade-enter {
-     opacity: 0.01;
- }
+.fade-enter {
+  opacity: 0.01;
+}
 
- .fade-enter.fade-enter-active {
-     opacity: 1;
-     transition: all 200ms ease-in;
- }
+.fade-enter.fade-enter-active {
+  opacity: 1;
+  transition: all 200ms ease-in;
+}
 
- .fade-exit {
-     opacity: 1;
-     background-color: yellow;
-     max-height: auto;
- }
+.fade-exit {
+  opacity: 1;
+  background-color: yellow;
+}
 
- .fade-exit-active {
-     opacity: 0.01;
-     max-height: 0;
- }
+.fade-exit-active {
+  opacity: 0.01;
+  max-height: 0;
+}
 
- #selection-action {
-     -webkit-transition: all 0.3s;
-     -moz-transition: all 0.3s;
-     -ms-transition: all 0.3s;
-     -o-transition: all 0.3s;
-     transition: all 0.3s;
-     background-color: transparent;
- }
+#selection-action {
+  -webkit-transition: all 0.3s;
+  -moz-transition: all 0.3s;
+  -ms-transition: all 0.3s;
+  -o-transition: all 0.3s;
+  transition: all 0.3s;
+  background-color: transparent;
+}
 
- .selection-active {
-     background-color: #14819a;
-     background: linear-gradient(to bottom, #0C9DB2 0%, #4ACADE 100%);
- }
+.selection-active {
+  background-color: #14819a;
+  background: linear-gradient(to bottom, #0c9db2 0%, #4acade 100%);
+}
 
- .selection-action {
-     -webkit-transition: all 0.1s;
-     -moz-transition: all 0.1s;
-     -ms-transition: all 0.1s;
-     -o-transition: all 0.1s;
-     transition: all 0.1s;
-     z-index: -1;
-     opacity: 0;
-     .nav>li>a {
-         color: #fff;
-     }
- }
+.selection-action {
+  -webkit-transition: all 0.1s;
+  -moz-transition: all 0.1s;
+  -ms-transition: all 0.1s;
+  -o-transition: all 0.1s;
+  transition: all 0.1s;
+  z-index: -1;
+  opacity: 0;
+  .nav > li > a {
+    color: #fff;
+  }
+}
 
- .selection-active .selection-action {
-     opacity: 1;
-     z-index: 1;
- }
+.selection-active .selection-action {
+  opacity: 1;
+  z-index: 1;
+}
 
- mark {
-     background-color: yellow;
- }
+mark {
+  background-color: yellow;
+  padding: 0;
+}
 
- .card-header h5 button:hover {
-     text-decoration: none;
-     cursor: pointer;
- }
+.card-header h5 button:hover {
+  text-decoration: none;
+  cursor: pointer;
+}
 
- .card-header h5 button span:first-child {
-     color: var(--gray-dark);
-     font-weight: 600;
-     display: inline-block;
-     margin-right: 15px;
- }
+.card-header h5 button span:first-child {
+  color: var(--gray-dark);
+  font-weight: 600;
+  display: inline-block;
+  margin-right: 15px;
+}
 
- .card-header h5 button span {
-     color: var(--secondary);
-     font-weight: 400;
- }
+.card-header h5 button span {
+  color: var(--secondary);
+  font-weight: 400;
+}
 
- .session-tab-count {
-     display: inline-block;
-     margin-right: 5px;
- }
+.session-tab-count {
+  display: inline-block;
+  margin-right: 5px;
+}
 
- .context-menu {
-     width: 120px;
-     box-shadow: 0 4px 5px 3px rgba(0, 0, 0, 0.2);
-     position: absolute;
-     background-color: #fff;
-     display: none;
-     .menu-options {
-         list-style: none;
-         padding: 10px 0;
-         .menu-option {
-             font-weight: 500;
-             font-size: 14px;
-             padding: 10px 40px 10px 20px;
-             cursor: pointer;
-             &:hover {
-                 background: rgba(0, 0, 0, 0.2);
-             }
-         }
-     }
- }
+.context-menu {
+  width: 120px;
+  box-shadow: 0 4px 5px 3px rgba(0, 0, 0, 0.2);
+  position: absolute;
+  background-color: #fff;
+  display: none;
+  .menu-options {
+    list-style: none;
+    padding: 10px 0;
+    .menu-option {
+      font-weight: 500;
+      font-size: 14px;
+      padding: 10px 40px 10px 20px;
+      cursor: pointer;
+      &:hover {
+        background: rgba(0, 0, 0, 0.2);
+      }
+    }
+  }
+}

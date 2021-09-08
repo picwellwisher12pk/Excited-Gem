@@ -5,7 +5,6 @@ exports.preferences = {
     searchIn: [true, true], // title,url
     empty: true,
   },
-  searchTerm: '',
   defaultTabsFrom: 'current',
   tempTabsFrom: 'current',
   tabsGroup: {

@@ -12,13 +12,7 @@ Changes:
     ☐ Use fewer fonts or svg fonts
 
 
-Fixes:
-  Tabs:
-    ☐ missing icons
-Hosting Details:
-Hosting: justhost
-  admin
-  parkroyal
+
 
 Cards:
   Visa 4444333322221111, 4911830000000 and 4917610000000000
@@ -27,22 +21,3 @@ Cards:
   MasterCard Debit  5163613613613613
   Maestro 6759649826438453
   American Express 343434343434343
-
-Flow:
-  welcome/index
-    public/pages/index
-  home/select_vehicle 0
-    public/pages/deliver_service (click bike)
-  home/delivery_details 1
-    public/pages/parcel_booking_detail    (Form Page)
-  home/review 2
-  book_print
-    public/pages/payment-page (Payment page)
-  home/confirm_order
-    payment-successful
-Post Codes:
-  Cb8 8by
-  Ig11 0tj
-  Ig11 9xh
-  RM14, 5ul
-  Ig3 5hu
