@@ -1,4 +1,5 @@
 require("dotenv").config();
+const autoprefixer = require("autoprefixer");
 let webpack = require("webpack"),
   WebExtPlugin = require("web-ext-plugin"),
   path = require("path"),
@@ -10,9 +11,9 @@ let webpack = require("webpack"),
   HtmlWebpackPlugin = require("html-webpack-plugin"),
   // ExtractTextPlugin = require("extract-text-webpack-plugin"),
   MiniCssExtractPlugin = require("mini-css-extract-plugin"),
-  // Visualizer = require("webpack-visualizer-plugin"),
   ExtensionReloader = require("webpack-extension-reloader"),
-  // ChromeExtensionReloader = require("webpack-chrome-extension-reloader"),
+  ChromeExtensionReloader = require("webpack-chrome-extension-reloader"),
+  preCSS = require("precss"),
   WebpackBar = require("webpackbar"),
   CopyPlugin = require("copy-webpack-plugin");
 
@@ -104,9 +105,8 @@ module.exports = {
           {
             loader: "postcss-loader", // Run post css actions
             options: {
-              plugins: function () {
-                // post css plugins, can be exported to postcss.config.js
-                return [require("precss"), require("autoprefixer")];
+              postcssOptions: {
+                // plugins: [preCSS, autoprefixer],
               },
             },
           },
@@ -181,19 +181,14 @@ module.exports = {
     },
   },
   plugins: [
-    new WebExtPlugin({
-      sourceDir: path.resolve(__dirname, "dist"),
-      browserConsole: true,
-    }),
+    // new WebExtPlugin({
+    //   sourceDir: path.resolve(__dirname, "dist"),
+    //   browserConsole: true,
+    // }),
     new CopyPlugin({
       patterns: [
         {
-          from: path.resolve(
-            __dirname,
-            "src",
-            "scripts",
-            "background-wrapper.js"
-          ),
+          from: path.resolve(__dirname, "src", "scripts", "background.js"),
           to: path.resolve(__dirname, "dist"),
         },
         {
@@ -241,10 +236,9 @@ module.exports = {
       chunks: ["sessions"],
     }),
     // env.NODE_ENV === "development" && new webpack.HotModuleReplacementPlugin(),
-    new ExtensionReloader(),
+    // new ExtensionReloader(),
     new WebpackBar({ profile: true }),
     new BundleAnalyzerPlugin({ analyzerPort: 3030 }),
-    // new Visualizer({ filename: "./statistics.html" }), //Pie
     // new LodashModuleReplacementPlugin({ collections: true }),
     new DashboardPlugin(), //cli based dashboard
   ],

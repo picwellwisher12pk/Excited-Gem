@@ -31,7 +31,6 @@
     "firefoxp": "SET NODE_ENV=production& SET BROWSER_CLIENT=firefox& node utils/production.js",
     "chromep": "SET NODE_ENV=production& SET BROWSER_CLIENT=chrome& node utils/production.js",
     "mount": "cd dist & web-ext run --firefox=firefoxdeveloperedition",
-    "react-devtools": "react-devtools",
     "packf": "cd firefox & web-ext build",
     "test": "mocha './src/**/*.test.js' --require @babel/register"
   },
@@ -86,7 +85,6 @@
     "immutability-helper": "^3.1.1",
     "jest": "^27.1.1",
     "lodash": "^4.17.20",
-    "lodash-webpack-plugin": "^0.11.5",
     "mini-css-extract-plugin": "^2.2.2",
     "mocha": "^9.1.1",
     "node-sass": "^6.0.1",
@@ -105,8 +103,6 @@
     "react-beautiful-dnd": "^13.1.0",
     "react-custom-scroll": "^4.3.0",
     "react-dev-utils": "^11.0.4",
-    "react-devtools": "^4.18.0",
-    "react-devtools-core": "^4.18.0",
     "react-dnd": "^14.0.3",
     "react-dnd-html5-backend": "^14.0.1",
     "react-dom": "^17.0.2",
@@ -117,7 +113,6 @@
     "react-sortable-hoc": "^2.0.0",
     "react-spinners": "^0.11.0",
     "react-transition-group": "^4.4.2",
-    "reactstrap": "^8.10.0",
     "redux": "^4.1.1",
     "redux-async-initial-state": "^0.3.0",
     "redux-logger": "^3.0.6",
@@ -135,8 +130,7 @@
     "webpack-cli": "^4.8.0",
     "webpack-dashboard": "^3.3.6",
     "webpack-dev-server": "^4.2.0",
-    "webpack-visualizer-plugin": "^0.1.11",
-    "webpackbar": "^3.2.0"
+    "webpackbar": "^5.0.0-3"
   },
   "sideEffects": false,
   "lint-staged": {
