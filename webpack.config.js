@@ -10,10 +10,9 @@ let webpack = require("webpack"),
   HtmlWebpackPlugin = require("html-webpack-plugin"),
   // ExtractTextPlugin = require("extract-text-webpack-plugin"),
   MiniCssExtractPlugin = require("mini-css-extract-plugin"),
-  Visualizer = require("webpack-visualizer-plugin"),
-  WriteFilePlugin = require("write-file-webpack-plugin"),
+  // Visualizer = require("webpack-visualizer-plugin"),
   ExtensionReloader = require("webpack-extension-reloader"),
-  ChromeExtensionReloader = require("webpack-chrome-extension-reloader"),
+  // ChromeExtensionReloader = require("webpack-chrome-extension-reloader"),
   WebpackBar = require("webpackbar"),
   CopyPlugin = require("copy-webpack-plugin");
 
@@ -118,13 +117,18 @@ module.exports = {
       },
       {
         test: new RegExp(".(" + images.join("|") + ")$"),
-        loader: "file-loader?name=images/[name].[ext]",
-        // options:{esModule:false},
+        loader: "file-loader",
+        options: {
+          name: "images/[name].[ext]",
+        },
         exclude: /node_modules/,
       },
       {
         test: new RegExp(".(" + fonts.join("|") + ")$"),
-        loader: "file-loader?name=/fonts/[name].[ext]",
+        loader: "file-loader",
+        options: {
+          name: "/fonts/[name].[ext]",
+        },
         exclude: /node_modules/,
       },
       {
@@ -165,6 +169,16 @@ module.exports = {
       path.resolve(__dirname, "src/icons"),
     ],
     descriptionFiles: ["package.json"],
+  },
+  devServer: {
+    contentBase: path.join(__dirname, "dist"),
+    devMiddleware: {
+      index: true,
+      mimeTypes: { "text/html": ["phtml"] },
+      publicPath: "/publicPathForDevServe",
+      serverSideRender: true,
+      writeToDisk: true,
+    },
   },
   plugins: [
     new WebExtPlugin({
@@ -228,11 +242,10 @@ module.exports = {
     }),
     // env.NODE_ENV === "development" && new webpack.HotModuleReplacementPlugin(),
     new ExtensionReloader(),
-    new WriteFilePlugin(), //Writes files to target directory during development build phase.
     new WebpackBar({ profile: true }),
     new BundleAnalyzerPlugin({ analyzerPort: 3030 }),
-    new Visualizer({ filename: "./statistics.html" }), //Pie
-    new LodashModuleReplacementPlugin({ collections: true }),
+    // new Visualizer({ filename: "./statistics.html" }), //Pie
+    // new LodashModuleReplacementPlugin({ collections: true }),
     new DashboardPlugin(), //cli based dashboard
   ],
 
