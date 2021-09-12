@@ -13,12 +13,23 @@ const getBackground = (version) => {
 const getPermissions = (version) => {
   if (version === 3) {
     return {
-      permissions: ["tabs", "contextMenus", "storage", "notifications"],
-      optional_permissions: ["unlimitedStorage"],
+      permissions: [
+        "tabs",
+        "contextMenus",
+        "storage",
+        "notifications",
+        "unlimitedStorage",
+      ],
     };
   } else if (version === 2) {
     return {
-      permissions: ["tabs", "contextMenus", "storage", "notifications"],
+      permissions: [
+        "tabs",
+        "contextMenus",
+        "storage",
+        "notifications",
+        "unlimitedStorage",
+      ],
     };
   }
 };

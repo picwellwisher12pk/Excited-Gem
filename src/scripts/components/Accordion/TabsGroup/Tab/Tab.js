@@ -1,9 +1,9 @@
-import React, {useRef} from "react";
-import {useDrag, useDrop} from "react-dnd";
-import {useDispatch, useSelector} from "react-redux";
-import {updateSelectedTabs} from "../../../../tabSlice";
-import {ItemTypes} from "./ItemTypes";
-import {LazyLoadImage} from 'react-lazy-load-image-component';
+import React, { useRef } from "react";
+import { useDrag, useDrop } from "react-dnd";
+import { useDispatch, useSelector } from "react-redux";
+import { updateSelectedTabs } from "../../../../tabSlice";
+import { ItemTypes } from "./ItemTypes";
+import { LazyLoadImage } from "react-lazy-load-image-component";
 
 //Icons
 import VolumeOffIcon from "volume-off.svg";
@@ -15,19 +15,19 @@ import ThumbtackActiveIcon from "thumbtack-active.svg";
 //Polyfill
 let browser = require("webextension-polyfill");
 
-const grayIcon = {height: 16, fill: "gray"};
-const blueIcon = {height: 16, fill: "#0487cf"};
+const grayIcon = { height: 16, fill: "gray" };
+const blueIcon = { height: 16, fill: "#0487cf" };
 const Tab = (props) => {
-  const {searchTerm, searchIn} = useSelector((state) => state.search);
+  const { searchTerm, searchIn } = useSelector((state) => state.search);
   const dispatch = useDispatch();
-  let {title, url, selected, pinned, discarded} = props;
+  let { title, url, selected, pinned, discarded } = props;
   const ref = useRef(null);
   /**
    * Specifies which props to inject into your component.
    */
 
-  const [{handlerId}, drop] = useDrop({
-    accept: ItemTypes.Tab,
+  const [{ handlerId }, drop] = useDrop({
+    accept: "tab",
     collect(monitor) {
       return {
         handlerId: monitor.getHandlerId(),
@@ -77,7 +77,8 @@ const Tab = (props) => {
     audioIcon;
   // console.log('props of tabs',props);
   const [{ isDragging }, drag] = useDrag({
-    item: { type: ItemTypes.Tab, id: props.id, index: props.index },
+    type: "tab",
+    item: { id: props.id, index: props.index },
     collect: (monitor) => ({
       isDragging: monitor.isDragging(),
     }),
@@ -98,18 +99,16 @@ const Tab = (props) => {
   }
 
   //Audio Icons rendering
-  if (!audible)
-    audioIcon = <VolumeOffIcon style={grayIcon}/>;
-  if (audible && !props.muted)
-    audioIcon = <VolumeIcon style={blueIcon}/>;
+  if (!audible) audioIcon = <VolumeOffIcon style={grayIcon} />;
+  if (audible && !props.muted) audioIcon = <VolumeIcon style={blueIcon} />;
   if (audible && props.mutedInfo.muted)
-    audioIcon = <VolumeMuteIcon style={grayIcon}/>;
+    audioIcon = <VolumeMuteIcon style={grayIcon} />;
 
   //Pin Icon Rendering
   let iconPinned = pinned ? (
-    <ThumbtackActiveIcon style={blueIcon}/>
+    <ThumbtackActiveIcon style={blueIcon} />
   ) : (
-    <ThumbtackIcon style={grayIcon}/>
+    <ThumbtackIcon style={grayIcon} />
   );
 
   //Markup of Action bar for active tabs: Right side buttons
@@ -130,7 +129,10 @@ const Tab = (props) => {
         className={`clickable sound-tab` + (audible ? ` active` : ` disabled`)}
         onClick={() => props.toggleMuteTab(props.id, audible)}
       >
-        <button className="btn btn-sm py-0  bg-transparent" style={{ minWidth: 33 }}>
+        <button
+          className="btn btn-sm py-0  bg-transparent"
+          style={{ minWidth: 33 }}
+        >
           {audioIcon}
         </button>
       </li>,
@@ -177,14 +179,16 @@ const Tab = (props) => {
       data-handler-id={handlerId}
       draggable={true}
     >
-      <label className="tab-favicon align-self-center position-relative" aria-label="favicon">
+      <label
+        className="tab-favicon align-self-center position-relative"
+        aria-label="favicon"
+      >
         {!selected && (
-
           <LazyLoadImage
             src={props.favIconUrl}
             title={props.favIconUrl && title}
-            alt={props.favIconUrl && title}/>
-
+            alt={props.favIconUrl && title}
+          />
         )}
 
         <input
@@ -209,7 +213,11 @@ const Tab = (props) => {
         dangerouslySetInnerHTML={{ __html: url }}
         onClick={() => browser.tabs.update(props.id, { active: true })}
       />
-      <ul className="tab-actions align-self-center" role="group" aria-label="options">
+      <ul
+        className="tab-actions align-self-center"
+        role="group"
+        aria-label="options"
+      >
         {actionButtons}
       </ul>
     </li>

@@ -80,7 +80,7 @@ module.exports = {
   mode: "development",
   context: __dirname,
   entry: {
-    tabs: [path.resolve(__dirname, "src", "scripts", "app.js")],
+    tabs: [path.resolve(__dirname, "src", "scripts", "TabsApp.js")],
     // sessions: [
     // "@babel/polyfill",
     //   path.resolve(__dirname, "src", "scripts", "sessions-container.js"),
@@ -95,6 +95,7 @@ module.exports = {
     rules: [
       {
         test: /\.(s?css)$/,
+        exclude: /node_modules/,
         use: [
           {
             loader: "style-loader", // inject CSS to page
@@ -106,12 +107,16 @@ module.exports = {
             loader: "postcss-loader", // Run post css actions
             options: {
               postcssOptions: {
-                // plugins: [preCSS, autoprefixer],
+                plugins: [preCSS],
               },
             },
           },
           {
             loader: "sass-loader", // compiles Sass to CSS
+            options: {
+              // Prefer `dart-sass`
+              implementation: require("sass"),
+            },
           },
         ],
       },
@@ -203,9 +208,10 @@ module.exports = {
       React: "react",
     }),
 
-    new MiniCssExtractPlugin({
-      filename: "css/[name].css",
-    }),
+    // new MiniCssExtractPlugin({
+    //   filename: "css/[name].css",
+    //   chunkFilename: "[id].css",
+    // }),
     // expose and write the allowed env vars on the compiled bundle
     new webpack.DefinePlugin(envKeys),
     new webpack.DefinePlugin({

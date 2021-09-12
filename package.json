@@ -85,11 +85,11 @@
     "immutability-helper": "^3.1.1",
     "jest": "^27.1.1",
     "lodash": "^4.17.20",
-    "mini-css-extract-plugin": "^2.2.2",
+    "mini-css-extract-plugin": "^2.3.0",
     "mocha": "^9.1.1",
     "node-sass": "^6.0.1",
     "popper.js": "^1.16.1",
-    "postcss-cli": "^8.3.1",
+    "postcss": "^8.3.6",
     "postcss-loader": "^6.1.1",
     "precss": "^4.0.0",
     "prettier": "^2.4.0",
@@ -118,16 +118,13 @@
     "redux-logger": "^3.0.6",
     "redux-thunk": "^2.3.0",
     "reduxed-chrome-storage": "^2.4.7",
-    "sass-loader": "^12.1.0",
     "style-loader": "^3.2.1",
     "terser-webpack-plugin": "^5.2.4",
     "uglifyjs-webpack-plugin": "^2.2.0",
     "url-loader": "^4.1.1",
     "webextension-polyfill": "^0.8.0",
-    "webpack": "^5.52.0",
     "webpack-bundle-analyzer": "^4.4.2",
     "webpack-chrome-extension-reloader": "^1.3.0",
-    "webpack-cli": "^4.8.0",
     "webpack-dashboard": "^3.3.6",
     "webpack-dev-server": "^4.2.0",
     "webpackbar": "^5.0.0-3"
@@ -150,7 +147,10 @@
   },
   "devDependencies": {
     "eslint-config-prettier": "^8.3.0",
+    "sass": "^1.39.2",
+    "sass-loader": "^12.1.0",
     "web-ext-plugin": "^1.3.2",
+    "webpack": "^5.52.1",
     "webpack-extension-reloader": "^1.1.4"
   }
 }
