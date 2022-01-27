@@ -12,16 +12,13 @@ var browser = require("webextension-polyfill");
 function updateTabs(store, eventName) {
   store.dispatch(ACTIONS.updateActiveTabs(eventName));
 }
-
+function onRemoved(store) {
+  updateTabs(store, "Tab Removed/Detached");
+}
 export default TabsApp;
 configureStore().then((store) => {
-  function onRemoved() {
-    updateTabs(store, "Tab Removed/Detached");
-  }
-
   browser.tabs.onRemoved.addListener(onRemoved);
   browser.tabs.onDetached.addListener(onRemoved);
-
   browser.tabs.onCreated.addListener(() => {
     updateTabs(store, "Tab Created");
   });
