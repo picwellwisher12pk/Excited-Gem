@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <title>
+        <%= htmlWebpackPlugin.options.title %>
+    </title>
+</head>
+
+<body class="eg">
+    <!-- Page Header -->
+    <header class="page-header">
+        <nav class="navbar navbar-expand-lg navbar-expand-md">
+            <div class="navbar-brand ">
+                <a href="#" class="pull-left logo" style="margin-top: 10px;"><img src="images/logo.png" alt="" style="height: 40px; width: auto;"></a>
+            </div>
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav">
+                    <li class="nav-item active"><a class="nav-link text-white" href="/tabs.html" id="go-to-tabs">Tabs<span
+                class="sr-only">(current)</span></a>
+                    </li>
+                    <li class="nav-item"><a class="nav-link text-white font-weight-bold" href="/sessions.html">Sessions</a></li>
+                </ul>
+            </div>
+        </nav>
+
+        <section class="context-actions container-fluid">
+            <ul class="nav nav-pills pull-left">
+
+                <li role="presentation">
+                    <a id="saveSessions-btn" href="#" title="Save Active Tabs opened in all Chrome windows">
+                        <i class="fas fa-save fa-fw"></i> Save Session
+                    </a>
+                </li>
+
+            </ul>
+
+        </section>
+    </header>
+    <!-- Page Header Ends -->
+    <div id="sessions-tab" role="tabpanel" class="tab-pane" style="overflow-y: auto;">
+        <div class="tabs-list-container">
+
+            <div id="all-sessions"></div>
+        </div>
+    </div>
+    <div id="react-container"></div>
+</body>
+<!-- <div class="menu" id="context-menu">Test</div> -->
+<div id="infoModal" tabindex="-1" role="dialog" aria-labelledby="mySmallModalLabel" class="modal bs-example-modal-sm">
+</div>
+
+</html>

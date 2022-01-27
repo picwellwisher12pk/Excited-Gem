@@ -31,6 +31,7 @@
     "firefoxp": "SET NODE_ENV=production& SET BROWSER_CLIENT=firefox& node utils/production.js",
     "chromep": "SET NODE_ENV=production& SET BROWSER_CLIENT=chrome& node utils/production.js",
     "mount": "cd dist & web-ext run --firefox=firefoxdeveloperedition",
+    "react-devtools": "react-devtools",
     "packf": "cd firefox & web-ext build",
     "test": "mocha './src/**/*.test.js' --require @babel/register"
   },

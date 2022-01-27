@@ -9,12 +9,15 @@ let webpack = require("webpack"),
     require("webpack-bundle-analyzer").BundleAnalyzerPlugin, //Bundle analyzer
   env = require("./utils/env"),
   HtmlWebpackPlugin = require("html-webpack-plugin"),
-  // ExtractTextPlugin = require("extract-text-webpack-plugin"),
   MiniCssExtractPlugin = require("mini-css-extract-plugin"),
   ExtensionReloader = require("webpack-extension-reloader"),
   ChromeExtensionReloader = require("webpack-chrome-extension-reloader"),
   preCSS = require("precss"),
   WebpackBar = require("webpackbar"),
+  WriteFilePlugin = require("write-file-webpack-plugin"),
+  // ExtractTextPlugin = require("extract-text-webpack-plugin"),
+  // Visualizer = require("webpack-visualizer-plugin"),
+  // WebpackBar = require("webpackbar"),
   CopyPlugin = require("copy-webpack-plugin");
 
 require("./utils/prepare");
@@ -243,10 +246,21 @@ module.exports = {
     }),
     // env.NODE_ENV === "development" && new webpack.HotModuleReplacementPlugin(),
     // new ExtensionReloader(),
-    new WebpackBar({ profile: true }),
-    new BundleAnalyzerPlugin({ analyzerPort: 3030 }),
     // new LodashModuleReplacementPlugin({ collections: true }),
+    new ExtensionReloader(),
+    new WriteFilePlugin(), //Writes files to target directory during development build phase.
+
+    new WebpackBar({ profile: true }),
+    // new WebpackBar({profile: true}),
+
+    new BundleAnalyzerPlugin({ analyzerPort: 3030 }),
+    // new BundleAnalyzerPlugin({ analyzerPort: 3030 }),
+
+    // new Visualizer({ filename: "./statistics.html" }), //Pie
+    // new LodashModuleReplacementPlugin({collections: true}),
+
     new DashboardPlugin(), //cli based dashboard
+    // new DashboardPlugin(), //cli based dashboard
   ],
 
   /*    {

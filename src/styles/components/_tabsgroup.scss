@@ -1,0 +1,9 @@
+.tabs-list {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+}
+
+.list-group+.list-group {
+    border-top: 15px solid var(--info);
+}

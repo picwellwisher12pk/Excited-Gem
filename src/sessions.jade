@@ -1,0 +1,45 @@
+doctype html
+html(lang="en")
+  head
+    title="Excited Gem"
+    link(rel="stylesheet", href="css/bootstrap.css")
+    link(rel="stylesheet", href="css/eg.css")
+    //- link(rel="stylesheet", href="css/font-awesome.css")
+    script(src="js/jquery.min.js")
+    script(src="js/react/dist/react.js")
+    script(src="js/react-dom/dist/react-dom.js")
+    script(src="js/bootstrap.js")
+    //- script(src="js/activetabs.js")
+    script(src="js/sessions.js")
+    //- script(src="js/readinglist.js")
+    script(src="js/content.js")
+    //- script(src="js/contentext.js")
+    //- script(src="js/jquery-ui.js")
+
+    style.
+      .tabGroupTitleText {
+      font-family: 'Open Sans', 'Helvetica Neue', Arial, sans-serif;
+      color: #444;
+      }
+
+
+  body.eg
+    include navigation
+    .container-fluid.sessions
+      h1 Sessions
+      #sessions-tab.tab-pane(role='tabpanel')
+        .tabs-list-container.header
+          .horizontal-block.context-actions
+            ul.nav.nav-pills
+              li(role='presentation')
+                a#saveSessions-btn(href='#', title='Save Active Tabs opened in all Chrome windows')
+                  span.glyphicon.glyphicon-save(aria-hidden='true')
+                  |                                     Save Session
+              li(role='presentation')
+                a#saveSessionsAndClose-btn(href='#', title='Save Active Tabs opened in all Chrome windows and close Chrome')
+                  span.glyphicon.glyphicon-save(aria-hidden='true')
+                  |                                     Save Session and Close Chrome
+        #all-sessions
+    #react-container
+    // Small modal
+  #infoModal.modal.bs-example-modal-sm(tabindex='-1', role='dialog', aria-labelledby='mySmallModalLabel')

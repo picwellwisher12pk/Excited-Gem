@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.1//EN" "http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd">
+<svg width="100%" height="100%" viewBox="0 0 17 17" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" xml:space="preserve" xmlns:serif="http://www.serif.com/" style="fill-rule:evenodd;clip-rule:evenodd;stroke-linejoin:round;stroke-miterlimit:1.41421;">
+    <g transform="matrix(1,0,0,1,-27,-62)">
+        <g transform="matrix(1.14414,0,0,1,-469.127,-1252.5)">
+            <g id="Loupe-Icon" serif:id="Loupe Icon" transform="matrix(0.874022,0,0,1,52.9107,0)">
+                <path d="M451.696,1330.7C451.303,1331.09 450.665,1331.09 450.271,1330.7L447.18,1327.61C446.013,1328.48 444.569,1329 443,1329C439.134,1329 436,1325.87 436,1322C436,1318.13 439.134,1315 443,1315C446.866,1315 450,1318.13 450,1322C450,1323.57 449.477,1325.01 448.605,1326.18L451.696,1329.27C452.09,1329.66 452.09,1330.3 451.696,1330.7ZM443,1317C440.239,1317 438,1319.24 438,1322C438,1324.76 440.239,1327 443,1327C445.761,1327 448,1324.76 448,1322C448,1319.24 445.761,1317 443,1317Z" style="fill:rgb(131,147,167);"/>
+            </g>
+        </g>
+    </g>
+</svg>
