@@ -1,0 +1,4 @@
+{
+  "watch": ["webpack.config.js", "package.json"],
+  "exec": "npx webpack serve --mode development"
+}

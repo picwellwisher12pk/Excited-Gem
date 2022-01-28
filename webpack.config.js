@@ -1,24 +1,22 @@
-require("dotenv").config();
-const autoprefixer = require("autoprefixer");
-let webpack = require("webpack"),
-  WebExtPlugin = require("web-ext-plugin"),
+// require("dotenv").config();
+// const autoprefixer = require("autoprefixer");
+const webpack = require("webpack"),
   path = require("path"),
   fileSystem = require("fs"),
+  env = require("./utils/env"),
+  WebExtPlugin = require("web-ext-plugin"),
   DashboardPlugin = require("webpack-dashboard/plugin"), //Webpack cli based dashboard
   BundleAnalyzerPlugin =
     require("webpack-bundle-analyzer").BundleAnalyzerPlugin, //Bundle analyzer
-  env = require("./utils/env"),
   HtmlWebpackPlugin = require("html-webpack-plugin"),
-  MiniCssExtractPlugin = require("mini-css-extract-plugin"),
   ExtensionReloader = require("webpack-extension-reloader"),
   ChromeExtensionReloader = require("webpack-chrome-extension-reloader"),
-  preCSS = require("precss"),
   WebpackBar = require("webpackbar"),
-  WriteFilePlugin = require("write-file-webpack-plugin"),
-  // ExtractTextPlugin = require("extract-text-webpack-plugin"),
-  // Visualizer = require("webpack-visualizer-plugin"),
-  // WebpackBar = require("webpackbar"),
   CopyPlugin = require("copy-webpack-plugin");
+// ExtractTextPlugin = require("extract-text-webpack-plugin"),
+// Visualizer = require("webpack-visualizer-plugin"),
+// WebpackBar = require("webpackbar"),
+const MiniCssExtractPlugin = require("mini-css-extract-plugin");
 
 require("./utils/prepare");
 
@@ -83,7 +81,7 @@ module.exports = {
   mode: "development",
   context: __dirname,
   entry: {
-    tabs: [path.resolve(__dirname, "src", "scripts", "TabsApp.js")],
+    tabs: [path.resolve(__dirname, "src", "scripts", "app.js")],
     // sessions: [
     // "@babel/polyfill",
     //   path.resolve(__dirname, "src", "scripts", "sessions-container.js"),
@@ -98,7 +96,7 @@ module.exports = {
     rules: [
       {
         test: /\.(s?css)$/,
-        exclude: /node_modules/,
+        // exclude: /node_modules/,
         use: [
           {
             loader: "style-loader", // inject CSS to page
@@ -108,11 +106,6 @@ module.exports = {
           },
           {
             loader: "postcss-loader", // Run post css actions
-            options: {
-              postcssOptions: {
-                plugins: [preCSS],
-              },
-            },
           },
           {
             loader: "sass-loader", // compiles Sass to CSS
@@ -179,14 +172,46 @@ module.exports = {
     descriptionFiles: ["package.json"],
   },
   devServer: {
-    contentBase: path.join(__dirname, "dist"),
+    hot: true,
+    static: {
+      directory: path.resolve(__dirname, "dist"),
+      staticOptions: {},
+      // Don't be confused with `devMiddleware.publicPath`, it is `publicPath` for static directory
+      // Can be:
+      // publicPath: ['/static-public-path-one/', '/static-public-path-two/'],
+      publicPath: "/dist",
+      // Can be:
+      // serveIndex: {} (options for the `serveIndex` option you can find https://github.com/expressjs/serve-index)
+      serveIndex: true,
+      // Can be:
+      // watch: {} (options for the `watch` option you can find https://github.com/paulmillr/chokidar)
+      watch: true,
+    },
     devMiddleware: {
       index: true,
       mimeTypes: { "text/html": ["phtml"] },
-      publicPath: "/publicPathForDevServe",
+      publicPath: "/dist",
       serverSideRender: true,
       writeToDisk: true,
     },
+    client: {
+      webSocketURL: {
+        hostname: "localhost",
+        pathname: "/ws",
+        port: 8080,
+      },
+      logging: "info",
+      // Can be used only for `errors`/`warnings`
+      //
+      // overlay: {
+      //   errors: true,
+      //   warnings: true,
+      // }
+      overlay: true,
+      progress: true,
+      webSocketTransport: "ws",
+    },
+    webSocketServer: "ws",
   },
   plugins: [
     // new WebExtPlugin({
@@ -211,10 +236,10 @@ module.exports = {
       React: "react",
     }),
 
-    // new MiniCssExtractPlugin({
-    //   filename: "css/[name].css",
-    //   chunkFilename: "[id].css",
-    // }),
+    new MiniCssExtractPlugin({
+      filename: "css/[name].css",
+      chunkFilename: "[id].css",
+    }),
     // expose and write the allowed env vars on the compiled bundle
     new webpack.DefinePlugin(envKeys),
     new webpack.DefinePlugin({
@@ -245,22 +270,16 @@ module.exports = {
       chunks: ["sessions"],
     }),
     // env.NODE_ENV === "development" && new webpack.HotModuleReplacementPlugin(),
-    // new ExtensionReloader(),
+    // new ExtensionReloader(),//problems with hot reloading
     // new LodashModuleReplacementPlugin({ collections: true }),
-    new ExtensionReloader(),
-    new WriteFilePlugin(), //Writes files to target directory during development build phase.
 
     new WebpackBar({ profile: true }),
-    // new WebpackBar({profile: true}),
 
-    new BundleAnalyzerPlugin({ analyzerPort: 3030 }),
     // new BundleAnalyzerPlugin({ analyzerPort: 3030 }),
 
     // new Visualizer({ filename: "./statistics.html" }), //Pie
-    // new LodashModuleReplacementPlugin({collections: true}),
 
     new DashboardPlugin(), //cli based dashboard
-    // new DashboardPlugin(), //cli based dashboard
   ],
 
   /*    {

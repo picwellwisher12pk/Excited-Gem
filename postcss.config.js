@@ -1,4 +1,4 @@
-'use strict'
+"use strict";
 
 // module.exports = (ctx) => ({
 //   map: ctx.file.dirname.includes('examples') ? false : {
@@ -13,11 +13,11 @@
 //   }
 // })
 module.exports = {
-  parser: 'sugarss',
-  plugins: {
-    'postcss-import': {},
-    'postcss-preset-env': {},
-    'cssnano': {}
-  }
+  plugins: [
+    require("postcss-import"),
+    require("autoprefixer"),
+    require("postcss-preset-env"),
+    require("precss"),
+    require("cssnano"),
+  ],
 };
-
