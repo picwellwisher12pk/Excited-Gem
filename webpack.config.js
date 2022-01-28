@@ -9,15 +9,13 @@ const webpack = require("webpack"),
   BundleAnalyzerPlugin =
     require("webpack-bundle-analyzer").BundleAnalyzerPlugin, //Bundle analyzer
   HtmlWebpackPlugin = require("html-webpack-plugin"),
-  ExtensionReloader = require("webpack-extension-reloader"),
   ChromeExtensionReloader = require("webpack-chrome-extension-reloader"),
   WebpackBar = require("webpackbar"),
   CopyPlugin = require("copy-webpack-plugin");
 // ExtractTextPlugin = require("extract-text-webpack-plugin"),
 // Visualizer = require("webpack-visualizer-plugin"),
-// WebpackBar = require("webpackbar"),
 const MiniCssExtractPlugin = require("mini-css-extract-plugin");
-
+const paths = require("./paths.js");
 require("./utils/prepare");
 
 // Get the root path (assuming your webpack config is in the root of your project!)
@@ -42,7 +40,7 @@ const envKeys = Object.keys(env).reduce((prev, next) => {
 }, {});
 
 // load the secrets
-alias = {};
+alias = { "@": paths.src };
 
 let secretsPath = path.join(__dirname, "secrets." + env.NODE_ENV + ".js");
 
@@ -81,11 +79,7 @@ module.exports = {
   mode: "development",
   context: __dirname,
   entry: {
-    tabs: [path.resolve(__dirname, "src", "scripts", "app.js")],
-    // sessions: [
-    // "@babel/polyfill",
-    //   path.resolve(__dirname, "src", "scripts", "sessions-container.js"),
-    // ],
+    "excited-gem": [path.resolve(__dirname, "src", "scripts", "app.js")],
     background: [path.resolve(__dirname, "src", "scripts", "background.js")],
   },
   output: {
@@ -95,25 +89,15 @@ module.exports = {
   module: {
     rules: [
       {
-        test: /\.(s?css)$/,
-        // exclude: /node_modules/,
+        test: /\.(sass|scss|css)$/,
         use: [
+          "style-loader",
           {
-            loader: "style-loader", // inject CSS to page
+            loader: "css-loader",
+            options: { sourceMap: true, importLoaders: 1, modules: false },
           },
-          {
-            loader: "css-loader", // translates CSS into CommonJS modules
-          },
-          {
-            loader: "postcss-loader", // Run post css actions
-          },
-          {
-            loader: "sass-loader", // compiles Sass to CSS
-            options: {
-              // Prefer `dart-sass`
-              implementation: require("sass"),
-            },
-          },
+          { loader: "postcss-loader", options: { sourceMap: true } },
+          { loader: "sass-loader", options: { sourceMap: true } },
         ],
       },
       {
@@ -159,7 +143,7 @@ module.exports = {
     ],
   },
   resolve: {
-    alias: alias,
+    alias,
     extensions: fileExtensions
       .map((extension) => "." + extension)
       .concat([".jsx", ".js", ".css"]),
@@ -196,18 +180,18 @@ module.exports = {
     },
     client: {
       webSocketURL: {
-        hostname: "localhost",
+        hostname: "0.0.0.0",
         pathname: "/ws",
         port: 8080,
       },
       logging: "info",
       // Can be used only for `errors`/`warnings`
       //
-      // overlay: {
-      //   errors: true,
-      //   warnings: true,
-      // }
-      overlay: true,
+      overlay: {
+        errors: true,
+        warnings: true,
+      },
+      // overlay: true,
       progress: true,
       webSocketTransport: "ws",
     },
@@ -224,21 +208,18 @@ module.exports = {
           from: path.resolve(__dirname, "src", "scripts", "background.js"),
           to: path.resolve(__dirname, "dist"),
         },
-        {
-          from: path.resolve(__dirname, "src", "scripts", "background.js"),
-          to: path.resolve(__dirname, "dist"),
-        },
       ],
     }),
     new webpack.ProvidePlugin({
-      $: "jquery",
-      jQuery: "jquery",
+      // $: "jquery",
+      // jQuery: "jquery",
       React: "react",
     }),
 
     new MiniCssExtractPlugin({
       filename: "css/[name].css",
       chunkFilename: "[id].css",
+      linkType: "text/css",
     }),
     // expose and write the allowed env vars on the compiled bundle
     new webpack.DefinePlugin(envKeys),
@@ -250,13 +231,13 @@ module.exports = {
     new HtmlWebpackPlugin({
       title: "Excited Gem | Tabs",
       logotype: env.NODE_ENV === "development" ? "dev-logo.png" : "logo.png",
-      template: path.join(__dirname, "./src", "tabs.ejs"),
-      filename: "tabs.html",
+      template: path.join(__dirname, "./src", "excited-gem.ejs"),
+      filename: "excited-gem.html",
       favicon:
         env.NODE_ENV === "development"
           ? "./src/images/dev-logo.png"
           : "./src/images/logo.png",
-      chunks: ["tabs"],
+      chunks: ["excited-gem"],
     }),
     new HtmlWebpackPlugin({
       title: "Excited Gem | Sessions",
@@ -270,7 +251,6 @@ module.exports = {
       chunks: ["sessions"],
     }),
     // env.NODE_ENV === "development" && new webpack.HotModuleReplacementPlugin(),
-    // new ExtensionReloader(),//problems with hot reloading
     // new LodashModuleReplacementPlugin({ collections: true }),
 
     new WebpackBar({ profile: true }),

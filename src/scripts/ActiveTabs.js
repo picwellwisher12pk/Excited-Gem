@@ -14,10 +14,6 @@ import "../images/dev-logo.png";
 // React Components
 import Header from "./components/Header/Header";
 import Search from "./components/Header/Search/Search";
-//Styles
-import "../styles/index.scss";
-import "react-custom-scroll/dist/customScroll.css";
-
 import { Navigation } from "./components/Header/Navigation";
 import { TabWindowWrapper } from "./TabWindowWrapper";
 

@@ -13,11 +13,13 @@
 //   }
 // })
 module.exports = {
-  plugins: [
-    require("postcss-import"),
-    require("autoprefixer"),
-    require("postcss-preset-env"),
-    require("precss"),
-    require("cssnano"),
-  ],
+  plugins: {
+    "postcss-preset-env": {
+      browsers: "last 2 versions",
+    },
+    autoprefixer: {},
+    "postcss-import": {},
+    precss: {},
+    cssnano: {},
+  },
 };

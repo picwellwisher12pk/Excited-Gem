@@ -1,5 +1,5 @@
 let browser = require("webextension-polyfill");
-export let homepageURL = browser.runtime.getURL("tabs.html");
+export let homepageURL = browser.runtime.getURL("excited-gem.html");
 let refinedTabs;
 
 export let ignoredUrlPatterns = [

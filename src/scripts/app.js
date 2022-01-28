@@ -5,7 +5,9 @@ import { render } from "react-dom";
 import { Provider } from "react-redux";
 import store from "./store";
 import ActiveTabs from "./ActiveTabs";
-import "../styles/index.scss";
+
+const style = require("@/styles/index.scss");
+const customScroll = require("/node_modules/react-custom-scroll/dist/customScroll.css");
 
 let browser = require("webextension-polyfill");
 
