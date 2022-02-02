@@ -55,3 +55,4 @@ src/images/solid/
 src/images/regular/
 src/images/light/
 *.zip
+.idea/
