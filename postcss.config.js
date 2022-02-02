@@ -19,7 +19,6 @@ module.exports = {
     },
     autoprefixer: {},
     "postcss-import": {},
-    precss: {},
     cssnano: {},
   },
 };
