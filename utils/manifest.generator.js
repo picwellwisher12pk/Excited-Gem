@@ -1,15 +1,25 @@
-const manifest = require("../manifest_partials/common"),
+const browserClient = "chrome";
+const ext = browserClient === "firefox" ? ".svg" : ".png";
+const chromeManifest = require("../manifest_partials/chrome");
+const manifest = {},
   fileSystem = require("fs"),
   myPackage = require("../package.json"),
   path = require("path"),
   env = require("./env"),
   logoFile =
-    env.NODE_ENV === "development" ? "images/dev-logo.png" : "images/logo.png";
+    env.NODE_ENV === "development"
+      ? "images/dev-logo" + ext
+      : "images/logo" + ext;
 
-// generates the manifest file using the package.json informations
+const getBackground =
+  require("../manifest_partials/versionBasedMethods").getBackground;
+const getPermissions =
+  require("../manifest_partials/versionBasedMethods").getPermissions;
+// generates the manifest file using the package.json information
 manifest.name = myPackage.title;
 manifest.version = myPackage.version;
 manifest.manifest_version = 3;
+manifest.background = getBackground(manifest.manifest_version);
 
 manifest.description = myPackage.description;
 manifest.icons = {
@@ -25,8 +35,12 @@ manifest.action = {
   default_title: myPackage.title,
 };
 
-const chromeManifest = require("../manifest_partials/chrome");
-manifest2 = { ...manifest, ...chromeManifest };
+manifest2 = {
+  ...manifest,
+  ...getPermissions(manifest.manifest_version),
+  ...chromeManifest,
+};
+
 fileSystem.writeFileSync(
   path.join(__dirname, "../dist/manifest.json"),
   JSON.stringify(manifest2)

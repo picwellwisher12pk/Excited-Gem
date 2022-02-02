@@ -1,0 +1,41 @@
+{
+  "compilerOptions": {
+      "target": "es5",
+      "module": "commonjs",
+      "declaration": true,
+      "noImplicitAny": true,
+      "removeComments": true,
+      "experimentalDecorators": true,
+      "rootDir": ".",
+      "sourceMap": true,
+      "listFiles": true,
+      "newLine": "LF",
+      "checkJs": true,
+      "noEmitOnError": true
+  },
+  "filesGlob": [
+      "./**/*.ts",
+      "./**/*.tsx",
+      "!./**/*.d.ts",
+      "!./gulpfile.ts",
+      "./typings/**/*.d.ts",
+      "!./node_modules/**/*.ts",
+      "./node_modules/typescript/lib/lib.es6.d.ts"
+  ],
+  "exclude": [],
+  "files": [
+      "./lib/cli.ts",
+      "./lib/index.ts",
+      "./test/indexSpec.ts",
+      "./typings/bundle.d.ts",
+      "./typings/empower/empower.d.ts",
+      "./typings/gulp/gulp.d.ts",
+      "./typings/mocha/mocha.d.ts",
+      "./typings/node/node.d.ts",
+      "./typings/orchestrator/orchestrator.d.ts",
+      "./typings/power-assert-formatter/power-assert-formatter.d.ts",
+      "./typings/power-assert/power-assert.d.ts",
+      "./typings/q/Q.d.ts",
+      "./node_modules/typescript/lib/lib.es6.d.ts"
+  ]
+}

@@ -1,20 +1,21 @@
-require("dotenv").config();
-let webpack = require("webpack"),
-  WebExtPlugin = require("web-ext-plugin"),
+// require("dotenv").config();
+// const autoprefixer = require("autoprefixer");
+const webpack = require("webpack"),
   path = require("path"),
   fileSystem = require("fs"),
-  // DashboardPlugin = require("webpack-dashboard/plugin"), //Webpack cli based dashboard
-  //BundleAnalyzerPlugin = require("webpack-bundle-analyzer").BundleAnalyzerPlugin, //Bundle analyzer
   env = require("./utils/env"),
+  WebExtPlugin = require("web-ext-plugin"),
+  DashboardPlugin = require("webpack-dashboard/plugin"), //Webpack cli based dashboard
+  BundleAnalyzerPlugin =
+    require("webpack-bundle-analyzer").BundleAnalyzerPlugin, //Bundle analyzer
   HtmlWebpackPlugin = require("html-webpack-plugin"),
-  // ExtractTextPlugin = require("extract-text-webpack-plugin"),
-  MiniCssExtractPlugin = require("mini-css-extract-plugin"),
-  // Visualizer = require("webpack-visualizer-plugin"),
-  WriteFilePlugin = require("write-file-webpack-plugin"),
-  ExtensionReloader = require("webpack-extension-reloader"),
-  // WebpackBar = require("webpackbar"),
+  ChromeExtensionReloader = require("webpack-chrome-extension-reloader"),
+  WebpackBar = require("webpackbar"),
   CopyPlugin = require("copy-webpack-plugin");
-
+// ExtractTextPlugin = require("extract-text-webpack-plugin"),
+// Visualizer = require("webpack-visualizer-plugin"),
+const MiniCssExtractPlugin = require("mini-css-extract-plugin");
+const paths = require("./paths.js");
 require("./utils/prepare");
 
 // Get the root path (assuming your webpack config is in the root of your project!)
@@ -39,7 +40,7 @@ const envKeys = Object.keys(env).reduce((prev, next) => {
 }, {});
 
 // load the secrets
-alias = {};
+alias = { "@": paths.src };
 
 let secretsPath = path.join(__dirname, "secrets." + env.NODE_ENV + ".js");
 
@@ -78,11 +79,7 @@ module.exports = {
   mode: "development",
   context: __dirname,
   entry: {
-    tabs: [path.resolve(__dirname, "src", "scripts", "app.js")],
-    // sessions: [
-    // "@babel/polyfill",
-    //   path.resolve(__dirname, "src", "scripts", "sessions-container.js"),
-    // ],
+    "excited-gem": [path.resolve(__dirname, "src", "scripts", "app.js")],
     background: [path.resolve(__dirname, "src", "scripts", "background.js")],
   },
   output: {
@@ -92,37 +89,31 @@ module.exports = {
   module: {
     rules: [
       {
-        test: /\.(s?css)$/,
+        test: /\.(sass|scss|css)$/,
         use: [
+          "style-loader",
           {
-            loader: "style-loader", // inject CSS to page
+            loader: "css-loader",
+            options: { sourceMap: true, importLoaders: 1, modules: false },
           },
-          {
-            loader: "css-loader", // translates CSS into CommonJS modules
-          },
-          {
-            loader: "postcss-loader", // Run post css actions
-            options: {
-              plugins: function () {
-                // post css plugins, can be exported to postcss.config.js
-                return [require("precss"), require("autoprefixer")];
-              },
-            },
-          },
-          {
-            loader: "sass-loader", // compiles Sass to CSS
-          },
+          { loader: "postcss-loader", options: { sourceMap: true } },
+          { loader: "sass-loader", options: { sourceMap: true } },
         ],
       },
       {
         test: new RegExp(".(" + images.join("|") + ")$"),
-        loader: "file-loader?name=images/[name].[ext]",
-        // options:{esModule:false},
+        loader: "file-loader",
+        options: {
+          name: "images/[name].[ext]",
+        },
         exclude: /node_modules/,
       },
       {
         test: new RegExp(".(" + fonts.join("|") + ")$"),
-        loader: "file-loader?name=/fonts/[name].[ext]",
+        loader: "file-loader",
+        options: {
+          name: "/fonts/[name].[ext]",
+        },
         exclude: /node_modules/,
       },
       {
@@ -152,7 +143,7 @@ module.exports = {
     ],
   },
   resolve: {
-    alias: alias,
+    alias,
     extensions: fileExtensions
       .map((extension) => "." + extension)
       .concat([".jsx", ".js", ".css"]),
@@ -164,22 +155,55 @@ module.exports = {
     ],
     descriptionFiles: ["package.json"],
   },
+  devServer: {
+    hot: true,
+    static: {
+      directory: path.resolve(__dirname, "dist"),
+      staticOptions: {},
+      // Don't be confused with `devMiddleware.publicPath`, it is `publicPath` for static directory
+      // Can be:
+      // publicPath: ['/static-public-path-one/', '/static-public-path-two/'],
+      publicPath: "/dist",
+      // Can be:
+      // serveIndex: {} (options for the `serveIndex` option you can find https://github.com/expressjs/serve-index)
+      serveIndex: true,
+      // Can be:
+      // watch: {} (options for the `watch` option you can find https://github.com/paulmillr/chokidar)
+      watch: true,
+    },
+    devMiddleware: {
+      index: true,
+      mimeTypes: { "text/html": ["phtml"] },
+      publicPath: "/dist",
+      serverSideRender: true,
+      writeToDisk: true,
+    },
+    client: {
+      webSocketURL: {
+        hostname: "0.0.0.0",
+        pathname: "/ws",
+        port: 8080,
+      },
+      logging: "info",
+      // Can be used only for `errors`/`warnings`
+      //
+      overlay: {
+        errors: true,
+        warnings: true,
+      },
+      // overlay: true,
+      progress: true,
+      webSocketTransport: "ws",
+    },
+    webSocketServer: "ws",
+  },
   plugins: [
-    new WebExtPlugin({
-      sourceDir: path.resolve(__dirname, "dist"),
-      browserConsole: true,
-    }),
+    // new WebExtPlugin({
+    //   sourceDir: path.resolve(__dirname, "dist"),
+    //   browserConsole: true,
+    // }),
     new CopyPlugin({
       patterns: [
-        {
-          from: path.resolve(
-            __dirname,
-            "src",
-            "scripts",
-            "background-wrapper.js"
-          ),
-          to: path.resolve(__dirname, "dist"),
-        },
         {
           from: path.resolve(__dirname, "src", "scripts", "background.js"),
           to: path.resolve(__dirname, "dist"),
@@ -187,13 +211,15 @@ module.exports = {
       ],
     }),
     new webpack.ProvidePlugin({
-      $: "jquery",
-      jQuery: "jquery",
+      // $: "jquery",
+      // jQuery: "jquery",
       React: "react",
     }),
 
     new MiniCssExtractPlugin({
       filename: "css/[name].css",
+      chunkFilename: "[id].css",
+      linkType: "text/css",
     }),
     // expose and write the allowed env vars on the compiled bundle
     new webpack.DefinePlugin(envKeys),
@@ -205,13 +231,13 @@ module.exports = {
     new HtmlWebpackPlugin({
       title: "Excited Gem | Tabs",
       logotype: env.NODE_ENV === "development" ? "dev-logo.png" : "logo.png",
-      template: path.join(__dirname, "./src", "tabs.ejs"),
-      filename: "tabs.html",
+      template: path.join(__dirname, "./src", "excited-gem.ejs"),
+      filename: "excited-gem.html",
       favicon:
         env.NODE_ENV === "development"
           ? "./src/images/dev-logo.png"
           : "./src/images/logo.png",
-      chunks: ["tabs"],
+      chunks: ["excited-gem"],
     }),
     new HtmlWebpackPlugin({
       title: "Excited Gem | Sessions",
@@ -225,13 +251,15 @@ module.exports = {
       chunks: ["sessions"],
     }),
     // env.NODE_ENV === "development" && new webpack.HotModuleReplacementPlugin(),
-    new ExtensionReloader(),
-    new WriteFilePlugin(), //Writes files to target directory during development build phase.
-    // new WebpackBar({profile: true}),
+    // new LodashModuleReplacementPlugin({ collections: true }),
+
+    new WebpackBar({ profile: true }),
+
     // new BundleAnalyzerPlugin({ analyzerPort: 3030 }),
+
     // new Visualizer({ filename: "./statistics.html" }), //Pie
-    // new LodashModuleReplacementPlugin({collections: true}),
-    // new DashboardPlugin(), //cli based dashboard
+
+    new DashboardPlugin(), //cli based dashboard
   ],
 
   /*    {

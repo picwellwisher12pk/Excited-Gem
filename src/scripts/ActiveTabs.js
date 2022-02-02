@@ -14,9 +14,6 @@ import "../images/dev-logo.png";
 // React Components
 import Header from "./components/Header/Header";
 import Search from "./components/Header/Search/Search";
-//Styles
-import "../styles/eg.scss";
-import "react-custom-scroll/dist/customScroll.css";
 import { Navigation } from "./components/Header/Navigation";
 import { TabWindowWrapper } from "./TabWindowWrapper";
 
@@ -73,9 +70,10 @@ updateTabs(getTabs, store);
 const ActiveTabs = () => {
   const { tabs } = useSelector((state) => state.tabs);
   const { search } = useSelector((state) => state);
-  const navigation = useMemo(() => <Navigation tabCount={tabs.length} />, [
-    tabs.length,
-  ]);
+  const navigation = useMemo(
+    () => <Navigation tabCount={tabs.length} />,
+    [tabs.length]
+  );
   const header = useMemo(
     () => <Header navigation={navigation} search={<Search />} />,
     [tabs, search]
