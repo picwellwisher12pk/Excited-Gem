@@ -2,9 +2,9 @@ import React, { useRef } from "react";
 import { useDrag, useDrop } from "react-dnd";
 import { useDispatch, useSelector } from "react-redux";
 import { updateSelectedTabs } from "../../../../tabSlice";
-import { ItemTypes } from "./ItemTypes";
 import { LazyLoadImage } from "react-lazy-load-image-component";
-
+import Grip from "grip-lines-vertical.svg";
+import Loading from "spinner-third.svg";
 //Icons
 import VolumeOffIcon from "volume-off.svg";
 import VolumeIcon from "volume.svg";
@@ -75,7 +75,6 @@ const Tab = (props) => {
     audible = props.audible || props.muted,
     actionButtons,
     audioIcon;
-  // console.log('props of tabs',props);
   const [{ isDragging }, drag] = useDrag({
     type: "tab",
     item: { id: props.id, index: props.index },
@@ -179,23 +178,40 @@ const Tab = (props) => {
       data-handler-id={handlerId}
       draggable={true}
     >
+      <Grip
+        // ref={drag}
+        style={{
+          width: 16,
+          height: 16,
+          marginTop: 10,
+          fill: "gray",
+          marginLeft: -10,
+          marginRight: 10,
+        }}
+      />
       <label
         className="tab-favicon align-self-center position-relative"
         aria-label="favicon"
       >
-        {!selected && (
-          <LazyLoadImage
-            src={props.favIconUrl}
-            title={props.favIconUrl && title}
-            alt={props.favIconUrl && title}
-          />
-        )}
+        {!selected &&
+          (loading ? (
+            <Loading className={"spinner"} />
+          ) : (
+            <LazyLoadImage
+              src={props.favIconUrl}
+              title={props.favIconUrl && title}
+              alt={props.favIconUrl && title}
+            />
+          ))}
 
         <input
           type="checkbox"
           onChange={() =>
             dispatch(
-              updateSelectedTabs({ id: props.id, selected: !props.selected })
+              updateSelectedTabs({
+                id: props.id,
+                selected: !props.selected,
+              })
             )
           }
           checked={selected}
@@ -204,7 +220,9 @@ const Tab = (props) => {
       </label>
       <span
         className={`tab-title clip font-weight-bold align-self-center`}
-        style={{ opacity: discarded || loading ? 0.5 : 1 }}
+        style={{
+          opacity: discarded || loading ? 0.5 : 1,
+        }}
         title={props.url}
         dangerouslySetInnerHTML={{ __html: title }}
       />

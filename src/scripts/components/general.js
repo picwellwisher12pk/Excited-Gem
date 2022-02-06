@@ -451,30 +451,46 @@ export function santizeTabs(tabs, ignoredUrlPatterns) {
 //   });
 // }
 
+/**
+ * Given a search term, audible search, pinned search, and search in, return a
+ * filtered list of tabs
+ * @param tabs - The array of tabs to filter.
+ * @returns A promise that resolves to an array of filtered tabs.
+ */
 export const asyncFilterTabs = async (
-  { searchTerm, audibleSearch, pinnedSearch },
-  { searchIn, ignoreCase, regex },
+  { searchTerm, audibleSearch, pinnedSearch, searchIn },
+  { ignoreCase, regex },
   tabs
 ) => {
   return await new Promise((resolve) => {
     if (searchTerm === "" && !audibleSearch && !pinnedSearch) return tabs;
     const filteredTabs = reduceTabs(
-      { searchTerm, audibleSearch, pinnedSearch },
-      { searchIn, ignoreCase, regex },
+      { searchTerm, audibleSearch, pinnedSearch, searchIn },
+      { ignoreCase, regex },
       tabs
     );
     resolve(filteredTabs);
   });
 };
+
+/**
+ * If the search term is empty, return all tabs. If the search term is not empty,
+ * filter the tabs by whether they match the search term in the title or the URL
+ * @param tabs - The list of tabs to filter.
+ * @returns The filtered tabs.
+ */
 export const filterTabs = (
-  { searchTerm, audibleSearch, pinnedSearch },
-  { searchIn, ignoreCase, regex },
+  { searchTerm, audibleSearch, pinnedSearch, searchIn },
+  { ignoreCase, regex },
   tabs
 ) => {
-  return tabs?.filter(({ title, url, audible, pinned }) => {
+  console.time("filterTabs");
+  let filteredTabs = tabs?.filter(({ title, url, audible, pinned }) => {
     const isAudible = audibleSearch ? audible === true : true;
     const isPinned = pinnedSearch ? pinned === true : true;
     if (regex) {
+      /* If the search term is found in the title or the URL, and the site is
+      audible and pinned, return true. */
       try {
         let regexTest = new RegExp(searchTerm, ignoreCase ? "i" : "");
         if (searchIn[0] && regexTest.test(title) && isAudible && isPinned)
@@ -501,13 +517,22 @@ export const filterTabs = (
         );
     }
   });
+  console.timeEnd("filterTabs");
+  return filteredTabs;
 };
+/**
+ * It takes a search term, a list of searchIn options, and a list of tabs, and
+ * returns a list of tabs that match the search term
+ * @param tabs - The array of tabs to search through.
+ * @returns An array of tab objects.
+ */
 export const reduceTabs = (
-  { searchTerm, audibleSearch, pinnedSearch },
-  { searchIn, ignoreCase, regex },
+  { searchTerm, audibleSearch, pinnedSearch, searchIn },
+  { ignoreCase, regex },
   tabs
 ) => {
-  return tabs?.reduce((accumulator, tab) => {
+  console.time("reduceTabs");
+  let reducedTabs = tabs?.reduce((accumulator, tab) => {
     const { title, url, audible, pinned } = tab;
     const isAudible = audibleSearch ? audible === true : true;
     const isPinned = pinnedSearch ? pinned === true : true;
@@ -542,6 +567,9 @@ export const reduceTabs = (
     }
     return accumulator;
   }, []);
+  reducedTabs = [...new Set(reducedTabs)];
+  console.timeEnd("reduceTabs");
+  return reducedTabs;
 };
 
 export const getMetrics = (compName, mode, actualTime, baseTime) => {

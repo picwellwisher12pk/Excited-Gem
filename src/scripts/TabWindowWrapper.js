@@ -1,32 +1,41 @@
-import {useSelector} from "react-redux";
-import React, {useCallback, useEffect, useState} from "react";
+import { useSelector } from "react-redux";
+import React, { useCallback, useEffect, useState } from "react";
 import Tab from "./components/Accordion/TabsGroup/Tab";
-import {DndProvider} from "react-dnd";
-import {HTML5Backend} from "react-dnd-html5-backend";
+import { DndProvider } from "react-dnd";
+import { HTML5Backend } from "react-dnd-html5-backend";
 import ClimbingBoxLoader from "react-spinners/ClimbingBoxLoader";
-import {asyncFilterTabs} from "./components/general";
+import { asyncFilterTabs } from "./components/general";
 
 const browser = require("webextension-polyfill");
 
 export const TabWindowWrapper = React.memo(() => {
   const [loading, setLoading] = useState(true);
   const tabs = useSelector((state) => state.tabs.tabs);
-  const {ignoreCase, regex} = useSelector((state) => state.config.search);
+  const { ignoreCase, regex } = useSelector((state) => state.config.search);
   const searchObject = useSelector((state) => state.search);
-  const {searchIn} = useSelector((state) => state.search);
-  const searchPref = {searchIn, ignoreCase, regex};
+  const searchPref = { ignoreCase, regex };
   const selectedTabs = useSelector((state) => state.tabs.selectedTabs);
   const [filteredTabs, setFilteredTabs] = useState(tabs);
 
-  const findFilteredTabs = async (searchObject, searchPref, tabs, setLoading) => {
-    let tempTabs = tabs && (await asyncFilterTabs(searchObject, searchPref, tabs));
+  const findFilteredTabs = async (
+    searchObject,
+    searchPref,
+    tabs,
+    setLoading
+  ) => {
+    let tempTabs =
+      tabs && (await asyncFilterTabs(searchObject, searchPref, tabs));
     window.filteredTabs = tempTabs;
     setFilteredTabs(tempTabs);
     setLoading(false);
   };
 
   useEffect(async () => {
-    if (searchObject.searchTerm === "" && !searchObject.audibleSearch && !searchObject.pinnedSearch) {
+    if (
+      searchObject.searchTerm === "" &&
+      !searchObject.audibleSearch &&
+      !searchObject.pinnedSearch
+    ) {
       setFilteredTabs(tabs);
     } else {
       setLoading(true);
@@ -58,7 +67,7 @@ export const TabWindowWrapper = React.memo(() => {
   }, []);
   const moveTab = useCallback(
     (itemId, dragIndex, index) => {
-      browser.tabs.move(itemId, {index});
+      browser.tabs.move(itemId, { index });
     },
     [tabs]
   );
@@ -70,7 +79,7 @@ export const TabWindowWrapper = React.memo(() => {
   );
   const toggleMuteTab = useCallback(
     (itemId, status) => {
-      browser.tabs.update(itemId, {muted: !status});
+      browser.tabs.update(itemId, { muted: !status });
     },
     [tabs]
   );
@@ -87,9 +96,9 @@ export const TabWindowWrapper = React.memo(() => {
         <DndProvider backend={HTML5Backend}>
           <ul className="tab tabs-list sortable selectable" id={"droppableUL"}>
             {filteredTabs?.length !== undefined &&
-            filteredTabs.map((tab) =>
-              tabTemplate(tab, selectedTabs, moveTab, closeTab)
-            )}
+              filteredTabs.map((tab) =>
+                tabTemplate(tab, selectedTabs, moveTab, closeTab)
+              )}
           </ul>
         </DndProvider>
       </React.Suspense>
@@ -97,7 +106,7 @@ export const TabWindowWrapper = React.memo(() => {
   ) : (
     <ClimbingBoxLoader
       color={"#12a3a9"}
-      css={{display: "block", margin: "80px auto"}}
+      css={{ display: "block", margin: "80px auto" }}
       loading={true}
       size={20}
     />
