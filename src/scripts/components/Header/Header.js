@@ -1,5 +1,5 @@
-import React, {Profiler, useEffect, useState} from "react";
-import {getMetrics, sortTabs} from "../general.js";
+import React, { Profiler, useEffect, useState } from "react";
+import { getMetrics, sortTabs } from "../general.js";
 import VolumeIcon from "volume.svg";
 import VolumeSlashIcon from "volume-mute.svg";
 import TimesIcon from "times.svg";
@@ -7,46 +7,42 @@ import SortIcon from "sort.svg";
 import SaveIcon from "save.svg";
 import SyncAltIcon from "sync-alt.svg";
 import ThumbtackIcon from "thumbtack-active.svg";
-import {connect, useDispatch, useSelector} from "react-redux";
-import {clearSelectedTabs} from "../../tabSlice.js";
+import { useDispatch, useSelector } from "react-redux";
+import { clearSelectedTabs } from "../../tabSlice.js";
 
 import Brand from "./Brand";
 import WindowSelector from "../WindowSelector";
 
-let browser = require("webextension-polyfill");
+const browser = require("webextension-polyfill");
 
 //Images
-let logo = require(`../../../images/${
+const logo = require(`../../../images/${
   NODE_ENV !== "production" && "dev"
 }-logo.png`);
 
 const Header = (props) => {
-  console.log('header reloading');
+  console.log("header loading", props);
   const dispatch = useDispatch();
   const selectedTabs = useSelector((state) => state.tabs.selectedTabs);
   const [allSelected, setAllSelected] = useState(props.allSelected);
   const [allPinned, setAllPinned] = useState(props.allPinned);
-  // const [allMuted, setAllMuted] = useState(props.allMuted);
-  let {navigation, search} = props;
-  useEffect(() => {
-    () => {
-    };
-  }, [props.tabCount])
+  const [allMuted, setAllMuted] = useState(props.allMuted);
+  const { navigation, search } = props;
   const sortBy = (sortType) => {
     sortTabs(sortType, tabs);
   };
   let iconPinned = props.allPinned ? (
-    <ThumbtackIcon style={{height: 16, fill: "white"}}/>
+    <ThumbtackIcon style={{ height: 16, fill: "white" }} />
   ) : (
-    <ThumbtackIcon style={{height: 16, fill: "white"}}/>
+    <ThumbtackIcon style={{ height: 16, fill: "white" }} />
   );
   let iconSound = props.allMuted ? (
-    <VolumeIcon style={{height: 16, fill: "white"}}/>
+    <VolumeIcon style={{ height: 16, fill: "white" }} />
   ) : (
     <VolumeSlashIcon style={{ height: 16, fill: "white" }} />
   );
   return (
-    <Profiler id={'header'} onRender={getMetrics}>
+    <Profiler id={"header"} onRender={getMetrics}>
       <header className="page-header" key={"header"}>
         <nav className="navbar">
           {Brand(logo)}
@@ -58,7 +54,7 @@ const Header = (props) => {
           id="selection-action"
         >
           <ul className="nav nav-pills pull-left">
-            <li className="nav-item">
+            <li className="nav-item d-flex flex-column justify-content-center">
               <a
                 className="nav-link"
                 onClick={() => {
@@ -70,7 +66,12 @@ const Header = (props) => {
                 }}
                 title="Select All"
               >
-                <input type="checkbox" checked={props.allSelected} readOnly/>
+                <input
+                  type="checkbox"
+                  className="checkbox"
+                  checked={props.allSelected}
+                  style={{ border: "none" }}
+                />
               </a>
             </li>
 
@@ -88,9 +89,9 @@ const Header = (props) => {
                   className="form-control bg-transparent text-white"
                   href="#"
                   title="Sort Tabs"
-                  style={{border: "none"}}
+                  style={{ border: "none" }}
                 >
-                  <SortIcon style={{height: 16}}/>
+                  <SortIcon style={{ height: 16 }} />
                 </a>
                 <div className="input-group-append" id="button-addon4">
                   <button
@@ -112,18 +113,18 @@ const Header = (props) => {
                 </div>
               </div>
             </li>
-            <WindowSelector key={"windowSelector"}/>
+            <WindowSelector key={"windowSelector"} />
           </ul>
           <div className="nav context-actions selection-action">
             <div
               className="input-group"
-              style={{width: "auto", marginRight: "15px"}}
+              style={{ width: "auto", marginRight: "15px" }}
             >
               <a
                 className="form-control"
                 onClick={() => props.processSelectedTabs("togglePinSelected")}
                 title="Toggle Pin selected tab"
-                style={{border: "none"}}
+                style={{ border: "none" }}
               >
                 Un/Pin Selected
               </a>
@@ -133,31 +134,31 @@ const Header = (props) => {
                   type="button"
                   title="Unpin Selected"
                   onClick={() => props.processSelectedTabs("unpinSelected")}
-                  style={{backgroundColor: "white"}}
+                  style={{ backgroundColor: "white" }}
                 >
-                  <ThumbtackIcon style={{height: 16}}/>
+                  <ThumbtackIcon style={{ height: 16 }} />
                 </button>
                 <button
                   className="btn btn-default"
                   type="button"
                   title="Pin Selected"
                   onClick={() => props.processSelectedTabs("pinSelected")}
-                  style={{backgroundColor: "white"}}
+                  style={{ backgroundColor: "white" }}
                 >
-                  <ThumbtackIcon style={{height: 16}}/>
+                  <ThumbtackIcon style={{ height: 16 }} />
                 </button>
               </div>
             </div>
             <div
               className="input-group"
-              style={{width: "auto", marginRight: "15px"}}
+              style={{ width: "auto", marginRight: "15px" }}
             >
               <a
                 className="form-control"
                 onClick={() => props.processSelectedTabs("toggleMuteSelected")}
                 href="#"
                 title="Toggle Pin selected tab"
-                style={{border: "none"}}
+                style={{ border: "none" }}
               >
                 Un/Mute Selected
               </a>
@@ -167,19 +168,19 @@ const Header = (props) => {
                   type="button"
                   title="Mute Selected"
                   onClick={() => props.processSelectedTabs("muteSelected")}
-                  style={{backgroundColor: "white"}}
+                  style={{ backgroundColor: "white" }}
                 >
-                  <VolumeSlashIcon style={{height: 16}}/>
+                  <VolumeSlashIcon style={{ height: 16 }} />
                 </button>
                 <button
                   className="btn btn-default"
                   type="button"
                   title="Unmute Selected"
                   onClick={() => props.processSelectedTabs("unmuteSelected")}
-                  style={{backgroundColor: "white"}}
+                  style={{ backgroundColor: "white" }}
                 >
-                  <VolumeIcon style={{height: 16}}/>
-                  <i className="fas fa-volume-up"/>
+                  <VolumeIcon style={{ height: 16 }} />
+                  <i className="fas fa-volume-up" />
                 </button>
               </div>
             </div>
@@ -188,9 +189,9 @@ const Header = (props) => {
               type="button"
               title="Close Selected"
               onClick={() => props.processSelectedTabs("closeSelected")}
-              style={{backgroundColor: "white"}}
+              style={{ backgroundColor: "white" }}
             >
-              <TimesIcon style={{height: 16, fill: "white"}}/>
+              <TimesIcon style={{ height: 16, fill: "white" }} />
             </button>
             <div className={"input-group-append"}>
               {/* <button
@@ -203,7 +204,7 @@ const Header = (props) => {
                 className="btn btn-default"
                 onClick={() => props.processSelectedTabs("toSession")}
               >
-                <SaveIcon style={{height: 16, fill: "white"}}/>
+                <SaveIcon style={{ height: 16, fill: "white" }} />
               </button>
             </div>
           </div>
@@ -214,10 +215,10 @@ const Header = (props) => {
                 title="Refresh Excited Gem Tabs"
                 onClick={() => {
                   updateTabs();
-                  this.setState({tabs: props.tabs});
+                  this.setState({ tabs: props.tabs });
                 }}
               >
-                <SyncAltIcon style={{height: 16, fill: "white"}}/>
+                <SyncAltIcon style={{ height: 16, fill: "white" }} />
               </button>
             </li>
             <li>
@@ -243,10 +244,10 @@ const Header = (props) => {
                     !props.allMuted ? "muteSelected" : "unmuteSelected",
                     this.filterTabs().map((tab) => tab.id)
                   );
-                  this.setState({allMuted: !props.allMuted});
+                  this.setState({ allMuted: !props.allMuted });
                 }}
                 title={!props.allMuted ? `Mute All` : `Unmute All`}
-                style={{minWidth: 33}}
+                style={{ minWidth: 33 }}
               >
                 {iconSound}
               </button>
@@ -264,7 +265,7 @@ const Header = (props) => {
                   browser.tabs.remove(ids);
                 }}
               >
-                <TimesIcon style={{height: 16, fill: "white"}}/>
+                <TimesIcon style={{ height: 16, fill: "white" }} />
               </button>
             </li>
           </ul>
@@ -274,9 +275,4 @@ const Header = (props) => {
   );
 };
 
-const mapDispatchToProps = (dispatch) => ({
-  searchInTabs: (searchTerm) => dispatch(ACTIONS.searchInTabs(searchTerm)),
-  toggleSearchInAction: (searchInArray) =>
-    dispatch(ACTIONS.toggleSearchInAction(searchInArray)),
-});
-export default connect(null, mapDispatchToProps)(Header);
+export default Header;

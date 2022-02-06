@@ -66,9 +66,6 @@
     }
     .checkbox {
       opacity: 0;
-      width: 16px;
-      height: 16px;
-      transition: all 0.2s;
       position: absolute;
       left: 0;
       top: 3px;
@@ -83,16 +80,16 @@
     }
   }
   &.checked {
-    background-color: #80b7e4;
+    background-color: #e3f1fc;
     border-color: #548dbb;
     .dimmed.tab-url {
-      color: white;
+      color: #0062cc;
     }
   }
   &.checked .tab-favicon {
     .checkbox {
       opacity: 1;
-      left: 14px;
+      //left: 0;
     }
     img {
       opacity: 0;

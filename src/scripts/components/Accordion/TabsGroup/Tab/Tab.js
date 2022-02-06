@@ -178,7 +178,7 @@ const Tab = (props) => {
       data-handler-id={handlerId}
       draggable={true}
     >
-      <Grip
+      {/* <Grip
         // ref={drag}
         style={{
           width: 16,
@@ -188,7 +188,7 @@ const Tab = (props) => {
           marginLeft: -10,
           marginRight: 10,
         }}
-      />
+      />*/}
       <label
         className="tab-favicon align-self-center position-relative"
         aria-label="favicon"
