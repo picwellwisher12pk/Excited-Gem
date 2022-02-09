@@ -1,38 +1,25 @@
-import React, { useCallback, useEffect, useState } from "react";
-var browser = require("webextension-polyfill");
-import { updateTabs, getTabs, setTabCountInBadge } from "./browserActions";
-let config = {
-  tabsfrom: "current",
-};
+import React, { useEffect, useState } from "react";
+import { useSelector, useDispatch } from "react-redux";
+import { getTabs, getAllWindows, getCurrentWindow } from "./browserActions";
+import { updateSelectedWindow } from "../tabSlice";
+
 const WindowSelector = () => {
+  const dispatch = useDispatch();
   const [dropdownVisible, setDropDown] = useState(false);
-  const [windowCount, setWindowCount] = useState(1);
-  const [browserWindows, setBrowserWindows] = useState([]);
+  const [allWindows, setAllWindows] = useState([]);
   const [currentWindow, setCurrentWindow] = useState({});
-
-  const setWindow = (window) => {
-    config.tabsfrom = window;
-    getTabs();
-  };
-  useEffect(() => {
-    browser.windows
-      .getAll({
-        populate: true,
-        windowTypes: ["normal"],
-      })
-      .then((windowInfoArray) => {
-        setWindowCount(windowInfoArray.length);
-        setBrowserWindows(windowInfoArray);
-      });
-    browser.windows.getCurrent({ populate: true }).then((window) => {
-      setCurrentWindow(window);
-    });
+  const { selectedWindow } = useSelector((state) => state.tabs);
+  useEffect(async () => {
+    setAllWindows(await getAllWindows());
+    setCurrentWindow(await getCurrentWindow());
   }, []);
+  if (allWindows.length <= 1) return false;
+  const setWindow = (window) => {
+    dispatch(updateSelectedWindow(window));
+    setDropDown(!dropdownVisible);
+  };
 
-  if (windowCount <= 1) return false;
-  let currentWindowId = currentWindow.id;
-  let currentWindowTabs = currentWindow.tabs ? currentWindow.tabs.length : 0;
-  let totalTabCount = browserWindows.reduce(function (total, window) {
+  let totalTabCount = allWindows.reduce(function (total, window) {
     return total + window.tabs.length;
   }, 0);
   return (
@@ -46,6 +33,7 @@ const WindowSelector = () => {
         aria-haspopup="true"
         aria-expanded="false"
         title="Show Tabs from Current/All Window(s)"
+        style={{ cursor: "pointer" }}
         className="nav-link dropdown-toggle"
         onClick={() => setDropDown(!dropdownVisible)}
       >
@@ -60,7 +48,7 @@ const WindowSelector = () => {
             <a
               href="#"
               className="d-flex justify-content-between align-items-center"
-              onClick={setWindow("all")}
+              onClick={() => setWindow("all")}
             >
               All Windows
               <span
@@ -74,22 +62,27 @@ const WindowSelector = () => {
               </span>
             </a>
           </li>
-          {browserWindows.map((window) => (
+          {allWindows.map((window) => (
             <li
               className="list-group-item"
-              onClick={setWindow(window.id)}
+              onClick={() =>
+                setWindow(
+                  currentWindow.id === window.id ? "current" : window.id
+                )
+              }
               key={window.id}
             >
-              <a
-                href="#"
-                className={`d-flex justify-content-between align-items-center ${
-                  currentWindow.id === window.id && "text-dark disabled"
-                }`}
+              <span
+                className={`d-flex justify-content-between align-items-center btn-link`}
                 onClick={() => {
-                  if (currentWindow.id !== window.id) return false;
+                  // if (currentWindow.id !== window.id) return false;
                   setWindow(window.id);
                 }}
               >
+                
+                
+                
+                
                 Window
                 {currentWindow.id === window.id && (
                   <span className="count badge badge-info">current</span>
@@ -103,7 +96,7 @@ const WindowSelector = () => {
                 >
                   {window.tabs.length}
                 </span>
-              </a>
+              </span>
             </li>
           ))}
         </ul>

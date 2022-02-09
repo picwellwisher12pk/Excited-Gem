@@ -29,7 +29,7 @@ if ("serviceWorker" in navigator) {
   });
 }
 
-export const App = render(
+render(
   <Provider store={store}>
     <ActiveTabs />
   </Provider>,

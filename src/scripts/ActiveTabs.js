@@ -20,7 +20,7 @@ import { TabWindowWrapper } from "./TabWindowWrapper";
 const browser = require("webextension-polyfill");
 
 export function updateTabs(getTabs, store) {
-  getTabs().then((tabs) => {
+  getTabs(store.getState().tabs.selectedWindow).then((tabs) => {
     store.dispatch(
       updateActiveTabs(
         tabs.map((tab) => {
@@ -70,10 +70,9 @@ updateTabs(getTabs, store);
 const ActiveTabs = () => {
   const { tabs } = useSelector((state) => state.tabs);
   const { search } = useSelector((state) => state);
-  const navigation = useMemo(
-    () => <Navigation tabCount={tabs.length} />,
-    [tabs.length]
-  );
+  const navigation = useMemo(() => <Navigation tabCount={tabs.length} />, [
+    tabs.length,
+  ]);
   const header = useMemo(
     () => <Header navigation={navigation} search={<Search />} />,
     [tabs, search]

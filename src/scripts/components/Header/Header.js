@@ -41,6 +41,9 @@ const Header = (props) => {
   ) : (
     <VolumeSlashIcon style={{ height: 16, fill: "white" }} />
   );
+  // browser.windows.getCurrent({ populate: true }).then((window) => {
+  //   setCurrentWindow(window);
+  // });
   return (
     <Profiler id={"header"} onRender={getMetrics}>
       <header className="page-header" key={"header"}>

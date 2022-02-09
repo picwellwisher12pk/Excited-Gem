@@ -16,10 +16,9 @@ import {
 
 const Search = () => {
   const dispatch = useDispatch();
-  const searchTerm = useSelector((state) => state.search.searchTerm);
-  const pinnedSearch = useSelector((state) => state.search.pinnedSearch);
-  const audibleSearch = useSelector((state) => state.search.audibleSearch);
-  const { searchIn } = useSelector((state) => state.search);
+  const { searchTerm, pinnedSearch, audibleSearch, searchIn } = useSelector(
+    (state) => state.search
+  );
   const regex = useSelector((state) => state.config.search.regex);
   const searchField = React.createRef();
   const title = React.createRef();
@@ -48,6 +47,7 @@ const Search = () => {
     }
   };
   const handleChange = () => {
+    //TODO: check browser.tabs.query for title and url pattern search. It may be faster
     setTimeout(dispatch(updateSearchTerm(searchField.current.value)), 300);
   };
   const clear = () => {

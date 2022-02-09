@@ -23,7 +23,7 @@ export const TabWindowWrapper = React.memo(() => {
     tabs,
     setLoading
   ) => {
-    let tempTabs =
+    const tempTabs =
       tabs && (await asyncFilterTabs(searchObject, searchPref, tabs));
     window.filteredTabs = tempTabs;
     setFilteredTabs(tempTabs);

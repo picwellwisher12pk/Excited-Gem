@@ -56,7 +56,7 @@ browser.runtime.onInstalled.addListener(() => {
   browser.storage.local.set(jsonObj).then((result) => {
     browser.storage.local.get("preferences").then((result) => {});
   });
-  getTabs().then((tabs) => setBadge(tabs.length));
+  getTabs("current").then((tabs) => setBadge(tabs.length));
 });
 browser.tabs.onRemoved.addListener((tabId) => {
   // browser.tabs.get(homepageOpened.id, () => {
@@ -76,10 +76,10 @@ browser.tabs.onRemoved.addListener((tabId) => {
 browser.tabs.onDetached.addListener(onRemoved);
 
 browser.tabs.onCreated.addListener(() => {
-  getTabs().then((tabs) => setBadge(tabs.length));
+  getTabs("current").then((tabs) => setBadge(tabs.length));
 });
 browser.tabs.onAttached.addListener(() => {
-  getTabs().then((tabs) => setBadge(tabs.length));
+  getTabs("current").then((tabs) => setBadge(tabs.length));
 });
 
 /* Browser Actions */

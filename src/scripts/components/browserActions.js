@@ -1,6 +1,5 @@
 import { preferences } from "../defaultPreferences";
 import * as general from "./general.js";
-
 var browser = require("webextension-polyfill");
 
 /**
@@ -30,15 +29,26 @@ export function openExcitedGemPage() {
 export function getCurrentWindowTabs() {
   return browser.tabs.query({ currentWindow: true });
 }
-
+export function getCurrentWindow() {
+  return browser.windows.getCurrent({ populate: true });
+}
+export function getAllWindows() {
+  return browser.windows.getAll({
+    populate: true,
+    windowTypes: ["normal"],
+  });
+}
 export function getAllWindowTabs() {
   return browser.tabs.query({});
 }
 
-export function getTabs() {
-  return preferences.defaultTabsFrom === "current"
-    ? browser.tabs.query({ currentWindow: true })
-    : browser.tabs.query({});
+export function getTabs(selectedWindow) {
+  if (selectedWindow === "current")
+    return browser.tabs.query({ currentWindow: true });
+  if (selectedWindow === "all") return browser.tabs.query({});
+  else {
+    browser.tabs.query({ windowId: selectedWindow });
+  }
 }
 
 export function updateTabs(reactObject = window.activeTabs) {

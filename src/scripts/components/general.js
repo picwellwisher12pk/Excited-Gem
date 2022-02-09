@@ -1,8 +1,8 @@
-let browser = require("webextension-polyfill");
-export let homepageURL = browser.runtime.getURL("excited-gem.html");
+const browser = require("webextension-polyfill");
+export const homepageURL = browser.runtime.getURL("excited-gem.html");
 let refinedTabs;
 
-export let ignoredUrlPatterns = [
+export const ignoredUrlPatterns = [
   "chrome://*",
   "chrome-extension://*",
   "http(s)?://localhost*",

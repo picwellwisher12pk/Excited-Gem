@@ -1,11 +1,11 @@
 import { createSlice } from "@reduxjs/toolkit";
-import _ from "lodash";
 
 export const tabSlice = createSlice({
   name: "tabs",
   initialState: {
     tabs: [],
     selectedTabs: [],
+    selectedWindow: "current",
   },
   reducers: {
     // Redux Toolkit allows us to write "mutating" logic in reducers. It
@@ -13,13 +13,13 @@ export const tabSlice = createSlice({
     // which detects changes to a "draft state" and produces a brand new
     // immutable state based off those changes
     updateActiveTabs: (state, action) => {
-      let newState = _.cloneDeep(state);
+      let newState = { ...state };
       newState.tabs = [];
-      newState.tabs = _.cloneDeep(action.payload);
+      newState.tabs = [...action.payload];
       return newState;
     },
     updateSelectedTabs: (state, action) => {
-      let newState = _.cloneDeep(state);
+      let newState = { ...state };
       let { id, selected } = action.payload;
       selected
         ? newState.selectedTabs.push(id)
@@ -28,9 +28,15 @@ export const tabSlice = createSlice({
       return newState;
     },
     clearSelectedTabs: (state) => {
-      let newState = _.cloneDeep(state);
+      let newState = { ...state };
       newState.selectedTabs = [];
       window.selectedTabs = [];
+      return newState;
+    },
+    updateSelectedWindow: (state, action) => {
+      let newState = { ...state };
+      newState.selectedWindow = action.payload;
+      window.selectedWindow = action.payload;
       return newState;
     },
   },
@@ -41,6 +47,7 @@ export const {
   updateActiveTabs,
   updateSelectedTabs,
   clearSelectedTabs,
+  updateSelectedWindow,
 } = tabSlice.actions;
 
 export default tabSlice.reducer;

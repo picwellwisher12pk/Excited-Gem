@@ -1,11 +1,10 @@
-import {createSlice} from "@reduxjs/toolkit";
-import _ from "lodash";
-import {preferences} from './defaultPreferences';
+import { createSlice } from "@reduxjs/toolkit";
+import { preferences } from "./defaultPreferences";
 
 export const searchSlice = createSlice({
   name: "search",
   initialState: {
-    searchTerm: '',
+    searchTerm: "",
     searchIn: preferences.search.searchIn,
     audibleSearch: false,
     pinnedSearch: false,
@@ -16,7 +15,7 @@ export const searchSlice = createSlice({
     // which detects changes to a "draft state" and produces a brand new
     // immutable state based off those changes
     updateSearchTerm: (state, action) => {
-      let newState = _.cloneDeep(state);
+      let newState = { ...state };
       // action.payload !== ""
       //   ? (newState.preferences.search.empty = false)
       //   : (newState.preferences.search.empty = true);
@@ -24,17 +23,17 @@ export const searchSlice = createSlice({
       return newState;
     },
     toggleSearchIn: (state, action) => {
-      let newState = _.cloneDeep(state);
+      let newState = { ...state };
       newState.searchIn[action.payload] = !state.searchIn[action.payload];
       return newState;
     },
     toggleAudible: (state) => {
-      let newState = _.cloneDeep(state);
+      let newState = { ...state };
       newState.audibleSearch = !state.audibleSearch;
       return newState;
     },
     togglePinned: (state) => {
-      let newState = _.cloneDeep(state);
+      let newState = { ...state };
       newState.pinnedSearch = !state.pinnedSearch;
       return newState;
     },
@@ -42,6 +41,11 @@ export const searchSlice = createSlice({
 });
 
 // Action creators are generated for each case reducer function
-export const {updateSearchTerm, toggleSearchIn, toggleAudible, togglePinned} = searchSlice.actions;
+export const {
+  updateSearchTerm,
+  toggleSearchIn,
+  toggleAudible,
+  togglePinned,
+} = searchSlice.actions;
 
 export default searchSlice.reducer;
