@@ -33,7 +33,10 @@
     "mount": "cd dist & web-ext run --firefox=firefoxdeveloperedition",
     "react-devtools": "react-devtools",
     "packf": "cd firefox & web-ext build",
-    "test": "mocha './src/**/*.test.js' --require @babel/register"
+    "test": "mocha './src/**/*.test.js' --require @babel/register",
+    "depcheck": "npx depcheck",
+    "outdated": "npm outdated",
+    "lint-fix-all": "eslint './src/**/*.js' --fix --ext .js,.jsx,.ts,.tsx"
   },
   "quokka": {
     "babel": true,
