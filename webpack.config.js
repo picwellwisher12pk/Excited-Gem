@@ -9,7 +9,6 @@ const webpack = require("webpack"),
   BundleAnalyzerPlugin =
     require("webpack-bundle-analyzer").BundleAnalyzerPlugin, //Bundle analyzer
   HtmlWebpackPlugin = require("html-webpack-plugin"),
-  ChromeExtensionReloader = require("webpack-chrome-extension-reloader"),
   WebpackBar = require("webpackbar"),
   CopyPlugin = require("copy-webpack-plugin");
 // ExtractTextPlugin = require("extract-text-webpack-plugin"),
