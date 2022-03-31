@@ -1,4 +1,4 @@
-import React, { Profiler, useEffect, useState } from "react";
+import React, { Profiler, useState } from "react";
 import { getMetrics, sortTabs } from "../general.js";
 import VolumeIcon from "volume.svg";
 import VolumeSlashIcon from "volume-mute.svg";
