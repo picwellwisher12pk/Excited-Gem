@@ -7,6 +7,8 @@ import VolumeIcon from "volume.svg";
 import VolumeOffIcon from "volume-off.svg";
 import ThumbtackIcon from "thumbtack.svg";
 import ThumbtackActiveIcon from "thumbtack-active.svg";
+import Loading from "spinner-third.svg";
+import { debounce } from "lodash";
 import {
   toggleAudible,
   togglePinned,
@@ -36,22 +38,34 @@ const Search = () => {
   const [placeholder, setPlaceholder] = useState(() =>
     preparePlaceholder(searchIn)
   );
+  const [iconState, setIconState] = useState("default");
 
   useEffect(() => {
     setPlaceholder(preparePlaceholder(searchIn));
   }, [searchIn]);
-  const handleKeyUp = (event) => {
-    searchField.current.value !== "" ? setEmpty(false) : setEmpty(true);
-    if (event.keyCode === 27) {
-      clear();
+  const handleKeyUp = useCallback((event) => {
+    const { value } = event.target;
+    if (value === "" || event.key === "Escape") {
+      clear(event.target);
+      return;
+    } else {
+      value && setIconState("searching");
+      return;
     }
-  };
-  const handleChange = () => {
-    //TODO: check browser.tabs.query for title and url pattern search. It may be faster
-    setTimeout(dispatch(updateSearchTerm(searchField.current.value)), 300);
-  };
-  const clear = () => {
-    searchField.current.value = "";
+  }, []);
+  const handleChange = useCallback(
+    debounce((event) => {
+      const { value } = event.target;
+      dispatch(updateSearchTerm(value));
+    }, 300),
+
+    []
+  );
+
+  const clear = (target) => {
+    console.log("clearing");
+    target.value = "";
+    setIconState("default");
     setEmpty(true);
     dispatch(updateSearchTerm(""));
   };
@@ -67,21 +81,42 @@ const Search = () => {
     }
     dispatch(toggleSearchIn(number));
   }, []);
+  let iconInSearch;
+  switch (iconState) {
+    case "loading":
+      iconInSearch = (
+        <Loading
+          className={"spinner"}
+          style={{ width: "40px", height: "43px", padding: "12px" }}
+        />
+      );
+      break;
+    case "searching":
+      iconInSearch = (
+        <TimesIcon
+          className={`cp`}
+          style={{
+            width: "40px",
+            height: "43px",
+            padding: "12px",
+            fill: "red",
+          }}
+          onClick={() => {
+            if (!empty) clear();
+          }}
+        />
+      );
+      break;
+    default:
+      iconInSearch = (
+        <SearchIcon
+          className={`text-secondary`}
+          style={{ width: "40px", height: "43px", padding: "12px" }}
+        />
+      );
+      break;
+  }
 
-  let iconInSearch = !searchTerm ? (
-    <SearchIcon
-      className={`text-secondary`}
-      style={{ width: "40px", height: "43px", padding: "12px" }}
-    />
-  ) : (
-    <TimesIcon
-      className={`cp`}
-      style={{ width: "40px", height: "43px", padding: "12px", fill: "red" }}
-      onClick={() => {
-        if (!empty) clear();
-      }}
-    />
-  );
   return (
     <ErrorBoundary>
       <section className="search-bar" style={{ width: "66%", paddingRight: 0 }}>
