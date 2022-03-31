@@ -35,7 +35,7 @@ manifest.action = {
   default_title: myPackage.title,
 };
 
-manifest2 = {
+const manifest2 = {
   ...manifest,
   ...getPermissions(manifest.manifest_version),
   ...chromeManifest,
