@@ -70,9 +70,10 @@ updateTabs(getTabs, store);
 const ActiveTabs = () => {
   const { tabs } = useSelector((state) => state.tabs);
   const { search } = useSelector((state) => state);
-  const navigation = useMemo(() => <Navigation tabCount={tabs.length} />, [
-    tabs.length,
-  ]);
+  const navigation = useMemo(
+    () => <Navigation tabCount={tabs.length} />,
+    [tabs.length]
+  );
   const header = useMemo(
     () => <Header navigation={navigation} search={<Search />} />,
     [tabs, search]

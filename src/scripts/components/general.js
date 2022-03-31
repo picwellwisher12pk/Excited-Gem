@@ -462,7 +462,7 @@ export const asyncFilterTabs = async (
   { ignoreCase, regex },
   tabs
 ) => {
-  return await new Promise((resolve) => {
+  return await new Promise(async (resolve) => {
     if (searchTerm === "" && !audibleSearch && !pinnedSearch) return tabs;
     const filteredTabs = reduceTabs(
       { searchTerm, audibleSearch, pinnedSearch, searchIn },
