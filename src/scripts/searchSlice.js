@@ -23,7 +23,7 @@ export const searchSlice = createSlice({
       return newState;
     },
     toggleSearchIn: (state, action) => {
-      let newState = { ...state };
+      const newState = { ...state };
       newState.searchIn[action.payload] = !state.searchIn[action.payload];
       return newState;
     },

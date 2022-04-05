@@ -16,32 +16,36 @@ import {
   updateSearchTerm,
 } from "../../../searchSlice";
 
+const doPlaceholder = (searchIn, regex = false) => {
+  let newPlaceholder = "Search in ";
+  newPlaceholder += searchIn[0] ? "Titles" : "";
+  newPlaceholder += searchIn[0] && searchIn[1] ? " and " : "";
+  newPlaceholder += searchIn[1] ? "URLs" : "";
+  return regex ? `/ ${newPlaceholder} /gi` : newPlaceholder;
+};
 const Search = () => {
   const dispatch = useDispatch();
+
+  //Global States
   const { searchTerm, pinnedSearch, audibleSearch, searchIn } = useSelector(
     (state) => state.search
   );
   const regex = useSelector((state) => state.config.search.regex);
+
+  //Refs
   const searchField = React.createRef();
   const title = React.createRef();
   const url = React.createRef();
+
+  //Local States
   const [empty, setEmpty] = useState(true);
-
-  const preparePlaceholder = (searchIn, initialPlaceholder = "Search in ") => {
-    let newPlaceholder = initialPlaceholder;
-    newPlaceholder += searchIn[0] ? "Titles" : "";
-    newPlaceholder += searchIn[0] && searchIn[1] ? " and " : "";
-    newPlaceholder += searchIn[1] ? "URLs" : "";
-    return newPlaceholder;
-  };
-
-  const [placeholder, setPlaceholder] = useState(() =>
-    preparePlaceholder(searchIn)
-  );
   const [iconState, setIconState] = useState("default");
+  const [placeholder, setPlaceholder] = useState(() =>
+    doPlaceholder(searchIn, regex)
+  );
 
   useEffect(() => {
-    setPlaceholder(preparePlaceholder(searchIn));
+    setPlaceholder(doPlaceholder(searchIn, regex));
   }, [searchIn]);
   const handleKeyUp = useCallback((event) => {
     const { value } = event.target;
