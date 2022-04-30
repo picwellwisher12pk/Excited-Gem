@@ -1,11 +1,19 @@
-// import { saveSessions, getSessions } from './components/getsetSessions.js';
-// import packagedAndBroadcast from './components/communications.js';
-// import { registerMenus, setTabCountInBadge } from "./components/browserActions.jsx";
-// const {  setTabCountInBadge,updateTabs } = require('./components/browserActions.js');
-// import './defaultPreferences';
-var browser = require("webextension-polyfill");
-import { preferences } from "./defaultPreferences";
-import { getTabs, setBadge, setTabCountInBadge } from "./browserActions";
+// import { sendMessage, onMessage } from "webext-bridge";
+import * as browser from "webextension-polyfill";
+import { preferences } from "~/scripts/defaultPreferences";
+import {
+  getTabs,
+  setBadge,
+  setTabCountInBadge,
+} from "~/scripts/browserActions";
+
+// only on dev mode
+if (import.meta.hot) {
+  // @ts-expect-error for background HMR
+  import("/@vite/client");
+  // load latest content script
+  import("./contentScriptHMR");
+}
 
 // let muteAll = (data) => {
 //   for (let i = 0; i < data.length; i++) {
@@ -92,3 +100,20 @@ browser.action.onClicked.addListener((tab) => {
 
 //Registering Menus
 // registerMenus();
+
+browser.runtime.onMessage.addListener(function (
+  message,
+  sender,
+  senderResponse
+) {
+  if (message.msg === "image") {
+    fetch("https://some-random-api.ml/img/pikachu")
+      .then((response) => response.text())
+      .then((data) => {
+        let dataObj = JSON.parse(data);
+        senderResponse({ data: dataObj, index: message.index });
+      })
+      .catch((error) => console.log("error", error));
+    return true; // Will respond asynchronously.
+  }
+});

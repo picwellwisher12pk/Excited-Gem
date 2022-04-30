@@ -16,17 +16,9 @@ $brand-secondary-color: #d1335b;
 
 .page-header {
   z-index: 999;
-  /* Permalink - use to edit and share this gradient: http://colorzilla.com/gradient-editor/#0082d5+0,2bd563+100 */
   background: #0082d5;
-  /* Old browsers */
-  background: -moz-linear-gradient(top, #0082d5 0%, #12a4a6 100%);
-  /* FF3.6-15 */
-  background: -webkit-linear-gradient(top, #0082d5 0%, #12a4a6 100%);
-  /* Chrome10-25,Safari5.1-6 */
   background: linear-gradient(to bottom, #0082d5 0%, #12a4a6 100%);
-  /* W3C, IE10+, FF16+, Chrome26+, Opera12+, Safari7+ */
-  // filter: progid: DXImageTransform.Microsoft.gradient( startColorstr='#0082d5', endColorstr='#2bd563', GradientType=0);
-  /* IE6-9 */
+
   position: relative;
   .nav > li > a {
     color: #fff;
@@ -244,7 +236,6 @@ mark {
 }
 
 .spinner {
-
   -webkit-animation: spin 2s linear infinite;
   -moz-animation: spin 2s linear infinite;
   animation: spin 2s linear infinite;
@@ -270,7 +261,7 @@ mark {
 }
 
 .checkbox {
-      width: 16px;
-      height: 16px;
-      transition: all 0.2s;
-    }
+  width: 16px;
+  height: 16px;
+  transition: all 0.2s;
+}
