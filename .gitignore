@@ -56,3 +56,8 @@ src/images/regular/
 src/images/light/
 *.zip
 .idea/
+*.csr
+*.crt
+extension*/
+dist/
+build/
