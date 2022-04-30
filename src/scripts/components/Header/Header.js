@@ -31,9 +31,7 @@ const Header = (props) => {
   const sortBy = (sortType) => {
     sortTabs(sortType, tabs);
   };
-  let iconPinned = props.allPinned ? (
-    <ThumbtackIcon style={{ height: 16, fill: "white" }} />
-  ) : (
+  let iconPinned = props.allPinned && (
     <ThumbtackIcon style={{ height: 16, fill: "white" }} />
   );
   let iconSound = props.allMuted ? (

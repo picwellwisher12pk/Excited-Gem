@@ -1,0 +1,31 @@
+{
+  "manifest_version": 3,
+  "name": "excited-gem",
+  "version": "1.0.0",
+  "description": "A tool to manage your tabs and other browser related features.",
+  "action": {
+    "default_icon": {
+      "19": "assets/icon.svg",
+      "38": "assets/icon.svg"
+    },
+    "default_title": "Excited Gem"
+  },
+  "background": {
+    "service_worker": "./background.js",
+    "type": "module"
+  },
+  "icons": {
+    "16": "assets/icon.svg",
+    "48": "assets/icon.svg",
+    "128": "assets/icon.svg"
+  },
+  "permissions": [
+    "activeTab",
+    "contextMenus",
+    "notifications",
+    "storage",
+    "tabs",
+    "unlimitedStorage",
+    "webNavigation"
+  ]
+}

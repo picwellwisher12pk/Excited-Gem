@@ -1,7 +1,7 @@
 {
   "name": "excited-gem",
   "title": "Excited Gem",
-  "version": "0.9.200",
+  "version": "1.0.0",
   "description": "A tool to manage your tabs and other browser related features.",
   "homepage": "https://picwellwisher12pk.github.io/onetab-advanced/",
   "bugs": "{}",
@@ -21,63 +21,67 @@
   },
   "scripts": {
     "start": "nodemon",
-    "patch": "npm version patch",
-    "minor": "npm version minor",
-    "major": "npm version major",
-    "build": "node utils/production.js --mode=production",
+    "dev": "npm run clear && cross-env NODE_ENV=development run-p dev:*",
+    "dev:prepare": "esno scripts/prepare.ts",
+    "dev:web": "vite --host",
+    "dev:js": "npm run build:js -- --mode development",
+    "dev:background": "npm run build:background -- --mode development",
+    "build": "cross-env NODE_ENV=production run-s clear build:web build:prepare build:js build:background",
     "postbuild": "git add . ",
-    "firefoxd": "SET mode=development & npm run start",
-    "chromed": "npm run start --env.CLIENT=chrome",
-    "firefoxp": "SET NODE_ENV=production& SET BROWSER_CLIENT=firefox& node utils/production.js",
-    "chromep": "SET NODE_ENV=production& SET BROWSER_CLIENT=chrome& node utils/production.js",
-    "mount": "cd dist & web-ext run --firefox=firefoxdeveloperedition",
+    "build:prepare": "esno scripts/prepare.ts",
+    "build:web": "vite build",
+    "build:js": "vite build --config vite.config.content.ts",
+    "build:background": "vite build --config vite.config.background.ts",
+    "pack": "cross-env NODE_ENV=production run-p pack:*",
+    "pack:zip": "rimraf extension.zip && jszip-cli add extension/* -o ./extension.zip",
+    "pack:crx": "crx pack extension -o ./extension.crx",
+    "pack:xpi": "cross-env WEB_EXT_ARTIFACTS_DIR=./ web-ext build --source-dir ./extension --filename extension.xpi --overwrite-dest",
+    "start:chromium": "web-ext run --source-dir ./extension --target=chromium",
+    "start:firefox": "web-ext run --source-dir ./extension --target=firefox-desktop",
+    "clear": "rimraf extension/dist extension/manifest.json extension.*",
+    "lint": "eslint 'src/**/*.{json,ts,js,react}'",
     "react-devtools": "react-devtools",
-    "packf": "cd firefox & web-ext build",
-    "test": "mocha './src/**/*.test.js' --require @babel/register",
     "depcheck": "npx depcheck",
     "outdated": "npm outdated",
-    "lint-fix-all": "eslint './src/**/*.js' --fix --ext .js,.jsx,.ts,.tsx"
-  },
-  "quokka": {
-    "babel": true,
-    "react": true,
-    "es6": true
+    "patch": "npm version patch",
+    "minor": "npm version minor",
+    "major": "npm version major"
   },
   "dependencies": {
+    "@antfu/eslint-config": "^0.9.0",
+    "@ffflorian/jszip-cli": "^3.1.5",
+    "@iconify/json": "^1.1.408",
     "@reduxjs/toolkit": "^1.6.1",
-    "@svgr/webpack": "^6.2.1",
+    "@vitejs/plugin-react": "^1.3.0",
     "autoprefixer": "^10.3.4",
     "bootstrap": "^5.1.3",
-    "copy-webpack-plugin": "^9.0.1",
-    "core-js": "3.21.0",
-    "css-loader": "^6.2.0",
+    "chokidar": "^3.5.2",
+    "cross-env": "^7.0.3",
+    "crx": "^5.0.1",
     "cssnano": "^5.0.16",
     "debug": "^4.3.2",
     "dotenv": "^15.0.0",
-    "ejs-loader": "^0.5.0",
     "eslint": "^8.8.0",
     "eslint-plugin-prettier": "^4.0.0",
-    "expect": "^27.4.6",
-    "file-loader": "^6.2.0",
+    "esno": "^0.10.0",
     "fs-extra": "^10.0.0",
-    "html-loader": "^3.1.0",
-    "html-webpack-plugin": "^5.3.2",
     "immutability-helper": "^3.1.1",
+    "kolorist": "^1.5.0",
     "lodash": "^4.17.20",
     "mocha": "^9.1.1",
+    "npm-run-all": "^4.1.5",
     "postcss": "^8.4.5",
     "postcss-import": "^14.0.2",
-    "postcss-loader": "^6.1.1",
     "postcss-preset-env": "^7.2.3",
     "prettier": "^2.4.0",
     "prop-types": "^15.7.2",
-    "react": "^17.0.2",
+    "react": "^18.0.0",
     "react-beautiful-dnd": "^13.1.0",
     "react-custom-scroll": "^4.3.0",
     "react-devtools": "^4.23.0",
     "react-dnd": "^14.0.3",
     "react-dnd-html5-backend": "^14.0.1",
-    "react-dom": "^17.0.2",
+    "react-dom": "^18.0.0",
     "react-lazy-load-image-component": "^1.5.1",
     "react-redux": "^7.2.5",
     "react-spinners": "^0.11.0",
@@ -85,28 +89,14 @@
     "redux-async-initial-state": "^0.3.0",
     "redux-logger": "^3.0.6",
     "reduxed-chrome-storage": "^2.4.7",
-    "style-loader": "^3.2.1",
-    "terser-webpack-plugin": "^5.2.4",
-    "webextension-polyfill": "^0.8.0",
-    "webpack-bundle-analyzer": "^4.4.2",
-    "webpack-dashboard": "^3.3.6",
-    "webpackbar": "^5.0.0-3"
-  },
-  "sideEffects": false,
-  "lint-staged": {
-    "*.test.tsx": [
-      "jest"
-    ],
-    "*.{js,tsx,ts}": [
-      "prettier --single-quote --trailing-comma es5 --write",
-      "eslint",
-      "git add"
-    ]
-  },
-  "applications": {
-    "gecko": {
-      "id": "{daf44bf7-a45e-4450-979c-91cf07434c3d}"
-    }
+    "rimraf": "^3.0.2",
+    "unplugin-auto-import": "^0.5.11",
+    "unplugin-icons": "^0.11.4",
+    "vite": "^2.6.2",
+    "vite-plugin-windicss": "^1.4.8",
+    "web-ext": "^6.4.0",
+    "webext-bridge": "^5.0.0",
+    "webextension-polyfill": "^0.8.0"
   },
   "devDependencies": {
     "@swc/cli": "^0.1.57",
@@ -118,19 +108,15 @@
     "mini-css-extract-plugin": "^2.5.3",
     "nodemon": "^2.0.15",
     "sass": "^1.49.0",
-    "sass-loader": "^12.1.0",
     "swc-loader": "^0.1.15",
-    "web-ext-plugin": "^1.6.0",
-    "webpack": "^5.52.1",
-    "webpack-cli": "^4.9.2",
-    "webpack-dev-server": "^4.7.3",
-    "webpack-ext-reloader": "^1.1.9"
+    "vite-plugin-chrome-extension": "^0.0.7",
+    "web-ext-plugin": "^1.6.0"
   },
   "nodemonConfig": {
     "ignore": [
       "test/*",
       "docs/*"
     ],
-    "delay": 2500
+    "delay": 1000
   }
 }

@@ -1,4 +1,4 @@
-const browser = require("webextension-polyfill");
+import * as browser from "webextension-polyfill";
 export const homepageURL = browser.runtime.getURL("excited-gem.html");
 let refinedTabs;
 

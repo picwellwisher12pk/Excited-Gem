@@ -8,7 +8,7 @@ import ActiveTabs from "./ActiveTabs";
 
 const style = require("@/styles/index.scss");
 const customScroll = require("/node_modules/react-custom-scroll/dist/customScroll.css");
-
+console.log("test");
 let browser = require("webextension-polyfill");
 
 if ("serviceWorker" in navigator) {
@@ -35,3 +35,7 @@ render(
   </Provider>,
   document.querySelector("#root")
 );
+if (module.hot) {
+  console.log("hmr test");
+  module.hot.accept();
+}

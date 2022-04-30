@@ -1,41 +1,30 @@
 {
   "compilerOptions": {
-      "target": "es5",
-      "module": "commonjs",
-      "declaration": true,
-      "noImplicitAny": true,
-      "removeComments": true,
-      "experimentalDecorators": true,
-      "rootDir": ".",
-      "sourceMap": true,
-      "listFiles": true,
-      "newLine": "LF",
-      "checkJs": true,
-      "noEmitOnError": true
+    "baseUrl": ".",
+    "checkJs": true,
+    "declaration": true,
+    "esModuleInterop": true,
+    "experimentalDecorators": true,
+    "forceConsistentCasingInFileNames": true,
+    "incremental": false,
+    "lib": ["DOM", "ESNext"],
+    "listFiles": true,
+    "module": "ESNext",
+    "moduleResolution": "node",
+    "newLine": "LF",
+    "noEmitOnError": true,
+    "noImplicitAny": true,
+    "noUnusedLocals": true,
+    "removeComments": true,
+    "resolveJsonModule": true,
+    "rootDir": ".",
+    "skipLibCheck": true,
+    "sourceMap": true,
+    "strict": true,
+    "target": "es2016",
+    "paths": {
+      "~/*": ["src/*"]
+    }
   },
-  "filesGlob": [
-      "./**/*.ts",
-      "./**/*.tsx",
-      "!./**/*.d.ts",
-      "!./gulpfile.ts",
-      "./typings/**/*.d.ts",
-      "!./node_modules/**/*.ts",
-      "./node_modules/typescript/lib/lib.es6.d.ts"
-  ],
-  "exclude": [],
-  "files": [
-      "./lib/cli.ts",
-      "./lib/index.ts",
-      "./test/indexSpec.ts",
-      "./typings/bundle.d.ts",
-      "./typings/empower/empower.d.ts",
-      "./typings/gulp/gulp.d.ts",
-      "./typings/mocha/mocha.d.ts",
-      "./typings/node/node.d.ts",
-      "./typings/orchestrator/orchestrator.d.ts",
-      "./typings/power-assert-formatter/power-assert-formatter.d.ts",
-      "./typings/power-assert/power-assert.d.ts",
-      "./typings/q/Q.d.ts",
-      "./node_modules/typescript/lib/lib.es6.d.ts"
-  ]
+  "exclude": ["dist", "node_modules"]
 }

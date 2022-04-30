@@ -1,11 +1,12 @@
 import { createSlice } from "@reduxjs/toolkit";
 import { preferences } from "./defaultPreferences";
-
+const searchIn = [...preferences.search.searchIn];
+console.log(preferences.search.searchIn, typeof preferences.search.searchIn);
 export const searchSlice = createSlice({
   name: "search",
   initialState: {
     searchTerm: "",
-    searchIn: preferences.search.searchIn,
+    searchIn: [true, true],
     audibleSearch: false,
     pinnedSearch: false,
   },

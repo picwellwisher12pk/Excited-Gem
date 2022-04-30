@@ -1,4 +1,10 @@
 {
-  "watch": ["webpack.config.js", "package.json"],
-  "exec": "npx webpack serve"
+  "watch": [
+    "vite.config.js",
+    "vite.config.content.js",
+    "package.json",
+    "src/manifest.json",
+    "src/manifest-loader.js"
+  ],
+  "exec": "npm run dev"
 }

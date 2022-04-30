@@ -1,6 +1,6 @@
-import { preferences } from "../defaultPreferences";
-import * as general from "./general.js";
-var browser = require("webextension-polyfill");
+import { preferences } from "~/scripts/defaultPreferences";
+import * as general from "./components/general.js";
+import * as browser from "webextension-polyfill";
 
 /**
  * Opens OneTab Main Page
