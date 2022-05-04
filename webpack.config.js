@@ -238,7 +238,6 @@ module.exports = {
           : "./src/images/logo.png",
       chunks: ["sessions"],
     }),
-    // env.NODE_ENV === "development" && new webpack.HotModuleReplacementPlugin(),
     // new LodashModuleReplacementPlugin({ collections: true }),
 
     new WebpackBar({ profile: true }),

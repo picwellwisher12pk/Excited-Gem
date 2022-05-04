@@ -17,7 +17,11 @@ async function stubIndexHtml() {
     await fs.ensureDir(r(`extension/`));
     let data = await fs.readFile(r(`src/pages/${view}/index.html`), "utf-8");
     data = data
-      .replace('"./main.js"', `"http://localhost:${port}/${view}/main.jsx"`)
+      .replace(
+        '"./main.jsx"',
+        `"http://localhost:${port}/pages/${view}/main.jsx"`
+        // `"./${view}.js"`
+      )
       .replace(
         '<div id="app"></div>',
         '<div id="app">Vite server did not start</div>'

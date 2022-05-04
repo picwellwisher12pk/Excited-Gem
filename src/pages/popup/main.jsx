@@ -7,8 +7,7 @@ import store from "~/scripts/store";
 import ActiveTabs from "~/scripts/ActiveTabs";
 
 import "~/styles/index.scss";
-import "/node_modules/react-custom-scroll/dist/customScroll.css";
-// import "bootstrap/dist/css/bootstrap.min.css";
+import "react-custom-scroll/dist/customScroll.css";
 
 // if ("serviceWorker" in navigator) {
 //   window.addEventListener("load", function () {
