@@ -20,6 +20,10 @@ const getPermissions = (version) => {
         "notifications",
         "unlimitedStorage",
       ],
+      content_security_policy: {
+        extension_pages:
+          "script-src 'self' http://localhost:*; object-src 'self'",
+      },
     };
   } else if (version === 2) {
     return {

@@ -83,7 +83,7 @@ browser.tabs.onAttached.addListener(() => {
 browser.action.onClicked.addListener((tab) => {
   console.info("Extension Page opening");
   browser.tabs
-    .create({ url: browser.runtime.getURL("excited-gem.html"), pinned: true })
+    .create({ url: browser.runtime.getURL("popup.html"), pinned: true })
     .then((tab) => tab);
   // openExcitedGemPage();
 });
