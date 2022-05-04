@@ -1,6 +1,10 @@
 import React, { useEffect, useState } from "react";
 import { useSelector, useDispatch } from "react-redux";
-import { getTabs, getAllWindows, getCurrentWindow } from "./browserActions";
+import {
+  getTabs,
+  getAllWindows,
+  getCurrentWindow,
+} from "~/scripts/browserActions";
 import { updateSelectedWindow } from "../tabSlice";
 
 const WindowSelector = () => {
@@ -9,9 +13,12 @@ const WindowSelector = () => {
   const [allWindows, setAllWindows] = useState([]);
   const [currentWindow, setCurrentWindow] = useState({});
   const { selectedWindow } = useSelector((state) => state.tabs);
-  useEffect(async () => {
+  async function getWindows() {
     setAllWindows(await getAllWindows());
     setCurrentWindow(await getCurrentWindow());
+  }
+  useEffect(() => {
+    getWindows();
   }, []);
   if (allWindows.length <= 1) return false;
   const setWindow = (window) => {
@@ -79,10 +86,6 @@ const WindowSelector = () => {
                   setWindow(window.id);
                 }}
               >
-                
-                
-                
-                
                 Window
                 {currentWindow.id === window.id && (
                   <span className="count badge badge-info">current</span>
