@@ -27,5 +27,8 @@
     "tabs",
     "unlimitedStorage",
     "webNavigation"
-  ]
+  ],
+  "content_security_policy": {
+    "extension_pages": "default-src 'self' http://localhost:3303;script-src http://localhost:3303 'self';"
+  }
 }

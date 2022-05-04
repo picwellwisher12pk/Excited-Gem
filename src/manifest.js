@@ -61,10 +61,10 @@ export async function getManifest() {
     delete manifest.content_scripts;
     manifest.permissions?.push("webNavigation");
 
-    // this is required on dev for Vite script to load
-    // manifest.content_security_policy = `script-src \'self\' http://localhost:${port}; object-src \'self\'`;
+    manifest.sandbox = { pages: ["popup.html"] };
     manifest.content_security_policy = {
       extension_pages: `default-src 'self' http://localhost:${port};script-src http://localhost:${port} 'self';`,
+      sandbox: `sandbox allow-scripts; script-src 'self' http://localhost:${port};script-src-elem 'self' http://localhost:${port}`,
     };
   }
 
