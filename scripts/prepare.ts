@@ -8,21 +8,23 @@ import { r, port, isDev, log } from "./utils";
  * Stub index.html to use Vite in development
  */
 async function stubIndexHtml() {
-  const views = ["options", "popup"];
+  const views = [
+    // "options",
+    "popup",
+  ];
 
   for (const view of views) {
-    await fs.ensureDir(r(`extension/dist/${view}`));
-    let data = await fs.readFile(r(`src/${view}/index.html`), "utf-8");
+    await fs.ensureDir(r(`extension/`));
+    let data = await fs.readFile(r(`src/pages/${view}/index.html`), "utf-8");
     data = data
-      .replace('"./main.js"', `"http://localhost:${port}/${view}/main.js"`)
+      .replace('"./main.js"', `"http://localhost:${port}/${view}/main.jsx"`)
       .replace(
         '<div id="app"></div>',
         '<div id="app">Vite server did not start</div>'
       );
-    await fs.writeFile(r(`extension/dist/${view}/index.html`), data, "utf-8");
+    await fs.writeFile(r(`extension/${view}.html`), data, "utf-8");
   }
 }
-
 function writeManifest() {
   execSync("npx esno ./scripts/manifest.ts", { stdio: "inherit" });
 }

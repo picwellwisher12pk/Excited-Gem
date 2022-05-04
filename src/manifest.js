@@ -17,7 +17,6 @@ export async function getManifest() {
         19: "assets/icon.svg",
         38: "assets/icon.svg",
       },
-
       default_title: "Excited Gem",
     },
     // options_ui: {
@@ -42,6 +41,10 @@ export async function getManifest() {
       "tabs",
       "unlimitedStorage",
     ],
+    // content_security_policy: {
+    //   extension_pages:
+    //     "default-src http://localhost:* 'self';script-src http://localhost:* 'self'; object-src 'none'",
+    // },
     // content_scripts: [
     //   {
     //     matches: ["http://*/*", "https://*/*"],
@@ -60,6 +63,9 @@ export async function getManifest() {
 
     // this is required on dev for Vite script to load
     // manifest.content_security_policy = `script-src \'self\' http://localhost:${port}; object-src \'self\'`;
+    manifest.content_security_policy = {
+      extension_pages: `default-src 'self' http://localhost:${port};script-src http://localhost:${port} 'self';`,
+    };
   }
 
   return manifest;
