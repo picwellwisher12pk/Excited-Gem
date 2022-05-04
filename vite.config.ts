@@ -7,12 +7,17 @@ import AutoImport from "unplugin-auto-import/vite";
 import WindiCSS from "vite-plugin-windicss";
 import windiConfig from "./windi.config";
 import { r, port, isDev } from "./scripts/utils";
+import dynamicImportVars from "@rollup/plugin-dynamic-import-vars";
+import scss from "rollup-plugin-scss";
+import svgrPlugin from "vite-plugin-svgr";
+import svgr from "@honkhonk/vite-plugin-svgr";
 
 export const sharedConfig: UserConfig = {
   root: r("src"),
   resolve: {
     alias: {
       "~/": `${r("src")}/`,
+      "@/": `${r("node_modules")}/`,
     },
   },
   define: {
@@ -20,6 +25,14 @@ export const sharedConfig: UserConfig = {
   },
   plugins: [
     react(),
+    scss(),
+    dynamicImportVars(),
+    svgrPlugin({
+      svgrOptions: {
+        icon: true,
+      },
+    }),
+    svgr(),
 
     AutoImport({
       imports: [
@@ -28,7 +41,6 @@ export const sharedConfig: UserConfig = {
           "webextension-polyfill": [["*", "browser"]],
         },
       ],
-      dts: r("src/auto-imports.d.ts"),
     }),
 
     // https://github.com/antfu/unplugin-react-components
@@ -61,7 +73,7 @@ export const sharedConfig: UserConfig = {
     },
   ],
   optimizeDeps: {
-    include: ["react", "webextension-polyfill"],
+    include: ["react", "webext-bridge", "webextension-polyfill"],
   },
 };
 
@@ -70,12 +82,15 @@ export default defineConfig(({ command }) => ({
   base: command === "serve" ? `http://localhost:${port}/` : "/dist/",
   server: {
     port,
+    strictPort: true,
     hmr: {
       host: "localhost",
+      overlay: true,
     },
   },
   build: {
     outDir: r("extension/dist"),
+    write: true,
     emptyOutDir: false,
     sourcemap: isDev ? "inline" : false,
     // https://developer.chrome.com/docs/webstore/program_policies/#:~:text=Code%20Readability%20Requirements
@@ -84,9 +99,8 @@ export default defineConfig(({ command }) => ({
     },
     rollupOptions: {
       input: {
-        background: r("src/background/main.js"),
-        options: r("src/options/index.html"),
-        popup: r("src/popup/index.html"),
+        // options: r("src/options/index.html"),
+        popup: r("src/pages/popup/index.html"),
       },
     },
   },
