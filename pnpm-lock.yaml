@@ -54,8 +54,7 @@ specifiers:
   reduxed-chrome-storage: ^2.4.7
   rimraf: ^3.0.2
   rollup-plugin-scss: ^3.0.0
-  sass: ^1.49.0
-  swc-loader: ^0.1.15
+  sass: ^1.49.9
   unplugin-auto-import: ^0.5.11
   unplugin-icons: ^0.11.4
   vite: ^2.6.2
@@ -122,7 +121,7 @@ dependencies:
   webextension-polyfill: 0.8.0
 
 devDependencies:
-  '@rollup/plugin-dynamic-import-vars': 1.4.2
+  '@rollup/plugin-dynamic-import-vars': 1.4.3
   '@swc/cli': 0.1.57_@swc+core@1.2.165+chokidar@3.5.3
   '@swc/core': 1.2.165
   '@swc/jest': 0.2.20_@swc+core@1.2.165
@@ -132,7 +131,6 @@ devDependencies:
   mini-css-extract-plugin: 2.6.0
   nodemon: 2.0.15
   sass: 1.49.9
-  swc-loader: 0.1.15_@swc+core@1.2.165
   vite-plugin-chrome-extension: 0.0.7_sass@1.49.9
   web-ext-plugin: 1.6.0
 
@@ -1187,8 +1185,8 @@ packages:
       reselect: 4.1.5
     dev: false
 
-  /@rollup/plugin-dynamic-import-vars/1.4.2:
-    resolution: {integrity: sha512-SEaS9Pf0RyaZ/oJ1knLZT+Fu0X6DlyTfUcoE7XKkiKJjNaB+8SLoHmDVRhomo5RpWHPyd+B00G/bE5R5+Q+HEg==}
+  /@rollup/plugin-dynamic-import-vars/1.4.3:
+    resolution: {integrity: sha512-VYP9BBVI0pcYpLp/DkFT8YP+EmqmWFMmWXoTObDH6OouERxJyPsIj0tC3HxhjNBOKgcRc7eV75IQItzELt7QSg==}
     engines: {node: '>= 10.0.0'}
     peerDependencies:
       rollup: ^1.20.0||^2.0.0
@@ -2353,10 +2351,6 @@ packages:
     dependencies:
       tweetnacl: 0.14.5
 
-  /big.js/5.2.2:
-    resolution: {integrity: sha512-vyL2OymJxmarO8gxMr0mhChsO9QGwhynfuu4+MHTAW6czfq9humCB7rKpUjDd9YUiDPU4mzpyupFSvOClAwbmQ==}
-    dev: true
-
   /binary-extensions/2.2.0:
     resolution: {integrity: sha512-jDctJ/IVQbZoJykoeHbhXpOlNBqGNcwXJKJog42E5HDPUwQTSdjCHdihjj0DlnheQ7blbT6dHOafNAiS8ooQKA==}
     engines: {node: '>=8'}
@@ -3339,11 +3333,6 @@ packages:
 
   /emoji-regex/8.0.0:
     resolution: {integrity: sha512-MSjYzcWNOA0ewAHpz0MxpYFvwg6yjy1NG3xteoqz644VCo/RPgnr1/GGt+ic3iJTzQ8Eu3TdM14SawnVUmGE6A==}
-
-  /emojis-list/3.0.0:
-    resolution: {integrity: sha512-/kyM18EfinwXZbno9FyUGeFh87KC8HRQBQGildHZbEuRyWFOmv1U10o9BBp8XVZDVNNuQKyIGIu5ZYAAXJ0V2Q==}
-    engines: {node: '>= 4'}
-    dev: true
 
   /encodeurl/1.0.2:
     resolution: {integrity: sha1-rT/0yG7C0CkyL1oCw6mmBslbP1k=}
@@ -6068,15 +6057,6 @@ packages:
       strip-bom: 3.0.0
     dev: false
 
-  /loader-utils/2.0.2:
-    resolution: {integrity: sha512-TM57VeHptv569d/GKh6TAYdzKblwDNiumOdkFnejjD0XwTH87K90w3O7AiJRqdQoXygvi1VQTJTLGhJl7WqA7A==}
-    engines: {node: '>=8.9.0'}
-    dependencies:
-      big.js: 5.2.2
-      emojis-list: 3.0.0
-      json5: 2.2.1
-    dev: true
-
   /local-pkg/0.4.1:
     resolution: {integrity: sha512-lL87ytIGP2FU5PWwNDo0w3WhIo2gopIAxPg9RxDYF7m4rr5ahuZxP22xnJHIvaLTe4Z9P6uKKY2UHiwyB4pcrw==}
     engines: {node: '>=14'}
@@ -8676,16 +8656,6 @@ packages:
       picocolors: 1.0.0
       stable: 0.1.8
     dev: false
-
-  /swc-loader/0.1.15_@swc+core@1.2.165:
-    resolution: {integrity: sha512-cn1WPIeQJvXM4bbo3OwdEIapsQ4uUGOfyFj0h2+2+brT0k76DCGnZXDE2KmcqTd2JSQ+b61z2NPMib7eEwMYYw==}
-    peerDependencies:
-      '@swc/core': ^1.2.52
-      webpack: '>=2'
-    dependencies:
-      '@swc/core': 1.2.165
-      loader-utils: 2.0.2
-    dev: true
 
   /symbol-tree/3.2.4:
     resolution: {integrity: sha512-9QNk5KwDF+Bvz+PyObkmSYjI5ksVUYtjW7AU22r2NKcfLJcXp96hkDWU3+XndOsUb+AQ9QhfzfCT2O+CNWT5Tw==}

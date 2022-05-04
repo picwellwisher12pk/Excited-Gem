@@ -111,8 +111,7 @@
     "jest": "^27.5.1",
     "mini-css-extract-plugin": "^2.5.3",
     "nodemon": "^2.0.15",
-    "sass": "^1.49.0",
-    "swc-loader": "^0.1.15",
+    "sass": "^1.49.9",
     "vite-plugin-chrome-extension": "^0.0.7",
     "web-ext-plugin": "^1.6.0"
   },
