@@ -4,8 +4,8 @@ import store from "./store";
 import React, { Profiler, useMemo } from "react";
 import { updateActiveTabs } from "./tabSlice";
 import { useSelector } from "react-redux";
-import { getTabs } from "./components/browserActions";
-import { profilerCallback } from "./components/general";
+import { getTabs } from "~/scripts/browserActions";
+import { profilerCallback } from "~/scripts/components/general";
 import CustomScroll from "react-custom-scroll";
 
 //JS libraries
@@ -14,10 +14,10 @@ import "../images/dev-logo.png";
 // React Components
 import Header from "./components/Header/Header";
 import Search from "./components/Header/Search/Search";
-import { Navigation } from "./components/Header/Navigation";
+import Navigation from "./components/Header/Navigation";
 import { TabWindowWrapper } from "./TabWindowWrapper";
 
-const browser = require("webextension-polyfill");
+import browser from "webextension-polyfill";
 
 export function updateTabs(getTabs, store) {
   getTabs(store.getState().tabs.selectedWindow).then((tabs) => {
@@ -70,6 +70,7 @@ updateTabs(getTabs, store);
 const ActiveTabs = () => {
   const { tabs } = useSelector((state) => state.tabs);
   const { search } = useSelector((state) => state);
+
   const navigation = useMemo(
     () => <Navigation tabCount={tabs.length} />,
     [tabs.length]
@@ -83,11 +84,11 @@ const ActiveTabs = () => {
   return (
     <>
       {header}
-      <CustomScroll heightRelativeToParent="100%" keepAtBottom={true}>
-        <Profiler id={"TabWindow:"} onRender={profilerCallback}>
+      {/* <Profiler id={"TabWindow:"} onRender={profilerCallback}>
+        <CustomScroll heightRelativeToParent="100%" keepAtBottom={true}>
           <TabWindowWrapper />
-        </Profiler>
-      </CustomScroll>
+        </CustomScroll>
+      </Profiler> */}
     </>
   );
 };

@@ -1,13 +1,13 @@
 import React, { useCallback, useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import ErrorBoundary from "../../../ErrorBoundary";
-import SearchIcon from "search.svg";
-import TimesIcon from "times.svg";
-import VolumeIcon from "volume.svg";
-import VolumeOffIcon from "volume-off.svg";
-import ThumbtackIcon from "thumbtack.svg";
-import ThumbtackActiveIcon from "thumbtack-active.svg";
-import Loading from "spinner-third.svg";
+import ErrorBoundary from "~/scripts/ErrorBoundary";
+import SearchIcon from "~/icons/search.svg?component";
+import TimesIcon from "~/icons/times.svg?component";
+import VolumeIcon from "~/icons/volume.svg?component";
+import VolumeOffIcon from "~/icons/volume-off.svg?component";
+import ThumbtackIcon from "~/icons/thumbtack.svg?component";
+import ThumbtackActiveIcon from "~/icons/thumbtack-active.svg?component";
+import Loading from "~/icons/spinner-third.svg?component";
 import { debounce } from "lodash";
 import {
   toggleAudible,
@@ -112,12 +112,10 @@ const Search = () => {
       );
       break;
     default:
-      iconInSearch = (
-        <SearchIcon
-          className={`text-secondary`}
-          style={{ width: "40px", height: "43px", padding: "12px" }}
-        />
-      );
+      <SearchIcon
+        className={`text-secondary`}
+        style={{ width: "40px", height: "43px", padding: "12px" }}
+      />;
       break;
   }
 

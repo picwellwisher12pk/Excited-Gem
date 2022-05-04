@@ -1,12 +1,12 @@
 import { useSelector } from "react-redux";
 import React, { useCallback, useEffect, useState } from "react";
-import Tab from "./components/Accordion/TabsGroup/Tab";
+import Tab from "~/scripts/components/Accordion/TabsGroup/Tab";
 import { DndProvider } from "react-dnd";
 import { HTML5Backend } from "react-dnd-html5-backend";
 import ClimbingBoxLoader from "react-spinners/ClimbingBoxLoader";
-import { asyncFilterTabs } from "./components/general";
+import { asyncFilterTabs } from "~/scripts/components/general";
 
-const browser = require("webextension-polyfill");
+import browser from "webextension-polyfill";
 
 export const TabWindowWrapper = React.memo(() => {
   const [loading, setLoading] = useState(true);

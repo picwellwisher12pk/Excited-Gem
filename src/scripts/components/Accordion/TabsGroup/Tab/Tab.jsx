@@ -3,17 +3,17 @@ import { useDrag, useDrop } from "react-dnd";
 import { useDispatch, useSelector } from "react-redux";
 import { updateSelectedTabs } from "../../../../tabSlice";
 import { LazyLoadImage } from "react-lazy-load-image-component";
-import Grip from "grip-lines-vertical.svg";
-import Loading from "spinner-third.svg";
+// import Grip from "~/icons/grip-lines-vertical.svg";
 //Icons
-import VolumeOffIcon from "volume-off.svg";
-import VolumeIcon from "volume.svg";
-import VolumeMuteIcon from "volume-mute.svg";
-import TimesIcon from "times.svg";
-import ThumbtackIcon from "thumbtack.svg";
-import ThumbtackActiveIcon from "thumbtack-active.svg";
+import Loading from "~/icons/spinner-third.svg";
+import VolumeOffIcon from "~/icons/volume-off.svg";
+import VolumeIcon from "~/icons/volume.svg";
+import VolumeMuteIcon from "~/icons/volume-mute.svg";
+import TimesIcon from "~/icons/times.svg";
+import ThumbtackIcon from "~/icons/thumbtack.svg";
+import ThumbtackActiveIcon from "~/icons/thumbtack-active.svg";
 //Polyfill
-let browser = require("webextension-polyfill");
+import browser from "webextension-polyfill";
 
 const grayIcon = { height: 16, fill: "gray" };
 const blueIcon = { height: 16, fill: "#0487cf" };

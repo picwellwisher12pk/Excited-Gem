@@ -1,24 +1,22 @@
 import React, { Profiler, useState } from "react";
 import { getMetrics, sortTabs } from "../general.js";
-import VolumeIcon from "volume.svg";
-import VolumeSlashIcon from "volume-mute.svg";
-import TimesIcon from "times.svg";
-import SortIcon from "sort.svg";
-import SaveIcon from "save.svg";
-import SyncAltIcon from "sync-alt.svg";
-import ThumbtackIcon from "thumbtack-active.svg";
+import VolumeIcon from "~/icons/volume.svg?component";
+import VolumeSlashIcon from "~/icons/volume-mute.svg?component";
+import TimesIcon from "~/icons/times.svg?component";
+import SortIcon from "~/icons/sort.svg?component";
+import SaveIcon from "~/icons/save.svg?component";
+import SyncAltIcon from "~/icons/sync-alt.svg?component";
+import ThumbtackIcon from "~/icons/thumbtack-active.svg?component";
 import { useDispatch, useSelector } from "react-redux";
 import { clearSelectedTabs } from "../../tabSlice.js";
 
 import Brand from "./Brand";
 import WindowSelector from "../WindowSelector";
 
-const browser = require("webextension-polyfill");
+import browser from "webextension-polyfill";
 
 //Images
-const logo = require(`../../../images/${
-  NODE_ENV !== "production" && "dev"
-}-logo.png`);
+import logo from "~/images/logo.png";
 
 const Header = (props) => {
   console.log("header loading", props);
