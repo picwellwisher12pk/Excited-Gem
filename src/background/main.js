@@ -1,5 +1,5 @@
 // import { sendMessage, onMessage } from "webext-bridge";
-import * as browser from "webextension-polyfill";
+import browser from "webextension-polyfill";
 import { preferences } from "~/scripts/defaultPreferences";
 import {
   getTabs,
@@ -8,12 +8,12 @@ import {
 } from "~/scripts/browserActions";
 
 // only on dev mode
-if (import.meta.hot) {
-  // @ts-expect-error for background HMR
-  import("/@vite/client");
-  // load latest content script
-  import("./contentScriptHMR");
-}
+// if (import.meta.hot) {
+//   // @ts-expect-error for background HMR
+//   import("/@vite/client");
+//   // load latest content script
+//   import("./contentScriptHMR");
+// }
 
 // let muteAll = (data) => {
 //   for (let i = 0; i < data.length; i++) {
@@ -87,13 +87,11 @@ browser.tabs.onAttached.addListener(() => {
 });
 
 /* Browser Actions */
-/////////////////////
 browser.action.onClicked.addListener((tab) => {
   console.info("Extension Page opening");
   browser.tabs
-    .create({ url: browser.runtime.getURL("excited-gem.html"), pinned: true })
+    .create({ url: browser.runtime.getURL("popup.html"), pinned: true })
     .then((tab) => tab);
-  // openExcitedGemPage();
 });
 
 // On clicking extension button opens EG homepage.
@@ -101,19 +99,19 @@ browser.action.onClicked.addListener((tab) => {
 //Registering Menus
 // registerMenus();
 
-browser.runtime.onMessage.addListener(function (
-  message,
-  sender,
-  senderResponse
-) {
-  if (message.msg === "image") {
-    fetch("https://some-random-api.ml/img/pikachu")
-      .then((response) => response.text())
-      .then((data) => {
-        let dataObj = JSON.parse(data);
-        senderResponse({ data: dataObj, index: message.index });
-      })
-      .catch((error) => console.log("error", error));
-    return true; // Will respond asynchronously.
-  }
-});
+// browser.runtime.onMessage.addListener(function (
+//   message,
+//   sender,
+//   senderResponse
+// ) {
+//   if (message.msg === "image") {
+//     fetch("https://some-random-api.ml/img/pikachu")
+//       .then((response) => response.text())
+//       .then((data) => {
+//         let dataObj = JSON.parse(data);
+//         senderResponse({ data: dataObj, index: message.index });
+//       })
+//       .catch((error) => console.log("error", error));
+//     return true; // Will respond asynchronously.
+//   }
+// });

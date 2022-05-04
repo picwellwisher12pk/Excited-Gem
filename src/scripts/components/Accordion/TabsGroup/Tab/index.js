@@ -1,4 +1,2 @@
-// import Tab from './Tab';
-// import 'tab.css';
-// export default Tab;
-module.exports = require('./Tab.js');
+import Tab from "./Tab.jsx";
+export default Tab;
