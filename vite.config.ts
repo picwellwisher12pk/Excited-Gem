@@ -7,8 +7,8 @@ import AutoImport from "unplugin-auto-import/vite";
 import WindiCSS from "vite-plugin-windicss";
 import windiConfig from "./windi.config";
 import { r, port, isDev } from "./scripts/utils";
-import dynamicImportVars from "@rollup/plugin-dynamic-import-vars";
-import scss from "rollup-plugin-scss";
+// import dynamicImportVars from "@rollup/plugin-dynamic-import-vars";
+// import scss from "rollup-plugin-scss";
 import svgrPlugin from "vite-plugin-svgr";
 import svgr from "@honkhonk/vite-plugin-svgr";
 
@@ -24,9 +24,9 @@ export const sharedConfig: UserConfig = {
     __DEV__: isDev,
   },
   plugins: [
-    react(),
-    scss(),
-    dynamicImportVars(),
+    // react(),
+    // scss(),
+    // dynamicImportVars(),
     svgrPlugin({
       svgrOptions: {
         icon: true,
@@ -37,9 +37,9 @@ export const sharedConfig: UserConfig = {
     AutoImport({
       imports: [
         "react",
-        {
-          "webextension-polyfill": [["*", "browser"]],
-        },
+        // {
+        //   "webextension-polyfill": [["*", "browser"]],
+        // },
       ],
     }),
 
@@ -73,7 +73,11 @@ export const sharedConfig: UserConfig = {
     },
   ],
   optimizeDeps: {
-    include: ["react", "webext-bridge", "webextension-polyfill"],
+    include: [
+      "react",
+      // "webext-bridge",
+      // "webextension-polyfill"
+    ],
   },
 };
 
