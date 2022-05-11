@@ -35,7 +35,7 @@ export const TabWindowWrapper = React.memo(() => {
     setLoading(false);
   };
 
-  useEffect(async () => {
+  useEffect(() => {
     if (
       searchObject.searchTerm === "" &&
       !searchObject.audibleSearch &&
