@@ -72,8 +72,8 @@ export function updateTabs(reactObject = window.activeTabs) {
 }
 
 export function setBadge(length) {
-  browser.action.setBadgeText({ text: length.toString() });
-  browser.action.setBadgeBackgroundColor({
+  browser.browserAction.setBadgeText({ text: length.toString() });
+  browser.browserAction.setBadgeBackgroundColor({
     color: length <= 50 ? "green" : "red",
   });
 }
