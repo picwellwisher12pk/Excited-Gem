@@ -16,7 +16,7 @@ import WindowSelector from "../WindowSelector";
 import browser from "webextension-polyfill";
 
 //Images
-import logo from "~/images/logo.png";
+import logo from "~/assets/logo.png";
 
 const Header = (props) => {
   console.log("header loading", props);
@@ -37,9 +37,9 @@ const Header = (props) => {
   ) : (
     <VolumeSlashIcon style={{ height: 16, fill: "white" }} />
   );
-  // browser.windows.getCurrent({ populate: true }).then((window) => {
-  //   setCurrentWindow(window);
-  // });
+  browser.windows.getCurrent({ populate: true }).then((window) => {
+    setCurrentWindow(window);
+  });
   return (
     <Profiler id={"header"} onRender={getMetrics}>
       <header className="page-header" key={"header"}>
