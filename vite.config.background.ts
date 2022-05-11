@@ -13,6 +13,7 @@ export default defineConfig({
     emptyOutDir: false,
     sourcemap: isDev ? "inline" : false,
     lib: {
+      formats: ["es"],
       entry: r("src/background/main.js"),
       name: packageJson.name,
     },
