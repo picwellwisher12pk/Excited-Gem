@@ -1,5 +1,4 @@
 // import { sendMessage, onMessage } from "webext-bridge";
-import browser from "webextension-polyfill";
 import { preferences } from "~/scripts/defaultPreferences";
 import {
   getTabs,
@@ -87,7 +86,7 @@ browser.tabs.onAttached.addListener(() => {
 });
 
 /* Browser Actions */
-browser.action.onClicked.addListener((tab) => {
+browser.browserAction.onClicked.addListener((tab) => {
   console.info("Extension Page opening");
   browser.tabs
     .create({ url: browser.runtime.getURL("popup.html"), pinned: true })
