@@ -93,7 +93,6 @@
     "redux-logger": "^3.0.6",
     "reduxed-chrome-storage": "^2.4.7",
     "rimraf": "^3.0.2",
-    "rollup-plugin-scss": "^3.0.0",
     "unplugin-auto-import": "^0.5.11",
     "unplugin-icons": "^0.11.4",
     "vite": "^2.6.2",
@@ -105,6 +104,7 @@
   },
   "devDependencies": {
     "@rollup/plugin-dynamic-import-vars": "latest",
+    "@svgr/rollup": "^6.2.1",
     "@swc/cli": "^0.1.57",
     "@swc/core": "^1.2.165",
     "@swc/jest": "^0.2.20",
