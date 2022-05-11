@@ -5,13 +5,13 @@ import { updateSelectedTabs } from "../../../../tabSlice";
 import { LazyLoadImage } from "react-lazy-load-image-component";
 // import Grip from "~/icons/grip-lines-vertical.svg";
 //Icons
-import Loading from "~/icons/spinner-third.svg";
-import VolumeOffIcon from "~/icons/volume-off.svg";
-import VolumeIcon from "~/icons/volume.svg";
-import VolumeMuteIcon from "~/icons/volume-mute.svg";
-import TimesIcon from "~/icons/times.svg";
-import ThumbtackIcon from "~/icons/thumbtack.svg";
-import ThumbtackActiveIcon from "~/icons/thumbtack-active.svg";
+import Loading from "~/icons/spinner-third.svg?component";
+import VolumeOffIcon from "~/icons/volume-off.svg?component";
+import VolumeIcon from "~/icons/volume.svg?component";
+import VolumeMuteIcon from "~/icons/volume-mute.svg?component";
+import TimesIcon from "~/icons/times.svg?component";
+import ThumbtackIcon from "~/icons/thumbtack.svg?component";
+import ThumbtackActiveIcon from "~/icons/thumbtack-active.svg?component";
 //Polyfill
 import browser from "webextension-polyfill";
 
