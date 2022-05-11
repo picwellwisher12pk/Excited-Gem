@@ -5,6 +5,9 @@ import { r, isDev } from "./scripts/utils";
 import windiConfig from "./windi.config";
 import packageJson from "./package.json";
 import react from "@vitejs/plugin-react";
+// import svgrPlugin from "vite-plugin-svgr";
+// import svgr from "@honkhonk/vite-plugin-svgr";
+import svgr from "@svgr/rollup";
 
 // bundling the content script using Vite
 export default defineConfig({
@@ -30,6 +33,12 @@ export default defineConfig({
   plugins: [
     ...sharedConfig.plugins!,
     react(),
+    // svgrPlugin({
+    //   svgrOptions: {
+    //     icon: true,
+    //   },
+    // }),
+    svgr(),
     // https://github.com/antfu/vite-plugin-windicss
     WindiCSS({
       config: {
