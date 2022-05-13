@@ -50,7 +50,7 @@ const Search = () => {
   const handleKeyUp = useCallback((event) => {
     const { value } = event.target;
     if (value === "" || event.key === "Escape") {
-      clear(event.target);
+      clear();
       return;
     } else {
       value && setIconState("searching");
@@ -66,9 +66,8 @@ const Search = () => {
     []
   );
 
-  const clear = (target) => {
-    console.log("clearing");
-    target.value = "";
+  const clear = () => {
+    searchField.current.value = "";
     setIconState("default");
     setEmpty(true);
     dispatch(updateSearchTerm(""));
@@ -105,20 +104,19 @@ const Search = () => {
             padding: "12px",
             fill: "red",
           }}
-          onClick={() => {
-            if (!empty) clear();
-          }}
+          onClick={clear}
         />
       );
       break;
     default:
-      <SearchIcon
-        className={`text-secondary`}
-        style={{ width: "40px", height: "43px", padding: "12px" }}
-      />;
+      iconInSearch = (
+        <SearchIcon
+          className={`text-secondary`}
+          style={{ width: "40px", height: "43px", padding: "12px" }}
+        />
+      );
       break;
   }
-
   return (
     <ErrorBoundary>
       <section className="search-bar" style={{ width: "66%", paddingRight: 0 }}>
@@ -224,16 +222,4 @@ const Search = () => {
   );
 };
 
-// const mapStateToProps = function (state) {
-//   return {
-//     regex: state.preferences.search.regex,
-//     ignoreCase: state.preferences.search.ignoreCase,
-//     searchIn: state.preferences.search.searchIn,
-//     empty: state.preferences.search.empty,
-//   };
-// };
-// const mapDispatchToProps = dispatch => ({
-//   searchInTabs: searchTerm => dispatch(ACTIONS.searchInTabs(searchTerm)),
-//   toggleSearchInAction: searchInArray => dispatch(ACTIONS.toggleSearchInAction(searchInArray))
-// });
 export default Search;
