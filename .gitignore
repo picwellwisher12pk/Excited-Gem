@@ -34,7 +34,6 @@
 /css
 /js/*.js
 $RECYCLE.BIN/
-assets/
 bower_components/
 build.zip
 build/
