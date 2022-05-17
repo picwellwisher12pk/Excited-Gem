@@ -169,12 +169,12 @@ const Tab = (props) => {
       key={props.id}
       id={props.id}
       className={
-        `tab-item flex py-2 hover:bg-slate-200 transition-colors duration-300 border-b-stone-100 border` +
+        `tab-item flex py-2 bg-slate-100 hover:bg-slate-200 transition-colors duration-300 border-b-stone-100 border` +
         (selected ? " checked" : " ") +
         (loading ? " loading" : discarded ? " idle" : "")
       }
-      data-discarded={discarded}
       style={{ opacity }}
+      data-discarded={discarded}
       data-handler-id={handlerId}
       draggable={true}
     >
