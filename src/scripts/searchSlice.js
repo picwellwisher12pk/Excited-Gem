@@ -24,7 +24,8 @@ export const searchSlice = createSlice({
     },
     toggleSearchIn: (state, action) => {
       const newState = { ...state };
-      newState.searchIn[action.payload] = !state.searchIn[action.payload];
+      newState.searchIn = { ...action.payload };
+      console.log(newState.searchIn);
       return newState;
     },
     toggleAudible: (state) => {

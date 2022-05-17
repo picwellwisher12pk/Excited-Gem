@@ -15,15 +15,9 @@ import {
   toggleSearchIn,
   updateSearchTerm,
 } from "../../../searchSlice";
+import { makePlaceholder as doPlaceholder } from "../../general";
 import { Input, Checkbox, Popover, Button } from "antd";
 const { Search: AntSearch } = Input;
-const doPlaceholder = (searchIn, regex = false) => {
-  let newPlaceholder = "Search in ";
-  newPlaceholder += searchIn[0] ? "Titles" : "";
-  newPlaceholder += searchIn[0] && searchIn[1] ? " and " : "";
-  newPlaceholder += searchIn[1] ? "URLs" : "";
-  return regex ? `/ ${newPlaceholder} /gi` : newPlaceholder;
-};
 
 const Search = () => {
   const dispatch = useDispatch();
@@ -45,6 +39,7 @@ const Search = () => {
 
   useEffect(() => {
     setPlaceholder(doPlaceholder(searchIn, regex));
+    console.log("setting placeholder: searchIn changed");
   }, [searchIn]);
   useEffect(() => {
     if (searchTerm === "") {
@@ -55,10 +50,8 @@ const Search = () => {
   }, [searchTerm]);
 
   const handleKeyUp = useCallback((event) => {
-    console.log("keyup", event);
     const { value } = event.target;
     if (value === "" || event.key === "Escape") {
-      console.log(searchField);
       // @ts-ignore
       searchField.current.input.value = "";
       dispatch(updateSearchTerm(""));
@@ -72,29 +65,28 @@ const Search = () => {
     []
   );
 
-  // const clear = (searchField) => {
+  const toggleSearchInHandle = (param, event) => {
+    const newSearchIn = { ...searchIn, [param]: !searchIn[param] };
 
-  // };
-  const toggleSearchInHandle = useCallback((param, event) => {
-    console.log(title, url, param, event);
-    // let titleLocal = title.current.state.checked;
-    // let urlLocal = url.current.state.checked;
-    // if (!titleLocal && !urlLocal) {
-    //   event.preventDefault();
-    //   alert(
-    //     "Sorry! You can't uncheck both Title and URL at the same time. One must remain checked."
-    //   );
-    //   return false;
-    // }
-    // dispatch(toggleSearchIn(param));
-  }, []);
+    console.log(newSearchIn, [param], event);
+
+    if (Object.values(newSearchIn).every((v) => v === false)) {
+      event.preventDefault();
+      alert(
+        "Sorry! You can't uncheck both Title and URL at the same time. One must remain checked."
+      );
+      event.target.checked = true;
+      return false;
+    }
+    dispatch(toggleSearchIn(newSearchIn));
+  };
   const content = (
     <div>
       <p>
         <label>
           <Checkbox
             ref={title}
-            defaultChecked={searchIn.title}
+            checked={searchIn.title}
             onChange={(e) => toggleSearchInHandle("title", e)}
           />{" "}
           Title
@@ -104,7 +96,7 @@ const Search = () => {
         <label>
           <Checkbox
             ref={url}
-            defaultChecked={searchIn.url}
+            checked={searchIn.url}
             onChange={(e) => toggleSearchInHandle("url", e)}
           />{" "}
           URL
@@ -133,9 +125,9 @@ const Search = () => {
                   onClick={() => dispatch(toggleAudible())}
                 >
                   {audibleSearch ? (
-                    <VolumeIcon style={{ height: 16, fill: "#0487cf" }} />
+                    <VolumeIcon className="fill-[#0487cf] h-[16px]" />
                   ) : (
-                    <VolumeOffIcon style={{ height: 16, fill: "#0487cf" }} />
+                    <VolumeOffIcon className="fill-[#0487cf] h-[16px]" />
                   )}
                 </a>
               </div>
@@ -146,11 +138,9 @@ const Search = () => {
                   onClick={() => dispatch(togglePinned())}
                 >
                   {pinnedSearch ? (
-                    <ThumbtackActiveIcon
-                      style={{ height: 16, fill: "#0487cf" }}
-                    />
+                    <ThumbtackActiveIcon className="fill-[#0487cf] h-[16px]" />
                   ) : (
-                    <ThumbtackIcon style={{ height: 16, fill: "#0487cf" }} />
+                    <ThumbtackIcon className="fill-[#0487cf] h-[16px]" />
                   )}
                 </a>
               </div>
@@ -158,7 +148,7 @@ const Search = () => {
             <label>
               <Checkbox defaultChecked={regex} /> Regex
             </label>
-            <Popover content={content} trigger="click">
+            <Popover content={content}>
               <a type="link" className="ml-3">
                 Search by...
               </a>
