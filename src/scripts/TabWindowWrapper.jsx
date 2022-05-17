@@ -8,10 +8,10 @@ import { asyncFilterTabs } from "~/scripts/components/general";
 
 import browser from "webextension-polyfill";
 
-export const TabWindowWrapper = React.memo(() => {
+const TabWindowWrapper = React.memo(() => {
   const [loading, setLoading] = useState(true);
-  const tabs = useSelector((state) => state.tabs.tabs);
-  const { ignoreCase, regex } = useSelector((state) => state.config.search);
+  const { tabs } = useSelector((state) => state.tabs);
+  const { ignoreCase, regex } = useSelector((state) => state.search);
   const searchObject = useSelector((state) => state.search);
   const searchPref = { ignoreCase, regex };
   const selectedTabs = useSelector((state) => state.tabs.selectedTabs);
@@ -117,3 +117,5 @@ export const TabWindowWrapper = React.memo(() => {
     />
   );
 });
+
+export default TabWindowWrapper;

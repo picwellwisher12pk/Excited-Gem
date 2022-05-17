@@ -15,7 +15,7 @@ import "../assets/dev-logo.png";
 import Header from "./components/Header/Header";
 import Search from "./components/Header/Search/Search";
 import Navigation from "./components/Header/Navigation";
-import { TabWindowWrapper } from "./TabWindowWrapper";
+import TabWindowWrapper from "./TabWindowWrapper";
 
 export function updateTabs(getTabs, store) {
   getTabs(store.getState().tabs.selectedWindow).then((tabs) => {
@@ -77,7 +77,6 @@ export default function ActiveTabs() {
     () => <Header navigation={navigation} search={<Search />} />,
     [tabs, search]
   );
-  console.log("activetab loading");
 
   return (
     <>
