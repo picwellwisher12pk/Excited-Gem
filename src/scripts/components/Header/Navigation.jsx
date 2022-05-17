@@ -1,30 +1,30 @@
+import { Badge } from "antd";
 import React from "react";
 
 export default function Navigation({ tabCount }) {
   console.log("reloading navigation");
   return (
-    <div className="d-flex flex-grow-1" id="navbarNav">
-      <ul className="d-flex">
-        <li className="nav-item active">
-          <a
-            className="nav-link text-white font-weight-bold"
-            href="/tabs.html"
-            id="go-to-tabs"
+    <div className="flex flex-grow" id="navbarNav">
+      <ul className="flex justify-start w-full mb-0">
+        <li className="px-4 py-3">
+          <Badge
+            offset={[5, -3]}
+            count={tabCount}
+            color={tabCount > 50 ? "orange" : "green "}
+            size="small"
           >
-            Tabs{" "}
-            <span
-              className={
-                `active-tab-counter badge ` +
-                (tabCount > 50 ? "badge-danger" : "badge-success")
-              }
+            <a
+              className=" text-white font-weight-bold"
+              href="/tabs.html"
+              id="go-to-tabs"
             >
-              {tabCount}
-            </span>
-            <span className="sr-only">(current)</span>
-          </a>
+              Tabs
+              <span className="sr-only">(current)</span>
+            </a>
+          </Badge>
         </li>
-        <li className="nav-item">
-          <a className="nav-link text-white" href="/sessions.html">
+        <li className="px-4 py-3">
+          <a className=" text-white" href="/sessions.html">
             Sessions
           </a>
         </li>

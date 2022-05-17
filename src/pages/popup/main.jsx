@@ -6,6 +6,8 @@ import { Provider } from "react-redux";
 import store from "~/scripts/store";
 import ActiveTabs from "~/scripts/ActiveTabs";
 
+import "~/index.css";
+import "antd/dist/antd.css";
 import "~/styles/index.scss";
 import "react-custom-scroll/dist/customScroll.css";
 

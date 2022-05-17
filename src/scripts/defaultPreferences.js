@@ -2,7 +2,7 @@ export const preferences = {
   search: {
     regex: false,
     ignoreCase: true,
-    searchIn: [true, true], // title,url
+    searchIn: { title: true, url: true }, // title,url
     empty: true,
   },
   defaultTabsFrom: "current",

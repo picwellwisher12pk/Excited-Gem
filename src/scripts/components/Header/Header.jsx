@@ -17,6 +17,7 @@ import browser from "webextension-polyfill";
 
 //Images
 import logo from "~/assets/logo.png";
+import { Button, Dropdown, Menu, Space } from "antd";
 
 const Header = (props) => {
   console.log("header loading", props);
@@ -38,24 +39,41 @@ const Header = (props) => {
     <VolumeSlashIcon style={{ height: 16, fill: "white" }} />
   );
   browser.windows.getCurrent({ populate: true }).then((window) => {
-    setCurrentWindow(window);
+    // setCurrentWindow(window);
   });
+  const menu = (
+    <Menu
+      items={[
+        {
+          label: <Button type="link">by Title</Button>,
+          key: "0",
+        },
+        {
+          label: <Button type="link">by URL</Button>,
+          key: "1",
+        },
+      ]}
+    />
+  );
   return (
     <Profiler id={"header"} onRender={getMetrics}>
-      <header className="page-header" key={"header"}>
-        <nav className="navbar">
+      <header
+        className="bg-gradient-to-t from-cyan-500 to-blue-500 p-2"
+        key={"header"}
+      >
+        <div className="flex">
           {Brand(logo)}
           {navigation}
           {search}
-        </nav>
+        </div>
         <section
-          className="context-actions navbar container-fluid"
+          className="flex flex-row justify-between items-center mt-3"
           id="selection-action"
         >
-          <ul className="nav nav-pills pull-left">
-            <li className="nav-item d-flex flex-column justify-content-center">
-              <a
-                className="nav-link"
+          <ul className="flex mb-0">
+            <li className="mr-5">
+              <label
+                className="text-white"
                 onClick={() => {
                   props.processSelectedTabs(
                     allSelected ? "selectAll" : "selectNone",
@@ -65,157 +83,103 @@ const Header = (props) => {
                 }}
                 title="Select All"
               >
-                <input
-                  type="checkbox"
-                  className="checkbox"
-                  checked={props.allSelected}
-                  style={{ border: "none" }}
-                />
-              </a>
+                <input type="checkbox" checked={props.allSelected} /> Select All
+              </label>
             </li>
-
-            <li className="nav-item dropdown" key={"sortSection"}>
-              <div
-                className="input-group"
-                style={{
-                  width: "auto",
-                  marginRight: "15px",
-                  borderRadius: "4px",
-                  border: "1px solid #7cbbff",
-                }}
-              >
-                <a
-                  className="form-control bg-transparent text-white"
-                  href="#"
-                  title="Sort Tabs"
-                  style={{ border: "none" }}
-                >
-                  <SortIcon style={{ height: 16 }} />
-                </a>
-                <div className="input-group-append" id="button-addon4">
-                  <button
-                    className="btn btn-link text-white"
-                    type="button"
-                    title="Sort by Title"
-                    onClick={() => sortBy("title")}
-                  >
-                    Title
-                  </button>
-                  <button
-                    className="btn btn-link text-white"
-                    type="button"
-                    title="Sort by URL"
-                    onClick={() => sortBy("url")}
-                  >
-                    URLs
-                  </button>
-                </div>
-              </div>
+            <li>
+              <Dropdown overlay={menu} trigger={["click"]}>
+                <button onClick={(e) => e.preventDefault()}>
+                  <SortIcon
+                    className="inline"
+                    style={{ height: 12, width: 14 }}
+                  />{" "}
+                  <span className="text-white">Sort Tabs</span>
+                </button>
+              </Dropdown>
             </li>
-            <WindowSelector key={"windowSelector"} />
+            <li>
+              <WindowSelector key={"windowSelector"} />
+            </li>
           </ul>
-          <div className="nav context-actions selection-action">
-            <div
-              className="input-group"
-              style={{ width: "auto", marginRight: "15px" }}
-            >
-              <a
-                className="form-control"
-                onClick={() => props.processSelectedTabs("togglePinSelected")}
-                title="Toggle Pin selected tab"
-                style={{ border: "none" }}
-              >
-                Un/Pin Selected
-              </a>
-              <div className="input-group-append" id="button-addon4">
-                <button
-                  className="btn btn-default"
-                  type="button"
-                  title="Unpin Selected"
-                  onClick={() => props.processSelectedTabs("unpinSelected")}
-                  style={{ backgroundColor: "white" }}
+          <div className="flex">
+            <strong className="text-yellow-300">With Selected </strong>
+            <div>
+              <Dropdown overlay={menu} trigger={["click"]}>
+                <a
+                  onClick={(e) => e.preventDefault()}
+                  className="text-white hover:text-white hover:fill-yellow-500 ml-5"
                 >
-                  <ThumbtackIcon style={{ height: 16 }} />
-                </button>
-                <button
-                  className="btn btn-default"
-                  type="button"
-                  title="Pin Selected"
-                  onClick={() => props.processSelectedTabs("pinSelected")}
-                  style={{ backgroundColor: "white" }}
-                >
-                  <ThumbtackIcon style={{ height: 16 }} />
-                </button>
-              </div>
+                  <Space>
+                    <ThumbtackIcon
+                      style={{ height: 12, fill: "white" }}
+                      className="fill-inherit"
+                    />
+                    Pin/Unpin
+                  </Space>
+                </a>
+              </Dropdown>
             </div>
-            <div
-              className="input-group"
-              style={{ width: "auto", marginRight: "15px" }}
-            >
-              <a
-                className="form-control"
-                onClick={() => props.processSelectedTabs("toggleMuteSelected")}
-                href="#"
-                title="Toggle Pin selected tab"
-                style={{ border: "none" }}
-              >
-                Un/Mute Selected
-              </a>
-              <div className="input-group-append" id="button-addon4">
-                <button
-                  className="btn btn-default"
-                  type="button"
-                  title="Mute Selected"
-                  onClick={() => props.processSelectedTabs("muteSelected")}
-                  style={{ backgroundColor: "white" }}
+            <div>
+              <Dropdown overlay={menu} trigger={["click"]}>
+                <a
+                  onClick={(e) => e.preventDefault()}
+                  className="text-white hover:text-white hover:fill-yellow-500 ml-5"
                 >
-                  <VolumeSlashIcon style={{ height: 16 }} />
-                </button>
-                <button
-                  className="btn btn-default"
-                  type="button"
-                  title="Unmute Selected"
-                  onClick={() => props.processSelectedTabs("unmuteSelected")}
-                  style={{ backgroundColor: "white" }}
-                >
-                  <VolumeIcon style={{ height: 16 }} />
-                  <i className="fas fa-volume-up" />
-                </button>
-              </div>
+                  <Space>
+                    <VolumeIcon
+                      style={{ height: 12, fill: "white" }}
+                      className="fill-inherit"
+                    />
+                    Mute/Unmute
+                  </Space>
+                </a>
+              </Dropdown>
             </div>
-            <button
-              className="btn btn-default"
-              type="button"
-              title="Close Selected"
-              onClick={() => props.processSelectedTabs("closeSelected")}
-              style={{ backgroundColor: "white" }}
-            >
-              <TimesIcon style={{ height: 16, fill: "white" }} />
-            </button>
-            <div className={"input-group-append"}>
-              {/* <button
-              className="btn btn-default"
-              onClick={() => props.processSelectedTabs("toNewWindow")}
-            >
-              <FA icon={faShareSquare} />
-            </button> */}
+
+            <div>
               <button
-                className="btn btn-default"
-                onClick={() => props.processSelectedTabs("toSession")}
+                title="Close Selected"
+                onClick={() => props.processSelectedTabs("closeSelected")}
+                className="ml-5"
               >
-                <SaveIcon style={{ height: 16, fill: "white" }} />
+                <TimesIcon
+                  style={{ height: 16, width: 14, fill: "white" }}
+                  className="inline"
+                />
+                <span className="text-white"> Close</span>
               </button>
             </div>
+            <div>
+              <button
+                className="btn btn-default ml-5"
+                onClick={() => props.processSelectedTabs("toSession")}
+              >
+                <SaveIcon
+                  style={{ height: 16, width: 14, fill: "white" }}
+                  className="inline"
+                />
+                <span className="text-white"> Save</span>
+              </button>
+            </div>
+            <div className={"input-group-append"}>
+              {/* <button
+                className="btn btn-default"
+                onClick={() => props.processSelectedTabs("toNewWindow")}
+              >
+                <FA icon={faShareSquare} />
+              </button> */}
+            </div>
           </div>
-          <ul className="tab-actions">
+          <ul className="flex mb-0">
             <li>
               <button
-                className="btn btn-sm bg-transparent refreshActiveTabs"
+                className="bg-transparent refreshActiveTabs"
                 title="Refresh Excited Gem Tabs"
                 onClick={() => {
-                  updateTabs();
-                  this.setState({ tabs: props.tabs });
+                  // updateTabs();
+                  // this.setState({ tabs: props.tabs });
                 }}
+                style={{ minWidth: 33 }}
               >
                 <SyncAltIcon style={{ height: 16, fill: "white" }} />
               </button>
