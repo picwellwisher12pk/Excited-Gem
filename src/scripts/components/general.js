@@ -616,3 +616,10 @@ export const profilerCallback = (
     interactions
   );
 };
+export const makePlaceholder = (searchIn, regex = false) => {
+  let placeholder = "Search in ";
+  placeholder += searchIn.title ? "Titles" : "";
+  placeholder += searchIn.title && searchIn.url ? " and " : "";
+  placeholder += searchIn.url ? "URLs" : "";
+  return regex ? `/ ${placeholder} /gi` : placeholder;
+};
