@@ -17,7 +17,7 @@ import browser from "webextension-polyfill";
 
 //Images
 import logo from "~/assets/logo.png";
-import { Button, Dropdown, Menu, Space } from "antd";
+import { Button, Checkbox, Dropdown, Menu, Space } from "antd";
 
 const Header = (props) => {
   console.log("header loading", props);
@@ -41,7 +41,7 @@ const Header = (props) => {
   browser.windows.getCurrent({ populate: true }).then((window) => {
     // setCurrentWindow(window);
   });
-  const menu = (
+  const sortMenu = (
     <Menu
       items={[
         {
@@ -50,6 +50,42 @@ const Header = (props) => {
         },
         {
           label: <Button type="link">by URL</Button>,
+          key: "1",
+        },
+      ]}
+    />
+  );
+  const pinMenu = (
+    <Menu
+      items={[
+        {
+          label: <Button type="link">Toggle Pin/Unpin</Button>,
+          key: "0",
+        },
+        {
+          label: <Button type="link">Pin</Button>,
+          key: "1",
+        },
+        {
+          label: <Button type="link">Unpin</Button>,
+          key: "1",
+        },
+      ]}
+    />
+  );
+  const muteMenu = (
+    <Menu
+      items={[
+        {
+          label: <Button type="link">Toggle Mute/Unmute</Button>,
+          key: "0",
+        },
+        {
+          label: <Button type="link">Mute</Button>,
+          key: "1",
+        },
+        {
+          label: <Button type="link">Unmute</Button>,
           key: "1",
         },
       ]}
@@ -83,11 +119,12 @@ const Header = (props) => {
                 }}
                 title="Select All"
               >
-                <input type="checkbox" checked={props.allSelected} /> Select All
+                <Checkbox defaultChecked={props.allSelected} />{" "}
+                <span className="pl-1">Select All</span>
               </label>
             </li>
             <li>
-              <Dropdown overlay={menu} trigger={["click"]}>
+              <Dropdown overlay={sortMenu} arrow={{ pointAtCenter: true }}>
                 <button onClick={(e) => e.preventDefault()}>
                   <SortIcon
                     className="inline"
@@ -101,10 +138,10 @@ const Header = (props) => {
               <WindowSelector key={"windowSelector"} />
             </li>
           </ul>
-          <div className="flex">
+          <div className={`flex ` + (selectedTabs.length > 0 && "hidden")}>
             <strong className="text-yellow-300">With Selected </strong>
             <div>
-              <Dropdown overlay={menu} trigger={["click"]}>
+              <Dropdown overlay={pinMenu} arrow={{ pointAtCenter: true }}>
                 <a
                   onClick={(e) => e.preventDefault()}
                   className="text-white hover:text-white hover:fill-yellow-500 ml-5"
@@ -120,7 +157,7 @@ const Header = (props) => {
               </Dropdown>
             </div>
             <div>
-              <Dropdown overlay={menu} trigger={["click"]}>
+              <Dropdown overlay={muteMenu} arrow={{ pointAtCenter: true }}>
                 <a
                   onClick={(e) => e.preventDefault()}
                   className="text-white hover:text-white hover:fill-yellow-500 ml-5"
