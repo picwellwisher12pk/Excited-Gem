@@ -1,6 +1,7 @@
 import React, { Profiler, useState } from "react";
 import { getMetrics, sortTabs } from "../general.js";
 import VolumeIcon from "~/icons/volume.svg?component";
+import VolumeOffIcon from "~/icons/volume-off.svg?component";
 import VolumeSlashIcon from "~/icons/volume-mute.svg?component";
 import TimesIcon from "~/icons/times.svg?component";
 import SortIcon from "~/icons/sort.svg?component";
@@ -36,7 +37,7 @@ const Header = (props) => {
   let iconSound = props.allMuted ? (
     <VolumeIcon style={{ height: 16, fill: "white" }} />
   ) : (
-    <VolumeSlashIcon style={{ height: 16, fill: "white" }} />
+    <VolumeOffIcon style={{ height: 16, fill: "white" }} />
   );
   browser.windows.getCurrent({ populate: true }).then((window) => {
     // setCurrentWindow(window);
@@ -138,79 +139,81 @@ const Header = (props) => {
               <WindowSelector key={"windowSelector"} />
             </li>
           </ul>
-          <div className={`flex ` + (selectedTabs.length > 0 && "hidden")}>
-            <strong className="text-yellow-300">With Selected </strong>
-            <div>
-              <Dropdown overlay={pinMenu} arrow={{ pointAtCenter: true }}>
-                <a
-                  onClick={(e) => e.preventDefault()}
-                  className="text-white hover:text-white hover:fill-yellow-500 ml-5"
-                >
-                  <Space>
-                    <ThumbtackIcon
-                      style={{ height: 12, fill: "white" }}
-                      className="fill-inherit"
-                    />
-                    Pin/Unpin
-                  </Space>
-                </a>
-              </Dropdown>
-            </div>
-            <div>
-              <Dropdown overlay={muteMenu} arrow={{ pointAtCenter: true }}>
-                <a
-                  onClick={(e) => e.preventDefault()}
-                  className="text-white hover:text-white hover:fill-yellow-500 ml-5"
-                >
-                  <Space>
-                    <VolumeIcon
-                      style={{ height: 12, fill: "white" }}
-                      className="fill-inherit"
-                    />
-                    Mute/Unmute
-                  </Space>
-                </a>
-              </Dropdown>
-            </div>
+          {selectedTabs.length > 0 && (
+            <div className={`flex`}>
+              <strong className="text-yellow-300">With Selected </strong>
+              <div>
+                <Dropdown overlay={pinMenu} arrow={{ pointAtCenter: true }}>
+                  <a
+                    onClick={(e) => e.preventDefault()}
+                    className="text-white hover:text-white hover:fill-yellow-500 ml-5"
+                  >
+                    <Space>
+                      <ThumbtackIcon
+                        style={{ height: 12, fill: "white" }}
+                        className="fill-inherit"
+                      />
+                      Pin/Unpin
+                    </Space>
+                  </a>
+                </Dropdown>
+              </div>
+              <div>
+                <Dropdown overlay={muteMenu} arrow={{ pointAtCenter: true }}>
+                  <a
+                    onClick={(e) => e.preventDefault()}
+                    className="text-white hover:text-white hover:fill-yellow-500 ml-5"
+                  >
+                    <Space>
+                      <VolumeIcon
+                        style={{ height: 12, fill: "white" }}
+                        className="fill-inherit"
+                      />
+                      Mute/Unmute
+                    </Space>
+                  </a>
+                </Dropdown>
+              </div>
 
-            <div>
-              <button
-                title="Close Selected"
-                onClick={() => props.processSelectedTabs("closeSelected")}
-                className="ml-5"
-              >
-                <TimesIcon
-                  style={{ height: 16, width: 14, fill: "white" }}
-                  className="inline"
-                />
-                <span className="text-white"> Close</span>
-              </button>
-            </div>
-            <div>
-              <button
-                className="btn btn-default ml-5"
-                onClick={() => props.processSelectedTabs("toSession")}
-              >
-                <SaveIcon
-                  style={{ height: 16, width: 14, fill: "white" }}
-                  className="inline"
-                />
-                <span className="text-white"> Save</span>
-              </button>
-            </div>
-            <div className={"input-group-append"}>
-              {/* <button
+              <div>
+                <button
+                  title="Close Selected"
+                  onClick={() => props.processSelectedTabs("closeSelected")}
+                  className="ml-5"
+                >
+                  <TimesIcon
+                    style={{ height: 16, width: 14, fill: "white" }}
+                    className="inline"
+                  />
+                  <span className="text-white"> Close</span>
+                </button>
+              </div>
+              <div>
+                <button
+                  className="btn btn-default ml-5"
+                  onClick={() => props.processSelectedTabs("toSession")}
+                >
+                  <SaveIcon
+                    style={{ height: 16, width: 14, fill: "white" }}
+                    className="inline"
+                  />
+                  <span className="text-white"> Save</span>
+                </button>
+              </div>
+              <div className={"input-group-append"}>
+                {/* <button
                 className="btn btn-default"
                 onClick={() => props.processSelectedTabs("toNewWindow")}
               >
                 <FA icon={faShareSquare} />
               </button> */}
+              </div>
             </div>
-          </div>
+          )}
           <ul className="flex mb-0">
             <li>
               <button
-                className="bg-transparent refreshActiveTabs"
+                className="bg-transparent refreshActiveTabs mr-3"
                 title="Refresh Excited Gem Tabs"
                 onClick={() => {
                   // updateTabs();
@@ -238,7 +241,7 @@ const Header = (props) => {
             </li>
             <li>
               <button
-                className="btn btn-sm bg-transparent "
+                className="px-2 bg-transparent "
                 onClick={() => {
                   props.processSelectedTabs(
                     !props.allMuted ? "muteSelected" : "unmuteSelected",
@@ -247,7 +250,7 @@ const Header = (props) => {
                   this.setState({ allMuted: !props.allMuted });
                 }}
                 title={!props.allMuted ? `Mute All` : `Unmute All`}
-                style={{ minWidth: 33 }}
+                // style={{ minWidth: 33 }}
               >
                 {iconSound}
               </button>
@@ -255,7 +258,7 @@ const Header = (props) => {
             <li>
               <button
                 title="Close All"
-                className="btn btn-sm bg-transparent"
+                className="px-2 bg-transparent"
                 onClick={() => {
                   let ids =
                     selectedTabs.length === 0
