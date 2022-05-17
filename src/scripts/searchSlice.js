@@ -1,6 +1,7 @@
 import { createSlice } from "@reduxjs/toolkit";
 import { preferences } from "./defaultPreferences";
 const searchIn = { ...preferences.search.searchIn };
+const regex = preferences.search.regex || false;
 export const searchSlice = createSlice({
   name: "search",
   initialState: {
@@ -8,6 +9,7 @@ export const searchSlice = createSlice({
     searchIn,
     audibleSearch: false,
     pinnedSearch: false,
+    regex,
   },
   reducers: {
     // Redux Toolkit allows us to write "mutating" logic in reducers. It
@@ -22,10 +24,14 @@ export const searchSlice = createSlice({
       newState.searchTerm = action.payload;
       return newState;
     },
+    toggleRegex: (state) => {
+      const newState = { ...state };
+      newState.regex = !state.regex;
+      return newState;
+    },
     toggleSearchIn: (state, action) => {
       const newState = { ...state };
       newState.searchIn = { ...action.payload };
-      console.log(newState.searchIn);
       return newState;
     },
     toggleAudible: (state) => {
@@ -42,7 +48,12 @@ export const searchSlice = createSlice({
 });
 
 // Action creators are generated for each case reducer function
-export const { updateSearchTerm, toggleSearchIn, toggleAudible, togglePinned } =
-  searchSlice.actions;
+export const {
+  updateSearchTerm,
+  toggleSearchIn,
+  toggleAudible,
+  togglePinned,
+  toggleRegex,
+} = searchSlice.actions;
 
 export default searchSlice.reducer;

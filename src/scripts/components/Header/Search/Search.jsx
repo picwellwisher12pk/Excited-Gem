@@ -1,19 +1,17 @@
 import React, { useCallback, useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import ErrorBoundary from "~/scripts/ErrorBoundary";
-import SearchIcon from "~/icons/search.svg?component";
-import TimesIcon from "~/icons/times.svg?component";
 import VolumeIcon from "~/icons/volume.svg?component";
 import VolumeOffIcon from "~/icons/volume-off.svg?component";
 import ThumbtackIcon from "~/icons/thumbtack.svg?component";
 import ThumbtackActiveIcon from "~/icons/thumbtack-active.svg?component";
-import Loading from "~/icons/spinner-third.svg?component";
 import { debounce } from "lodash";
 import {
   toggleAudible,
   togglePinned,
   toggleSearchIn,
   updateSearchTerm,
+  toggleRegex,
 } from "../../../searchSlice";
 import { makePlaceholder as doPlaceholder } from "../../general";
 import { Input, Checkbox, Popover, Button } from "antd";
@@ -23,24 +21,19 @@ const Search = () => {
   const dispatch = useDispatch();
 
   //Global States
-  const { searchTerm, pinnedSearch, audibleSearch, searchIn } = useSelector(
-    (state) => state.search
-  );
-  const regex = useSelector((state) => state.config.search.regex);
+  const { searchTerm, pinnedSearch, audibleSearch, searchIn, regex } =
+    useSelector((state) => state.search);
   //Refs
   const searchField = React.useRef();
-  const title = React.useRef();
-  const url = React.useRef();
   //Local States
   const [placeholder, setPlaceholder] = useState(() =>
     doPlaceholder(searchIn, regex)
   );
-  const [empty, setEmpty] = useState(true);
 
   useEffect(() => {
     setPlaceholder(doPlaceholder(searchIn, regex));
-    console.log("setting placeholder: searchIn changed");
   }, [searchIn]);
+  useEffect(() => {}, [regex]);
   useEffect(() => {
     if (searchTerm === "") {
       const inputSearch = document.getElementById("search-field");
@@ -67,9 +60,6 @@ const Search = () => {
 
   const toggleSearchInHandle = (param, event) => {
     const newSearchIn = { ...searchIn, [param]: !searchIn[param] };
-
-    console.log(newSearchIn, [param], event);
-
     if (Object.values(newSearchIn).every((v) => v === false)) {
       event.preventDefault();
       alert(
@@ -85,7 +75,6 @@ const Search = () => {
       <p>
         <label>
           <Checkbox
-            ref={title}
             checked={searchIn.title}
             onChange={(e) => toggleSearchInHandle("title", e)}
           />{" "}
@@ -95,7 +84,6 @@ const Search = () => {
       <p className="mb-0 pb-0">
         <label>
           <Checkbox
-            ref={url}
             checked={searchIn.url}
             onChange={(e) => toggleSearchInHandle("url", e)}
           />{" "}
@@ -109,14 +97,19 @@ const Search = () => {
     <ErrorBoundary>
       <AntSearch
         className="!w-3/4"
-        // defaultValue={searchTerm}
         id="search-field"
         ref={searchField}
         onKeyUp={handleKeyUp}
-        // bordered={false}
-        prefix={regex && "/"}
+        prefix={
+          regex ? (
+            <span className="text-zinc-300">/</span>
+          ) : (
+            <span className="text-white">/</span>
+          )
+        }
         suffix={
           <>
+            {regex && <span className="text-zinc-300 pr-3">/gi</span>}
             <div className="flex option-regex">
               <div className="mr-3">
                 <a
@@ -146,7 +139,11 @@ const Search = () => {
               </div>
             </div>
             <label>
-              <Checkbox defaultChecked={regex} /> Regex
+              <Checkbox
+                defaultChecked={regex}
+                onChange={() => dispatch(toggleRegex())}
+              />{" "}
+              Regex
             </label>
             <Popover content={content}>
               <a type="link" className="ml-3">
@@ -157,7 +154,6 @@ const Search = () => {
         }
         placeholder={placeholder}
         autoFocus
-        allowClear
         // onChange={(e) => handleChange(e.target.value)}
         onSearch={(value, e) => handleChange(value)}
       />
