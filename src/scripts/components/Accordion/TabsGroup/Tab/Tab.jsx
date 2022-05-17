@@ -93,8 +93,8 @@ const Tab = (props) => {
     } catch (e) {
       console.error("Bad Regular Expressions:", e, searchTerm);
     }
-    searchIn[0] && (title = props.title.replace(regex, "<mark>$&</mark>"));
-    searchIn[1] && (url = props.url.replace(regex, "<mark>$&</mark>"));
+    searchIn.title && (title = props.title.replace(regex, "<mark>$&</mark>"));
+    searchIn.url && (url = props.url.replace(regex, "<mark>$&</mark>"));
   }
 
   //Audio Icons rendering
@@ -143,7 +143,7 @@ const Tab = (props) => {
         onClick={() => props.closeTab(props.id)}
         data-command="remove"
       >
-        <button className="">
+        <button className="mr-1">
           <TimesIcon style={{ height: 16, fill: "red" }} />
         </button>
       </li>,
@@ -153,7 +153,7 @@ const Tab = (props) => {
     actionButtons = (
       <li
         title="Remove"
-        className="clickable remove-tab"
+        className="clickable remove-tab mr-1"
         data-id={props.id}
         onClick={() => props.removeTab(props.url)}
         data-command="remove"
@@ -200,7 +200,6 @@ const Tab = (props) => {
             <LazyLoadImage
               src={props.favIconUrl}
               title={props.favIconUrl && title}
-              // alt={props.favIconUrl && title}
               style={{ width: 16, height: 16 }}
             />
           ))}
@@ -243,19 +242,4 @@ const Tab = (props) => {
   );
 };
 
-// const mapStateToProps = function (state) {
-//   return {
-//     searchTerm: state.search.searchTerm,
-//   };
-// };
-// const mapDispatchToProps = (dispatch) => ({
-//   closeTab: (id) => dispatch(ACTIONS.closeTabs(id)),
-//   togglePinTab: (id) => dispatch(ACTIONS.togglePinTab(id)),
-//   toggleMuteTab: (id) => dispatch(ACTIONS.toggleMuteTab(id)),
-//   searchInTabs: (searchTerm) => dispatch(ACTIONS.searchInTabs(searchTerm)),
-//   updateSelectedTabs: (id, selected) =>
-//     dispatch(updateSelectedTabs(id, selected)),
-//   toggleSearchInAction: (searchInArray) =>
-//     dispatch(ACTIONS.toggleSearchInAction(searchInArray)),
-// });
 export default React.memo(Tab);
