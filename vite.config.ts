@@ -88,6 +88,7 @@ export default defineConfig(({ command }) => ({
     port,
     strictPort: true,
     hmr: {
+      protocol: "ws",
       host: "localhost",
       overlay: true,
     },
