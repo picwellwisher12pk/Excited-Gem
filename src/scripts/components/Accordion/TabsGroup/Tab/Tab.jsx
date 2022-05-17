@@ -116,11 +116,11 @@ const Tab = (props) => {
       <li
         key={1}
         title="Un/Pin Tab"
-        className={`clickable pin-tab ${pinned ? " active" : " disabled"}`}
+        className={`clickable flex pin-tab ${pinned ? " active" : " disabled"}`}
         onClick={() => props.togglePinTab(props.id)}
         aria-label="pinned"
       >
-        <button className="btn btn-sm py-0 bg-transparent">{iconPinned}</button>
+        <button className="px-2">{iconPinned}</button>
       </li>,
       <li
         key={2}
@@ -129,8 +129,8 @@ const Tab = (props) => {
         onClick={() => props.toggleMuteTab(props.id, audible)}
       >
         <button
-          className="btn btn-sm py-0  bg-transparent"
-          style={{ minWidth: 33 }}
+          className="px-2"
+          // style={{ minWidth: 33 }}
         >
           {audioIcon}
         </button>
@@ -138,12 +138,12 @@ const Tab = (props) => {
       <li
         key={3}
         title="Close Tab"
-        className="clickable remove-tab"
+        className="cursor-pointer px-2 remove-tab"
         data-id={props.id}
         onClick={() => props.closeTab(props.id)}
         data-command="remove"
       >
-        <button className="btn btn-sm py-0 bg-transparent">
+        <button className="">
           <TimesIcon style={{ height: 16, fill: "red" }} />
         </button>
       </li>,
@@ -169,7 +169,7 @@ const Tab = (props) => {
       key={props.id}
       id={props.id}
       className={
-        `tab-item` +
+        `tab-item flex py-2 hover:bg-slate-200 transition-colors duration-300 border-b-stone-100 border` +
         (selected ? " checked" : " ") +
         (loading ? " loading" : discarded ? " idle" : "")
       }
@@ -190,7 +190,7 @@ const Tab = (props) => {
         }}
       />*/}
       <label
-        className="tab-favicon align-self-center position-relative"
+        className="tab-favicon align-self-center relative px-2"
         aria-label="favicon"
       >
         {!selected &&
@@ -200,7 +200,8 @@ const Tab = (props) => {
             <LazyLoadImage
               src={props.favIconUrl}
               title={props.favIconUrl && title}
-              alt={props.favIconUrl && title}
+              // alt={props.favIconUrl && title}
+              style={{ width: 16, height: 16 }}
             />
           ))}
 
@@ -215,11 +216,11 @@ const Tab = (props) => {
             )
           }
           checked={selected}
-          className="checkbox"
+          className="checkbox hidden"
         />
       </label>
       <span
-        className={`tab-title clip font-weight-bold align-self-center`}
+        className={`whitespace-nowrap clip font-bold align-self-center pr-2`}
         style={{
           opacity: discarded || loading ? 0.5 : 1,
         }}
@@ -227,12 +228,12 @@ const Tab = (props) => {
         dangerouslySetInnerHTML={{ __html: title }}
       />
       <span
-        className="clickable tab-url trimmed clip dimmed align-self-center"
+        className="cursor-pointer whitespace-nowrap tab-url flex-grow truncate  text-zinc-400 align-self-center"
         dangerouslySetInnerHTML={{ __html: url }}
         onClick={() => browser.tabs.update(props.id, { active: true })}
       />
       <ul
-        className="tab-actions align-self-center"
+        className="tab-actions flex align-self-center justify-self-end"
         role="group"
         aria-label="options"
       >

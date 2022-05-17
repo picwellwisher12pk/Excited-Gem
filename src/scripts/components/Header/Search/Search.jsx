@@ -15,7 +15,8 @@ import {
   toggleSearchIn,
   updateSearchTerm,
 } from "../../../searchSlice";
-
+import { Input, Checkbox, Popover, Button } from "antd";
+const { Search: AntSearch } = Input;
 const doPlaceholder = (searchIn, regex = false) => {
   let newPlaceholder = "Search in ";
   newPlaceholder += searchIn[0] ? "Titles" : "";
@@ -23,6 +24,7 @@ const doPlaceholder = (searchIn, regex = false) => {
   newPlaceholder += searchIn[1] ? "URLs" : "";
   return regex ? `/ ${newPlaceholder} /gi` : newPlaceholder;
 };
+
 const Search = () => {
   const dispatch = useDispatch();
 
@@ -31,193 +33,144 @@ const Search = () => {
     (state) => state.search
   );
   const regex = useSelector((state) => state.config.search.regex);
-
   //Refs
-  const searchField = React.createRef();
-  const title = React.createRef();
-  const url = React.createRef();
-
+  const searchField = React.useRef();
+  const title = React.useRef();
+  const url = React.useRef();
   //Local States
-  const [empty, setEmpty] = useState(true);
-  const [iconState, setIconState] = useState("default");
   const [placeholder, setPlaceholder] = useState(() =>
     doPlaceholder(searchIn, regex)
   );
+  const [empty, setEmpty] = useState(true);
 
   useEffect(() => {
     setPlaceholder(doPlaceholder(searchIn, regex));
   }, [searchIn]);
+  useEffect(() => {
+    if (searchTerm === "") {
+      const inputSearch = document.getElementById("search-field");
+      // @ts-ignore
+      inputSearch.value = "";
+    }
+  }, [searchTerm]);
+
   const handleKeyUp = useCallback((event) => {
+    console.log("keyup", event);
     const { value } = event.target;
     if (value === "" || event.key === "Escape") {
-      clear();
-      return;
-    } else {
-      value && setIconState("searching");
+      console.log(searchField);
+      // @ts-ignore
+      searchField.current.input.value = "";
+      dispatch(updateSearchTerm(""));
       return;
     }
   }, []);
   const handleChange = useCallback(
-    debounce((event) => {
-      const { value } = event.target;
+    debounce((value) => {
       dispatch(updateSearchTerm(value));
     }, 300),
-
     []
   );
 
-  const clear = () => {
-    searchField.current.value = "";
-    setIconState("default");
-    setEmpty(true);
-    dispatch(updateSearchTerm(""));
-  };
-  const toggleSearchInHandle = useCallback((title, url, number, event) => {
-    let titleLocal = title.current.checked;
-    let urlLocal = url.current.checked;
-    if (!titleLocal && !urlLocal) {
-      event.preventDefault();
-      alert(
-        "Sorry! You can't uncheck both Title and URL at the same time. One must remain checked."
-      );
-      return false;
-    }
-    dispatch(toggleSearchIn(number));
+  // const clear = (searchField) => {
+
+  // };
+  const toggleSearchInHandle = useCallback((param, event) => {
+    console.log(title, url, param, event);
+    // let titleLocal = title.current.state.checked;
+    // let urlLocal = url.current.state.checked;
+    // if (!titleLocal && !urlLocal) {
+    //   event.preventDefault();
+    //   alert(
+    //     "Sorry! You can't uncheck both Title and URL at the same time. One must remain checked."
+    //   );
+    //   return false;
+    // }
+    // dispatch(toggleSearchIn(param));
   }, []);
-  let iconInSearch;
-  switch (iconState) {
-    case "loading":
-      iconInSearch = (
-        <Loading
-          className={"spinner"}
-          style={{ width: "40px", height: "43px", padding: "12px" }}
-        />
-      );
-      break;
-    case "searching":
-      iconInSearch = (
-        <TimesIcon
-          className={`cp`}
-          style={{
-            width: "40px",
-            height: "43px",
-            padding: "12px",
-            fill: "red",
-          }}
-          onClick={clear}
-        />
-      );
-      break;
-    default:
-      iconInSearch = (
-        <SearchIcon
-          className={`text-secondary`}
-          style={{ width: "40px", height: "43px", padding: "12px" }}
-        />
-      );
-      break;
-  }
+  const content = (
+    <div>
+      <p>
+        <label>
+          <Checkbox
+            ref={title}
+            defaultChecked={searchIn.title}
+            onChange={(e) => toggleSearchInHandle("title", e)}
+          />{" "}
+          Title
+        </label>
+      </p>
+      <p className="mb-0 pb-0">
+        <label>
+          <Checkbox
+            ref={url}
+            defaultChecked={searchIn.url}
+            onChange={(e) => toggleSearchInHandle("url", e)}
+          />{" "}
+          URL
+        </label>
+      </p>
+    </div>
+  );
+
   return (
     <ErrorBoundary>
-      <section className="search-bar" style={{ width: "66%", paddingRight: 0 }}>
-        <div id="filter-tabs" className="input-group filter-tabs">
-          {iconInSearch}
-          {regex && (
-            <i
-              className={`quicksearch-input form-control`}
-              style={{ maxWidth: "10px", border: "none", lineHeight: "28px" }}
-            >
-              /
-            </i>
-          )}
-          <input
-            id="quicksearch-input"
-            type="text"
-            ref={searchField}
-            placeholder={placeholder}
-            className="quicksearch-input form-control regex "
-            onChange={handleChange}
-            onKeyUp={handleKeyUp}
-            autoFocus
-          />
-          {regex && (
-            <i
-              className={`quicksearch-input form-control`}
-              style={{ maxWidth: "10px", border: "none", lineHeight: "28px" }}
-            >
-              /
-            </i>
-          )}
-          <div className="input-group-append option-regex">
-            <div style={{ paddingTop: 6 }}>
-              <button
-                className="btn btn-sm bg-transparent"
-                title="Search audible only"
-                onClick={() => dispatch(toggleAudible())}
-              >
-                {audibleSearch ? (
-                  <VolumeIcon style={{ height: 16, fill: "#0487cf" }} />
-                ) : (
-                  <VolumeOffIcon style={{ height: 16, fill: "#0487cf" }} />
-                )}
-              </button>
+      <AntSearch
+        className="!w-3/4"
+        // defaultValue={searchTerm}
+        id="search-field"
+        ref={searchField}
+        onKeyUp={handleKeyUp}
+        // bordered={false}
+        prefix={regex && "/"}
+        suffix={
+          <>
+            <div className="flex option-regex">
+              <div className="mr-3">
+                <a
+                  className="!border-0"
+                  title="Search audible only"
+                  onClick={() => dispatch(toggleAudible())}
+                >
+                  {audibleSearch ? (
+                    <VolumeIcon style={{ height: 16, fill: "#0487cf" }} />
+                  ) : (
+                    <VolumeOffIcon style={{ height: 16, fill: "#0487cf" }} />
+                  )}
+                </a>
+              </div>
+              <div className="mr-3">
+                <a
+                  className="!border-0"
+                  title="Search pinned only"
+                  onClick={() => dispatch(togglePinned())}
+                >
+                  {pinnedSearch ? (
+                    <ThumbtackActiveIcon
+                      style={{ height: 16, fill: "#0487cf" }}
+                    />
+                  ) : (
+                    <ThumbtackIcon style={{ height: 16, fill: "#0487cf" }} />
+                  )}
+                </a>
+              </div>
             </div>
-            <div className="mr-3" style={{ paddingTop: 6 }}>
-              <button
-                className="btn btn-sm bg-transparent"
-                title="Search pinned only"
-                onClick={() => dispatch(togglePinned())}
-              >
-                {pinnedSearch ? (
-                  <ThumbtackActiveIcon
-                    style={{ height: 16, fill: "#0487cf" }}
-                  />
-                ) : (
-                  <ThumbtackIcon style={{ height: 16, fill: "#0487cf" }} />
-                )}
-              </button>
-            </div>
-            <div className="custom-control custom-checkbox ">
-              <input
-                type="checkbox"
-                className="custom-control-input"
-                id="prefTitle"
-                ref={title}
-                defaultChecked={searchIn[0] && "checked"}
-                onClick={(e) => {
-                  toggleSearchInHandle(title, url, 0, e);
-                }}
-              />
-              <label
-                className="custom-control-label input-group-text"
-                htmlFor="prefTitle"
-              >
-                Title
-              </label>
-            </div>
-          </div>
-          <div className="input-group-append option-case-sensitive">
-            <div className="custom-control custom-checkbox ">
-              <input
-                type="checkbox"
-                className="custom-control-input"
-                id="prefURL"
-                ref={url}
-                defaultChecked={searchIn[1] && "checked"}
-                onClick={(e) => {
-                  toggleSearchInHandle(title, url, 1, e);
-                }}
-              />
-              <label
-                className="custom-control-label input-group-text"
-                htmlFor="prefURL"
-              >
-                URL
-              </label>
-            </div>
-          </div>
-        </div>
-      </section>
+            <label>
+              <Checkbox defaultChecked={regex} /> Regex
+            </label>
+            <Popover content={content} trigger="click">
+              <a type="link" className="ml-3">
+                Search by...
+              </a>
+            </Popover>
+          </>
+        }
+        placeholder={placeholder}
+        autoFocus
+        allowClear
+        // onChange={(e) => handleChange(e.target.value)}
+        onSearch={(value, e) => handleChange(value)}
+      />
     </ErrorBoundary>
   );
 };
