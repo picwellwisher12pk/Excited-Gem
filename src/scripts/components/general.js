@@ -484,7 +484,6 @@ export const filterTabs = (
   { ignoreCase, regex },
   tabs
 ) => {
-  console.time("filterTabs");
   let filteredTabs = tabs?.filter(({ title, url, audible, pinned }) => {
     const isAudible = audibleSearch ? audible === true : true;
     const isPinned = pinnedSearch ? pinned === true : true;
@@ -517,7 +516,7 @@ export const filterTabs = (
         );
     }
   });
-  console.timeEnd("filterTabs");
+
   return filteredTabs;
 };
 /**
@@ -539,25 +538,25 @@ export const reduceTabs = (
     if (regex) {
       try {
         let regexTest = new RegExp(searchTerm, ignoreCase ? "i" : "");
-        if (searchIn[0] && regexTest.test(title) && isAudible && isPinned)
+        if (searchIn.title && regexTest.test(title) && isAudible && isPinned)
           accumulator.push(tab);
-        if (searchIn[1] && regexTest.test(url) && isAudible && isPinned)
+        if (searchIn.url && regexTest.test(url) && isAudible && isPinned)
           accumulator.push(tab);
       } catch (error) {
         console.error("Search error:", error);
       }
     } else {
-      if (searchIn[0] && !ignoreCase)
+      if (searchIn.title && !ignoreCase)
         if (title.includes(searchTerm) && isAudible && isPinned)
           accumulator.push(tab);
-      if (searchIn[0] && ignoreCase)
+      if (searchIn.title && ignoreCase)
         if (
           title.toLowerCase().includes(searchTerm.toLowerCase()) &&
           isAudible &&
           isPinned
         )
           accumulator.push(tab);
-      if (searchIn[1])
+      if (searchIn.url)
         if (
           url.toLowerCase().includes(searchTerm.toLowerCase()) &&
           isAudible &&
