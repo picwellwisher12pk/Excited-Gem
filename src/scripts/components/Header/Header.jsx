@@ -23,14 +23,11 @@ import { Button, Checkbox, Dropdown, Menu, Space } from "antd";
 const Header = (props) => {
   console.log("header loading", props);
   const dispatch = useDispatch();
-  const selectedTabs = useSelector((state) => state.tabs.selectedTabs);
+  const { selectedTabs, tabs } = useSelector((state) => state.tabs);
   const [allSelected, setAllSelected] = useState(props.allSelected);
   const [allPinned, setAllPinned] = useState(props.allPinned);
   const [allMuted, setAllMuted] = useState(props.allMuted);
   const { navigation, search } = props;
-  const sortBy = (sortType) => {
-    sortTabs(sortType, tabs);
-  };
   let iconPinned = props.allPinned && (
     <ThumbtackIcon style={{ height: 16, fill: "white" }} />
   );
@@ -46,11 +43,29 @@ const Header = (props) => {
     <Menu
       items={[
         {
-          label: <Button type="link">by Title</Button>,
+          label: (
+            <Button
+              type="link"
+              onClick={() => {
+                sortTabs("title", tabs);
+              }}
+            >
+              by Title
+            </Button>
+          ),
           key: "0",
         },
         {
-          label: <Button type="link">by URL</Button>,
+          label: (
+            <Button
+              type="link"
+              onClick={() => {
+                sortTabs("url", tabs);
+              }}
+            >
+              by URL
+            </Button>
+          ),
           key: "1",
         },
       ]}
