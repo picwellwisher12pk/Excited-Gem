@@ -1,5 +1,6 @@
 import React, { useRef } from "react";
 import { useDrag, useDrop } from "react-dnd";
+import { Checkbox } from "antd";
 import { useDispatch, useSelector } from "react-redux";
 import { updateSelectedTabs } from "../../../../tabSlice";
 import { LazyLoadImage } from "react-lazy-load-image-component";
@@ -169,7 +170,7 @@ const Tab = (props) => {
       key={props.id}
       id={props.id}
       className={
-        `tab-item flex py-2 bg-slate-100 hover:bg-slate-200 transition-colors duration-300 border-b-stone-100 border` +
+        `overflow-hidden tab-item flex py-2 bg-slate-100 hover:bg-slate-200 transition-colors duration-300 border-b-stone-100 border` +
         (selected ? " checked" : " ") +
         (loading ? " loading" : discarded ? " idle" : "")
       }
@@ -189,23 +190,11 @@ const Tab = (props) => {
           marginRight: 10,
         }}
       />*/}
-      <label
-        className="tab-favicon align-self-center relative px-2"
+      <div
+        className="tab-favicon align-self-center flex px-2 items-center"
         aria-label="favicon"
       >
-        {!selected &&
-          (loading ? (
-            <Loading className={"spinner"} />
-          ) : (
-            <LazyLoadImage
-              src={props.favIconUrl}
-              title={props.favIconUrl && title}
-              style={{ width: 16, height: 16 }}
-            />
-          ))}
-
-        <input
-          type="checkbox"
+        <Checkbox
           onChange={() =>
             dispatch(
               updateSelectedTabs({
@@ -214,10 +203,19 @@ const Tab = (props) => {
               })
             )
           }
+          className="!mr-2"
           checked={selected}
-          className="checkbox hidden"
         />
-      </label>
+        {loading ? (
+          <Loading className={"spinner"} />
+        ) : (
+          <LazyLoadImage
+            src={props.favIconUrl}
+            title={props.favIconUrl && title}
+            style={{ width: 16, height: 16 }}
+          />
+        )}
+      </div>
       <span
         className={`whitespace-nowrap clip font-bold align-self-center pr-2`}
         style={{
