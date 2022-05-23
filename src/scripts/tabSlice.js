@@ -13,31 +13,23 @@ export const tabSlice = createSlice({
     // which detects changes to a "draft state" and produces a brand new
     // immutable state based off those changes
     updateActiveTabs: (state, action) => {
-      let newState = { ...state };
-      newState.tabs = [];
-      newState.tabs = [...action.payload];
-      return newState;
+      state.tabs = [];
+      state.tabs = [...action.payload];
     },
     updateSelectedTabs: (state, action) => {
-      let newState = { ...state };
       let { id, selected } = action.payload;
       selected
-        ? newState.selectedTabs.push(id)
-        : newState.selectedTabs.splice(newState.selectedTabs.indexOf(id), 1);
-      window.selectedTabs = newState.selectedTabs;
-      return newState;
+        ? state.selectedTabs.push(id)
+        : state.selectedTabs.splice(state.selectedTabs.indexOf(id), 1);
+      window.selectedTabs = [...state.selectedTabs];
     },
     clearSelectedTabs: (state) => {
-      let newState = { ...state };
-      newState.selectedTabs = [];
+      state.selectedTabs = [];
       window.selectedTabs = [];
-      return newState;
     },
     updateSelectedWindow: (state, action) => {
-      let newState = { ...state };
-      newState.selectedWindow = action.payload;
+      state.selectedWindow = action.payload;
       window.selectedWindow = action.payload;
-      return newState;
     },
   },
 });
