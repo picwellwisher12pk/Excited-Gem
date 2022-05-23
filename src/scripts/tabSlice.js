@@ -10,8 +10,7 @@ export const tabSlice = createSlice({
   },
   reducers: {
     updateActiveTabs: (state, action) => {
-      state.tabs = [];
-      state.tabs = [...action.payload];
+      state.tabs = action.payload;
     },
     updateSelectedTabs: (state, action) => {
       let { id, selected } = action.payload;
