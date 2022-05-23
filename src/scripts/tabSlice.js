@@ -5,13 +5,10 @@ export const tabSlice = createSlice({
   initialState: {
     tabs: [],
     selectedTabs: [],
+    filteredTabs: [],
     selectedWindow: "current",
   },
   reducers: {
-    // Redux Toolkit allows us to write "mutating" logic in reducers. It
-    // doesn't actually mutate the state because it uses the Immer library,
-    // which detects changes to a "draft state" and produces a brand new
-    // immutable state based off those changes
     updateActiveTabs: (state, action) => {
       state.tabs = [];
       state.tabs = [...action.payload];
@@ -22,6 +19,10 @@ export const tabSlice = createSlice({
         ? state.selectedTabs.push(id)
         : state.selectedTabs.splice(state.selectedTabs.indexOf(id), 1);
       window.selectedTabs = [...state.selectedTabs];
+    },
+    updateFilteredTabs: (state, action) => {
+      state.filteredTabs = [...action.payload];
+      window.filteredTabs = [...action.payload];
     },
     clearSelectedTabs: (state) => {
       state.selectedTabs = [];
@@ -38,6 +39,7 @@ export const tabSlice = createSlice({
 export const {
   updateActiveTabs,
   updateSelectedTabs,
+  updateFilteredTabs,
   clearSelectedTabs,
   updateSelectedWindow,
 } = tabSlice.actions;

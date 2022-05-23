@@ -23,7 +23,9 @@ import { Button, Checkbox, Dropdown, Menu, Space } from "antd";
 const Header = (props) => {
   console.log("header loading", props);
   const dispatch = useDispatch();
-  const { selectedTabs, tabs } = useSelector((state) => state.tabs);
+  const { selectedTabs, tabs, filteredTabs } = useSelector(
+    (state) => state.tabs
+  );
   const [allSelected, setAllSelected] = useState(props.allSelected);
   const [allPinned, setAllPinned] = useState(props.allPinned);
   const [allMuted, setAllMuted] = useState(props.allMuted);
@@ -129,14 +131,19 @@ const Header = (props) => {
                 onClick={() => {
                   props.processSelectedTabs(
                     allSelected ? "selectAll" : "selectNone",
-                    props.tabs.map((tab) => tab.id)
+                    filteredTabs.map((tab) => tab.id)
                   );
                   setAllSelected(!allSelected);
                 }}
                 title="Select All"
               >
                 <Checkbox defaultChecked={props.allSelected} />{" "}
-                <span className="pl-1">Select All</span>
+                <span className="pl-1 cursor-pointer">Select All</span>
+                {selectedTabs && (
+                  <span title="Selected Tabs count" className="pl-1">
+                    ({selectedTabs?.length})
+                  </span>
+                )}
               </label>
             </li>
             <li>
@@ -229,7 +236,7 @@ const Header = (props) => {
             <li>
               <button
                 className="bg-transparent refreshActiveTabs mr-3"
-                title="Refresh Excited Gem Tabs"
+                title="Refresh View"
                 onClick={() => {
                   // updateTabs();
                   // this.setState({ tabs: props.tabs });
@@ -248,7 +255,11 @@ const Header = (props) => {
                   );
                   setAllPinned(!allPinned);
                 }}
-                title={!props.allPinned ? `Pin All` : `Unpin All`}
+                title={
+                  !props.allPinned
+                    ? `Pin All Visible Tabs`
+                    : `Unpin All Visible Tabs`
+                }
                 className="btn btn-sm bg-transparent"
               >
                 {iconPinned}
@@ -264,7 +275,11 @@ const Header = (props) => {
                   );
                   this.setState({ allMuted: !props.allMuted });
                 }}
-                title={!props.allMuted ? `Mute All` : `Unmute All`}
+                title={
+                  !props.allMuted
+                    ? `Mute All Visible Tabs`
+                    : `Unmute All Visible Tabs`
+                }
                 // style={{ minWidth: 33 }}
               >
                 {iconSound}
@@ -272,7 +287,7 @@ const Header = (props) => {
             </li>
             <li>
               <button
-                title="Close All"
+                title="Close All Visible Tabs"
                 className="px-2 bg-transparent"
                 onClick={() => {
                   let ids =
