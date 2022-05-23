@@ -19,6 +19,7 @@ const { Search: AntSearch } = Input;
 
 const Search = () => {
   const dispatch = useDispatch();
+  const { filteredTabs } = useSelector((state) => state.tabs);
 
   //Global States
   const { searchTerm, pinnedSearch, audibleSearch, searchIn, regex } =
@@ -109,8 +110,13 @@ const Search = () => {
         }
         suffix={
           <>
+            {searchTerm && (
+              <span className="text-zinc-400">
+                {filteredTabs.length + " Tabs found... "}
+              </span>
+            )}
             {regex && <span className="text-zinc-300 pr-3">/gi</span>}
-            <div className="flex option-regex">
+            <div className="flex ml-3">
               <div className="mr-3">
                 <a
                   className="!border-0"

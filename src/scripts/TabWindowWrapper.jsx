@@ -1,4 +1,3 @@
-import { useSelector } from "react-redux";
 import React, {
   useCallback,
   useEffect,
@@ -10,6 +9,8 @@ import { DndProvider } from "react-dnd";
 import { HTML5Backend } from "react-dnd-html5-backend";
 import { asyncFilterTabs } from "~/scripts/components/general";
 import ContentLoader from "react-content-loader";
+import { updateFilteredTabs } from "./tabSlice";
+import { useDispatch, useSelector } from "react-redux";
 
 const MyLoader = (props) => (
   <ContentLoader
@@ -50,14 +51,15 @@ const MyLoader = (props) => (
 import browser from "webextension-polyfill";
 
 const TabWindowWrapper = React.memo(() => {
+  const dispatch = useDispatch();
   const [width, setWidth] = useState(0);
   const [loading, setLoading] = useState(true);
-  const { tabs } = useSelector((state) => state.tabs);
+  const { tabs, filteredTabs } = useSelector((state) => state.tabs);
   const { ignoreCase, regex } = useSelector((state) => state.search);
   const searchObject = useSelector((state) => state.search);
   const searchPref = { ignoreCase, regex };
   const selectedTabs = useSelector((state) => state.tabs.selectedTabs);
-  const [filteredTabs, setFilteredTabs] = useState(tabs);
+  // const [filteredTabs, setFilteredTabs] = useState(tabs);
 
   const findFilteredTabs = async (
     searchObject,
@@ -67,19 +69,17 @@ const TabWindowWrapper = React.memo(() => {
   ) => {
     if (!searchObject.searchTerm) {
       setLoading(false);
-      setFilteredTabs(tabs);
+      dispatch;
       return;
     }
     const tempTabs =
       tabs && (await asyncFilterTabs(searchObject, searchPref, tabs));
     // window.filteredTabs = tempTabs;
-    setFilteredTabs(tempTabs);
+    dispatch(updateFilteredTabs(tempTabs));
     setLoading(false);
   };
   useLayoutEffect(() => {
-    const newWidth = document.body.offsetWidth;
-    console.log(newWidth);
-    setWidth(newWidth);
+    setWidth(document.body.offsetWidth);
   });
   useEffect(() => {
     if (
@@ -87,7 +87,7 @@ const TabWindowWrapper = React.memo(() => {
       !searchObject.audibleSearch &&
       !searchObject.pinnedSearch
     ) {
-      setFilteredTabs(tabs);
+      dispatch(updateFilteredTabs(tabs));
     } else {
       setLoading(true);
       findFilteredTabs(searchObject, searchPref, tabs, setLoading);
@@ -146,10 +146,9 @@ const TabWindowWrapper = React.memo(() => {
       <React.Suspense fallback={<h1>Loading profile...</h1>}>
         <DndProvider backend={HTML5Backend}>
           <ul className="tab tabs-list sortable selectable" id={"droppableUL"}>
-            {filteredTabs?.length !== undefined &&
-              filteredTabs.map((tab) =>
-                tabTemplate(tab, selectedTabs, moveTab, closeTab)
-              )}
+            {filteredTabs?.map((tab) =>
+              tabTemplate(tab, selectedTabs, moveTab, closeTab)
+            )}
           </ul>
         </DndProvider>
       </React.Suspense>
