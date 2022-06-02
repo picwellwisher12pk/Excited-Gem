@@ -11,7 +11,7 @@ export default defineConfig({
     outDir: r("extension/"),
     cssCodeSplit: false,
     emptyOutDir: false,
-    sourcemap: isDev ? "inline" : false,
+    sourcemap: !isDev ? "inline" : false,
     lib: {
       formats: ["es"],
       entry: r("src/background/main.js"),
