@@ -23,6 +23,16 @@ async function stubIndexHtml() {
         // `"./${view}.js"`
       )
       .replace(
+        `<title>Tabs - Excited Gem</title>`,
+        `<script type="module">
+            import RefreshRuntime from "http://localhost:3303/@react-refresh";
+            RefreshRuntime.injectIntoGlobalHook(window);
+            window.$RefreshReg$ = () => {};
+            window.$RefreshSig$ = () => (type) => type;
+            window.__vite_plugin_react_preamble_installed__ = true;
+          </script>`
+      )
+      .replace(
         '<div id="app"></div>',
         '<div id="app">Vite server did not start</div>'
       );
