@@ -24,7 +24,7 @@ export const sharedConfig: UserConfig = {
     __DEV__: isDev,
   },
   plugins: [
-    // react(),
+    react(),
     // scss(),
     // dynamicImportVars(),
     svgrPlugin({
@@ -37,9 +37,9 @@ export const sharedConfig: UserConfig = {
     AutoImport({
       imports: [
         "react",
-        // {
-        //   "webextension-polyfill": [["*", "browser"]],
-        // },
+        {
+          "webextension-polyfill": [["*", "browser"]],
+        },
       ],
     }),
 
