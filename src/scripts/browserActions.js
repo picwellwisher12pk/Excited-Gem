@@ -72,10 +72,17 @@ export function updateTabs(reactObject = window.activeTabs) {
 }
 
 export function setBadge(length) {
-  browser.browserAction.setBadgeText({ text: length.toString() });
-  browser.browserAction.setBadgeBackgroundColor({
-    color: length <= 50 ? "green" : "red",
-  });
+  if (browser.action) {
+    browser.action.setBadgeText({ text: length.toString() });
+    browser.action.setBadgeBackgroundColor({
+      color: length <= 50 ? "green" : "red",
+    });
+  } else {
+    browser.browserAction.setBadgeText({ text: length.toString() });
+    browser.browserAction.setBadgeBackgroundColor({
+      color: length <= 50 ? "green" : "red",
+    });
+  }
 }
 
 export function setTabCountInBadge(tabId, isOnRemoved) {

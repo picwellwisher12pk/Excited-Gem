@@ -86,12 +86,23 @@ browser.tabs.onAttached.addListener(() => {
 });
 
 /* Browser Actions */
-browser.browserAction.onClicked.addListener((tab) => {
-  console.info("Extension Page opening");
-  browser.tabs
-    .create({ url: browser.runtime.getURL("popup.html"), pinned: true })
-    .then((tab) => tab);
-});
+if (browser.action) {
+  browser.action.onClicked.addListener((tab) => {
+    console.info("Extension Page opening");
+    browser.tabs
+      .create({ url: browser.runtime.getURL("popup.html"), pinned: true })
+      .then((tab) => tab);
+    // openExcitedGemPage();
+  });
+} else {
+  browser.browserAction.onClicked.addListener((tab) => {
+    console.info("Extension Page opening");
+    browser.tabs
+      .create({ url: browser.runtime.getURL("popup.html"), pinned: true })
+      .then((tab) => tab);
+    // openExcitedGemPage();
+  });
+}
 
 // On clicking extension button opens EG homepage.
 
