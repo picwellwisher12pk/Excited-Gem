@@ -23,9 +23,11 @@
     "start": "nodemon",
     "dev": "npm run clear && cross-env NODE_ENV=development run-p dev:*",
     "dev:prepare": "esno scripts/prepare.ts",
-    "dev:web": "vite ",
+    "vite": "vite ",
+    "dev:web": "vite --debug",
     "dev:js": "npm run build:js -- --mode development",
     "dev:background": "npm run build:background -- --mode development",
+    "popup": "npm run build:popup -- --mode development",
     "dev:popup": "npm run build:popup -- --mode development",
     "build": "cross-env NODE_ENV=production run-s clear build:web build:prepare build:js build:background",
     "postbuild": "git add . ",
@@ -50,6 +52,7 @@
     "major": "npm version major"
   },
   "dependencies": {
+    "@ant-design/icons": "^4.7.0",
     "@antfu/eslint-config": "^0.9.0",
     "@ffflorian/jszip-cli": "^3.1.5",
     "@honkhonk/vite-plugin-svgr": "^1.1.0",
