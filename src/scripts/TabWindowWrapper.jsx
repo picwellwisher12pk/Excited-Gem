@@ -6,11 +6,12 @@ import React, {
 } from "react";
 import Tab from "~/scripts/components/Accordion/TabsGroup/Tab";
 import { DndProvider } from "react-dnd";
+import { updateFilteredTabs } from "./tabSlice";
+import { useDispatch, useSelector } from "react-redux";
 import { HTML5Backend } from "react-dnd-html5-backend";
 import { asyncFilterTabs } from "~/scripts/components/general";
 import ContentLoader from "react-content-loader";
-import { updateFilteredTabs } from "./tabSlice";
-import { useDispatch, useSelector } from "react-redux";
+import browser from "webextension-polyfill";
 
 const MyLoader = (props) => (
   <ContentLoader
@@ -48,7 +49,6 @@ const MyLoader = (props) => (
     })}
   </ContentLoader>
 );
-import browser from "webextension-polyfill";
 
 const TabWindowWrapper = React.memo(() => {
   const dispatch = useDispatch();
@@ -97,20 +97,25 @@ const TabWindowWrapper = React.memo(() => {
   const tabTemplate = (tab, selectedTabs, moveTab) => {
     let selected = false;
     //If current tab.id exists in selectedTabs array
-    if (selectedTabs.indexOf(tab.id) >= 0) selected = true;
-    return (
-      <Tab
-        {...tab}
-        key={tab.id}
-        activeTab={true}
-        index={tab.index}
-        moveTab={moveTab}
-        selected={selected}
-        closeTab={closeTab}
-        togglePinTab={togglePinTab}
-        toggleMuteTab={toggleMuteTab}
-      />
-    );
+    try {
+      if (selectedTabs.indexOf(tab?.id) >= 0) selected = true;
+
+      return (
+        <Tab
+          {...tab}
+          key={tab.id}
+          activeTab={true}
+          index={tab.index}
+          moveTab={moveTab}
+          selected={selected}
+          closeTab={closeTab}
+          togglePinTab={togglePinTab}
+          toggleMuteTab={toggleMuteTab}
+        />
+      );
+    } catch (error) {
+      console.error(error);
+    }
   };
 
   useEffect(() => {

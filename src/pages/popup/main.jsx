@@ -1,8 +1,11 @@
 // import "react-devtools";
 import React from "react";
-import { createRoot } from "react-dom/client";
+import * as reactDOM from "react-dom/client";
+const { createRoot } = reactDOM;
 //Redux
-import { Provider } from "react-redux";
+import * as reactRedux from "react-redux";
+const Provider = reactRedux.Provider;
+console.log("react-redux", reactRedux);
 import store from "~/scripts/store";
 import ActiveTabs from "~/scripts/ActiveTabs";
 

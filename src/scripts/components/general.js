@@ -1,4 +1,5 @@
 import * as browser from "webextension-polyfill";
+import { saveTabs, saveURLs } from "./getsetSessions";
 export const homepageURL = browser.runtime.getURL("excited-gem.html");
 let refinedTabs;
 
@@ -255,14 +256,17 @@ export function removeClass(el, className) {
 }
 
 export function sortTabs(sortby, tabs) {
-  let tabsList = quicksort(sortby, tabs);
-  log("after quicksort", tabsList);
-  for (let i = 0; i < tabsList.length; i++) {
-    let { id } = tabsList[i];
-    setTimeout(() => {
-      browser.tabs.move(id, { index: i });
-    }, sortDelay);
-  }
+  return new Promise((resolve, reject) => {
+    let tabsList = quicksort(sortby, tabs);
+    log("after quicksort", tabsList);
+    tabsList.forEach((tab, i) => {
+      setTimeout(() => {
+        browser.tabs.move(tab.id, { index: i });
+      }, sortDelay);
+      console.log("sorting: still moving");
+    });
+    resolve(true);
+  });
 }
 
 /*function runQuery(query){
@@ -373,64 +377,108 @@ export function santizeTabs(tabs, ignoredUrlPatterns) {
 //   }
 //   return true;
 // }
-// processSelectedTabs(action, selection = props.selectedTabs) {
-//   switch (action) {
-//     case 'closeSelected':
-//       let message = 'Are you sure you want to close selected tabs';
-//       if (selection.length === props.tabs.length)
-//         message = 'Are you sure you want to close all the tabs? This will also close this window.';
-//       if (!confirm(message)) return false;
-//       for (let id of selection) closeTab(id, false);
-//       setState({ selectedTabs: [] });
-//       removeClass(document.querySelectorAll('#selection-action'), 'selection-active');
-//       break;
-//     case 'toNewWindow':
-//       let targetWindow = browser.windows.create();
-//       targetWindow.then(windowInfo => {
-//         browser.tabs.move(selection, { windowId: windowInfo.id, index: 0 });
-//       });
-//       break;
-//     case 'toSession':
-//       saveTabs(selection.map(selectedTab => state.tabs.find(o => selectedTab === o.id)));
-//       break;
-//     case 'pinSelected':
-//       for (let tab of selection) pinTab(tab);
-//       break;
-//     case 'unpinSelected':
-//       for (let tab of selection) unpinTab(tab);
-//       break;
-//     case 'togglePinSelected':
-//       for (let tab of selection) !tab.pinned ? pinTab(tab) : unpinTab(tab);
-//       break;
-//
-//     //Mute
-//     case 'muteSelected':
-//       console.log('muting');
-//       for (let tab of selection) muteTab(tab);
-//       break;
-//     case 'unmuteSelected':
-//       for (let tab of selection) unmuteTab(tab);
-//       break;
-//     case 'toggleMuteSelected':
-//       for (let tab of selection) !tab.mutedInfo.muted ? muteTab(tab) : unmuteTab(tab);
-//       break;
-//
-//     //Selection
-//     case 'selectAll':
-//       setState({ selectedTabs: filterTabs().map(tab => tab.id) });
-//       addClass(document.querySelectorAll('#selection-action'), 'selection-active');
-//       break;
-//     case 'selectNone':
-//       setState({ selectedTabs: [] });
-//       removeClass(document.querySelectorAll('#selection-action'), 'selection-active');
-//       break;
-//     case 'invertSelection':
-//       let inverted = props.tabs.filter(tab => !props.selectedTabs.includes(tab.id)).map(tab => tab.id);
-//       setState({ selectedTabs: inverted });
-//       break;
-//   }
-// }
-//
+export function processTabs(action, selection, state, setState) {
+  console.log(
+    "🚀 ~ file: general.js ~ line 377 ~ processTabs ~ action, selection, state, setState",
+    action,
+    selection,
+    state,
+    setState
+  );
+
+  const selectedTabs = {};
+  state
+    .filter((tab) => selection.includes(tab.id))
+    .forEach((tab) => {
+      selectedTabs[tab.id] = tab;
+    });
+  switch (action) {
+    case "closeSelected":
+      let message = "Are you sure you want to close selected tabs";
+      //State is Tabs here
+      selection.length === state.length &&
+        (message =
+          "Are you sure you want to close all the tabs? This will also close this window.");
+      const userPermission = confirm(message);
+      if (!userPermission) return false;
+      browser.tabs.remove(selection);
+      setState();
+      break;
+    case "toNewWindow":
+      let targetWindow = browser.windows.create();
+      targetWindow.then((windowInfo) => {
+        browser.tabs.move(selection, { windowId: windowInfo.id, index: 0 });
+      });
+      break;
+    case "toSession":
+      saveTabs(
+        selection.map((selectedTab) =>
+          state.tabs.find((o) => selectedTab === o.id)
+        )
+      );
+      break;
+    case "save":
+      console.log(selection, selectedTab);
+      saveURLs(
+        selection.map((selectedTab) =>
+          state.tabs.find((o) => selectedTab === o.id)
+        )
+      );
+      break;
+    case "pinSelected":
+      for (let tabId of selection)
+        browser.tabs.update(parseInt(tabId), { pinned: true });
+      break;
+    case "unpinSelected":
+      for (let tabId of selection)
+        browser.tabs.update(parseInt(tabId), { pinned: false });
+      break;
+    case "togglePinSelected":
+      for (let tabId of selection)
+        browser.tabs.update(parseInt(tabId), {
+          pinned: !selectedTabs[tabId].pinned ? true : false,
+        });
+      break;
+
+    //Mute
+    case "muteSelected":
+      for (let tabId of selection)
+        browser.tabs.update(parseInt(tabId), { muted: true });
+      break;
+    case "unmuteSelected":
+      for (let tabId of selection)
+        browser.tabs.update(parseInt(tabId), { muted: false });
+      break;
+    case "toggleMuteSelected":
+      for (let tabId of selection)
+        browser.tabs.update(parseInt(tabId), {
+          muted: !selectedTabs[tabId].mutedInfo.muted ? true : false,
+        });
+      break;
+
+    //Selection
+    case "selectAll":
+      setState({ selectedTabs: filterTabs().map((tab) => tab.id) });
+      addClass(
+        document.querySelectorAll("#selection-action"),
+        "selection-active"
+      );
+      break;
+    case "selectNone":
+      setState({ selectedTabs: [] });
+      removeClass(
+        document.querySelectorAll("#selection-action"),
+        "selection-active"
+      );
+      break;
+    case "invertSelection":
+      let inverted = props.tabs
+        .filter((tab) => !props.selectedTabs.includes(tab.id))
+        .map((tab) => tab.id);
+      setState({ selectedTabs: inverted });
+      break;
+  }
+}
 
 // setPreferences(prefSection, key, value) {
 //   browser.storage.local.get('preferences').then(result => {

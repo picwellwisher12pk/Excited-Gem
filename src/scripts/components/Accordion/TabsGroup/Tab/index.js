@@ -1,2 +1,2 @@
-import Tab from "./Tab.jsx";
+import { Tab } from "./Tab.jsx";
 export default Tab;
