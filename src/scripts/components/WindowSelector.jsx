@@ -67,8 +67,10 @@ export default function WindowSelector({ allWindows, currentWindow }) {
                 }
               ></span>
               <span>
-                {currentWindow.id === window.id && "Current "}
                 Window
+                {currentWindow.id === window.id && (
+                  <small className="text-gray-400"> (current)</small>
+                )}
                 <span className="sr-only">(current)</span>
               </span>
             </div>
