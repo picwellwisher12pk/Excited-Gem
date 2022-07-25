@@ -27,6 +27,16 @@ export const tabSlice = createSlice({
       state.selectedTabs = [];
       window.selectedTabs = [];
     },
+    selectAllTabs: (state) => {
+      state.selectedTabs = [...state.filteredTabs.map((tab) => tab.id)];
+    },
+    invertSelectedTabs: (state) => {
+      state.selectedTabs = [
+        ...state.filteredTabs
+          .filter((tab) => !state.selectedTabs.includes(tab.id))
+          .map((tab) => tab.id),
+      ];
+    },
     updateSelectedWindow: (state, action) => {
       state.selectedWindow = action.payload;
       window.selectedWindow = action.payload;
@@ -36,6 +46,8 @@ export const tabSlice = createSlice({
 
 // Action creators are generated for each case reducer function
 export const {
+  selectAllTabs,
+  invertSelectedTabs,
   updateActiveTabs,
   updateSelectedTabs,
   updateFilteredTabs,

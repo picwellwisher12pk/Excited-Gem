@@ -9,7 +9,11 @@ import SaveIcon from "~/icons/save.svg?component";
 import SyncAltIcon from "~/icons/sync-alt.svg?component";
 import ThumbtackIcon from "~/icons/thumbtack-active.svg?component";
 import { useDispatch, useSelector } from "react-redux";
-import { clearSelectedTabs } from "../../tabSlice.js";
+import {
+  clearSelectedTabs,
+  selectAllTabs,
+  invertSelectedTabs,
+} from "../../tabSlice.js";
 import { LoadingOutlined } from "@ant-design/icons";
 import Brand from "./Brand";
 import WindowSelector from "../WindowSelector";
@@ -21,6 +25,7 @@ import logo from "~/assets/logo.png";
 import { Button, Dropdown, Menu, Select, Space } from "antd";
 import { MoveModal } from "../Modals/Move.jsx";
 import { SaveModal } from "../Modals/Save.jsx";
+import { Checkbox } from "antd";
 const { Option } = Select;
 
 const Header = (props) => {
@@ -29,6 +34,10 @@ const Header = (props) => {
   const { selectedTabs, tabs, filteredTabs } = useSelector(
     (state) => state.tabs
   );
+  const [checkedList, setCheckedList] = useState(selectedTabs);
+  const [indeterminate, setIndeterminate] = useState(false);
+  const [checkAll, setCheckAll] = useState(false);
+
   const { navigation, search } = props;
   const [allSelected, setAllSelected] = useState(props.allSelected);
   const [allMuted, setAllMuted] = useState(props.allMuted);
@@ -41,12 +50,6 @@ const Header = (props) => {
     setAllWindows(await getAllWindows());
     setCurrentWindow(await getCurrentWindow());
   }
-  const [modal, setModal] = useState({
-    title: null,
-    content: null,
-    isVisible: false,
-  });
-
   useEffect(() => {
     getWindows();
   }, []);
@@ -208,16 +211,32 @@ const Header = (props) => {
           <ul className="flex mb-0">
             <li className="mr-3">
               <div className="flex shadow-md">
-                <span className="bg-zinc-200 py-[4px] px-2 rounded-l-[2px] text-black select-none">
-                  Select
+                <span
+                  className="bg-zinc-200 py-[4px] px-2 rounded-l-[2px] text-black select-none"
+                  title="Un/Select only filtered or visible tabs"
+                >
+                  <Checkbox
+                    onChange={() => {
+                      console.log(selectedTabs.length, filteredTabs.length);
+                      if (selectedTabs.length < filteredTabs.length)
+                        dispatch(selectAllTabs());
+                      if (selectedTabs.length === filteredTabs.length) {
+                        console.log("clearing selected tabs");
+                        dispatch(clearSelectedTabs());
+                      }
+                    }}
+                    indeterminate={
+                      selectedTabs.length > 0 &&
+                      selectedTabs.length < filteredTabs.length
+                    }
+                    checked={selectedTabs.length === filteredTabs.length}
+                  />
                 </span>
-                <Button className="!px-2 !border-0 !rounded-none !bg-gradient-to-b !from-white !to-slate-200 !transition">
-                  All
-                </Button>
-                <Button className="!px-2 !border-0 !rounded-none !bg-gradient-to-b !from-white !to-slate-200  transition">
-                  None
-                </Button>
-                <Button className="!px-2 !border-0 !rounded-l-none !bg-gradient-to-b !from-white !to-slate-200  transition">
+                <Button
+                  className="!px-2 !border-0 !rounded-l-none !bg-gradient-to-b !from-white !to-slate-200  transition"
+                  title="Invert Selection"
+                  onClick={() => dispatch(invertSelectedTabs())}
+                >
                   Invert
                 </Button>
               </div>
