@@ -240,31 +240,6 @@ const Header = (props) => {
                   Invert
                 </Button>
               </div>
-              {/* <label
-                className="text-white"
-                onClick={() => {
-                  props.processSelectedTabs(
-                    allSelected ? "selectAll" : "selectNone",
-                    filteredTabs.map((tab) => tab.id)
-                  );
-                  setAllSelected(!allSelected);
-                }}
-                title="Select All"
-              >
-                <Checkbox defaultChecked={props.allSelected} />{" "}
-                <Badge
-                  title="Selected Tabs count"
-                  className="pl-1"
-                  overflowCount={999}
-                  count={selectedTabs?.length}
-                  color={"green "}
-                  size="small"
-                >
-                  <span className="pl-1 cursor-pointer text-white">
-                    Select All
-                  </span>
-                </Badge>
-              </label> */}
             </li>
             <li>
               <Dropdown overlay={sortMenu} className="mr-3">
