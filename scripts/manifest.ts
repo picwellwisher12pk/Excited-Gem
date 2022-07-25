@@ -5,7 +5,8 @@ import { r, log } from "./utils";
 export async function writeManifest() {
   let time = new Date();
 
-  await fs.writeJSON(r("extension/manifest.json"), await getManifest(), {
+  const manifest = await getManifest();
+  await fs.writeJSON(r("extension/manifest.json"), manifest, {
     spaces: 2,
   });
   log(
@@ -18,6 +19,7 @@ export async function writeManifest() {
         hour12: true,
       })
   );
+  log("DATA", manifest);
 }
 
 writeManifest();

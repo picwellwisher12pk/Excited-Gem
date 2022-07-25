@@ -3,7 +3,8 @@
 // import { registerMenus, setTabCountInBadge } from "./components/browserActions.jsx";
 // const {  setTabCountInBadge,updateTabs } = require('./components/browserActions.js');
 // import './defaultPreferences';
-var browser = require("webextension-polyfill");
+// import browser from "@/node_modules/webextension-polyfill/dist/browser-polyfill.js";
+// import * as browser from "webextension-polyfill";
 import { preferences } from "./defaultPreferences";
 import { getTabs, setBadge, setTabCountInBadge } from "./browserActions";
 
@@ -80,13 +81,23 @@ browser.tabs.onAttached.addListener(() => {
 
 /* Browser Actions */
 /////////////////////
-browser.action.onClicked.addListener((tab) => {
-  console.info("Extension Page opening");
-  browser.tabs
-    .create({ url: browser.runtime.getURL("popup.html"), pinned: true })
-    .then((tab) => tab);
-  // openExcitedGemPage();
-});
+if (browser.action) {
+  browser.action.onClicked.addListener((tab) => {
+    console.info("Extension Page opening");
+    browser.tabs
+      .create({ url: browser.runtime.getURL("popup.html"), pinned: true })
+      .then((tab) => tab);
+    // openExcitedGemPage();
+  });
+} else {
+  browser.browserAction.onClicked.addListener((tab) => {
+    console.info("Extension Page opening");
+    browser.tabs
+      .create({ url: browser.runtime.getURL("popup.html"), pinned: true })
+      .then((tab) => tab);
+    // openExcitedGemPage();
+  });
+}
 
 // On clicking extension button opens EG homepage.
 
