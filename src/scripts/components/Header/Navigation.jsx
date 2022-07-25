@@ -8,6 +8,7 @@ export default function Navigation({ tabCount }) {
       <ul className="flex justify-start w-full mb-0">
         <li className="px-4 py-3">
           <Badge
+            overflowCount={999}
             offset={[5, -3]}
             count={tabCount}
             color={tabCount > 50 ? "orange" : "green "}

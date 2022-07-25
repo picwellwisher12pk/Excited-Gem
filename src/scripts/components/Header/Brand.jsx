@@ -1,5 +1,3 @@
-import React from "react";
-
 const Brand = (logo) => {
   console.log(logo);
   return (
