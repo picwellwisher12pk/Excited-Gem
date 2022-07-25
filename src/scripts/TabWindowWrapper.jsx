@@ -72,10 +72,11 @@ const TabWindowWrapper = React.memo(() => {
       dispatch;
       return;
     }
-    const tempTabs =
-      tabs && (await asyncFilterTabs(searchObject, searchPref, tabs));
-    // window.filteredTabs = tempTabs;
-    dispatch(updateFilteredTabs(tempTabs));
+    dispatch(
+      updateFilteredTabs(
+        tabs && (await asyncFilterTabs(searchObject, searchPref, tabs))
+      )
+    );
     setLoading(false);
   };
   useLayoutEffect(() => {
@@ -93,30 +94,6 @@ const TabWindowWrapper = React.memo(() => {
       findFilteredTabs(searchObject, searchPref, tabs, setLoading);
     }
   }, [searchObject, tabs]);
-
-  const tabTemplate = (tab, selectedTabs, moveTab) => {
-    let selected = false;
-    //If current tab.id exists in selectedTabs array
-    try {
-      if (selectedTabs.indexOf(tab?.id) >= 0) selected = true;
-
-      return (
-        <Tab
-          {...tab}
-          key={tab.id}
-          activeTab={true}
-          index={tab.index}
-          moveTab={moveTab}
-          selected={selected}
-          closeTab={closeTab}
-          togglePinTab={togglePinTab}
-          toggleMuteTab={toggleMuteTab}
-        />
-      );
-    } catch (error) {
-      console.error(error);
-    }
-  };
 
   useEffect(() => {
     setLoading(false);
@@ -151,9 +128,20 @@ const TabWindowWrapper = React.memo(() => {
       <React.Suspense fallback={<h1>Loading profile...</h1>}>
         <DndProvider backend={HTML5Backend}>
           <ul className="tab tabs-list sortable selectable" id={"droppableUL"}>
-            {filteredTabs?.map((tab) =>
-              tabTemplate(tab, selectedTabs, moveTab, closeTab)
-            )}
+            {filteredTabs?.map((tab) => (
+              <Tab
+                {...tab}
+                key={tab.id}
+                activeTab={true}
+                index={tab.index}
+                moveTab={moveTab}
+                //If current tab.id exists in selectedTabs array
+                selected={selectedTabs.indexOf(tab?.id) >= 0 ? true : false}
+                closeTab={closeTab}
+                togglePinTab={togglePinTab}
+                toggleMuteTab={toggleMuteTab}
+              />
+            ))}
           </ul>
         </DndProvider>
       </React.Suspense>
