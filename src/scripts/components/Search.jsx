@@ -1,76 +1,77 @@
-import React, { useCallback, useEffect, useState } from "react";
-import { useDispatch, useSelector } from "react-redux";
-import ErrorBoundary from "~/scripts/ErrorBoundary";
-import VolumeIcon from "~/icons/volume.svg?component";
-import VolumeOffIcon from "~/icons/volume-off.svg?component";
-import ThumbtackIcon from "~/icons/thumbtack.svg?component";
-import ThumbtackActiveIcon from "~/icons/thumbtack-active.svg?component";
-import { debounce } from "lodash";
+import {  Checkbox, Input, Popover } from "antd"
+import { debounce } from "lodash"
+import React, { useCallback, useEffect, useState } from "react"
+import { useDispatch, useSelector } from "react-redux"
+import ThumbtackActiveIcon from "react:/src/icons/thumbtack-active.svg"
+import ThumbtackIcon from "react:/src/icons/thumbtack.svg"
+import VolumeOffIcon from "react:/src/icons/volume-off.svg"
+import VolumeIcon from "react:/src/icons/volume.svg"
+
+import ErrorBoundary from "/src/scripts/ErrorBoundary"
+import { makePlaceholder as doPlaceholder } from "/src/scripts/general"
 import {
   toggleAudible,
   togglePinned,
-  toggleSearchIn,
-  updateSearchTerm,
   toggleRegex,
-} from "../../../searchSlice";
-import { makePlaceholder as doPlaceholder } from "../../general";
-import { Input, Checkbox, Popover, Button } from "antd";
-const { Search: AntSearch } = Input;
+  toggleSearchIn,
+  updateSearchTerm
+} from "/src/scripts/searchSlice"
+
+const { Search: AntSearch } = Input
 
 const Search = () => {
-  const dispatch = useDispatch();
-  const { filteredTabs } = useSelector((state) => state.tabs);
+  const dispatch = useDispatch()
+  const { filteredTabs } = useSelector((state) => state.tabs)
 
   //Global States
   const { searchTerm, pinnedSearch, audibleSearch, searchIn, regex } =
-    useSelector((state) => state.search);
+    useSelector((state) => state.search)
   //Refs
-  const searchField = React.useRef();
+  const searchField = React.useRef()
   //Local States
   const [placeholder, setPlaceholder] = useState(() =>
     doPlaceholder(searchIn, regex)
-  );
+  )
 
   useEffect(() => {
-    setPlaceholder(doPlaceholder(searchIn, regex));
-  }, [searchIn]);
-  useEffect(() => {}, [regex]);
+    setPlaceholder(doPlaceholder(searchIn, regex))
+  }, [searchIn])
+  useEffect(() => {}, [regex])
   useEffect(() => {
     if (searchTerm === "") {
-      const inputSearch = document.getElementById("search-field");
-      // @ts-ignore
-      inputSearch.value = "";
+      const inputSearch = document.getElementById("search-field")
+      inputSearch.value = ""
     }
-  }, [searchTerm]);
+  }, [searchTerm])
 
   const handleKeyUp = useCallback((event) => {
-    const { value } = event.target;
+    const { value } = event.target
     if (value === "" || event.key === "Escape") {
       // @ts-ignore
-      searchField.current.input.value = "";
-      dispatch(updateSearchTerm(""));
-      return;
+      searchField.current.input.value = ""
+      dispatch(updateSearchTerm(""))
+      return
     }
-  }, []);
+  }, [])
   const handleChange = useCallback(
     debounce((value) => {
-      dispatch(updateSearchTerm(value));
+      dispatch(updateSearchTerm(value))
     }, 300),
     []
-  );
+  )
 
   const toggleSearchInHandle = (param, event) => {
-    const newSearchIn = { ...searchIn, [param]: !searchIn[param] };
+    const newSearchIn = { ...searchIn, [param]: !searchIn[param] }
     if (Object.values(newSearchIn).every((v) => v === false)) {
-      event.preventDefault();
+      event.preventDefault()
       alert(
         "Sorry! You can't uncheck both Title and URL at the same time. One must remain checked."
-      );
-      event.target.checked = true;
-      return false;
+      )
+      event.target.checked = true
+      return false
     }
-    dispatch(toggleSearchIn(newSearchIn));
-  };
+    dispatch(toggleSearchIn(newSearchIn))
+  }
   const content = (
     <div>
       <p>
@@ -92,7 +93,7 @@ const Search = () => {
         </label>
       </p>
     </div>
-  );
+  )
 
   return (
     <ErrorBoundary>
@@ -121,8 +122,7 @@ const Search = () => {
                 <a
                   className="!border-0"
                   title="Search audible only"
-                  onClick={() => dispatch(toggleAudible())}
-                >
+                  onClick={() => dispatch(toggleAudible())}>
                   {audibleSearch ? (
                     <VolumeIcon className="fill-[#0487cf] h-[16px]" />
                   ) : (
@@ -134,8 +134,7 @@ const Search = () => {
                 <a
                   className="!border-0"
                   title="Search pinned only"
-                  onClick={() => dispatch(togglePinned())}
-                >
+                  onClick={() => dispatch(togglePinned())}>
                   {pinnedSearch ? (
                     <ThumbtackActiveIcon className="fill-[#0487cf] h-[16px]" />
                   ) : (
@@ -164,7 +163,7 @@ const Search = () => {
         onSearch={(value, e) => handleChange(value)}
       />
     </ErrorBoundary>
-  );
-};
+  )
+}
 
-export default Search;
+export default Search

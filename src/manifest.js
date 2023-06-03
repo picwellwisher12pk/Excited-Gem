@@ -2,8 +2,8 @@ import fs from "fs-extra";
 // import { Manifest } from "webextension-polyfill";
 // import type PkgType from "../package.json";
 import { isDev, port, r } from "../scripts/utils";
-const manifestVersion = 2;
-export async function getManifest() {
+const manifestVersion = 3;
+export default async function getManifest() {
   const pkg = await fs.readJSON(r("package.json"));
   // update this file to update this manifest.json
   // can also be conditional based on your need
@@ -29,6 +29,7 @@ export async function getManifest() {
       "notifications",
       "storage",
       "tabs",
+      "tabGroups",
       "unlimitedStorage",
     ],
     // content_security_policy: {
@@ -46,9 +47,10 @@ export async function getManifest() {
   const SHA256 =
     manifestVersion === 2
       ? "sha256-9402wHbGtjqsZ8WISJUnqSRxLJpuyt9R0E8g410kSr4="
-      : "";
+      : "sha256-9402wHbGtjqsZ8WISJUnqSRxLJpuyt9R0E8g410kSr4=";
   const unsafeEval = manifestVersion === 2 ? "unsafe-eval" : "";
-  const policyString = `default-src 'self' http://localhost:${port};script-src 'self' '${SHA256}'  http://localhost:${port} ;connect-src 'self' ws://localhost:${port}; style-src 'self' 'unsafe-inline' http://localhost:${port}; img-src * 'self' data:  ;`;
+  // const policyString = `default-src 'self' http://localhost:${port};script-src 'self' '${SHA256}'  http://localhost:${port} ;connect-src 'self' ws://localhost:${port}; style-src 'self' 'unsafe-inline' http://localhost:${port}; img-src * 'self' data:  ;`;
+  const policyString = `script-src \'self\'  http://localhost:${port}; object-src \'self\'`;
   if (isDev) {
     if (manifestVersion === 3) {
       // for content script, as browsers will cache them for each reload,

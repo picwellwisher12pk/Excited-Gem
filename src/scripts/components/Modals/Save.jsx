@@ -19,6 +19,7 @@ export const SaveModal = (props) => {
     <Modal
       title={"Save Tabs as list"}
       visible={true}
+      width={800}
       onOk={() => {
         props.setSaveModalVisible(false);
       }}
@@ -33,31 +34,35 @@ export const SaveModal = (props) => {
         placeholder="Title"
       />
       <div className="mt-3">
-        <span>Tags</span>
+        {/* <span>Tags</span> */}
         <Select
           className="border"
           mode="tags"
           style={{
             width: "100%",
           }}
-          placeholder="Tags Mode"
-          onChange={handleChange}
+          placeholder="Tags"
+          onChange={setTags}
         >
           {children}
         </Select>
       </div>
       <div className="mt-5">
-        <span>Tabs</span>
-        {props.selectedTabs.map((tabId) => {
-          const tab = tabs.find((tab) => {
-            return tab.id === tabId;
-          });
-          return (
-            <div className="overflow-hidden tab-item flex p-2 bg-slate-100 hover:bg-slate-100 transition-colors duration-300 border-b-stone-100 border ">
-              <strong>{tab.title}</strong>
-            </div>
-          );
-        })}
+        <span>Tabs ({props.selectedTabs.length})</span>
+
+        <div className="max-h-[300px] overflow-auto">
+          {props.selectedTabs.map((tabId) => {
+            const tab = tabs.find((tab) => tab.id === tabId);
+            return (
+              <div
+                className="overflow-hidden tab-item flex p-2 bg-slate-100 hover:bg-slate-100 transition-colors duration-300 border-b-stone-100 border text-xs"
+                title={tab.url}
+              >
+                <strong>{tab.title}</strong>
+              </div>
+            );
+          })}
+        </div>
       </div>
     </Modal>
   );

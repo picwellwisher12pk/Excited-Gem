@@ -1,17 +1,16 @@
-import React, {
-  useCallback,
-  useEffect,
-  useLayoutEffect,
-  useState,
-} from "react";
-import Tab from "~/scripts/components/Accordion/TabsGroup/Tab";
-import { DndProvider } from "react-dnd";
-import { updateFilteredTabs } from "./tabSlice";
-import { useDispatch, useSelector } from "react-redux";
-import { HTML5Backend } from "react-dnd-html5-backend";
-import { asyncFilterTabs } from "~/scripts/components/general";
-import ContentLoader from "react-content-loader";
-import browser from "webextension-polyfill";
+import React, { useCallback, useEffect, useLayoutEffect, useState } from "react"
+import ContentLoader from "react-content-loader"
+import { DndProvider } from "react-dnd"
+import { HTML5Backend } from "react-dnd-html5-backend"
+import { useDispatch, useSelector } from "react-redux"
+
+import Tab from "./components/Tab"
+import { asyncFilterTabs } from "./general.js"
+import { updateFilteredTabs } from "./tabSlice"
+
+
+
+
 
 const MyLoader = (props) => (
   <ContentLoader
@@ -21,13 +20,12 @@ const MyLoader = (props) => (
     viewBox={"0 0 " + props.width + " 500"}
     backgroundColor="#e3e3e3"
     foregroundColor="#ecebeb"
-    {...props}
-  >
+    {...props}>
     {[...Array(10)].map((_, i) => {
-      const height = 20;
-      const radius = height / 2;
+      const height = 20
+      const radius = height / 2
       return (
-        <>
+        <g key={i}>
           <rect
             x="10"
             y={15 + i * 40}
@@ -41,24 +39,24 @@ const MyLoader = (props) => (
             y={15 + i * 40}
             rx={5}
             ry={5}
-            width={props.width - height - 50}
+            width={props.width > 0 ? props.width - height - 50 : 0}
             height={height}
           />
-        </>
-      );
+        </g>
+      )
     })}
   </ContentLoader>
-);
+)
 
 const TabWindowWrapper = React.memo(() => {
-  const dispatch = useDispatch();
-  const [width, setWidth] = useState(0);
-  const [loading, setLoading] = useState(true);
-  const { tabs, filteredTabs } = useSelector((state) => state.tabs);
-  const { ignoreCase, regex } = useSelector((state) => state.search);
-  const searchObject = useSelector((state) => state.search);
-  const searchPref = { ignoreCase, regex };
-  const selectedTabs = useSelector((state) => state.tabs.selectedTabs);
+  const dispatch = useDispatch()
+  const [width, setWidth] = useState(0)
+  const [loading, setLoading] = useState(true)
+  const { tabs, filteredTabs } = useSelector((state) => state.tabs)
+  const { ignoreCase, regex } = useSelector((state) => state.search)
+  const searchObject = useSelector((state) => state.search)
+  const searchPref = { ignoreCase, regex }
+  const selectedTabs = useSelector((state) => state.tabs.selectedTabs)
   // const [filteredTabs, setFilteredTabs] = useState(tabs);
 
   const findFilteredTabs = async (
@@ -68,61 +66,61 @@ const TabWindowWrapper = React.memo(() => {
     setLoading
   ) => {
     if (!searchObject.searchTerm) {
-      setLoading(false);
-      dispatch;
-      return;
+      setLoading(false)
+      dispatch
+      return
     }
     dispatch(
       updateFilteredTabs(
         tabs && (await asyncFilterTabs(searchObject, searchPref, tabs))
       )
-    );
-    setLoading(false);
-  };
+    )
+    setLoading(false)
+  }
   useLayoutEffect(() => {
-    setWidth(document.body.offsetWidth);
-  });
+    setWidth(document.body.offsetWidth)
+  })
   useEffect(() => {
     if (
       searchObject.searchTerm === "" &&
       !searchObject.audibleSearch &&
       !searchObject.pinnedSearch
     ) {
-      dispatch(updateFilteredTabs(tabs));
+      dispatch(updateFilteredTabs(tabs))
     } else {
-      setLoading(true);
-      findFilteredTabs(searchObject, searchPref, tabs, setLoading);
+      setLoading(true)
+      findFilteredTabs(searchObject, searchPref, tabs, setLoading)
     }
-  }, [searchObject, tabs]);
+  }, [searchObject, tabs])
 
   useEffect(() => {
-    setLoading(false);
-  }, []);
+    setLoading(false)
+  }, [])
   const moveTab = useCallback(
     (itemId, dragIndex, index) => {
-      browser.tabs.move(itemId, { index });
+      browser.tabs.move(itemId, { index })
     },
     [tabs]
-  );
+  )
   const closeTab = useCallback(
     (itemId) => {
-      browser.tabs.remove(itemId);
+      browser.tabs.remove(itemId)
     },
     [tabs]
-  );
+  )
   const toggleMuteTab = useCallback(
     (itemId, status) => {
-      browser.tabs.update(itemId, { muted: !status });
+      browser.tabs.update(itemId, { muted: !status })
     },
     [tabs]
-  );
+  )
 
   const togglePinTab = useCallback(
     (itemId, status) => {
-      browser.tabs.pin(itemId, status);
+      browser.tabs.pin(itemId, status)
     },
     [tabs]
-  );
+  )
   return !loading ? (
     <div className="tabs-list-container">
       <React.Suspense fallback={<h1>Loading profile...</h1>}>
@@ -148,7 +146,7 @@ const TabWindowWrapper = React.memo(() => {
     </div>
   ) : (
     <MyLoader width={width} />
-  );
-});
+  )
+})
 
-export default TabWindowWrapper;
+export default TabWindowWrapper

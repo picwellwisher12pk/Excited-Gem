@@ -38,6 +38,7 @@ export const tabSlice = createSlice({
       ];
     },
     updateSelectedWindow: (state, action) => {
+      console.log("updateSelectedWindow:", action.payload);
       state.selectedWindow = action.payload;
       window.selectedWindow = action.payload;
     },

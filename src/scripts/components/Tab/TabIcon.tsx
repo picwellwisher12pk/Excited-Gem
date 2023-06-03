@@ -1,6 +1,7 @@
-import { Checkbox } from "antd"
-import React from "react"
-import Loading from "react:*.svg"
+import { Checkbox } from 'antd'
+import React from 'react'
+// @ts-ignore
+import Loading from 'react:/src/icons/spinner-third.svg'
 
 
 
@@ -23,9 +24,9 @@ export function TabIcon(props: {
         checked={props.checked}
       />
       {props.loading ? (
-        <Loading className={"spinner"} />
+        <Loading className={'spinner'} style={{ fill: 'blue' }} />
       ) : (
-        <LazyLoadImage
+        <img
           src={props.src}
           title={props.src && props.title}
           style={{ width: 16, height: 16 }}

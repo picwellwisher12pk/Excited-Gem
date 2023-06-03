@@ -1,8 +1,13 @@
-import React from "react"
-import ThumbtackActiveIcon from "react:*.svg"
-import ThumbtackIcon from "react:*.svg"
+import React from 'react'
+// @ts-ignore
+import ThumbtackActiveIcon from 'react:/src/icons/thumbtack-active.svg'
+// @ts-ignore
+import ThumbtackIcon from 'react:/src/icons/thumbtack.svg'
 
-import { blueIconStyle, grayIconStyle } from "~/scripts/components/Tab/helpers"
+import {
+  blueIconStyle,
+  grayIconStyle
+} from '/src/scripts/components/Tab/helpers'
 
 
 

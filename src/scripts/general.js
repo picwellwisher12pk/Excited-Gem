@@ -1,13 +1,13 @@
-import * as browser from "webextension-polyfill";
-import { saveTabs, saveURLs } from "./getsetSessions";
-export const homepageURL = browser.runtime.getURL("excited-gem.html");
-let refinedTabs;
+import { saveTabs, saveURLs } from "./components/getsetSessions"
+
+export const HOMEPAGEURL = chrome.runtime.getURL("/tabs/home.html")
+let refinedTabs
 
 export const ignoredUrlPatterns = [
   "chrome://*",
   "chrome-extension://*",
-  "http(s)?://localhost*",
-];
+  "http(s)?://localhost*"
+]
 export let ignoredDataKeys = [
   "active",
   "autoDiscardable",
@@ -19,36 +19,36 @@ export let ignoredDataKeys = [
   "selected",
   "status",
   "width",
-  "windowId",
-];
-let sortDelay = 250;
+  "windowId"
+]
+let sortDelay = 250
 
 export function compareURL(a, b) {
-  log("URL", a.url.slice(1, 30), b.url.slice(1, 30));
-  if (a.url < b.url) return -1;
-  if (a.url > b.url) return 1;
-  return 0;
+  log("URL", a.url.slice(1, 30), b.url.slice(1, 30))
+  if (a.url < b.url) return -1
+  if (a.url > b.url) return 1
+  return 0
 }
 
 export function compareTitle(a, b) {
-  if (a.title.toLowerCase() < b.title.toLowerCase()) return -1;
-  if (a.title.toLowerCase() > b.title.toLowerCase()) return 1;
-  return 0;
+  if (a.title.toLowerCase() < b.title.toLowerCase()) return -1
+  if (a.title.toLowerCase() > b.title.toLowerCase()) return 1
+  return 0
 }
 
 export function matchKeys(property, keysToRemove) {
   for (let i = 0; i < keysToRemove.length; i++) {
-    if (property === keysToRemove[i]) return true;
+    if (property === keysToRemove[i]) return true
   }
 }
 
 export function removeKeys(keysToRemove, object) {
-  var tempObject = {};
+  var tempObject = {}
   for (let property in object) {
-    if (matchKeys(property, keysToRemove)) continue;
-    tempObject[property] = object[property];
+    if (matchKeys(property, keysToRemove)) continue
+    tempObject[property] = object[property]
   }
-  return tempObject;
+  return tempObject
 }
 /**
  * [saveData description]
@@ -63,48 +63,48 @@ export function saveData(data, message = "Data saved") {
         type: "basic",
         iconUrl: "../images/extension-icon48.png",
         title: "Data saved",
-        message: message,
+        message: message
       },
       () =>
         // notificationId
         {}
-    );
-  });
+    )
+  })
 }
 
 // Warn if overriding existing method
 if (Array.prototype.equals)
   console.warn(
     "Overriding existing Array.prototype.equals. Possible causes: New API defines the method, there's a framework conflict or you've got double inclusions in your code."
-  );
+  )
 // attach the .equals method to Array's prototype to call it on any array
 Array.prototype.equals = (array) => {
   // if the other array is a falsy value, return
-  if (!array) return false;
+  if (!array) return false
 
   // compare lengths - can save a lot of time
-  if (this.length !== array.length) return false;
+  if (this.length !== array.length) return false
 
   for (var i = 0, l = this.length; i < l; i++) {
     // Check if we have nested arrays
     if (this[i] instanceof Array && array[i] instanceof Array) {
       // recurse into the nested arrays
-      if (!this[i].equals(array[i])) return false;
+      if (!this[i].equals(array[i])) return false
     } else if (this[i] !== array[i]) {
       // Warning - two different object instances will never be equal: {x:20} != {x:20}
-      return false;
+      return false
     }
   }
-  return true;
-};
+  return true
+}
 export function arraysAreIdentical(arr1, arr2) {
-  if (arr1.length !== arr2.length) return false;
+  if (arr1.length !== arr2.length) return false
   for (var i = 0, len = arr1.length; i < len; i++) {
     if (arr1[i] !== arr2[i]) {
-      return false;
+      return false
     }
   }
-  return true;
+  return true
 }
 
 //Takes an array of object and make an plain array out of for a given property
@@ -121,19 +121,19 @@ export function arraysAreIdentical(arr1, arr2) {
 // }
 //Takes an array of object and make an plain array out of for a given property
 export function propertyToArray(array, property) {
-  let newArray = [];
+  let newArray = []
   for (let i = 0; i < array.length; i++) {
-    newArray.push(array[i][property]);
+    newArray.push(array[i][property])
   }
-  return newArray;
+  return newArray
 }
 
 // Hide method from for-in loops
-Object.defineProperty(Array.prototype, "equals", { enumerable: false });
+Object.defineProperty(Array.prototype, "equals", { enumerable: false })
 
 // module.exports = general;
 export function hasClass2(elem, className) {
-  return elem.className.split(" ").indexOf(className) > -1;
+  return elem.className.split(" ").indexOf(className) > -1
 }
 
 // export function getCurrentURL() {
@@ -150,43 +150,43 @@ export function hasClass2(elem, className) {
 //   }
 // }
 export function setValue(object, path, value) {
-  var a = path.split(".");
-  var o = object;
+  var a = path.split(".")
+  var o = object
   for (var i = 0; i < a.length - 1; i++) {
-    var n = a[i];
+    var n = a[i]
     if (n in o) {
-      o = o[n];
+      o = o[n]
     } else {
-      o[n] = {};
-      o = o[n];
+      o[n] = {}
+      o = o[n]
     }
   }
-  o[a[a.length - 1]] = value;
+  o[a[a.length - 1]] = value
 }
 
 export function getValue(object, path) {
-  var o = object;
-  path = path.replace(/\[(\w+)]/g, ".$1");
-  path = path.replace(/^\./, "");
-  var a = path.split(".");
+  var o = object
+  path = path.replace(/\[(\w+)]/g, ".$1")
+  path = path.replace(/^\./, "")
+  var a = path.split(".")
   while (a.length) {
-    var n = a.shift();
+    var n = a.shift()
     if (n in o) {
-      o = o[n];
+      o = o[n]
     } else {
-      return;
+      return
     }
   }
-  return o;
+  return o
 }
 
 export function log() {
-  let trace = false;
+  let trace = false
   if (window.development || window.debug) {
-    console.group(arguments[0]);
-    console.log(Array.prototype.slice.call(arguments));
-    trace ? console.trace() : "";
-    console.groupEnd();
+    console.group(arguments[0])
+    console.log(Array.prototype.slice.call(arguments))
+    trace ? console.trace() : ""
+    console.groupEnd()
   }
 }
 
@@ -206,7 +206,7 @@ export function log() {
 // }
 
 export function timeConverter(UNIX_timestamp) {
-  var date = new Date(UNIX_timestamp);
+  var date = new Date(UNIX_timestamp)
   var options = {
     weekday: "short",
     year: "numeric",
@@ -214,59 +214,59 @@ export function timeConverter(UNIX_timestamp) {
     day: "numeric",
     hour: "2-digit",
     minute: "2-digit",
-    second: "2-digit",
-  };
-  return date.toLocaleDateString("en-US", options);
+    second: "2-digit"
+  }
+  return date.toLocaleDateString("en-US", options)
 }
 
 // Hide method from for-in loops
-Object.defineProperty(Array.prototype, "equals", { enumerable: false });
+Object.defineProperty(Array.prototype, "equals", { enumerable: false })
 
 function quicksort(sortby, array) {
-  log("quicksort array", array);
-  if (array.length <= 1) return array;
-  let pivot = array[0];
-  let left = [];
-  let right = [];
+  log("quicksort array", array)
+  if (array.length <= 1) return array
+  let pivot = array[0]
+  let left = []
+  let right = []
   for (let i = 1; i < array.length; i++) {
     array[i][sortby] < pivot[sortby]
       ? left.push(array[i])
-      : right.push(array[i]);
+      : right.push(array[i])
   }
-  log("left:", left, "right:", right);
-  return quicksort(sortby, left).concat(pivot, quicksort(sortby, right));
+  log("left:", left, "right:", right)
+  return quicksort(sortby, left).concat(pivot, quicksort(sortby, right))
 }
 
 function hasClass(el, className) {
-  if (el.classList) return el.classList.contains(className);
-  return !!el.className.match(new RegExp("(\\s|^)" + className + "(\\s|$)"));
+  if (el.classList) return el.classList.contains(className)
+  return !!el.className.match(new RegExp("(\\s|^)" + className + "(\\s|$)"))
 }
 
 export function addClass(el, className) {
-  if (el.classList) el.classList.add(className);
-  else if (!hasClass(el, className)) el.className += " " + className;
+  if (el.classList) el.classList.add(className)
+  else if (!hasClass(el, className)) el.className += " " + className
 }
 
 export function removeClass(el, className) {
-  if (el.classList) el.classList.remove(className);
+  if (el.classList) el.classList.remove(className)
   else if (hasClass(el, className)) {
-    var reg = new RegExp("(\\s|^)" + className + "(\\s|$)");
-    el.className = el.className.replace(reg, " ");
+    var reg = new RegExp("(\\s|^)" + className + "(\\s|$)")
+    el.className = el.className.replace(reg, " ")
   }
 }
 
 export function sortTabs(sortby, tabs) {
   return new Promise((resolve, reject) => {
-    let tabsList = quicksort(sortby, tabs);
-    log("after quicksort", tabsList);
+    let tabsList = quicksort(sortby, tabs)
+    log("after quicksort", tabsList)
     tabsList.forEach((tab, i) => {
       setTimeout(() => {
-        browser.tabs.move(tab.id, { index: i });
-      }, sortDelay);
-      console.log("sorting: still moving");
-    });
-    resolve(true);
-  });
+        browser.tabs.move(tab.id, { index: i })
+      }, sortDelay)
+      console.log("sorting: still moving")
+    })
+    resolve(true)
+  })
 }
 
 /*function runQuery(query){
@@ -276,13 +276,13 @@ export function sortTabs(sortby, tabs) {
 }*/
 export function santizeTabs(tabs, ignoredUrlPatterns) {
   refinedTabs = tabs.filter((tab) => {
-    ignoredUrlPatterns;
-    let url = tab.url;
-    let pattern = new RegExp(ignoredUrlPatterns.join("|"), "i");
+    ignoredUrlPatterns
+    let url = tab.url
+    let pattern = new RegExp(ignoredUrlPatterns.join("|"), "i")
     // log(url,pattern,matched);
-    return url.match(pattern) == null;
-  });
-  return refinedTabs;
+    return url.match(pattern) == null
+  })
+  return refinedTabs
 }
 
 // state = { ...props };
@@ -384,99 +384,99 @@ export function processTabs(action, selection, state, setState) {
     selection,
     state,
     setState
-  );
+  )
 
-  const selectedTabs = {};
+  const selectedTabs = {}
   state
     .filter((tab) => selection.includes(tab.id))
     .forEach((tab) => {
-      selectedTabs[tab.id] = tab;
-    });
+      selectedTabs[tab.id] = tab
+    })
   switch (action) {
     case "closeSelected":
-      let message = "Are you sure you want to close selected tabs";
+      let message = "Are you sure you want to close selected tabs"
       //State is Tabs here
       selection.length === state.length &&
         (message =
-          "Are you sure you want to close all the tabs? This will also close this window.");
-      const userPermission = confirm(message);
-      if (!userPermission) return false;
-      browser.tabs.remove(selection);
-      setState();
-      break;
+          "Are you sure you want to close all the tabs? This will also close this window.")
+      const userPermission = confirm(message)
+      if (!userPermission) return false
+      browser.tabs.remove(selection)
+      setState()
+      break
     case "toNewWindow":
-      let targetWindow = browser.windows.create();
+      let targetWindow = browser.windows.create()
       targetWindow.then((windowInfo) => {
-        browser.tabs.move(selection, { windowId: windowInfo.id, index: 0 });
-      });
-      break;
+        browser.tabs.move(selection, { windowId: windowInfo.id, index: 0 })
+      })
+      break
     case "toSession":
       saveTabs(
         selection.map((selectedTab) =>
           state.tabs.find((o) => selectedTab === o.id)
         )
-      );
-      break;
+      )
+      break
     case "save":
-      console.log(selection, selectedTab);
+      console.log(selection, selectedTab)
       saveURLs(
         selection.map((selectedTab) =>
           state.tabs.find((o) => selectedTab === o.id)
         )
-      );
-      break;
+      )
+      break
     case "pinSelected":
       for (let tabId of selection)
-        browser.tabs.update(parseInt(tabId), { pinned: true });
-      break;
+        browser.tabs.update(parseInt(tabId), { pinned: true })
+      break
     case "unpinSelected":
       for (let tabId of selection)
-        browser.tabs.update(parseInt(tabId), { pinned: false });
-      break;
+        browser.tabs.update(parseInt(tabId), { pinned: false })
+      break
     case "togglePinSelected":
       for (let tabId of selection)
         browser.tabs.update(parseInt(tabId), {
-          pinned: !selectedTabs[tabId].pinned ? true : false,
-        });
-      break;
+          pinned: !selectedTabs[tabId].pinned ? true : false
+        })
+      break
 
     //Mute
     case "muteSelected":
       for (let tabId of selection)
-        browser.tabs.update(parseInt(tabId), { muted: true });
-      break;
+        browser.tabs.update(parseInt(tabId), { muted: true })
+      break
     case "unmuteSelected":
       for (let tabId of selection)
-        browser.tabs.update(parseInt(tabId), { muted: false });
-      break;
+        browser.tabs.update(parseInt(tabId), { muted: false })
+      break
     case "toggleMuteSelected":
       for (let tabId of selection)
         browser.tabs.update(parseInt(tabId), {
-          muted: !selectedTabs[tabId].mutedInfo.muted ? true : false,
-        });
-      break;
+          muted: !selectedTabs[tabId].mutedInfo.muted ? true : false
+        })
+      break
 
     //Selection
     case "selectAll":
-      setState({ selectedTabs: filterTabs().map((tab) => tab.id) });
+      setState({ selectedTabs: filterTabs().map((tab) => tab.id) })
       addClass(
         document.querySelectorAll("#selection-action"),
         "selection-active"
-      );
-      break;
+      )
+      break
     case "selectNone":
-      setState({ selectedTabs: [] });
+      setState({ selectedTabs: [] })
       removeClass(
         document.querySelectorAll("#selection-action"),
         "selection-active"
-      );
-      break;
+      )
+      break
     case "invertSelection":
       let inverted = props.tabs
         .filter((tab) => !props.selectedTabs.includes(tab.id))
-        .map((tab) => tab.id);
-      setState({ selectedTabs: inverted });
-      break;
+        .map((tab) => tab.id)
+      setState({ selectedTabs: inverted })
+      break
   }
 }
 
@@ -511,15 +511,15 @@ export const asyncFilterTabs = async (
   tabs
 ) => {
   return await new Promise(async (resolve) => {
-    if (searchTerm === "" && !audibleSearch && !pinnedSearch) return tabs;
+    if (searchTerm === "" && !audibleSearch && !pinnedSearch) return tabs
     const filteredTabs = reduceTabs(
       { searchTerm, audibleSearch, pinnedSearch, searchIn },
       { ignoreCase, regex },
       tabs
-    );
-    resolve(filteredTabs);
-  });
-};
+    )
+    resolve(filteredTabs)
+  })
+}
 
 /**
  * If the search term is empty, return all tabs. If the search term is not empty,
@@ -533,40 +533,40 @@ export const filterTabs = (
   tabs
 ) => {
   let filteredTabs = tabs?.filter(({ title, url, audible, pinned }) => {
-    const isAudible = audibleSearch ? audible === true : true;
-    const isPinned = pinnedSearch ? pinned === true : true;
+    const isAudible = audibleSearch ? audible === true : true
+    const isPinned = pinnedSearch ? pinned === true : true
     if (regex) {
       /* If the search term is found in the title or the URL, and the site is
       audible and pinned, return true. */
       try {
-        let regexTest = new RegExp(searchTerm, ignoreCase ? "i" : "");
+        let regexTest = new RegExp(searchTerm, ignoreCase ? "i" : "")
         if (searchIn[0] && regexTest.test(title) && isAudible && isPinned)
-          return true;
+          return true
         if (searchIn[1] && regexTest.test(url) && isAudible && isPinned)
-          return true;
+          return true
       } catch (error) {
-        console.error("Search error:", error);
+        console.error("Search error:", error)
       }
     } else {
       if (searchIn[0] && !ignoreCase)
-        return title.includes(searchTerm) && isAudible && isPinned;
+        return title.includes(searchTerm) && isAudible && isPinned
       if (searchIn[0] && ignoreCase)
         return (
           title.toLowerCase().includes(searchTerm.toLowerCase()) &&
           isAudible &&
           isPinned
-        );
+        )
       if (searchIn[1])
         return (
           url.toLowerCase().includes(searchTerm.toLowerCase()) &&
           isAudible &&
           isPinned
-        );
+        )
     }
-  });
+  })
 
-  return filteredTabs;
-};
+  return filteredTabs
+}
 /**
  * It takes a search term, a list of searchIn options, and a list of tabs, and
  * returns a list of tabs that match the search term
@@ -578,46 +578,46 @@ export const reduceTabs = (
   { ignoreCase, regex },
   tabs
 ) => {
-  console.time("reduceTabs");
+  console.time("reduceTabs")
   let reducedTabs = tabs?.reduce((accumulator, tab) => {
-    const { title, url, audible, pinned } = tab;
-    const isAudible = audibleSearch ? audible === true : true;
-    const isPinned = pinnedSearch ? pinned === true : true;
+    const { title, url, audible, pinned } = tab
+    const isAudible = audibleSearch ? audible === true : true
+    const isPinned = pinnedSearch ? pinned === true : true
     if (regex) {
       try {
-        let regexTest = new RegExp(searchTerm, ignoreCase ? "i" : "");
+        let regexTest = new RegExp(searchTerm, ignoreCase ? "i" : "")
         if (searchIn.title && regexTest.test(title) && isAudible && isPinned)
-          accumulator.push(tab);
+          accumulator.push(tab)
         if (searchIn.url && regexTest.test(url) && isAudible && isPinned)
-          accumulator.push(tab);
+          accumulator.push(tab)
       } catch (error) {
-        console.error("Search error:", error);
+        console.error("Search error:", error)
       }
     } else {
       if (searchIn.title && !ignoreCase)
         if (title.includes(searchTerm) && isAudible && isPinned)
-          accumulator.push(tab);
+          accumulator.push(tab)
       if (searchIn.title && ignoreCase)
         if (
           title.toLowerCase().includes(searchTerm.toLowerCase()) &&
           isAudible &&
           isPinned
         )
-          accumulator.push(tab);
+          accumulator.push(tab)
       if (searchIn.url)
         if (
           url.toLowerCase().includes(searchTerm.toLowerCase()) &&
           isAudible &&
           isPinned
         )
-          accumulator.push(tab);
+          accumulator.push(tab)
     }
-    return accumulator;
-  }, []);
-  reducedTabs = [...new Set(reducedTabs)];
-  console.timeEnd("reduceTabs");
-  return reducedTabs;
-};
+    return accumulator
+  }, [])
+  reducedTabs = [...new Set(reducedTabs)]
+  console.timeEnd("reduceTabs")
+  return reducedTabs
+}
 
 export const getMetrics = (compName, mode, actualTime, baseTime) => {
   // requestAnimationFrame(() => {
@@ -628,13 +628,13 @@ export const getMetrics = (compName, mode, actualTime, baseTime) => {
   //    ActualTime:   ${actualTime}
   //   `;
   // });
-  console.log(compName, mode, actualTime, baseTime);
-};
+  console.log(compName, mode, actualTime, baseTime)
+}
 
 export function updateTabs(getTabs, store) {
   getTabs().then((tabs) => {
-    store.dispatch(updateActiveTabs(tabs));
-  });
+    store.dispatch(updateActiveTabs(tabs))
+  })
 }
 
 export const profilerCallback = (
@@ -661,12 +661,12 @@ export const profilerCallback = (
     commitTime,
     "interactions:",
     interactions
-  );
-};
+  )
+}
 export const makePlaceholder = (searchIn, regex = false) => {
-  let placeholder = "Search in ";
-  placeholder += searchIn.title ? "Titles" : "";
-  placeholder += searchIn.title && searchIn.url ? " and " : "";
-  placeholder += searchIn.url ? "URLs" : "";
-  return regex ? `/ ${placeholder} /gi` : placeholder;
-};
+  let placeholder = "Search in "
+  placeholder += searchIn.title ? "Titles" : ""
+  placeholder += searchIn.title && searchIn.url ? " and " : ""
+  placeholder += searchIn.url ? "URLs" : ""
+  return regex ? `/ ${placeholder} /gi` : placeholder
+}

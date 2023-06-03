@@ -2,7 +2,7 @@ require('jquery');
 require('bootstrap');
 
 import packagedAndBroadcast from './components/communications.js';
-import * as general from './components/general.js';
+import * as general from './general.js';
 
 import '../styles/bootstrap.scss';
 import '../styles/eg.scss';

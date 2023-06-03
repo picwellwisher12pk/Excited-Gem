@@ -22,10 +22,10 @@ svg {
 
 .ant-btn:focus,
 .ant-btn:hover {
-  background-image: none !important ;
-  color: black;
-  background-color: #fff;
-  border-color: #fff;
+  // background-image: none !important ;
+  // color: black;
+  // background-color: #fff;
+  // border-color: #fff;
 }
 .ant-btn:active {
   background-image: -webkit-gradient(
@@ -292,4 +292,7 @@ mark {
   width: 16px;
   height: 16px;
   transition: all 0.2s;
+}
+.ant-input-search-button{
+  background-color: #eee !important;
 }

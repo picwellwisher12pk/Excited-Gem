@@ -15,7 +15,7 @@ export default function WindowSelector({ allWindows, currentWindow }) {
     setDropDown(!dropdownVisible);
   };
 
-  let totalTabCount = allWindows.reduce(function (total, window) {
+  const totalTabCount = allWindows.reduce(function (total, window) {
     return total + window.tabs.length;
   }, 0);
   return (
@@ -23,6 +23,7 @@ export default function WindowSelector({ allWindows, currentWindow }) {
       style={{ width: 200 }}
       defaultValue={currentWindow.id}
       className="!border-0 shadow-md !rounded-[2px] !bg-gradient-to-b !from-white !to-slate-200"
+      onSelect={setWindow}
     >
       <Option className="list-group-item" value="all">
         <div className="flex justify-between">

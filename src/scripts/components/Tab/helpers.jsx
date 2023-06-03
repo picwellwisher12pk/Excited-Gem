@@ -3,6 +3,10 @@ import VolumeOffIcon from "react:/src/icons/volume-off.svg"
 import VolumeSlashIcon from "react:/src/icons/volume-slash.svg"
 import VolumeIcon from "react:/src/icons/volume.svg"
 
+
+
+
+
 export const iconHeight = 16
 export const grayIconStyle = { height: iconHeight, fill: "gray" }
 export const blueIconStyle = { height: iconHeight, fill: "#0487cf" }
@@ -16,11 +20,13 @@ export function markSearchedTerm(value, searchTerm) {
     console.trace("Bad Regular Expressions:", e, searchTerm)
   }
 }
+
 export function renderAudioIcon(audible, { mutedInfo }) {
   if (mutedInfo.muted) return <VolumeSlashIcon style={grayIconStyle} />
   if (!audible) return <VolumeOffIcon style={grayIconStyle} />
   if (audible) return <VolumeIcon style={blueIconStyle} />
 }
+
 export function renderActionButtons(props, pinned, iconPinned, audible) {
   const { id, url } = props
   if (props.activeTab) {

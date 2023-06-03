@@ -1,0 +1,32 @@
+{
+  "{{chrome}}.manifest_version": 3,
+  "{{firefox}}.manifest_version": 2,
+  "icons": {
+    "16": "logo.svg",
+    "48": "logo.svg",
+    "128": "logo.svg"
+  },
+  "permissions": [
+    "activeTab",
+    "contextMenus",
+    "notifications",
+    "storage",
+    "tabs",
+    "tabGroups",
+    "unlimitedStorage"
+  ],
+  "{{chrome}}.action": {
+    "default_icon": {
+      "19": "logo.svg",
+      "38": "logo.svg"
+    },
+    "default_title": "Excited Gem"
+  },
+  "{{firefox}}.browser_action": {
+    "default_popup": "src/popup.html"
+  },
+  "background": {
+    "{{chrome}}.service_worker": "src/background.js",
+    "{{firefox}}.scripts": ["src/background.js"]
+  }
+}

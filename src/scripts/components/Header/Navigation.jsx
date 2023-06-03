@@ -1,8 +1,8 @@
 import { Badge } from "antd";
-import React from "react";
+import React,{memo} from "react";
 
-export default function Navigation({ tabCount }) {
-  console.log("reloading navigation");
+const  Navigation = ({ tabCount }) =>{
+  console.log('navigation')
   return (
     <div className="flex flex-grow" id="navbarNav">
       <ul className="flex justify-start w-full mb-0">
@@ -13,6 +13,7 @@ export default function Navigation({ tabCount }) {
             count={tabCount}
             color={tabCount > 50 ? "orange" : "green "}
             size="small"
+            className="!border-0"
           >
             <a
               className=" text-white font-weight-bold"
@@ -33,3 +34,5 @@ export default function Navigation({ tabCount }) {
     </div>
   );
 }
+
+export default Navigation;
