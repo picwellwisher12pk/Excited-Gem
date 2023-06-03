@@ -1,13 +1,41 @@
-._*
-./js/*.js
-.AppleDouble
+# Dependencies
+/node_modules
+/.pnp
+.pnp.js
+
+# Testing
+/coverage
+
+# Miscellaneous
 .DS_Store
 .DS_STORE
+*.pem
+
+# Debug
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+.pnpm-debug.log*
+
+# Local Environment Files
+.env*
+out/
+build/
+dist/
+
+# Plasmo - https://www.plasmo.com
+.plasmo
+
+# BPP - http://bpp.browser.market/
+keys.json
+
+# TypeScript
+.tsbuildinfo
+
+# Editor and System Files
+._*
+.AppleDouble
 .history/
-.idea/
-.idea/excited-gem.iml
-.idea/watcherTasks.xml
-.idea/workspace.xml
 .LSOverride
 .remote-sync.json
 .sass-cache
@@ -18,6 +46,8 @@
 .vscode/extensions.json
 .vscode/launch.json
 .vscode/settings.json
+
+# Archive and Binary Files
 *.cache
 *.crx
 *.csv
@@ -26,27 +56,20 @@
 *.local
 *.log
 *.out
-*.pem
 *.pid
 *.seed
 *.xpi
-*.zip
+
+# Build Output and Assets
 /css
 /js/*.js
 $RECYCLE.BIN/
 bower_components/
-build.zip
-build/
 certs/key.pem
-chrome/
 commonjs/
 Desktop.ini
-dist
 dist-ssr
-dist/
 excited-gem.sublime-workspace
-extension/
-extension/manifest.json
 firefox/
 Icon
 lib-cov
@@ -64,19 +87,4 @@ src/images/light/
 src/images/regular/
 src/images/solid/
 thumbs.db
-Thumbs.db
 utils/.npmrc
-firefox/
-chrome/
-.idea/watcherTasks.xml
-build.zip
-src/images/solid/
-src/images/regular/
-src/images/light/
-*.zip
-.idea/
-*.csr
-*.crt
-extension/
-dist/
-build/
