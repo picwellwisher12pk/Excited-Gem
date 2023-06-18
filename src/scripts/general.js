@@ -1,30 +1,30 @@
-import { saveTabs, saveURLs } from "./components/getsetSessions"
+import { saveTabs, saveURLs } from './components/getsetSessions'
 
-export const HOMEPAGEURL = chrome.runtime.getURL("/tabs/home.html")
+export const HOMEPAGEURL = chrome.runtime.getURL('/tabs/home.html')
 let refinedTabs
 
 export const ignoredUrlPatterns = [
-  "chrome://*",
-  "chrome-extension://*",
-  "http(s)?://localhost*"
+  'chrome://*',
+  'chrome-extension://*',
+  'http(s)?://localhost*'
 ]
 export let ignoredDataKeys = [
-  "active",
-  "autoDiscardable",
-  "discarded",
-  "height",
-  "highlighted",
-  "id",
-  "index",
-  "selected",
-  "status",
-  "width",
-  "windowId"
+  'active',
+  'autoDiscardable',
+  'discarded',
+  'height',
+  'highlighted',
+  'id',
+  'index',
+  'selected',
+  'status',
+  'width',
+  'windowId'
 ]
 let sortDelay = 250
 
 export function compareURL(a, b) {
-  log("URL", a.url.slice(1, 30), b.url.slice(1, 30))
+  log('URL', a.url.slice(1, 30), b.url.slice(1, 30))
   if (a.url < b.url) return -1
   if (a.url > b.url) return 1
   return 0
@@ -55,14 +55,14 @@ export function removeKeys(keysToRemove, object) {
  * @param  {String/Object/Array} data    [description]
  * @param  {String} message [description]
  */
-export function saveData(data, message = "Data saved") {
+export function saveData(data, message = 'Data saved') {
   browser.storage.local.set(data, () => {
     browser.notifications.create(
-      "reminder",
+      'reminder',
       {
-        type: "basic",
-        iconUrl: "../images/extension-icon48.png",
-        title: "Data saved",
+        type: 'basic',
+        iconUrl: '../images/extension-icon48.png',
+        title: 'Data saved',
         message: message
       },
       () =>
@@ -129,11 +129,11 @@ export function propertyToArray(array, property) {
 }
 
 // Hide method from for-in loops
-Object.defineProperty(Array.prototype, "equals", { enumerable: false })
+Object.defineProperty(Array.prototype, 'equals', { enumerable: false })
 
 // module.exports = general;
 export function hasClass2(elem, className) {
-  return elem.className.split(" ").indexOf(className) > -1
+  return elem.className.split(' ').indexOf(className) > -1
 }
 
 // export function getCurrentURL() {
@@ -150,7 +150,7 @@ export function hasClass2(elem, className) {
 //   }
 // }
 export function setValue(object, path, value) {
-  var a = path.split(".")
+  var a = path.split('.')
   var o = object
   for (var i = 0; i < a.length - 1; i++) {
     var n = a[i]
@@ -166,9 +166,9 @@ export function setValue(object, path, value) {
 
 export function getValue(object, path) {
   var o = object
-  path = path.replace(/\[(\w+)]/g, ".$1")
-  path = path.replace(/^\./, "")
-  var a = path.split(".")
+  path = path.replace(/\[(\w+)]/g, '.$1')
+  path = path.replace(/^\./, '')
+  var a = path.split('.')
   while (a.length) {
     var n = a.shift()
     if (n in o) {
@@ -185,7 +185,7 @@ export function log() {
   if (window.development || window.debug) {
     console.group(arguments[0])
     console.log(Array.prototype.slice.call(arguments))
-    trace ? console.trace() : ""
+    trace ? console.trace() : ''
     console.groupEnd()
   }
 }
@@ -208,22 +208,22 @@ export function log() {
 export function timeConverter(UNIX_timestamp) {
   var date = new Date(UNIX_timestamp)
   var options = {
-    weekday: "short",
-    year: "numeric",
-    month: "short",
-    day: "numeric",
-    hour: "2-digit",
-    minute: "2-digit",
-    second: "2-digit"
+    weekday: 'short',
+    year: 'numeric',
+    month: 'short',
+    day: 'numeric',
+    hour: '2-digit',
+    minute: '2-digit',
+    second: '2-digit'
   }
-  return date.toLocaleDateString("en-US", options)
+  return date.toLocaleDateString('en-US', options)
 }
 
 // Hide method from for-in loops
-Object.defineProperty(Array.prototype, "equals", { enumerable: false })
+Object.defineProperty(Array.prototype, 'equals', { enumerable: false })
 
 function quicksort(sortby, array) {
-  log("quicksort array", array)
+  log('quicksort array', array)
   if (array.length <= 1) return array
   let pivot = array[0]
   let left = []
@@ -233,37 +233,37 @@ function quicksort(sortby, array) {
       ? left.push(array[i])
       : right.push(array[i])
   }
-  log("left:", left, "right:", right)
+  log('left:', left, 'right:', right)
   return quicksort(sortby, left).concat(pivot, quicksort(sortby, right))
 }
 
 function hasClass(el, className) {
   if (el.classList) return el.classList.contains(className)
-  return !!el.className.match(new RegExp("(\\s|^)" + className + "(\\s|$)"))
+  return !!el.className.match(new RegExp('(\\s|^)' + className + '(\\s|$)'))
 }
 
 export function addClass(el, className) {
   if (el.classList) el.classList.add(className)
-  else if (!hasClass(el, className)) el.className += " " + className
+  else if (!hasClass(el, className)) el.className += ' ' + className
 }
 
 export function removeClass(el, className) {
   if (el.classList) el.classList.remove(className)
   else if (hasClass(el, className)) {
-    var reg = new RegExp("(\\s|^)" + className + "(\\s|$)")
-    el.className = el.className.replace(reg, " ")
+    var reg = new RegExp('(\\s|^)' + className + '(\\s|$)')
+    el.className = el.className.replace(reg, ' ')
   }
 }
 
 export function sortTabs(sortby, tabs) {
   return new Promise((resolve, reject) => {
     let tabsList = quicksort(sortby, tabs)
-    log("after quicksort", tabsList)
+    log('after quicksort', tabsList)
     tabsList.forEach((tab, i) => {
       setTimeout(() => {
         browser.tabs.move(tab.id, { index: i })
       }, sortDelay)
-      console.log("sorting: still moving")
+      console.log('sorting: still moving')
     })
     resolve(true)
   })
@@ -278,7 +278,7 @@ export function santizeTabs(tabs, ignoredUrlPatterns) {
   refinedTabs = tabs.filter((tab) => {
     ignoredUrlPatterns
     let url = tab.url
-    let pattern = new RegExp(ignoredUrlPatterns.join("|"), "i")
+    let pattern = new RegExp(ignoredUrlPatterns.join('|'), 'i')
     // log(url,pattern,matched);
     return url.match(pattern) == null
   })
@@ -379,7 +379,7 @@ export function santizeTabs(tabs, ignoredUrlPatterns) {
 // }
 export function processTabs(action, selection, state, setState) {
   console.log(
-    "🚀 ~ file: general.js ~ line 377 ~ processTabs ~ action, selection, state, setState",
+    '🚀 ~ file: general.js ~ line 377 ~ processTabs ~ action, selection, state, setState',
     action,
     selection,
     state,
@@ -393,31 +393,31 @@ export function processTabs(action, selection, state, setState) {
       selectedTabs[tab.id] = tab
     })
   switch (action) {
-    case "closeSelected":
-      let message = "Are you sure you want to close selected tabs"
+    case 'closeSelected':
+      let message = 'Are you sure you want to close selected tabs'
       //State is Tabs here
       selection.length === state.length &&
         (message =
-          "Are you sure you want to close all the tabs? This will also close this window.")
+          'Are you sure you want to close all the tabs? This will also close this window.')
       const userPermission = confirm(message)
       if (!userPermission) return false
       browser.tabs.remove(selection)
       setState()
       break
-    case "toNewWindow":
+    case 'toNewWindow':
       let targetWindow = browser.windows.create()
       targetWindow.then((windowInfo) => {
         browser.tabs.move(selection, { windowId: windowInfo.id, index: 0 })
       })
       break
-    case "toSession":
+    case 'toSession':
       saveTabs(
         selection.map((selectedTab) =>
           state.tabs.find((o) => selectedTab === o.id)
         )
       )
       break
-    case "save":
+    case 'save':
       console.log(selection, selectedTab)
       saveURLs(
         selection.map((selectedTab) =>
@@ -425,15 +425,15 @@ export function processTabs(action, selection, state, setState) {
         )
       )
       break
-    case "pinSelected":
+    case 'pinSelected':
       for (let tabId of selection)
         browser.tabs.update(parseInt(tabId), { pinned: true })
       break
-    case "unpinSelected":
+    case 'unpinSelected':
       for (let tabId of selection)
         browser.tabs.update(parseInt(tabId), { pinned: false })
       break
-    case "togglePinSelected":
+    case 'togglePinSelected':
       for (let tabId of selection)
         browser.tabs.update(parseInt(tabId), {
           pinned: !selectedTabs[tabId].pinned ? true : false
@@ -441,15 +441,15 @@ export function processTabs(action, selection, state, setState) {
       break
 
     //Mute
-    case "muteSelected":
+    case 'muteSelected':
       for (let tabId of selection)
         browser.tabs.update(parseInt(tabId), { muted: true })
       break
-    case "unmuteSelected":
+    case 'unmuteSelected':
       for (let tabId of selection)
         browser.tabs.update(parseInt(tabId), { muted: false })
       break
-    case "toggleMuteSelected":
+    case 'toggleMuteSelected':
       for (let tabId of selection)
         browser.tabs.update(parseInt(tabId), {
           muted: !selectedTabs[tabId].mutedInfo.muted ? true : false
@@ -457,21 +457,21 @@ export function processTabs(action, selection, state, setState) {
       break
 
     //Selection
-    case "selectAll":
+    case 'selectAll':
       setState({ selectedTabs: filterTabs().map((tab) => tab.id) })
       addClass(
-        document.querySelectorAll("#selection-action"),
-        "selection-active"
+        document.querySelectorAll('#selection-action'),
+        'selection-active'
       )
       break
-    case "selectNone":
+    case 'selectNone':
       setState({ selectedTabs: [] })
       removeClass(
-        document.querySelectorAll("#selection-action"),
-        "selection-active"
+        document.querySelectorAll('#selection-action'),
+        'selection-active'
       )
       break
-    case "invertSelection":
+    case 'invertSelection':
       let inverted = props.tabs
         .filter((tab) => !props.selectedTabs.includes(tab.id))
         .map((tab) => tab.id)
@@ -511,7 +511,7 @@ export const asyncFilterTabs = async (
   tabs
 ) => {
   return await new Promise(async (resolve) => {
-    if (searchTerm === "" && !audibleSearch && !pinnedSearch) return tabs
+    if (searchTerm === '' && !audibleSearch && !pinnedSearch) return tabs
     const filteredTabs = reduceTabs(
       { searchTerm, audibleSearch, pinnedSearch, searchIn },
       { ignoreCase, regex },
@@ -539,13 +539,13 @@ export const filterTabs = (
       /* If the search term is found in the title or the URL, and the site is
       audible and pinned, return true. */
       try {
-        let regexTest = new RegExp(searchTerm, ignoreCase ? "i" : "")
+        let regexTest = new RegExp(searchTerm, ignoreCase ? 'i' : '')
         if (searchIn[0] && regexTest.test(title) && isAudible && isPinned)
           return true
         if (searchIn[1] && regexTest.test(url) && isAudible && isPinned)
           return true
       } catch (error) {
-        console.error("Search error:", error)
+        console.error('Search error:', error)
       }
     } else {
       if (searchIn[0] && !ignoreCase)
@@ -578,20 +578,20 @@ export const reduceTabs = (
   { ignoreCase, regex },
   tabs
 ) => {
-  console.time("reduceTabs")
+  console.time('reduceTabs')
   let reducedTabs = tabs?.reduce((accumulator, tab) => {
     const { title, url, audible, pinned } = tab
     const isAudible = audibleSearch ? audible === true : true
     const isPinned = pinnedSearch ? pinned === true : true
     if (regex) {
       try {
-        let regexTest = new RegExp(searchTerm, ignoreCase ? "i" : "")
+        let regexTest = new RegExp(searchTerm, ignoreCase ? 'i' : '')
         if (searchIn.title && regexTest.test(title) && isAudible && isPinned)
           accumulator.push(tab)
         if (searchIn.url && regexTest.test(url) && isAudible && isPinned)
           accumulator.push(tab)
       } catch (error) {
-        console.error("Search error:", error)
+        console.error('Search error:', error)
       }
     } else {
       if (searchIn.title && !ignoreCase)
@@ -615,7 +615,7 @@ export const reduceTabs = (
     return accumulator
   }, [])
   reducedTabs = [...new Set(reducedTabs)]
-  console.timeEnd("reduceTabs")
+  console.timeEnd('reduceTabs')
   return reducedTabs
 }
 
@@ -647,26 +647,26 @@ export const profilerCallback = (
   interactions
 ) => {
   console.log(
-    "id:",
+    'id:',
     id,
-    "phase:",
+    'phase:',
     phase,
-    "actualDuration:",
+    'actualDuration:',
     actualDuration,
-    "baseDuration:",
+    'baseDuration:',
     baseDuration,
-    "startTime:",
+    'startTime:',
     startTime,
-    "commitTime:",
+    'commitTime:',
     commitTime,
-    "interactions:",
+    'interactions:',
     interactions
   )
 }
 export const makePlaceholder = (searchIn, regex = false) => {
-  let placeholder = "Search in "
-  placeholder += searchIn.title ? "Titles" : ""
-  placeholder += searchIn.title && searchIn.url ? " and " : ""
-  placeholder += searchIn.url ? "URLs" : ""
+  let placeholder = 'Search in '
+  placeholder += searchIn.title ? 'Titles' : ''
+  placeholder += searchIn.title && searchIn.url ? ' and ' : ''
+  placeholder += searchIn.url ? 'URLs' : ''
   return regex ? `/ ${placeholder} /gi` : placeholder
 }

@@ -15,10 +15,6 @@ import Header from './components/Header/Header'
 import Navigation from './components/Header/Navigation'
 import Search from './components/Search'
 
-
-
-
-
 export function updateTabs(getTabs, store) {
   getTabs(store.getState().tabs.selectedWindow).then((tabs) => {
     console.log(
@@ -72,21 +68,27 @@ chrome.tabs.onUpdated.addListener(() => updateTabs(getTabs, store))
 chrome.tabs.onMoved.addListener(() => updateTabs(getTabs, store))
 updateTabs(getTabs, store)
 
-const ActiveTabs = memo(() => {
+const ActiveTabs = () => {
+  console.log('ActiveTabs rendered')
   // @ts-ignore
   const { tabs } = useSelector((state) => state.tabs)
   const navigation = useMemo(
     () => <Navigation tabCount={tabs.length} />,
     [tabs]
   )
+  const header = useMemo(
+    () => (
+      <Header>
+        <Navigation tabCount={tabs.length} />
+        <Search />
+      </Header>
+    ),
+    []
+  )
   // const search  = useMemo(()=>(<Navigation tabCount={tabs.length} />),[])
   return (
     <div className="flex flex-col h-[100vh]">
-
-      <Header key="header">
-          <Navigation tabCount={tabs.length} />
-          <Search />
-      </Header>
+      {header}
       <CustomScroll
         heightRelativeToParent="100%"
         keepAtBottom={true}
@@ -98,5 +100,5 @@ const ActiveTabs = memo(() => {
       </Profiler> */}
     </div>
   )
-})
+}
 export default ActiveTabs

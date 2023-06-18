@@ -9,16 +9,18 @@ import 'antd/dist/reset.css'
 import '/src/styles/index.css'
 import '/src/styles/index.scss'
 import 'react-custom-scroll/dist/customScroll.css'
-
+import { StrictMode } from 'react'
 
 function Home() {
   console.log('home')
   return (
-    <Provider store={store}>
-      <ActiveTabs />
-      {/* <PersistGate loading={null} persistor={persistor}>
-      </PersistGate> */}
-    </Provider>
+    <StrictMode>
+      <Provider store={store}>
+        <ActiveTabs />
+        {/* <PersistGate loading={null} persistor={persistor}>
+        </PersistGate> */}
+      </Provider>
+    </StrictMode >
   )
 }
 

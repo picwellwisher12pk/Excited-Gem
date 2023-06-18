@@ -1,24 +1,26 @@
-import { LoadingOutlined } from '@ant-design/icons';
-import { Button, Checkbox, Dropdown, Menu, MenuProps, Select, Space } from 'antd';
-import { memo, useCallback, useEffect, useRef, useState } from 'react';
-import { useDispatch, useSelector } from 'react-redux';
-import SortIcon from 'react:/src/icons/sort.svg';
-import SyncAltIcon from 'react:/src/icons/sync-alt.svg';
-import ThumbtackIcon from 'react:/src/icons/thumbtack-active.svg';
-import VolumeSlashIcon from 'react:/src/icons/volume-mute.svg';
+import { LoadingOutlined } from '@ant-design/icons'
+import { Button, Checkbox, Dropdown, Menu, Select, Space } from 'antd'
+import { memo, useCallback, useEffect, useMemo, useRef, useState } from 'react'
+import { useDispatch, useSelector } from 'react-redux'
+import SyncAltIcon from 'react:/src/icons/sync-alt.svg'
+import ThumbtackIcon from 'react:/src/icons/thumbtack-active.svg'
+import VolumeSlashIcon from 'react:/src/icons/volume-mute.svg'
 
-
+import { processTabs, sortTabs } from '../../general'
+import {
+  clearSelectedTabs,
+  invertSelectedTabs,
+  selectAllTabs
+} from '../../tabSlice.js'
+import { MoveModal } from '../Modals/Move.jsx'
+import { SaveModal } from '../Modals/Save.jsx'
+import WindowSelector from '../WindowSelector.jsx'
+import Brand from './Brand.jsx'
 import MenuItemButton from './MenuItemButton.tsx'
-import { processTabs, sortTabs } from '../../general';
-import { clearSelectedTabs, invertSelectedTabs, selectAllTabs } from '../../tabSlice.js';
-import { MoveModal } from '../Modals/Move.jsx';
-import { SaveModal } from '../Modals/Save.jsx';
-import WindowSelector from '../WindowSelector.jsx';
-import Brand from './Brand.jsx';
+import SortButton from './SortButton'
 //Images
 // @ts-ignore
-import logo from '/public/logo.png';
-
+import logo from '/public/logo.png'
 
 // import TimesIcon from "react:~/icons/times.svg"
 // import VolumeOffIcon from "react:~/icons/volume-off.svg"
@@ -52,19 +54,14 @@ function useTraceUpdate(props) {
     prev.current = props
   })
 }
-
-type Item = {
-  key: any
-  label: React.JSX.Element
-}
-type sortType = string
 type actionType = string
 type action = string
-const sortTypes: string[] = ['title', 'url']
+
 const pinActions: string[] = ['toggle', 'pin', 'unpin']
 const muteActions: string[] = ['toggle', 'mute', 'unmute']
 
-const Header = memo((props) => {
+const Header = (props) => {
+  console.log('Header')
   const dispatch = useDispatch()
   const { selectedTabs, tabs, filteredTabs } = useSelector(
     (state) => state.tabs
@@ -73,10 +70,9 @@ const Header = memo((props) => {
   const [indeterminate, setIndeterminate] = useState(false)
   const [checkAll, setCheckAll] = useState(false)
 
-  const { navigation, search } = props.children
   const [allSelected, setAllSelected] = useState(props.allSelected)
   const [allMuted, setAllMuted] = useState(props.allMuted)
-  const [sorting, setSorting] = useState(false)
+
   const [allWindows, setAllWindows] = useState([])
   const [currentWindow, setCurrentWindow] = useState({})
   const [moveModalVisible, setMoveModalVisible] = useState(false)
@@ -97,14 +93,7 @@ const Header = memo((props) => {
   chrome.windows.getCurrent({ populate: true }).then((window) => {
     setCurrentWindow(window)
   })
-  const handleSort = useCallback(
-    async (sortType: string, tabs) => {
-      setSorting(true)
-      await sortTabs(sortType, tabs)
-      setSorting(false)
-    },
-    [tabs]
-  )
+
   const handlePin = useCallback(
     (option, selectedTabs, tabs) => {
       processTabs(option, selectedTabs, tabs)
@@ -117,60 +106,28 @@ const Header = memo((props) => {
     },
     [selectedTabs, tabs]
   )
-  const sortOptions = sortTypes.map((option, i) => ({
-    key: i, label: option.toUpperCase()
-  }))
-  console.log(sortOptions)
+  const sortButton = useMemo(() => <SortButton tabs={tabs} />, [])
   const pinOptions: Item[] = pinActions.map((option, i) => ({
     key: i,
-    label: <MenuItemButton option={option} callback={() => handlePin(option, selectedTabs, tabs)} />
-
+    label: (
+      <MenuItemButton
+        option={option}
+        callback={() => handlePin(option, selectedTabs, tabs)}
+      />
+    )
   }))
   const muteOptions: Item[] = pinActions.map((option, i) => ({
     key: i,
-    label:   <MenuItemButton option={option} callback={() => handleMute(option, selectedTabs, tabs)} />
+    label: (
+      <MenuItemButton
+        option={option}
+        callback={() => handleMute(option, selectedTabs, tabs)}
+      />
+    )
   }))
   const pinMenu = <Menu items={pinOptions} />
   const muteMenu = <Menu items={muteOptions} />
-  let sortingIcon = sorting ? (
-    <LoadingOutlined />
-  ) : (
-    <SortIcon className="!fill-slate-700" style={{ height: 12, width: 14 }} />
-  )
-  const items = [
-  {
-    key: '1',
-    label: (
-      <a target="_blank" rel="noopener noreferrer" href="https://www.antgroup.com">
-        1st menu item
-      </a>
-    ),
-  },
-  {
-    key: '2',
-    label: (
-      <a target="_blank" rel="noopener noreferrer" href="https://www.aliyun.com">
-        2nd menu item (disabled)
-      </a>
-    ),
-    // icon: <SmileOutlined />,
-    disabled: true,
-  },
-  {
-    key: '3',
-    label: (
-      <a target="_blank" rel="noopener noreferrer" href="https://www.luohanacademy.com">
-        3rd menu item (disabled)
-      </a>
-    ),
-    disabled: true,
-  },
-  {
-    key: '4',
-    danger: true,
-    label: 'a danger item',
-  },
-];
+
   useTraceUpdate(props)
   return (
     <header
@@ -178,7 +135,7 @@ const Header = memo((props) => {
       key={'header'}>
       <div className="flex">
         {Brand(logo)}
-        {props.children}
+        {props?.children}
       </div>
       <section
         className="flex flex-row justify-between items-center mt-1"
@@ -207,7 +164,7 @@ const Header = memo((props) => {
                 />
               </span>
               <Button
-              size={'small'}
+                size={'small'}
                 className="!px-2 !border-0 !rounded-l-none !bg-gradient-to-b !from-white !to-slate-200  transition"
                 title="Invert Selection"
                 onClick={() => dispatch(invertSelectedTabs())}>
@@ -215,20 +172,7 @@ const Header = memo((props) => {
               </Button>
             </div>
           </li>
-          <li>
-            <Dropdown menu={{items}} className="mr-3">
-              <Button
-              size={'small'}
-                onClick={(e) => e.preventDefault()}
-                className="!border-0 !bg-gradient-to-b !from-white !to-slate-200"
-                >
-                <Space>
-                  {sortingIcon}
-                  <span>Sort</span>
-                </Space>
-              </Button>
-            </Dropdown>
-          </li>
+          <li>{sortButton}</li>
           <li>
             {allWindows.length > 1 && (
               <WindowSelector
@@ -265,8 +209,8 @@ const Header = memo((props) => {
             <div>
               <Dropdown overlay={muteMenu} arrow={true}>
                 <Button
-                size={'small'}
-                className="!px-2 !border-0 mr-2 !bg-gradient-to-b !from-white !to-slate-200 !hover:to-white  !hover:text-black !transition">
+                  size={'small'}
+                  className="!px-2 !border-0 mr-2 !bg-gradient-to-b !from-white !to-slate-200 !hover:to-white  !hover:text-black !transition">
                   {/* <VolumeIcon style={{ height: 12 }} className="fill-inherit" /> */}
                   Un/Mute <small style={{ fontSize: 8 }}>▼</small>
                 </Button>
@@ -274,7 +218,7 @@ const Header = memo((props) => {
             </div>
             <div>
               <Button
-              size={'small'}
+                size={'small'}
                 className="!px-2 !border-0 mr-2 !bg-gradient-to-b !from-white !to-slate-200 !hover:to-white  !hover:text-black !transition "
                 onClick={() => {
                   setSaveModalVisible(true)
@@ -289,7 +233,7 @@ const Header = memo((props) => {
 
             <div>
               <Button
-              size={'small'}
+                size={'small'}
                 title="Move Selected Tabs"
                 onClick={() => {
                   setMoveModalVisible(true)
@@ -303,7 +247,7 @@ const Header = memo((props) => {
             </div>
             <div>
               <Button
-              size={'small'}
+                size={'small'}
                 title="Close Selected"
                 onClick={() => {
                   processTabs('closeSelected', selectedTabs, tabs, () => {
@@ -328,7 +272,7 @@ const Header = memo((props) => {
         <ul className="flex mb-0">
           <li>
             <Button
-            size={'small'}
+              size={'small'}
               className="!border-0 !shadow-md !hover:shadow-sm !bg-gradient-to-b !from-white !to-slate-200 flex justify-center items-center"
               title="Refresh View"
               onClick={() => {
@@ -342,7 +286,7 @@ const Header = memo((props) => {
 
           <li>
             <Button
-            size={'small'}
+              size={'small'}
               className="!border-0 !shadow-md !hover:shadow-sm !bg-gradient-to-b !from-white !to-slate-200 ml-2"
               onClick={() => {
                 props.processSelectedTabs(
@@ -379,6 +323,6 @@ const Header = memo((props) => {
     // <Profiler id={"header"} onRender={getMetrics}>
     // </Profiler>
   )
-})
+}
 
 export default Header
