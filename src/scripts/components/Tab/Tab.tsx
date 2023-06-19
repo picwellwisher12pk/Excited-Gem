@@ -81,11 +81,12 @@ const Tab = (props) => {
         }}
         onClick={() => chrome.tabs.update(props.id, { active: true })}
       />
-      <ul
-        className="tab-actions flex align-self-center justify-self-end"
+      <div
+        className="tab-actions flex align-self-center justify-self-end mx-3"
+        style={{ gap: 8 }}
         aria-label="options">
         {renderActionButtons(props, pinned, iconPinned, audible)}
-      </ul>
+      </div>
     </li>
   )
 }

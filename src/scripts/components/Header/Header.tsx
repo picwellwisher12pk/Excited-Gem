@@ -269,7 +269,7 @@ const Header = (props) => {
             </div>
           </section>
         )}
-        <ul className="flex mb-0">
+        <ul className="flex mb-0 mr-1">
           <li>
             <Button
               size={'small'}
