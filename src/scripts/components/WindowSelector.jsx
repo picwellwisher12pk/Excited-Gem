@@ -97,7 +97,7 @@ export default function WindowSelector() {
       loading={loading}
       style={{ width: 200 }}
       size={'small'}
-      value={{
+      defaultValue={{
         label: (
           <span className={`flex justify-between align-items-center btn-link`}>
             <div>
