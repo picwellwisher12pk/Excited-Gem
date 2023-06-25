@@ -14,14 +14,12 @@ export default function WindowSelector() {
   const [allWindows, setAllWindows] = useState([])
   const [loading, setLoading] = useState(true)
   const [currentWindow, setCurrentWindow] = useState({})
-  const [currentWindowOption, setCurrentWindowOption] = useState({}) //['current'
 
   async function getWindows() {
     const allWindows = await getAllWindows()
     const currentWindow = await getCurrentWindow()
     setAllWindows(allWindows)
     setCurrentWindow(currentWindow)
-    setCurrentWindowOption(optionCreator(currentWindow))
     setLoading(false)
   }
   function optionCreator(window) {
@@ -92,8 +90,8 @@ export default function WindowSelector() {
       </div>
     </Option>
   )
-
   const options = allWindows.map(optionCreator)
+
   return (
     <Select
       loading={loading}
@@ -129,7 +127,7 @@ export default function WindowSelector() {
         value: currentWindow.id
       }}
       className="!border-0 shadow-md !rounded-[2px] !bg-gradient-to-b !from-white !to-slate-200"
-      onChange={setWindow}>
+      onSelect={setWindow}>
       {[optionAll, ...options]}
     </Select>
   )
