@@ -1,8 +1,11 @@
 import { Button } from 'antd'
+import React from 'react'
 import TimesIcon from 'react:/src/icons/times.svg'
 import VolumeOffIcon from 'react:/src/icons/volume-off.svg'
 import VolumeSlashIcon from 'react:/src/icons/volume-slash.svg'
 import VolumeIcon from 'react:/src/icons/volume.svg'
+
+import Btn from '../Btn'
 
 const btnStyle = {
   width: 30,
@@ -21,57 +24,70 @@ export function markSearchedTerm(value, searchTerm) {
     const regex = new RegExp(searchTerm, 'gi')
     return value.replace(regex, '<mark>$&</mark>')
   } catch (e) {
-    console.trace('Bad Regular Expressions:', e, searchTerm)
+    console.error('Bad Regular Expressions:', e, searchTerm)
+    return value
   }
 }
 
 export function renderAudioIcon(audible, { mutedInfo }) {
-  if (mutedInfo.muted) return <VolumeSlashIcon style={grayIconStyle} />
+  if (mutedInfo?.muted) return <VolumeSlashIcon style={grayIconStyle} />
   if (!audible) return <VolumeOffIcon style={grayIconStyle} />
   if (audible) return <VolumeIcon style={blueIconStyle} />
 }
 
-export function renderActionButtons(props, pinned, iconPinned, audible) {
-  const { id, url } = props
-  if (props.activeTab) {
+const renderActionButtons = ({
+  id,
+  url,
+  activeTab,
+  togglePinTab,
+  toggleMuteTab,
+  closeTab,
+  removeTab,
+  pinned,
+  iconPinned,
+  audible
+}) => {
+  if (activeTab) {
     return [
-      <Button
-        key={1}
+      <Btn
+        key={'pinButton'}
         title="Un/Pin Tab"
-        size="small"
-        onClick={() => props.togglePinTab(id)}
-        style={btnStyle}
-        aria-label="pinned">
+        gradient={false}
+        border={true}
+        // onClick={() => togglePinTab(id)}
+      >
         {iconPinned}
-      </Button>,
-      <Button
-        onClick={() => props.toggleMuteTab(id, audible)}
-        key={2}
+      </Btn>,
+      <Btn
+        key={'muteButton'}
         title="Un/Mute Tab"
-        size="small"
-        style={btnStyle}>
-        {renderAudioIcon(audible, props)}
-      </Button>,
-      <Button
-        size={'small'}
-        key={3}
-        title="Close Tab"
+        gradient={false}
+        border={true}
+        // onClick={() => toggleMuteTab(id, audible)}
+      >
+        {renderAudioIcon(audible, { id, url })}
+      </Btn>,
+      <Btn
+        key={'removeButton'}
+        title="Remove Tab"
         data-id={id}
-        style={btnStyle}
-        onClick={() => props.closeTab(id)}
-        data-command="remove">
+        gradient={false}
+        border={true}
+        // onClick={() => closeTab(id)}
+      >
         <TimesIcon style={{ height: 14, fill: 'red' }} />
-      </Button>
+      </Btn>
     ]
   }
   //Non-Active Tabs only get a remove button on action bar for now.
   return (
-    <Button
+    <Btn
       title="Remove"
       data-id={id}
-      onClick={() => props.removeTab(url)}
-      data-command="remove">
+      onClick={() => removeTab(url)}
+      border={true}>
       <TimesIcon style={{ height: 14, fill: 'red' }} />
-    </Button>
+    </Btn>
   )
 }
+export default renderActionButtons

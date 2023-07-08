@@ -22,4 +22,7 @@ module.exports = {
       });
     },
   ],
+  corePlugins: {
+    preflight: false // <== disable this!
+  },
 };

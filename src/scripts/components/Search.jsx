@@ -1,21 +1,21 @@
-import {  Checkbox, Input, Popover } from "antd"
-import { debounce } from "lodash"
-import React, { useCallback, useEffect, useState } from "react"
-import { useDispatch, useSelector } from "react-redux"
-import ThumbtackActiveIcon from "react:/src/icons/thumbtack-active.svg"
-import ThumbtackIcon from "react:/src/icons/thumbtack.svg"
-import VolumeOffIcon from "react:/src/icons/volume-off.svg"
-import VolumeIcon from "react:/src/icons/volume.svg"
+import { Checkbox, Input, Popover } from 'antd'
+import { debounce } from 'lodash'
+import React, { memo, useCallback, useEffect, useState } from 'react'
+import { useDispatch, useSelector } from 'react-redux'
+import ThumbtackActiveIcon from 'react:/src/icons/thumbtack-active.svg'
+import ThumbtackIcon from 'react:/src/icons/thumbtack.svg'
+import VolumeOffIcon from 'react:/src/icons/volume-off.svg'
+import VolumeIcon from 'react:/src/icons/volume.svg'
 
-import ErrorBoundary from "/src/scripts/ErrorBoundary"
-import { makePlaceholder as doPlaceholder } from "/src/scripts/general"
+import ErrorBoundary from '/src/scripts/ErrorBoundary'
+import { makePlaceholder as doPlaceholder } from '/src/scripts/general'
 import {
   toggleAudible,
   togglePinned,
   toggleRegex,
   toggleSearchIn,
   updateSearchTerm
-} from "/src/scripts/searchSlice"
+} from '/src/scripts/searchSlice'
 
 const { Search: AntSearch } = Input
 
@@ -38,18 +38,18 @@ const Search = () => {
   }, [searchIn])
   useEffect(() => {}, [regex])
   useEffect(() => {
-    if (searchTerm === "") {
-      const inputSearch = document.getElementById("search-field")
-      inputSearch.value = ""
+    if (searchTerm === '') {
+      const inputSearch = document.getElementById('search-field')
+      inputSearch.value = ''
     }
   }, [searchTerm])
 
   const handleKeyUp = useCallback((event) => {
     const { value } = event.target
-    if (value === "" || event.key === "Escape") {
+    if (value === '' || event.key === 'Escape') {
       // @ts-ignore
-      searchField.current.input.value = ""
-      dispatch(updateSearchTerm(""))
+      searchField.current.input.value = ''
+      dispatch(updateSearchTerm(''))
       return
     }
   }, [])
@@ -78,8 +78,8 @@ const Search = () => {
         <label>
           <Checkbox
             checked={searchIn.title}
-            onChange={(e) => toggleSearchInHandle("title", e)}
-          />{" "}
+            onChange={(e) => toggleSearchInHandle('title', e)}
+          />{' '}
           Title
         </label>
       </p>
@@ -87,8 +87,8 @@ const Search = () => {
         <label>
           <Checkbox
             checked={searchIn.url}
-            onChange={(e) => toggleSearchInHandle("url", e)}
-          />{" "}
+            onChange={(e) => toggleSearchInHandle('url', e)}
+          />{' '}
           URL
         </label>
       </p>
@@ -113,14 +113,14 @@ const Search = () => {
           <>
             {searchTerm && (
               <span className="text-zinc-400">
-                {filteredTabs.length + " Tabs found... "}
+                {filteredTabs.length + ' Tabs found... '}
               </span>
             )}
             {regex && <span className="text-zinc-300 pr-3">/gi</span>}
-            <div className="flex ml-3">
+            <div className="flex align-items-center ml-3">
               <div className="mr-3">
-                <a
-                  className="!border-0"
+                <button
+                  className="!border-0 flex align-items-center"
                   title="Search audible only"
                   onClick={() => dispatch(toggleAudible())}>
                   {audibleSearch ? (
@@ -128,7 +128,7 @@ const Search = () => {
                   ) : (
                     <VolumeOffIcon className="fill-[#0487cf] h-[16px]" />
                   )}
-                </a>
+                </button>
               </div>
               <div className="mr-3">
                 <a
@@ -147,7 +147,7 @@ const Search = () => {
               <Checkbox
                 defaultChecked={regex}
                 onChange={() => dispatch(toggleRegex())}
-              />{" "}
+              />{' '}
               Regex
             </label>
             <Popover content={content}>
@@ -166,4 +166,4 @@ const Search = () => {
   )
 }
 
-export default Search
+export default memo(Search)

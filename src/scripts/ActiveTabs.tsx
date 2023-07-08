@@ -76,19 +76,12 @@ const ActiveTabs = () => {
     () => <Navigation tabCount={tabs.length} />,
     [tabs]
   )
-  const header = useMemo(
-    () => (
+  return (
+    <div className="flex flex-col h-[100vh]">
       <Header>
         <Navigation tabCount={tabs.length} />
         <Search />
       </Header>
-    ),
-    []
-  )
-  // const search  = useMemo(()=>(<Navigation tabCount={tabs.length} />),[])
-  return (
-    <div className="flex flex-col h-[100vh]">
-      {header}
       <CustomScroll
         heightRelativeToParent="100%"
         keepAtBottom={true}
@@ -96,8 +89,6 @@ const ActiveTabs = () => {
         class="flex-grow">
         <TabWindowWrapper />
       </CustomScroll>
-      {/* <Profiler id={"TabWindow:"} onRender={profilerCallback}>
-      </Profiler> */}
     </div>
   )
 }

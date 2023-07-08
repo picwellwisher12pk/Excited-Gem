@@ -1,5 +1,9 @@
 import { saveTabs, saveURLs } from './components/getsetSessions'
 
+
+
+
+
 export const HOMEPAGEURL = chrome.runtime.getURL('/tabs/home.html')
 let refinedTabs
 
@@ -50,14 +54,15 @@ export function removeKeys(keysToRemove, object) {
   }
   return tempObject
 }
+
 /**
  * [saveData description]
  * @param  {String/Object/Array} data    [description]
  * @param  {String} message [description]
  */
 export function saveData(data, message = 'Data saved') {
-  browser.storage.local.set(data, () => {
-    browser.notifications.create(
+  chrome.storage.local.set(data, () => {
+    chrome.notifications.create(
       'reminder',
       {
         type: 'basic',
@@ -97,6 +102,7 @@ Array.prototype.equals = (array) => {
   }
   return true
 }
+
 export function arraysAreIdentical(arr1, arr2) {
   if (arr1.length !== arr2.length) return false
   for (var i = 0, len = arr1.length; i < len; i++) {
@@ -256,12 +262,12 @@ export function removeClass(el, className) {
 }
 
 export function sortTabs(sortby, tabs) {
-  return new Promise((resolve, reject) => {
+  return new Promise((resolve) => {
     let tabsList = quicksort(sortby, tabs)
     log('after quicksort', tabsList)
     tabsList.forEach((tab, i) => {
       setTimeout(() => {
-        browser.tabs.move(tab.id, { index: i })
+        chrome.tabs.move(tab.id, { index: i })
       }, sortDelay)
       console.log('sorting: still moving')
     })
@@ -271,7 +277,7 @@ export function sortTabs(sortby, tabs) {
 
 /*function runQuery(query){
   let query = 'table#searchResult tbody td';
-  browser.runtime.sendMessage(query);
+  chrome.runtime.sendMessage(query);
   return query;
 }*/
 export function santizeTabs(tabs, ignoredUrlPatterns) {
@@ -329,7 +335,7 @@ export function santizeTabs(tabs, ignoredUrlPatterns) {
 //Pinned
 // const pinTab = (tabId) => {
 //   console.info("pinning");
-//   browser.tabs.update(tabId, {pinned: true});
+//   chrome.tabs.update(tabId, {pinned: true});
 //   getTabs().then(
 //     (tabs) => {
 //       setState({tabs});
@@ -339,7 +345,7 @@ export function santizeTabs(tabs, ignoredUrlPatterns) {
 // };
 // const unpinTab = (tabId) => {
 //   console.info("unpinning");
-//   browser.tabs.update(tabId, {pinned: false});
+//   chrome.tabs.update(tabId, {pinned: false});
 //   getTabs().then(
 //     (tabs) => {
 //       setState({tabs});
@@ -359,14 +365,14 @@ export function santizeTabs(tabs, ignoredUrlPatterns) {
 // }
 //Muted or Not
 // muteTab(id) {
-//   browser.tabs.update(parseInt(id), { muted: true });
+//   chrome.tabs.update(parseInt(id), { muted: true });
 // }
 // unmuteTab(id) {
-//   browser.tabs.update(parseInt(id), { muted: false });
+//   chrome.tabs.update(parseInt(id), { muted: false });
 // }
 // const toggleMute = (id) => {
-//   browser.tabs.get(id).then((tab) => {
-//     browser.tabs.update(parseInt(id), {muted: !tab.mutedInfo.muted});
+//   chrome.tabs.get(id).then((tab) => {
+//     chrome.tabs.update(parseInt(id), {muted: !tab.mutedInfo.muted});
 //   });
 //   props.updateActiveTabs();
 // };
@@ -401,13 +407,13 @@ export function processTabs(action, selection, state, setState) {
           'Are you sure you want to close all the tabs? This will also close this window.')
       const userPermission = confirm(message)
       if (!userPermission) return false
-      browser.tabs.remove(selection)
+      chrome.tabs.remove(selection)
       setState()
       break
     case 'toNewWindow':
-      let targetWindow = browser.windows.create()
+      let targetWindow = chrome.windows.create()
       targetWindow.then((windowInfo) => {
-        browser.tabs.move(selection, { windowId: windowInfo.id, index: 0 })
+        chrome.tabs.move(selection, { windowId: windowInfo.id, index: 0 })
       })
       break
     case 'toSession':
@@ -427,15 +433,15 @@ export function processTabs(action, selection, state, setState) {
       break
     case 'pinSelected':
       for (let tabId of selection)
-        browser.tabs.update(parseInt(tabId), { pinned: true })
+        chrome.tabs.update(parseInt(tabId), { pinned: true })
       break
     case 'unpinSelected':
       for (let tabId of selection)
-        browser.tabs.update(parseInt(tabId), { pinned: false })
+        chrome.tabs.update(parseInt(tabId), { pinned: false })
       break
     case 'togglePinSelected':
       for (let tabId of selection)
-        browser.tabs.update(parseInt(tabId), {
+        chrome.tabs.update(parseInt(tabId), {
           pinned: !selectedTabs[tabId].pinned ? true : false
         })
       break
@@ -443,15 +449,15 @@ export function processTabs(action, selection, state, setState) {
     //Mute
     case 'muteSelected':
       for (let tabId of selection)
-        browser.tabs.update(parseInt(tabId), { muted: true })
+        chrome.tabs.update(parseInt(tabId), { muted: true })
       break
     case 'unmuteSelected':
       for (let tabId of selection)
-        browser.tabs.update(parseInt(tabId), { muted: false })
+        chrome.tabs.update(parseInt(tabId), { muted: false })
       break
     case 'toggleMuteSelected':
       for (let tabId of selection)
-        browser.tabs.update(parseInt(tabId), {
+        chrome.tabs.update(parseInt(tabId), {
           muted: !selectedTabs[tabId].mutedInfo.muted ? true : false
         })
       break
@@ -481,11 +487,11 @@ export function processTabs(action, selection, state, setState) {
 }
 
 // setPreferences(prefSection, key, value) {
-//   browser.storage.local.get('preferences').then(result => {
+//   chrome.storage.local.get('preferences').then(result => {
 //     let jsonObj = result;
 //     jsonObj['preferences'][prefSection][key] = value;
-//     browser.storage.local.set(jsonObj).then(() => {
-//       browser.notifications.create(
+//     chrome.storage.local.set(jsonObj).then(() => {
+//       chrome.notifications.create(
 //         'reminder',
 //         {
 //           type: 'basic',
@@ -669,4 +675,15 @@ export const makePlaceholder = (searchIn, regex = false) => {
   placeholder += searchIn.title && searchIn.url ? ' and ' : ''
   placeholder += searchIn.url ? 'URLs' : ''
   return regex ? `/ ${placeholder} /gi` : placeholder
+}
+
+export function getCurrentWindow() {
+  return chrome.windows.getCurrent({ populate: true })
+}
+
+export function getAllWindows() {
+  return chrome.windows.getAll({
+    populate: true,
+    windowTypes: ['normal']
+  })
 }

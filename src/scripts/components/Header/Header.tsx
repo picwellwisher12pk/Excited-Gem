@@ -1,43 +1,35 @@
-import { LoadingOutlined } from '@ant-design/icons'
-import { Button, Checkbox, Dropdown, Menu, Select, Space } from 'antd'
+import { DownOutlined } from '@ant-design/icons'
+import { Button, Dropdown, Menu, Select, Space } from 'antd'
 import { memo, useCallback, useEffect, useMemo, useRef, useState } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 import SyncAltIcon from 'react:/src/icons/sync-alt.svg'
 import ThumbtackIcon from 'react:/src/icons/thumbtack-active.svg'
 import VolumeSlashIcon from 'react:/src/icons/volume-mute.svg'
 
-import { processTabs, sortTabs } from '../../general'
-import {
-  clearSelectedTabs,
-  invertSelectedTabs,
-  selectAllTabs
-} from '../../tabSlice.js'
+import { processTabs } from '../../general'
+import { clearSelectedTabs } from '../../tabSlice.js'
 import { MoveModal } from '../Modals/Move.jsx'
 import { SaveModal } from '../Modals/Save.jsx'
 import WindowSelector from '../WindowSelector.jsx'
 import Brand from './Brand.jsx'
 import MenuItemButton from './MenuItemButton.tsx'
+import Selection from './Selection'
 import SortButton from './SortButton'
 //Images
 // @ts-ignore
 import logo from '/public/logo.png'
+import Btn from '../Btn'
 
-// import TimesIcon from "react:~/icons/times.svg"
-// import VolumeOffIcon from "react:~/icons/volume-off.svg"
-// import VolumeIcon from "react:~/icons/volume.svg"
 
-export function getCurrentWindow() {
-  return chrome.windows.getCurrent({ populate: true })
-}
 
-export function getAllWindows() {
-  return chrome.windows.getAll({
-    populate: true,
-    windowTypes: ['normal']
-  })
-}
+
 
 const { Option } = Select
+import TimesIcon from "react:/src/icons/xmark-solid.svg"
+import MoveIcon from "react:/src/icons/up-down-left-right-solid.svg"
+import VolumeOffIcon from "react:/src/icons/volume-off.svg"
+import VolumeIcon from "react:/src/icons/volume.svg"
+import SaveIcon from "react:/src/icons/floppy-disk-solid.svg"
 
 function useTraceUpdate(props) {
   const prev = useRef(props)
@@ -54,6 +46,7 @@ function useTraceUpdate(props) {
     prev.current = props
   })
 }
+
 type actionType = string
 type action = string
 
@@ -77,22 +70,33 @@ const Header = (props) => {
   const [currentWindow, setCurrentWindow] = useState({})
   const [moveModalVisible, setMoveModalVisible] = useState(false)
   const [saveModalVisible, setSaveModalVisible] = useState(false)
-  // async function getWindows() {
-  //   setAllWindows(await getAllWindows())
-  //   setCurrentWindow(await getCurrentWindow())
-  // }
-  // useEffect(() => {
-  //   getWindows()
-  // }, [])
 
-  let iconPinned = props.allPinned && (
+  async function getWindows() {
+    setAllWindows(await getAllWindows())
+    setCurrentWindow(await getCurrentWindow())
+  }
+
+  useEffect(() => {
+    getWindows()
+  }, [])
+
+  const iconPinned = props.allPinned && (
     <ThumbtackIcon style={{ height: 16, fill: 'white' }} />
   )
-  let iconSound = <VolumeSlashIcon style={{ height: 16 }} />
+  const iconSound = <VolumeSlashIcon style={{ height: 16 }} />
 
-  chrome.windows.getCurrent({ populate: true }).then((window) => {
-    setCurrentWindow(window)
-  })
+  // chrome.windows.getCurrent({ populate: true }).then((window) => {
+  //   setCurrentWindow(window)
+  // })
+
+  //Event Handlers
+
+  const handlePinning = useCallback((e) => {
+    console.log('pinning', e, e.target)
+  }, [])
+  const handleMuting = useCallback((e) => {
+    console.log('muting', e)
+  }, [])
 
   const handlePin = useCallback(
     (option, selectedTabs, tabs) => {
@@ -109,82 +113,36 @@ const Header = (props) => {
   const sortButton = useMemo(() => <SortButton tabs={tabs} />, [])
   const pinOptions: Item[] = pinActions.map((option, i) => ({
     key: i,
-    label: (
-      <MenuItemButton
-        option={option}
-        callback={() => handlePin(option, selectedTabs, tabs)}
-      />
-    )
+    label: <MenuItemButton label={option} callback={handlePinning} />
   }))
-  const muteOptions: Item[] = pinActions.map((option, i) => ({
+  const muteOptions: Item[] = muteActions.map((option, i) => ({
     key: i,
-    label: (
-      <MenuItemButton
-        option={option}
-        callback={() => handleMute(option, selectedTabs, tabs)}
-      />
-    )
+    label: <MenuItemButton label={option} callback={handleMuting} />
   }))
   const pinMenu = <Menu items={pinOptions} />
   const muteMenu = <Menu items={muteOptions} />
+  // const muteBtnStyle = "!border-0 !shadow-md !hover:shadow-sm !bg-gradient-to-b !from-white !to-slate-200 ml-2"
 
-  useTraceUpdate(props)
   return (
-    <header
-      className="bg-gradient-to-t from-cyan-500 to-blue-500 p-2 transition-all duration-200 ease-in-out"
-      key={'header'}>
-      <div className="flex">
+    <header className="bg-gradient-to-t from-cyan-500 to-blue-500 p-2 transition-all duration-200 ease-in-out">
+      <section className="flex">
         {Brand(logo)}
         {props?.children}
-      </div>
+      </section>
       <section
         className="flex flex-row justify-between items-center mt-1"
         id="selection-action">
-        <ul className="flex mb-0">
-          <li className="mr-3">
-            <div className="flex shadow-md">
-              <span
-                className="bg-zinc-200 px-2 !rounded-l-md text-black select-none"
-                title="Un/Select only filtered or visible tabs">
-                <Checkbox
-                  onChange={() => {
-                    console.log(selectedTabs.length, filteredTabs.length)
-                    if (selectedTabs.length < filteredTabs.length)
-                      dispatch(selectAllTabs())
-                    if (selectedTabs.length === filteredTabs.length) {
-                      console.log('clearing selected tabs')
-                      dispatch(clearSelectedTabs())
-                    }
-                  }}
-                  indeterminate={
-                    selectedTabs.length > 0 &&
-                    selectedTabs.length < filteredTabs.length
-                  }
-                  checked={selectedTabs.length === filteredTabs.length}
-                />
-              </span>
-              <Button
-                size={'small'}
-                className="!px-2 !border-0 !rounded-l-none !bg-gradient-to-b !from-white !to-slate-200  transition"
-                title="Invert Selection"
-                onClick={() => dispatch(invertSelectedTabs())}>
-                Invert
-              </Button>
-            </div>
-          </li>
-          <li>{sortButton}</li>
-          <li>
-            {allWindows.length > 1 && (
-              <WindowSelector
-                key={'windowSelector'}
-                allWindows={allWindows}
-                currentWindow={currentWindow}
-              />
-            )}
-          </li>
-        </ul>
+        <div className="flex mb-0">
+          <div className="mr-3">
+            <Selection />
+          </div>
+          <div>{sortButton}</div>
+          <div>
+            <WindowSelector />
+          </div>
+        </div>
         {selectedTabs.length > 0 && (
-          <section className={`flex text-white`}>
+          <Space >
             {/* <Select defaultValue={"selected"} className="!border-0 !mr-2">
                 <Option value="selected">With selected</Option>
                 <Option value="filtered">With Filtered</Option>
@@ -193,71 +151,66 @@ const Header = (props) => {
               With Selected ({selectedTabs.length})
             </span>
             <div>
-              <Dropdown overlay={pinMenu} arrow={true}>
-                <Button
-                  size={'small'}
-                  // onClick={(e) => e.preventDefault()}
-                  className=" !px-2 !border-0 !bg-gradient-to-b !from-white !to-slate-200  !hover:text-black !transition mr-2">
-                  {/* <ThumbtackIcon
+              <Dropdown menu={pinMenu} trigger={['click']}>
+                <Btn
+                  onClick={(e) => e.preventDefault()}
+                >
+                  <ThumbtackIcon
                     style={{ height: 12 }}
                     className="fill-inherit"
-                  /> */}
-                  Un/Pin <small style={{ fontSize: 8 }}>▼</small>
-                </Button>
+                  />
+                  <span>Un/Pin</span>
+                  <DownOutlined className="text-zinc-500" />
+                </Btn>
               </Dropdown>
             </div>
             <div>
-              <Dropdown overlay={muteMenu} arrow={true}>
-                <Button
-                  size={'small'}
-                  className="!px-2 !border-0 mr-2 !bg-gradient-to-b !from-white !to-slate-200 !hover:to-white  !hover:text-black !transition">
-                  {/* <VolumeIcon style={{ height: 12 }} className="fill-inherit" /> */}
-                  Un/Mute <small style={{ fontSize: 8 }}>▼</small>
-                </Button>
+              <Dropdown menu={muteMenu} trigger={['click']}>
+                <Btn >
+                  <VolumeIcon style={{ height: 12 }} className="fill-inherit" />
+                  <span>Un/Mute</span>
+                  <DownOutlined className="text-zinc-500" />
+                </Btn>
               </Dropdown>
             </div>
             <div>
-              <Button
-                size={'small'}
-                className="!px-2 !border-0 mr-2 !bg-gradient-to-b !from-white !to-slate-200 !hover:to-white  !hover:text-black !transition "
+              <Btn
                 onClick={() => {
                   setSaveModalVisible(true)
                 }}>
-                {/* <SaveIcon
+                <SaveIcon
                   style={{ height: 12, width: 14 }}
                   className="inline"
-                /> */}
+                />
                 <span> Save ...</span>
-              </Button>
+              </Btn>
             </div>
 
             <div>
-              <Button
-                size={'small'}
+              <Btn
                 title="Move Selected Tabs"
                 onClick={() => {
                   setMoveModalVisible(true)
                 }}
-                className="!px-2 !border-0 !bg-gradient-to-b !from-white !to-slate-200  !hover:text-black !transition mr-2 ">
-                {/* <TimesIcon style={{ height: 14, width: 14, fill: "red" }} /> */}
+              >
+                <MoveIcon style={{ height: 14 }} />
                 <Space>
                   <span>Move ...</span>
                 </Space>
-              </Button>
+              </Btn>
             </div>
             <div>
-              <Button
-                size={'small'}
+              <Btn
                 title="Close Selected"
                 onClick={() => {
                   processTabs('closeSelected', selectedTabs, tabs, () => {
                     dispatch(clearSelectedTabs())
                   })
                 }}
-                className="!px-2 !border-0 !bg-gradient-to-b !from-white !to-slate-200  !hover:text-black !transition mr-2 !text-red-600 ">
-                {/* <TimesIcon style={{ height: 14, width: 14, fill: "red" }} /> */}
+              >
+                <TimesIcon style={{ height: 14, width: 14, fill: "red" }} />
                 <span> Close</span>
-              </Button>
+              </Btn>
             </div>
             <div className={'input-group-append'}>
               {/* <button
@@ -267,27 +220,21 @@ const Header = (props) => {
                 <FA icon={faShareSquare} />
               </button> */}
             </div>
-          </section>
+          </Space>
         )}
-        <ul className="flex mb-0 mr-1">
-          <li>
-            <Button
-              size={'small'}
-              className="!border-0 !shadow-md !hover:shadow-sm !bg-gradient-to-b !from-white !to-slate-200 flex justify-center items-center"
-              title="Refresh View"
-              onClick={() => {
-                // updateTabs();
-                // this.setState({ tabs: props.tabs });
-              }}
-              style={{ minWidth: 33 }}>
-              <SyncAltIcon style={{ height: 14 }} />
-            </Button>
-          </li>
+        <Space className="mr-1">
+          <Btn
+            title="Refresh View"
+            onClick={() => {
+              // updateTabs();
+              // this.setState({ tabs: props.tabs });
+            }}
+            style={{ minWidth: 33 }}>
+            <SyncAltIcon style={{ height: 14 }} />
+          </Btn>
 
-          <li>
-            <Button
-              size={'small'}
-              className="!border-0 !shadow-md !hover:shadow-sm !bg-gradient-to-b !from-white !to-slate-200 ml-2"
+          <div>
+            <Btn
               onClick={() => {
                 props.processSelectedTabs(
                   !props.allMuted ? 'muteSelected' : 'unmuteSelected'
@@ -301,9 +248,9 @@ const Header = (props) => {
                   : `Unmute All Visible Tabs`
               }>
               {iconSound}
-            </Button>
-          </li>
-        </ul>
+            </Btn>
+          </div>
+        </Space>
       </section>
       {moveModalVisible && (
         <MoveModal
@@ -325,4 +272,4 @@ const Header = (props) => {
   )
 }
 
-export default Header
+export default memo(Header)

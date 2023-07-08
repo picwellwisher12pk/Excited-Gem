@@ -1,9 +1,9 @@
-import { Segmented } from "antd"
-import { Button, Modal, Radio } from "antd"
-import React, { useState } from "react"
+import { Segmented } from 'antd'
+import { Button, Modal, Radio } from 'antd'
+import React, { useState } from 'react'
 
 export const MoveModal = (props) => {
-  const options = ["Current Windows", "New Window", "To End", "To Start"]
+  const options = ['Current Windows', 'New Window', 'To End', 'To Start']
   const [type, setType] = useState(options[0])
   const [windowId, setWindowId] = useState(props.currentWindow.id)
   const [position, setPosition] = useState(0)
@@ -14,7 +14,7 @@ export const MoveModal = (props) => {
   }
   function makeMoveTypeUI(type) {
     switch (type) {
-      case "Current Windows":
+      case 'Current Windows':
         return (
           <Radio.Group onChange={({ target }) => setWindowId(target.value)}>
             <div className="flex flex-col">
@@ -22,8 +22,8 @@ export const MoveModal = (props) => {
                 <Radio
                   value={window.id}
                   disabled={window.id === props.currentWindow.id && true}>
-                  {window.id === props.currentWindow.id && "Current"} Window
-                  {i + 1}{" "}
+                  {window.id === props.currentWindow.id && 'Current'} Window
+                  {i + 1}{' '}
                   <small className="text-orange-500">
                     ({window.tabs.length} tabs)
                   </small>
@@ -33,21 +33,21 @@ export const MoveModal = (props) => {
             </div>
           </Radio.Group>
         )
-      case "New Window":
+      case 'New Window':
         return (
           <>
             <p>This will move your selected tabs to new window.</p>
             <strong className="text-cyan-500">Hit OK to continue!</strong>
           </>
         )
-      case "To End":
+      case 'To End':
         return (
           <>
             <p>This will move your selected tabs to end of current window.</p>
             <strong className="text-cyan-500">Hit OK to continue!</strong>
           </>
         )
-      case "To Start":
+      case 'To Start':
         return (
           <>
             <p>This will move your selected tabs to start of current window.</p>
@@ -62,9 +62,9 @@ export const MoveModal = (props) => {
       visible={true}
       onOk={() => {
         switch (type) {
-          case "Current Windows":
+          case 'Current Windows':
             if (windowId === props.currentWindow.id) {
-              alert("Select some window to move to")
+              alert('Select some window to move to')
               return false
             }
             Browser.tabs
@@ -78,7 +78,7 @@ export const MoveModal = (props) => {
               })
             return
 
-          case "New Window":
+          case 'New Window':
             Browser.windows.create().then((window) => {
               Browser.tabs
                 .move(props.selectedTabs, { windowId: window.id, index: 0 })
@@ -88,7 +88,7 @@ export const MoveModal = (props) => {
                 })
             })
             return
-          case "To End":
+          case 'To End':
             Browser.tabs
               .move(props.selectedTabs, {
                 windowId: props.currentWindow.id,
@@ -100,7 +100,7 @@ export const MoveModal = (props) => {
               })
             return
 
-          case "To Start":
+          case 'To Start':
             Browser.tabs
               .move(props.selectedTabs, {
                 windowId: props.currentWindow.id,

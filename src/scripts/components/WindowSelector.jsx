@@ -97,6 +97,8 @@ export default function WindowSelector() {
       loading={loading}
       style={{ width: 200 }}
       size={'small'}
+      bordered={false}
+      showArrow={true}
       defaultValue={{
         label: (
           <span className={`flex justify-between align-items-center btn-link`}>
@@ -126,7 +128,7 @@ export default function WindowSelector() {
         ),
         value: currentWindow.id
       }}
-      className="!border-0 shadow-md !rounded-[2px] !bg-gradient-to-b !from-white !to-slate-200"
+      className="!border-0 shadow-md hover:shadow-sm active:shadow-none rounded-sm !bg-gradient-to-b !from-white !to-slate-200"
       onSelect={setWindow}>
       {[optionAll, ...options]}
     </Select>

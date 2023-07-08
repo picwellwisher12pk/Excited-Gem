@@ -1,23 +1,20 @@
-import React, { useCallback, useEffect, useLayoutEffect, useState } from "react"
-import ContentLoader from "react-content-loader"
-import { DndProvider } from "react-dnd"
-import { HTML5Backend } from "react-dnd-html5-backend"
-import { useDispatch, useSelector } from "react-redux"
+import { List } from 'antd'
+import React, { useCallback, useEffect, useLayoutEffect, useState } from 'react'
+import ContentLoader from 'react-content-loader'
+import { DndProvider } from 'react-dnd'
+import { HTML5Backend } from 'react-dnd-html5-backend'
+import { useDispatch, useSelector } from 'react-redux'
 
-import Tab from "./components/Tab"
-import { asyncFilterTabs } from "./general.js"
-import { updateFilteredTabs } from "./tabSlice"
-
-
-
-
+import Tab from './components/Tab'
+import { asyncFilterTabs } from './general.js'
+import { updateFilteredTabs } from './tabSlice'
 
 const MyLoader = (props) => (
   <ContentLoader
     speed={1}
     width={props.width}
     height={500}
-    viewBox={"0 0 " + props.width + " 500"}
+    viewBox={'0 0 ' + props.width + ' 500'}
     backgroundColor="#e3e3e3"
     foregroundColor="#ecebeb"
     {...props}>
@@ -82,7 +79,7 @@ const TabWindowWrapper = React.memo(() => {
   })
   useEffect(() => {
     if (
-      searchObject.searchTerm === "" &&
+      searchObject.searchTerm === '' &&
       !searchObject.audibleSearch &&
       !searchObject.pinnedSearch
     ) {
@@ -125,7 +122,7 @@ const TabWindowWrapper = React.memo(() => {
     <div className="tabs-list-container">
       <React.Suspense fallback={<h1>Loading profile...</h1>}>
         <DndProvider backend={HTML5Backend}>
-          <ul className="tab tabs-list sortable selectable" id={"droppableUL"}>
+          <List id={'droppableUL'}>
             {filteredTabs?.map((tab) => (
               <Tab
                 {...tab}
@@ -140,7 +137,7 @@ const TabWindowWrapper = React.memo(() => {
                 toggleMuteTab={toggleMuteTab}
               />
             ))}
-          </ul>
+          </List>
         </DndProvider>
       </React.Suspense>
     </div>

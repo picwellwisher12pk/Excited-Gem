@@ -1,4 +1,4 @@
-import { preferences } from "~/scripts/defaultPreferences"
+import { preferences } from '~/scripts/defaultPreferences'
 
 // import { HOMEPAGEURL } from "~/scripts/general"
 
@@ -8,7 +8,7 @@ export function getCurrentWindow() {
 export function getAllWindows() {
   return chrome.windows.getAll({
     populate: true,
-    windowTypes: ["normal"]
+    windowTypes: ['normal']
   })
 }
 /**
@@ -44,10 +44,10 @@ export function getAllWindows() {
 //   return chrome.tabs.query({})
 // }
 
-export function getTabs(selectedWindow = "current") {
-  if (selectedWindow === "current")
+export function getTabs(selectedWindow = 'current') {
+  if (selectedWindow === 'current')
     return chrome.tabs.query({ currentWindow: true })
-  if (selectedWindow === "all") return chrome.tabs.query({})
+  if (selectedWindow === 'all') return chrome.tabs.query({})
   else {
     chrome.tabs.query({ windowId: selectedWindow })
   }
@@ -76,7 +76,7 @@ export function getTabs(selectedWindow = "current") {
 export function setBadge(length) {
   chrome.action.setBadgeText({ text: length.toString() })
   chrome.action.setBadgeBackgroundColor({
-    color: length <= 50 ? "green" : "orange"
+    color: length <= 50 ? 'green' : 'orange'
   })
 }
 

@@ -7,28 +7,29 @@ import Loading from 'react:/src/icons/spinner-third.svg'
 
 
 
-export function TabIcon(props: {
-  onChange: () => any
-  checked: any
-  loading: boolean
-  src: any
-  title: any
+export function TabIcon({ onChange, checked, loading, src, title }: {
+  onChange: () => void;
+  checked: boolean;
+  loading: boolean;
+  src: string;
+  title: string;
 }) {
   return (
     <div
       className="tab-favicon align-self-center flex px-2 items-center min-w-[56px]"
       aria-label="favicon">
       <Checkbox
-        onChange={props.onChange}
+        onChange={onChange}
         className="!mr-2"
-        checked={props.checked}
+        checked={checked}
       />
-      {props.loading ? (
+      {loading ? (
         <Loading className={'spinner'} style={{ fill: 'blue' }} />
       ) : (
         <img
-          src={props.src}
-          title={props.src && props.title}
+          src={src || 'default-src-value'}
+          alt={title}
+          title={src && title}
           style={{ width: 16, height: 16 }}
         />
       )}

@@ -1,38 +1,36 @@
-import { Badge } from "antd";
-import React,{memo} from "react";
+import { Badge } from 'antd'
+import React, { memo } from 'react'
 
-const  Navigation = ({ tabCount }) =>{
+const Navigation = ({ tabCount }) => {
   console.log('navigation')
   return (
     <div className="flex flex-grow" id="navbarNav">
-      <ul className="flex justify-start w-full mb-0">
-        <li className="px-4 py-3">
+      <div className="flex justify-start w-fdivl mb-0">
+        <div className="px-4 py-3">
           <Badge
             overflowCount={999}
             offset={[5, -3]}
             count={tabCount}
-            color={tabCount > 50 ? "orange" : "green "}
+            color={tabCount > 50 ? 'orange' : 'green '}
             size="small"
-            className="!border-0"
-          >
+            className="!border-0">
             <a
               className=" text-white font-weight-bold"
               href="/tabs.html"
-              id="go-to-tabs"
-            >
+              id="go-to-tabs">
               Tabs
               <span className="sr-only">(current)</span>
             </a>
           </Badge>
-        </li>
-        <li className="px-4 py-3">
+        </div>
+        <div className="px-4 py-3">
           <a className=" text-white" href="/sessions.html">
             Sessions
           </a>
-        </li>
-      </ul>
+        </div>
+      </div>
     </div>
-  );
+  )
 }
 
-export default Navigation;
+export default memo(Navigation)

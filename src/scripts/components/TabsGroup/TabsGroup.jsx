@@ -1,8 +1,10 @@
+import { List } from 'antd'
+
 const TabsGroup = (props) => {
   return (
-    <ul className="tab tabs-list sortable selectable" id={"droppableUL"}>
+    <List className="tab tabs-list sortable selectable" id={'droppableDIV'}>
       {props.children}
-    </ul>
+    </List>
   )
 }
 export default TabsGroup

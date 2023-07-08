@@ -1,7 +1,9 @@
-import { useRef } from 'react'
+import { TabProps } from 'types';
+import { List } from 'antd';
+import React, { useCallback, useMemo, useRef } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
-
-import { markSearchedTerm, renderActionButtons } from './helpers'
+import ReactHTMLParser from 'react-html-parser'
+import renderActionButtons, { markSearchedTerm } from './helpers'
 // import Grip from "/src/icons/grip-lines-vertical.svg";
 // @ts-ignore
 import { IconPinned } from '/src/scripts/components/Tab/IconPinned'
@@ -13,31 +15,68 @@ import {
 import { updateSelectedTabs } from '/src/scripts/tabSlice'
 
 
+type TabProps = {
+  id: number;
+  title: string;
+  url: string;
+  selected: boolean;
+  pinned: boolean;
+  discarded: boolean;
+  status: string;
+  audible: boolean;
+  muted: boolean;
+  mutedInfo: any;
+  favIconUrl: string;
+};
 
 
 
-const Tab = (props) => {
-  const dispatch = useDispatch()
-  // @ts-ignore
-  const { searchTerm, searchIn } = useSelector((state) => state.search)
-  const { title, url, selected, pinned, discarded } = props
-  const refTab: React.MutableRefObject<any> = useRef(null)
+const Tab = ({
+  id,
+  selected,
+  status,
+  audible,
+  muted,
+  mutedInfo,
+  pinned,
+  discarded,
+  favIconUrl,
+  title,
+  url
+}: TabProps) => {
+  const dispatch = useDispatch();
+  const { searchTerm, searchIn } = useSelector((state) => state.search);
+  const refTab = useRef<HTMLLIElement>(null);
 
-  //React DND clause
-  const [{ handlerId }, drop] = getUseDrop(refTab, props)
-  const [{ isDragging }, drag] = getUseDrag(props)
-  drag(drop(refTab))
+  const handleSelectedTabsUpdate = useCallback(() => {
+    dispatch(
+      updateSelectedTabs({
+        id,
+        selected: !selected
+      })
+    );
+  }, [dispatch, id, selected]);
 
-  const loading: boolean = props.status === 'loading'
-  const audible: boolean = props.audible || props.muted
-  const opacity: 0 | 1 = isDragging ? 0 : 1
-  let iconPinned: React.JSX.Element = IconPinned(pinned)
+  const handleTabClick = () => {
+    chrome.tabs.update(id, { active: true });
+  };
 
+  const markedTitle = useMemo(() => searchIn.title ? markSearchedTerm(title, searchTerm) : title, [searchIn.title, title, searchTerm]);
+  const markedUrl = useMemo(() => searchIn.url ? markSearchedTerm(url, searchTerm) : url, [searchIn.url, url, searchTerm]);
+
+  const [{ handlerId }, drop] = getUseDrop(refTab, { id, selected, pinned, discarded });
+  const [{ isDragging }, drag] = getUseDrag({ id, selected, pinned, discarded });
+  drag(drop(refTab));
+
+  const loading = status === 'loading';
+  const isAudible = audible || muted;
+  const opacity: 0 | 1 = isDragging ? 0 : 1;
+  const iconPinned = useMemo(() => IconPinned(pinned), [pinned]);
   return (
-    <li
+    <List.Item
       ref={refTab}
-      key={props.id}
-      id={props.id}
+      key={id}
+      id={id}
       className={
         `overflow-hidden tab-item flex py-2 hover:bg-slate-200 transition-colors duration-300 border-b-stone-100 border` +
         (selected ? ' checked bg-slate-100' : ' ') +
@@ -46,48 +85,40 @@ const Tab = (props) => {
       style={{ opacity }}
       data-discarded={discarded}
       data-handler-id={handlerId}
-      data-muted={props.mutedInfo.muted}
-      data-audible={props.audible}
-      data-pinned={props.pinned}
-      draggable={true}>
+      data-muted={mutedInfo.muted}
+      data-audible={audible}
+      data-pinned={pinned}
+      draggable={true}
+    >
       <TabIcon
-        onChange={() =>
-          dispatch(
-            updateSelectedTabs({
-              id: props.id,
-              selected: !props.selected
-            })
-          )
-        }
+        onChange={handleSelectedTabsUpdate}
         checked={selected}
         loading={loading}
-        src={props.favIconUrl}
+        src={favIconUrl}
         title={title}
       />
       <span
         className={`whitespace-nowrap clip font-bold align-self-center pr-2`}
-        style={{
-          opacity: discarded || loading ? 0.5 : 1
-        }}
-        dangerouslySetInnerHTML={{
-          __html: searchIn.title ? markSearchedTerm(title, searchTerm) : title
-        }}
-        title={props.url}
-      />
+        style={{ opacity: discarded || loading ? 0.5 : 1 }}
+        title={url}
+      >
+        {ReactHTMLParser(markedTitle)}
+      </span>
       <span
         className="cursor-pointer whitespace-nowrap tab-url flex-grow truncate  text-zinc-400 align-self-center"
-        dangerouslySetInnerHTML={{
-          __html: searchIn.url ? markSearchedTerm(url, searchTerm) : url
-        }}
-        onClick={() => chrome.tabs.update(props.id, { active: true })}
-      />
+        onClick={handleTabClick}
+      >
+        {ReactHTMLParser(markedUrl)}
+      </span>
       <div
         className="tab-actions flex align-self-center justify-self-end mx-3"
         style={{ gap: 8 }}
-        aria-label="options">
-        {renderActionButtons(props, pinned, iconPinned, audible)}
+        aria-label="options"
+      >
+        {renderActionButtons({ id, selected, activeTab: true, pinned, discarded, pinned, iconPinned, isAudible })}
       </div>
-    </li>
-  )
-}
+    </List.Item>
+  );
+};
+
 export default Tab
