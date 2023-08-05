@@ -1,38 +1,47 @@
-import { TabProps } from 'types';
-import { List } from 'antd';
+import { List } from 'antd'
+import parse from 'html-react-parser'
 import React, { useCallback, useMemo, useRef } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
-import ReactHTMLParser from 'react-html-parser'
-import renderActionButtons, { markSearchedTerm } from './helpers'
+// @ts-ignore
+import TimesIcon from 'react:/src/icons/times.svg'
+
+import { updateSelectedTabs } from '../../tabSlice'
+import ItemBtn from '../ItemBtn'
+import { TabIcon } from './TabIcon'
+import { getUseDrag, getUseDrop } from './dnd-reducers'
+import { markSearchedTerm, renderAudioIcon } from './helpers'
 // import Grip from "/src/icons/grip-lines-vertical.svg";
 // @ts-ignore
 import { IconPinned } from '/src/scripts/components/Tab/IconPinned'
-import { TabIcon } from '/src/scripts/components/Tab/TabIcon'
-import {
-  getUseDrag,
-  getUseDrop
-} from '/src/scripts/components/Tab/dnd-reducers'
-import { updateSelectedTabs } from '/src/scripts/tabSlice'
+
+
+
 
 
 type TabProps = {
-  id: number;
-  title: string;
-  url: string;
-  selected: boolean;
-  pinned: boolean;
-  discarded: boolean;
-  status: string;
-  audible: boolean;
-  muted: boolean;
-  mutedInfo: any;
-  favIconUrl: string;
-};
-
-
+  id: number
+  title: string
+  url: string
+  selected: boolean
+  pinned: boolean
+  discarded: boolean
+  status: string
+  audible: boolean
+  muted: boolean
+  mutedInfo: any
+  favIconUrl: string
+  activeTab: boolean
+  remove: (id: number) => {}
+  toggleMuteTab: (id: number, audible: boolean) => {}
+  togglePinTab: (id: number) => {}
+}
 
 const Tab = ({
   id,
+  activeTab,
+  remove,
+  toggleMuteTab,
+  togglePinTab,
   selected,
   status,
   audible,
@@ -44,9 +53,9 @@ const Tab = ({
   title,
   url
 }: TabProps) => {
-  const dispatch = useDispatch();
-  const { searchTerm, searchIn } = useSelector((state) => state.search);
-  const refTab = useRef<HTMLLIElement>(null);
+  const dispatch = useDispatch()
+  const { searchTerm, searchIn } = useSelector(({ search }) => search)
+  const refTab = useRef<HTMLLIElement>(null)
 
   const handleSelectedTabsUpdate = useCallback(() => {
     dispatch(
@@ -54,29 +63,45 @@ const Tab = ({
         id,
         selected: !selected
       })
-    );
-  }, [dispatch, id, selected]);
+    )
+  }, [dispatch, id, selected])
 
   const handleTabClick = () => {
-    chrome.tabs.update(id, { active: true });
-  };
+    chrome.tabs.update(id, { active: true })
+  }
 
-  const markedTitle = useMemo(() => searchIn.title ? markSearchedTerm(title, searchTerm) : title, [searchIn.title, title, searchTerm]);
-  const markedUrl = useMemo(() => searchIn.url ? markSearchedTerm(url, searchTerm) : url, [searchIn.url, url, searchTerm]);
+  const markedTitle = useMemo(
+    () => (searchIn.title ? markSearchedTerm(title, searchTerm) : title),
+    [searchIn.title, title, searchTerm]
+  )
+  const markedUrl = useMemo(
+    () => (searchIn.url ? markSearchedTerm(url, searchTerm) : url),
+    [searchIn.url, url, searchTerm]
+  )
 
-  const [{ handlerId }, drop] = getUseDrop(refTab, { id, selected, pinned, discarded });
-  const [{ isDragging }, drag] = getUseDrag({ id, selected, pinned, discarded });
-  drag(drop(refTab));
+  const [{ handlerId }, drop] = getUseDrop(refTab, {
+    id,
+    selected,
+    pinned,
+    discarded
+  })
+  const [{ isDragging }, drag] = getUseDrag({ id, selected, pinned, discarded })
+  drag(drop(refTab))
 
-  const loading = status === 'loading';
-  const isAudible = audible || muted;
-  const opacity: 0 | 1 = isDragging ? 0 : 1;
-  const iconPinned = useMemo(() => IconPinned(pinned), [pinned]);
+  const loading = status === 'loading'
+  const isAudible = audible || muted
+  const opacity: 0 | 1 = isDragging ? 0 : 1
+  const iconPinned = useMemo(() => IconPinned(pinned), [pinned])
+  const handlePinTab = useCallback(() => {
+    togglePinTab(id, pinned), [id]
+  })
+  const handleMuteTab = () => { toggleMuteTab(id, mutedInfo.muted) }
+  const handleRemove = useCallback(() => remove(id), [id])
   return (
     <List.Item
       ref={refTab}
       key={id}
-      id={id}
+      id={String(id)}
       className={
         `overflow-hidden tab-item flex py-2 hover:bg-slate-200 transition-colors duration-300 border-b-stone-100 border` +
         (selected ? ' checked bg-slate-100' : ' ') +
@@ -88,8 +113,7 @@ const Tab = ({
       data-muted={mutedInfo.muted}
       data-audible={audible}
       data-pinned={pinned}
-      draggable={true}
-    >
+      draggable={true}>
       <TabIcon
         onChange={handleSelectedTabsUpdate}
         checked={selected}
@@ -100,25 +124,35 @@ const Tab = ({
       <span
         className={`whitespace-nowrap clip font-bold align-self-center pr-2`}
         style={{ opacity: discarded || loading ? 0.5 : 1 }}
-        title={url}
-      >
-        {ReactHTMLParser(markedTitle)}
+        title={url}>
+        {parse(markedTitle)}
       </span>
       <span
         className="cursor-pointer whitespace-nowrap tab-url flex-grow truncate  text-zinc-400 align-self-center"
-        onClick={handleTabClick}
-      >
-        {ReactHTMLParser(markedUrl)}
+        onClick={handleTabClick}>
+        {parse(markedUrl)}
       </span>
       <div
-        className="tab-actions flex align-self-center justify-self-end mx-3"
-        style={{ gap: 8 }}
-        aria-label="options"
-      >
-        {renderActionButtons({ id, selected, activeTab: true, pinned, discarded, pinned, iconPinned, isAudible })}
+        className="tab-actions flex align-self-center justify-self-end mx-3 gap-2"
+        aria-label="options">
+        {activeTab && (
+          <>
+            <ItemBtn title="Un/Pin Tab" onClick={handlePinTab}>
+              {iconPinned}
+            </ItemBtn>
+            <ItemBtn
+              title="Un/Mute Tab"
+              onClick={handleMuteTab}>
+              {renderAudioIcon(audible, mutedInfo)}
+            </ItemBtn>
+          </>
+        )}
+        <ItemBtn onClick={handleRemove}>
+          <TimesIcon style={{ height: 14, fill: 'red' }} />
+        </ItemBtn>
       </div>
     </List.Item>
-  );
-};
+  )
+}
 
 export default Tab

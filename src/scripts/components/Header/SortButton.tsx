@@ -1,7 +1,6 @@
-import type { MenuProps } from 'antd'
 import { DownOutlined } from '@ant-design/icons'
-import { Dropdown, Space } from 'antd'
-
+import type { MenuProps } from 'antd'
+import { Dropdown } from 'antd'
 import { useCallback } from 'react'
 //@ts-ignore
 import SortIcon from 'react:/src/icons/sort.svg'
@@ -30,10 +29,7 @@ const SortButton = ({ tabs }) => {
   return (
     <Dropdown menu={{ items }} className="mr-3" trigger={['click']}>
       <Btn>
-        <SortIcon
-          className="!fill-slate-700"
-          style={{ height: 12 }}
-        />
+        <SortIcon className="!fill-slate-700" style={{ height: 12 }} />
         <span>Sort</span>
         <DownOutlined className="text-zinc-500" />
       </Btn>

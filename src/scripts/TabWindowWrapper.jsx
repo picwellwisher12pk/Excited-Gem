@@ -93,31 +93,20 @@ const TabWindowWrapper = React.memo(() => {
   useEffect(() => {
     setLoading(false)
   }, [])
-  const moveTab = useCallback(
-    (itemId, dragIndex, index) => {
-      browser.tabs.move(itemId, { index })
-    },
-    [tabs]
-  )
-  const closeTab = useCallback(
-    (itemId) => {
-      browser.tabs.remove(itemId)
-    },
-    [tabs]
-  )
-  const toggleMuteTab = useCallback(
-    (itemId, status) => {
-      browser.tabs.update(itemId, { muted: !status })
-    },
-    [tabs]
-  )
 
-  const togglePinTab = useCallback(
-    (itemId, status) => {
-      browser.tabs.pin(itemId, status)
-    },
-    [tabs]
-  )
+  const moveTab = (itemId, dragIndex, index) => {
+    chrome.tabs.move(itemId, { index })
+  }
+  const remove = (itemId) => {
+    chrome.tabs.remove(itemId)
+  }
+  const toggleMuteTab = (itemId, status) => {
+    chrome.tabs.update(itemId, { muted: !status })
+  }
+  const togglePinTab = (itemId, status) => {
+    chrome.tabs.update(itemId, { pinned: !status })
+  }
+
   return !loading ? (
     <div className="tabs-list-container">
       <React.Suspense fallback={<h1>Loading profile...</h1>}>
@@ -126,13 +115,13 @@ const TabWindowWrapper = React.memo(() => {
             {filteredTabs?.map((tab) => (
               <Tab
                 {...tab}
-                key={tab.id}
+                key={tab?.id}
                 activeTab={true}
-                index={tab.index}
+                index={tab?.index}
                 moveTab={moveTab}
                 //If current tab.id exists in selectedTabs array
                 selected={selectedTabs.indexOf(tab?.id) >= 0 ? true : false}
-                closeTab={closeTab}
+                remove={remove}
                 togglePinTab={togglePinTab}
                 toggleMuteTab={toggleMuteTab}
               />
