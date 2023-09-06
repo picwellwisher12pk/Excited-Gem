@@ -20,12 +20,11 @@
   },
   "env": {
     "browser": true,
-    "node": true,
     "jquery": true,
     "jest": true
   },
   "rules": {
-    "no-debugger": 0,
+    "no-debugger": 1,
     "no-unused-vars": [
       1,
       {
@@ -48,7 +47,7 @@
         "props": false
       }
     ],
-    "no-console": 0,
+    "no-console": 1,
     "import/prefer-default-export": 0,
     "import": 0,
     "func-names": 0,

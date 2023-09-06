@@ -6,7 +6,7 @@ import SyncAltIcon from 'react:/src/icons/sync-alt.svg'
 import ThumbtackIcon from 'react:/src/icons/thumbtack-active.svg'
 import VolumeSlashIcon from 'react:/src/icons/volume-mute.svg'
 
-import { processTabs } from '../../general'
+import { processTabs, getAllWindows, getCurrentWindow } from '../../general'
 import { clearSelectedTabs } from '../../tabSlice.js'
 import { MoveModal } from '../Modals/Move.jsx'
 import { SaveModal } from '../Modals/Save.jsx'

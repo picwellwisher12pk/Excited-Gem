@@ -4,6 +4,7 @@ export const tabSlice = createSlice({
   name: "tabs",
   initialState: {
     tabs: [],
+    windows: [],
     selectedTabs: [],
     filteredTabs: [],
     selectedWindow: "current",

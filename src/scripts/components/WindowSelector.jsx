@@ -40,7 +40,7 @@ export default function WindowSelector() {
             <span
               className={
                 'inline-block w-2 h-2 rounded-full mb-[1px] mr-2 ' +
-                (currentWindow.id === window.id && 'bg-green-500')
+                (currentWindow.id === window.id ? 'bg-green-500' : '')
               }></span>
             <span>
               Window
@@ -90,8 +90,37 @@ export default function WindowSelector() {
       </div>
     </Option>
   )
-  const options = allWindows.map(optionCreator)
+  const optionCurrent = (
+    <Option value="current" label="current" key="current">
+      <div className="flex justify-between">
+        <div>
+          <span
+            className={
+              'inline-block w-2 h-2 rounded-full mb-[1px] mr-2 ' +
+              (selectedWindow.id === window.id ? 'bg-green-500' : '')
+            }></span>
+          <span>
+            Window <small className="text-gray-400"> (current)</small>
+          </span>
+        </div>
+        <small
+          className={
+            currentWindow.tabs?.length > 50
+              ? '!text-orange-600'
+              : '!text-green-500'
+          }>
+          {currentWindow.tabs?.length} tab
+          {currentWindow.tabs?.length > 1 && 's'}
+        </small>
+      </div>
+    </Option>
+  )
 
+  const options = allWindows
+    .filter((window) => currentWindow.id !== window.id)
+    .map(optionCreator)
+
+  if (allWindows.length <= 1) return null
   return (
     <Select
       loading={loading}
@@ -100,37 +129,11 @@ export default function WindowSelector() {
       bordered={false}
       showArrow={true}
       defaultValue={{
-        label: (
-          <span className={`flex justify-between align-items-center btn-link`}>
-            <div>
-              <span
-                className={
-                  'inline-block w-2 h-2 rounded-full mb-[1px] mr-2 ' +
-                  (currentWindow.id === window.id && 'bg-green-500')
-                }></span>
-              <span>
-                Window
-                {currentWindow.id === window.id && (
-                  <small className="text-gray-400"> (current)</small>
-                )}
-              </span>
-            </div>
-            <small
-              className={
-                currentWindow?.tabs?.length > 50
-                  ? '!text-orange-600'
-                  : '!text-lime-700'
-              }>
-              {currentWindow?.tabs?.length} tab
-              {currentWindow?.tabs?.length > 1 && 's'}
-            </small>
-          </span>
-        ),
-        value: currentWindow.id
+        value: selectedWindow
       }}
       className="!border-0 shadow-md hover:shadow-sm active:shadow-none rounded-sm !bg-gradient-to-b !from-white !to-slate-200"
       onSelect={setWindow}>
-      {[optionAll, ...options]}
+      {[optionAll, optionCurrent, ...options]}
     </Select>
   )
 }
