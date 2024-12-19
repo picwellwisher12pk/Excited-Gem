@@ -15,6 +15,7 @@ const getPermissions = (version) => {
     return {
       permissions: [
         "tabs",
+        "tabGroups",
         "contextMenus",
         "storage",
         "notifications",
@@ -37,4 +38,4 @@ const getPermissions = (version) => {
     };
   }
 };
-module.exports = { getBackground, getPermissions };
+module.exports = {getBackground, getPermissions};

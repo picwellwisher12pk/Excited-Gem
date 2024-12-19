@@ -1,5 +1,5 @@
-import { createSlice } from "@reduxjs/toolkit";
-import { preferences } from "./defaultPreferences";
+import {createSlice} from "@reduxjs/toolkit";
+import {preferences} from "../scripts/defaultPreferences";
 
 export const configSlice = createSlice({
   name: "config",
@@ -12,13 +12,13 @@ export const configSlice = createSlice({
     // which detects changes to a "draft state" and produces a brand new
     // immutable state based off those changes
     updateActiveTabs: (state, action) => {
-      let newState = { ...state };
+      let newState = {...state};
       newState.tabs = [];
       newState.tabs = _.cloneDeep(action.payload);
       return newState;
     },
     updateSelectedTabs: (state, action) => {
-      let newState = { ...state };
+      let newState = {...state};
       newState.selectedTabs = action.payload;
       return newState;
     },

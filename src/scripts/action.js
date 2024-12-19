@@ -1,6 +1,6 @@
 // import { getTabs } from "~/scripts/browserActions.ts"
 
-import store from "./store"
+import store from "../store/store"
 
 let browser = require("webextension-polyfill")
 // types of action
@@ -51,26 +51,26 @@ const searchInTabs = (searchTerm) => (dispatch) => {
 }
 const closeTabs =
   (tabIds, promptForClosure = true) =>
-  (dispatch) => {
-    if (promptForClosure) {
-      if (
-        !confirm(`Are you sure you want to close the following tab\n` + tabIds)
-      )
-        return false
+    (dispatch) => {
+      if (promptForClosure) {
+        if (
+          !confirm(`Are you sure you want to close the following tab\n` + tabIds)
+        )
+          return false
+      }
+      return browser.tabs.remove(tabIds).then(() => {
+        return dispatch(updateActiveTabs())
+      })
     }
-    return browser.tabs.remove(tabIds).then(() => {
-      return dispatch(updateActiveTabs())
-    })
-  }
 const pinTab = (tabId) => (dispatch) => {
   return browser.tabs.get(tabId).then((tab) => {
-    browser.tabs.update(parseInt(tabId), { pinned: true })
+    browser.tabs.update(parseInt(tabId), {pinned: true})
     return dispatch(updateActiveTabs())
   })
 }
 const unpinTab = (tabId) => (dispatch) => {
   return browser.tabs.get(tabId).then((tab) => {
-    browser.tabs.update(parseInt(tabId), { pinned: false })
+    browser.tabs.update(parseInt(tabId), {pinned: false})
     return dispatch(updateActiveTabs())
   })
 }
@@ -81,13 +81,13 @@ const togglePin = (tabId) => (dispatch) => {
 }
 const muteTab = (tabId) => (dispatch) => {
   return browser.tabs.get(tabId).then((tab) => {
-    browser.tabs.update(parseInt(tabId), { muted: true })
+    browser.tabs.update(parseInt(tabId), {muted: true})
     return dispatch(updateActiveTabs())
   })
 }
 const unmuteTab = (tabId) => (dispatch) => {
   return browser.tabs.get(tabId).then((tab) => {
-    browser.tabs.update(parseInt(tabId), { muted: false })
+    browser.tabs.update(parseInt(tabId), {muted: false})
     return dispatch(updateActiveTabs())
   })
 }

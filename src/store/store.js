@@ -1,4 +1,4 @@
-import { configureStore } from '@reduxjs/toolkit'
+import {configureStore} from '@reduxjs/toolkit'
 import logger from 'redux-logger';
 import tabReducer from "./tabSlice";
 import configReducer from "./configSlice";
@@ -6,13 +6,13 @@ import searchReducer from "./searchSlice";
 
 export default configureStore({
   reducer: {
-    tabs:tabReducer,
-    config:configReducer,
-    search:searchReducer,
+    tabs: tabReducer,
+    config: configReducer,
+    search: searchReducer,
   },
   middleware: (getDefaultMiddleware) =>
-      getDefaultMiddleware().concat(logger),
-  devTools:window.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__ && window.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__()
+    getDefaultMiddleware().concat(logger),
+  devTools: window.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__ && window.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__()
 });
 
 /*

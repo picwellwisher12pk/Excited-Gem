@@ -5,95 +5,53 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="c622c5e4-cd19-47ef-9a24-878d22484dec" name="Changes" comment="">
-      <change afterPath="$PROJECT_DIR$/src/index.d.ts" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/scripts/components/Header/index.ts" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/scripts/components/Tab/IconPinned.tsx" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/scripts/components/Tab/TabIcon.tsx" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/scripts/components/Tab/dnd-reducers.ts" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/scripts/components/Tab/index.ts" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.env" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/.gitignore" beforeDir="false" afterPath="$PROJECT_DIR$/.gitignore" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/codestream.xml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/dbnavigator.xml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/encodings.xml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/jsLibraryMappings.xml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/misc.xml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/modules.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/modules.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/prettier.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/prettier.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/vcs.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/vcs.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.prettierrc" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/babel.config.js" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/completion.sh" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/extension/manifest.json" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/nodemon.json" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/manifest_partials/versionBasedMethods.js" beforeDir="false" afterPath="$PROJECT_DIR$/manifest_partials/versionBasedMethods.js" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/package.json" beforeDir="false" afterPath="$PROJECT_DIR$/package.json" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/paths.js" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/pnpm-lock.yaml" beforeDir="false" afterPath="$PROJECT_DIR$/pnpm-lock.yaml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/shim.d.ts" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/assets/dev-logo.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/assets/dev-logo.svg" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/assets/logo.ico" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/assets/logo.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/assets/logo.svg" beforeDir="false" afterPath="$PROJECT_DIR$/src/assets/logo.svg" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/auto-imports.d.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/auto-imports.d.ts" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/background/main.js" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/icons/sort.svg" beforeDir="false" afterPath="$PROJECT_DIR$/src/icons/sort.svg" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/icons/thumbtack-active.svg" beforeDir="false" afterPath="$PROJECT_DIR$/src/icons/thumbtack-active.svg" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/icons/volume-mute.svg" beforeDir="false" afterPath="$PROJECT_DIR$/src/icons/volume-mute.svg" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/icons/volume-off.svg" beforeDir="false" afterPath="$PROJECT_DIR$/src/icons/volume-off.svg" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/icons/volume-slash.svg" beforeDir="false" afterPath="$PROJECT_DIR$/src/icons/volume-slash.svg" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/index.css" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/logo.svg" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/manifest.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/manifest.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/pages/popup/index.html" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/pages/popup/main.jsx" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/popup.html" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/scripts/ActiveTabs.jsx" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/scripts/ActiveTabs.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/scripts/ActiveTabs.tsx" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/scripts/TabWindowWrapper.jsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/scripts/TabWindowWrapper.jsx" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/scripts/action.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/scripts/action.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/scripts/active-tabs-container.jsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/scripts/active-tabs-container.jsx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/scripts/background.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/scripts/background.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/scripts/bootstrap/alert.js" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/scripts/bootstrap/button.js" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/scripts/bootstrap/carousel.js" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/scripts/bootstrap/collapse.js" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/scripts/bootstrap/dropdown.js" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/scripts/bootstrap/index.js" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/scripts/bootstrap/modal.js" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/scripts/bootstrap/popover.js" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/scripts/bootstrap/scrollspy.js" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/scripts/bootstrap/tab.js" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/scripts/bootstrap/tooltip.js" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/scripts/bootstrap/util.js" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/scripts/browserActions.js" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/scripts/components/Accordion/TabsGroup/Tab/ItemTypes.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/scripts/components/Tab/ItemTypes.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/scripts/components/Accordion/TabsGroup/Tab/Tab.jsx" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/scripts/components/Accordion/TabsGroup/Tab/Tab.test.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/scripts/components/Tab/Tab.test.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/scripts/components/Accordion/TabsGroup/Tab/helpers.jsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/scripts/components/Tab/helpers.jsx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/scripts/components/Accordion/TabsGroup/Tab/index.js" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/scripts/components/Accordion/TabsGroup/TabsGroup.jsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/scripts/components/TabsGroup/TabsGroup.jsx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/scripts/components/Accordion/TabsGroup/index.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/scripts/components/TabsGroup/index.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/scripts/components/Header/Brand.jsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/scripts/components/Header/Brand.jsx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/scripts/components/Header/Header.jsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/scripts/components/Header/Header.tsx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/scripts/components/Header/Navigation.jsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/scripts/components/Header/Navigation.jsx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/scripts/components/Header/Search/Search.jsx" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/scripts/components/Header/Search/index.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/scripts/components/Header/Search/index.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/scripts/components/Modals/Move.jsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/scripts/components/Modals/Move.jsx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/scripts/components/Modals/Save.jsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/scripts/components/Modals/Save.jsx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/scripts/components/WindowSelector.jsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/scripts/components/WindowSelector.jsx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/scripts/components/general.js" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/scripts/components/getsetSessions.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/scripts/components/getsetSessions.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/scripts/options-container.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/scripts/options-container.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/scripts/react-components/session.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/scripts/react-components/session.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/scripts/tabSlice.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/scripts/tabSlice.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/scripts/vendor/npm.js" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/tsconfig.js" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/vite.config.background.ts" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/vite.config.content.ts" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/vite.config.popup.ts" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/vite.config.popup.txt" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/vite.config.ts" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/webpack.config.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/scripts/components/Btn.tsx" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/scripts/components/DummyHeader.jsx" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/scripts/components/Header/Brand.jsx" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/scripts/components/Header/Header.tsx" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/scripts/components/Header/MenuItemButton.tsx" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/scripts/components/Header/Navigation.jsx" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/scripts/components/Header/Search/Search.test.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/scripts/components/Header/Search/index.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/scripts/components/Header/Selection.tsx" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/scripts/components/Header/SortButton.tsx" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/scripts/components/Header/index.ts" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/scripts/components/Header/pinning.tsx" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/scripts/components/ItemBtn.tsx" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/scripts/components/Modals/Move.jsx" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/scripts/components/Modals/Save.jsx" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/scripts/components/Search.jsx" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/scripts/components/Tab/IconPinned.tsx" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/scripts/components/Tab/ItemTypes.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/scripts/components/Tab/Tab.test.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/scripts/components/Tab/Tab.tsx" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/scripts/components/Tab/TabIcon.tsx" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/scripts/components/Tab/dnd-reducers.ts" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/scripts/components/Tab/helpers.tsx" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/scripts/components/Tab/index.ts" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/scripts/components/TabsGroup/TabsGroup.jsx" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/scripts/components/TabsGroup/index.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/scripts/components/VolumeIcon.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/scripts/components/WindowSelector.jsx" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/scripts/components/communications.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/scripts/components/getsetSessions.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/scripts/components/idle.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/scripts/components/readingList.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/scripts/components/tabSelection.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/scripts/components/tabs.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/scripts/configSlice.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/store/configSlice.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/scripts/searchSlice.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/store/searchSlice.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/scripts/store.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/store/store.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/scripts/tabSlice.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/store/tabSlice.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/tabs/home.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/tabs/home.tsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/tsconfig.json" beforeDir="false" afterPath="$PROJECT_DIR$/tsconfig.json" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -104,6 +62,7 @@
     <option name="RECENT_TEMPLATES">
       <list>
         <option value="TypeScript File" />
+        <option value="TypeScript JSX File" />
       </list>
     </option>
   </component>
@@ -113,44 +72,75 @@
   <component name="Git.Settings">
     <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
   </component>
+  <component name="GitToolBoxStore">
+    <option name="projectConfigVersion" value="5" />
+  </component>
+  <component name="HighlightingSettingsPerFile">
+    <setting file="file://$PROJECT_DIR$/node_modules/@types/chrome/index.d.ts" root0="FORCE_HIGHLIGHTING" />
+  </component>
   <component name="MarkdownSettingsMigration">
     <option name="stateVersion" value="1" />
   </component>
   <component name="OptimizeOnSaveOptions">
     <option name="myRunOnSave" value="true" />
   </component>
+  <component name="ProjectColorInfo">{
+  &quot;associatedIndex&quot;: 2
+}</component>
   <component name="ProjectId" id="2PRPZRefme2Mm15t1jx0Klxk4Vs" />
   <component name="ProjectViewState">
     <option name="hideEmptyMiddlePackages" value="true" />
     <option name="showLibraryContents" value="true" />
   </component>
-  <component name="PropertiesComponent">{
-  &quot;keyToString&quot;: {
-    &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
-    &quot;WebServerToolWindowFactoryState&quot;: &quot;false&quot;,
-    &quot;git-widget-placeholder&quot;: &quot;plasmo&quot;,
-    &quot;node.js.detected.package.eslint&quot;: &quot;true&quot;,
-    &quot;node.js.detected.package.tslint&quot;: &quot;true&quot;,
-    &quot;node.js.selected.package.eslint&quot;: &quot;(autodetect)&quot;,
-    &quot;node.js.selected.package.tslint&quot;: &quot;(autodetect)&quot;,
-    &quot;nodejs_package_manager_path&quot;: &quot;npm&quot;,
-    &quot;prettierjs.PrettierConfiguration.Package&quot;: &quot;D:\\Projects\\Personal\\excited-gem\\node_modules\\prettier&quot;,
-    &quot;settings.editor.selected.configurable&quot;: &quot;settings.javascript.prettier&quot;,
-    &quot;ts.external.directory.path&quot;: &quot;D:\\Projects\\Personal\\excited-gem\\node_modules\\typescript\\lib&quot;,
-    &quot;vue.rearranger.settings.migration&quot;: &quot;true&quot;
+  <component name="PropertiesComponent"><![CDATA[{
+  "keyToString": {
+    "RunOnceActivity.OpenProjectViewOnStart": "true",
+    "RunOnceActivity.ShowReadmeOnStart": "true",
+    "WebServerToolWindowFactoryState": "false",
+    "git-widget-placeholder": "plasmo",
+    "kotlin-language-version-configured": "true",
+    "last_opened_file_path": "C:/Users/amir/Documents/Projects/IT22/fe-pms",
+    "node.js.detected.package.eslint": "true",
+    "node.js.detected.package.tslint": "true",
+    "node.js.selected.package.eslint": "(autodetect)",
+    "node.js.selected.package.tslint": "(autodetect)",
+    "nodejs_interpreter_path": "C:/Users/amir/.bun/bin/bunx",
+    "nodejs_package_manager_path": "pnpm",
+    "prettierjs.PrettierConfiguration.Package": "C:\\Users\\amir\\Documents\\Projects\\Personal\\excited-gem\\node_modules\\prettier",
+    "settings.editor.selected.configurable": "settings.sync",
+    "ts.external.directory.path": "C:\\Users\\amir\\Documents\\Projects\\Personal\\excited-gem\\node_modules\\typescript\\lib",
+    "vue.rearranger.settings.migration": "true"
   }
-}</component>
+}]]></component>
+  <component name="ReactDesignerToolWindowState">
+    <option name="myId2Visible">
+      <map>
+        <entry key="com.intellij.reactbuddy.reactComponents" value="false" />
+        <entry key="com.intellij.reactbuddy.reactInspector" value="false" />
+        <entry key="com.intellij.reactbuddy.storybook" value="false" />
+      </map>
+    </option>
+  </component>
   <component name="RecentsManager">
     <key name="MoveFile.RECENT_KEYS">
+      <recent name="C:\Users\amir\Documents\Projects\Personal\excited-gem\src\store" />
+      <recent name="C:\Users\amir\Documents\Projects\Personal\excited-gem\src\components" />
+      <recent name="C:\Users\amir\Documents\Projects\Personal\excited-gem\src" />
       <recent name="D:\Projects\Personal\excited-gem\src\scripts\components\Header" />
       <recent name="D:\Projects\Personal\excited-gem\src\scripts\components" />
-      <recent name="D:\Projects\Personal\excited-gem\src\scripts\components\Tab" />
     </key>
     <key name="es6.move.members.recent.items">
       <recent name="D:\Projects\Personal\excited-gem\src\scripts\components\Tab\TabIcon.tsx" />
       <recent name="D:\Projects\Personal\excited-gem\src\scripts\components\Tab\reducers.ts" />
       <recent name="D:\Projects\Personal\excited-gem\src\scripts\components\Tab\Pinned.tsx" />
     </key>
+  </component>
+  <component name="SharedIndexes">
+    <attachedChunks>
+      <set>
+        <option value="bundled-js-predefined-1d06a55b98c1-91d5c284f522-JavaScript-WS-241.15989.105" />
+      </set>
+    </attachedChunks>
   </component>
   <component name="SpellCheckerSettings" RuntimeDictionaries="0" Folders="0" CustomDictionaries="0" DefaultDictionary="application-level" UseSingleDictionary="true" transferred="true" />
   <component name="TaskManager">
@@ -166,6 +156,21 @@
       <workItem from="1683744923072" duration="5127000" />
       <workItem from="1684025371328" duration="1368000" />
       <workItem from="1684026897234" duration="2783000" />
+      <workItem from="1712184878194" duration="222000" />
+      <workItem from="1712185421245" duration="81000" />
+      <workItem from="1712185519142" duration="4404000" />
+      <workItem from="1712312598949" duration="48000" />
+      <workItem from="1712312661838" duration="11000" />
+      <workItem from="1712609786464" duration="1568000" />
+      <workItem from="1712611997290" duration="96000" />
+      <workItem from="1712612399295" duration="757000" />
+      <workItem from="1712613184117" duration="734000" />
+      <workItem from="1712623358486" duration="79000" />
+      <workItem from="1712655009410" duration="2961000" />
+      <workItem from="1712668079364" duration="4287000" />
+      <workItem from="1713957926725" duration="39000" />
+      <workItem from="1713985521684" duration="66000" />
+      <workItem from="1714432803133" duration="17000" />
     </task>
     <servers />
   </component>

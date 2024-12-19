@@ -1,11 +1,11 @@
-import React, { memo, useMemo } from 'react'
+import React, {memo, useMemo} from 'react'
 import CustomScroll from 'react-custom-scroll'
-import { useSelector } from 'react-redux'
+import {useSelector} from 'react-redux'
 
 // import { profilerCallback } from "/src/scripts/general"
-import store from './store'
-import { updateActiveTabs } from './tabSlice'
-import { getTabs } from '/src/scripts/browserActions'
+import store from '../store/store'
+import {updateActiveTabs} from '../store/tabSlice'
+import {getTabs} from '/src/scripts/browserActions'
 
 import '/public/logo.png'
 import '/public/dev-logo.png'
@@ -71,23 +71,23 @@ updateTabs(getTabs, store)
 const ActiveTabs = () => {
   console.log('ActiveTabs rendered')
   // @ts-ignore
-  const { tabs } = useSelector((state) => state.tabs)
+  const {tabs} = useSelector((state) => state.tabs)
   const navigation = useMemo(
-    () => <Navigation tabCount={tabs.length} />,
+    () => <Navigation tabCount={tabs.length}/>,
     [tabs]
   )
   return (
     <div className="flex flex-col h-[100vh]">
       <Header>
-        <Navigation tabCount={tabs.length} />
-        <Search />
+        <Navigation tabCount={tabs.length}/>
+        <Search/>
       </Header>
       <CustomScroll
         heightRelativeToParent="100%"
         keepAtBottom={true}
         key="scroll"
         class="flex-grow">
-        <TabWindowWrapper />
+        <TabWindowWrapper/>
       </CustomScroll>
     </div>
   )
