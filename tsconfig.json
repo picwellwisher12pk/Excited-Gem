@@ -4,6 +4,7 @@
     "node_modules"
   ],
   "include": [
+    "src",
     ".plasmo/index.d.ts",
     "./**/*.ts",
     "./**/*.tsx",
@@ -19,6 +20,10 @@
     "types": [
       "chrome"
     ],
+    "moduleResolution": "node",
+    "esModuleInterop": true,
+    "skipLibCheck": true,
+    "resolveJsonModule": true,
     "baseUrl": "."
   }
 }

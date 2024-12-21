@@ -1,11 +1,11 @@
 import {List} from 'antd'
-import React, {useCallback, useEffect, useLayoutEffect, useState} from 'react'
+import React, { useEffect, useLayoutEffect, useState} from 'react'
 import ContentLoader from 'react-content-loader'
 import {DndProvider} from 'react-dnd'
 import {HTML5Backend} from 'react-dnd-html5-backend'
 import {useDispatch, useSelector} from 'react-redux'
 
-import Tab from './components/Tab'
+import Tab from '~/components/Tab'
 import {asyncFilterTabs} from './general.js'
 import {updateFilteredTabs} from '../store/tabSlice'
 

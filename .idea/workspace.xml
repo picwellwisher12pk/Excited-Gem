@@ -5,52 +5,13 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="c622c5e4-cd19-47ef-9a24-878d22484dec" name="Changes" comment="">
+      <change beforePath="$PROJECT_DIR$/.gitignore" beforeDir="false" afterPath="$PROJECT_DIR$/.gitignore" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/manifest_partials/versionBasedMethods.js" beforeDir="false" afterPath="$PROJECT_DIR$/manifest_partials/versionBasedMethods.js" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/package.json" beforeDir="false" afterPath="$PROJECT_DIR$/package.json" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/pnpm-lock.yaml" beforeDir="false" afterPath="$PROJECT_DIR$/pnpm-lock.yaml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/scripts/ActiveTabs.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/scripts/ActiveTabs.tsx" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/scripts/TabWindowWrapper.jsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/scripts/TabWindowWrapper.jsx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/scripts/action.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/scripts/action.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/scripts/components/Btn.tsx" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/scripts/components/DummyHeader.jsx" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/scripts/components/Header/Brand.jsx" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/scripts/components/Header/Header.tsx" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/scripts/components/Header/MenuItemButton.tsx" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/scripts/components/Header/Navigation.jsx" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/scripts/components/Header/Search/Search.test.js" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/scripts/components/Header/Search/index.js" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/scripts/components/Header/Selection.tsx" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/scripts/components/Header/SortButton.tsx" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/scripts/components/Header/index.ts" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/scripts/components/Header/pinning.tsx" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/scripts/components/ItemBtn.tsx" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/scripts/components/Modals/Move.jsx" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/scripts/components/Modals/Save.jsx" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/scripts/components/Search.jsx" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/scripts/components/Tab/IconPinned.tsx" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/scripts/components/Tab/ItemTypes.js" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/scripts/components/Tab/Tab.test.js" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/scripts/components/Tab/Tab.tsx" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/scripts/components/Tab/TabIcon.tsx" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/scripts/components/Tab/dnd-reducers.ts" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/scripts/components/Tab/helpers.tsx" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/scripts/components/Tab/index.ts" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/scripts/components/TabsGroup/TabsGroup.jsx" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/scripts/components/TabsGroup/index.js" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/scripts/components/VolumeIcon.js" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/scripts/components/WindowSelector.jsx" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/scripts/components/communications.js" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/scripts/components/getsetSessions.js" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/scripts/components/idle.js" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/scripts/components/readingList.js" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/scripts/components/tabSelection.js" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/scripts/components/tabs.js" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/scripts/configSlice.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/store/configSlice.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/scripts/searchSlice.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/store/searchSlice.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/scripts/store.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/store/store.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/scripts/tabSlice.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/store/tabSlice.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/tabs/home.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/tabs/home.tsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/scripts/general.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/scripts/general.js" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/tsconfig.json" beforeDir="false" afterPath="$PROJECT_DIR$/tsconfig.json" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
@@ -84,6 +45,9 @@
   <component name="OptimizeOnSaveOptions">
     <option name="myRunOnSave" value="true" />
   </component>
+  <component name="PackageJsonUpdateNotifier">
+    <dismissed value="$PROJECT_DIR$/package.json" />
+  </component>
   <component name="ProjectColorInfo">{
   &quot;associatedIndex&quot;: 2
 }</component>
@@ -92,26 +56,27 @@
     <option name="hideEmptyMiddlePackages" value="true" />
     <option name="showLibraryContents" value="true" />
   </component>
-  <component name="PropertiesComponent"><![CDATA[{
-  "keyToString": {
-    "RunOnceActivity.OpenProjectViewOnStart": "true",
-    "RunOnceActivity.ShowReadmeOnStart": "true",
-    "WebServerToolWindowFactoryState": "false",
-    "git-widget-placeholder": "plasmo",
-    "kotlin-language-version-configured": "true",
-    "last_opened_file_path": "C:/Users/amir/Documents/Projects/IT22/fe-pms",
-    "node.js.detected.package.eslint": "true",
-    "node.js.detected.package.tslint": "true",
-    "node.js.selected.package.eslint": "(autodetect)",
-    "node.js.selected.package.tslint": "(autodetect)",
-    "nodejs_interpreter_path": "C:/Users/amir/.bun/bin/bunx",
-    "nodejs_package_manager_path": "pnpm",
-    "prettierjs.PrettierConfiguration.Package": "C:\\Users\\amir\\Documents\\Projects\\Personal\\excited-gem\\node_modules\\prettier",
-    "settings.editor.selected.configurable": "settings.sync",
-    "ts.external.directory.path": "C:\\Users\\amir\\Documents\\Projects\\Personal\\excited-gem\\node_modules\\typescript\\lib",
-    "vue.rearranger.settings.migration": "true"
+  <component name="PropertiesComponent">{
+  &quot;keyToString&quot;: {
+    &quot;RunOnceActivity.OpenProjectViewOnStart&quot;: &quot;true&quot;,
+    &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
+    &quot;RunOnceActivity.git.unshallow&quot;: &quot;true&quot;,
+    &quot;WebServerToolWindowFactoryState&quot;: &quot;false&quot;,
+    &quot;git-widget-placeholder&quot;: &quot;plasmo&quot;,
+    &quot;kotlin-language-version-configured&quot;: &quot;true&quot;,
+    &quot;last_opened_file_path&quot;: &quot;C:/Users/amir/Documents/Projects/IT22/fe-pms&quot;,
+    &quot;node.js.detected.package.eslint&quot;: &quot;true&quot;,
+    &quot;node.js.detected.package.tslint&quot;: &quot;true&quot;,
+    &quot;node.js.selected.package.eslint&quot;: &quot;(autodetect)&quot;,
+    &quot;node.js.selected.package.tslint&quot;: &quot;(autodetect)&quot;,
+    &quot;nodejs_interpreter_path&quot;: &quot;C:/Users/amir/.bun/bin/bunx&quot;,
+    &quot;nodejs_package_manager_path&quot;: &quot;pnpm&quot;,
+    &quot;prettierjs.PrettierConfiguration.Package&quot;: &quot;C:\\Users\\amir\\Documents\\Projects\\Personal\\excited-gem\\node_modules\\prettier&quot;,
+    &quot;settings.editor.selected.configurable&quot;: &quot;settings.sync&quot;,
+    &quot;ts.external.directory.path&quot;: &quot;C:\\Users\\amir\\Documents\\Projects\\Personal\\excited-gem\\node_modules\\typescript\\lib&quot;,
+    &quot;vue.rearranger.settings.migration&quot;: &quot;true&quot;
   }
-}]]></component>
+}</component>
   <component name="ReactDesignerToolWindowState">
     <option name="myId2Visible">
       <map>
@@ -138,7 +103,7 @@
   <component name="SharedIndexes">
     <attachedChunks>
       <set>
-        <option value="bundled-js-predefined-1d06a55b98c1-91d5c284f522-JavaScript-WS-241.15989.105" />
+        <option value="bundled-js-predefined-d6986cc7102b-deb605915726-JavaScript-WS-243.22562.112" />
       </set>
     </attachedChunks>
   </component>
@@ -171,6 +136,11 @@
       <workItem from="1713957926725" duration="39000" />
       <workItem from="1713985521684" duration="66000" />
       <workItem from="1714432803133" duration="17000" />
+      <workItem from="1734718193353" duration="1810000" />
+      <workItem from="1734727550301" duration="4664000" />
+      <workItem from="1734732974410" duration="1522000" />
+      <workItem from="1734738170866" duration="1098000" />
+      <workItem from="1734739989443" duration="998000" />
     </task>
     <servers />
   </component>
