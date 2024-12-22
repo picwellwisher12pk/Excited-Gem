@@ -1,10 +1,10 @@
 import { useMemo } from 'react'
-import CustomScroll from 'react-custom-scroll'
+import { CustomScroll } from 'react-custom-scroll'
 import { useSelector } from 'react-redux'
 
 // import { profilerCallback } from "/src/scripts/general"
-import store from '../store/store'
-import { updateActiveTabs } from '../store/tabSlice'
+import store from '~/store/store'
+import { updateActiveTabs } from '~/store/tabSlice'
 import { getTabs } from "~/scripts/browserActions"
 
 import '/public/logo.png'
