@@ -17,7 +17,7 @@ import Selection from './Selection'
 import SortButton from './SortButton'
 //Images
 // @ts-ignore
-import logo from '/public/logo.png'
+import logo from 'logo.png'
 import Btn from '~/components/Btn'
 import TimesIcon from "react:/src/icons/xmark-solid.svg"
 import MoveIcon from "react:/src/icons/up-down-left-right-solid.svg"
@@ -42,9 +42,6 @@ function useTraceUpdate(props) {
     prev.current = props
   })
 }
-
-type actionType = string
-type action = string
 
 const pinActions: string[] = ['toggle', 'pin', 'unpin']
 const muteActions: string[] = ['toggle', 'mute', 'unmute']
@@ -144,7 +141,7 @@ const Header = (props) => {
                 <Option value="filtered">With Filtered</Option>
               </Select> */}
             <span className="px-2 pl-0 text-white select-none font-semibold">
-              With Selected ({selectedTabs.length})
+              Actions for selection ({selectedTabs.length} tabs)
             </span>
             <div>
               <Dropdown menu={pinMenu} trigger={['click']}>
