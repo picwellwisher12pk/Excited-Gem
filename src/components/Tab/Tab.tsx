@@ -41,7 +41,6 @@ const Tab = ({
                selected,
                status,
                audible,
-               muted,
                mutedInfo,
                pinned,
                discarded,
@@ -67,11 +66,17 @@ const Tab = ({
   }
 
   const markedTitle = useMemo(
-    () => (searchIn.title ? markSearchedTerm(title, searchTerm) : title),
+    () => {
+      if (title === undefined || title === null) return ' '
+      else return searchIn.title ? markSearchedTerm(title, searchTerm) : title
+    },
     [searchIn.title, title, searchTerm]
   )
   const markedUrl = useMemo(
-    () => (searchIn.url ? markSearchedTerm(url, searchTerm) : url),
+    () => {
+      if (url === undefined || url === null) return ' '
+      else return searchIn.url ? markSearchedTerm(url, searchTerm) : url
+    },
     [searchIn.url, url, searchTerm]
   )
 
@@ -110,9 +115,6 @@ const Tab = ({
       style={{opacity}}
       data-discarded={discarded}
       data-handler-id={handlerId}
-      data-muted={mutedInfo.muted}
-      data-audible={audible}
-      data-pinned={pinned}
       draggable={true}>
       <TabIcon
         onChange={handleSelectedTabsUpdate}
@@ -122,7 +124,7 @@ const Tab = ({
         title={title}
       />
       <span
-        className={`whitespace-nowrap clip font-bold align-self-center pr-2`}
+        className={`whitespace-nowrap clip font-bolder align-self-center pr-2`}
         style={{opacity: discarded || loading ? 0.5 : 1}}
         title={url}>
         {parse(markedTitle)}
