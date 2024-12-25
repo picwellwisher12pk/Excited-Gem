@@ -15,7 +15,7 @@ function Btn({
     <Button
       size={size}
       {...props}
-      className={`px-3 align-items-center min-w-[30px] shadow-md hover:shadow-sm active:shadow-none
+      className={`align-items-center min-w-[40px] shadow-md hover:shadow-sm active:shadow-none
       ${!border ? btnBorder : '!border !border-zinc-200'}
       ${gradient ? btnGradient : ''} ${props.className}`}>
       {children?.length > 1 ? (
