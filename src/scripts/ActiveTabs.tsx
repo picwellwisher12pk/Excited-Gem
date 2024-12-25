@@ -1,14 +1,14 @@
-import { useMemo } from 'react'
-import { CustomScroll } from 'react-custom-scroll'
-import { useSelector } from 'react-redux'
+import {useMemo} from 'react'
+import {CustomScroll} from 'react-custom-scroll'
+import {useSelector} from 'react-redux'
 
 // import { profilerCallback } from "/src/scripts/general"
 import store from '~/store/store'
-import { updateActiveTabs } from '~/store/tabSlice'
-import { getTabs } from "~/scripts/browserActions"
+import {updateActiveTabs} from '~/store/tabSlice'
+import {getTabs} from "~/scripts/browserActions"
 
-import '/public/logo.png'
-import '/public/dev-logo.png'
+import '~/assets/logo.svg'
+import '~/assets/dev-logo.svg'
 
 import TabWindowWrapper from './TabWindowWrapper'
 import Header from '~/components/Header/Header'
@@ -71,23 +71,23 @@ updateTabs(getTabs, store)
 const ActiveTabs = () => {
   console.log('ActiveTabs rendered')
   // @ts-ignore
-  const { tabs } = useSelector((state) => state.tabs)
+  const {tabs} = useSelector((state) => state.tabs)
   const navigation = useMemo(
-    () => <Navigation tabCount={tabs.length} />,
+    () => <Navigation tabCount={tabs.length}/>,
     [tabs]
   )
   return (
     <div className="flex flex-col h-[100vh]">
       <Header>
-        <Navigation tabCount={tabs.length} />
-        <Search />
+        <Navigation tabCount={tabs.length}/>
+        <Search/>
       </Header>
       <CustomScroll
         heightRelativeToParent="100%"
         keepAtBottom={true}
         key="scroll"
         class="flex-grow">
-        <TabWindowWrapper />
+        <TabWindowWrapper/>
       </CustomScroll>
     </div>
   )

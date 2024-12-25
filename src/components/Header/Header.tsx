@@ -17,7 +17,7 @@ import Selection from './Selection'
 import SortButton from './SortButton'
 //Images
 // @ts-ignore
-import logo from 'logo.png'
+import logo from '~/assets/logo.svg'
 import Btn from '~/components/Btn'
 import TimesIcon from "react:/src/icons/xmark-solid.svg"
 import MoveIcon from "react:/src/icons/up-down-left-right-solid.svg"
