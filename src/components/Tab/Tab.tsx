@@ -85,7 +85,6 @@ const Tab = ({
   drag(drop(refTab))
 
   const loading: boolean = status === 'loading'
-  const isAudible: boolean = audible || muted
   const opacity: number = isDragging ? 0 : 1
   const iconPinned = useMemo(() => IconPinned(pinned), [pinned])
   const handlePinTab = useCallback(() => {
@@ -97,13 +96,16 @@ const Tab = ({
     toggleMuteTab(id, mutedInfo.muted)
   }
   const handleRemove = useCallback(() => remove(id), [id])
+
+  const discardedStatus = discarded ? ' idle' : '';
+
   return (
     <List.Item
       ref={refTab}
       key={id}
       id={String(id)}
       className={
-        `overflow-hidden tab-item flex py-2 hover:bg-slate-200 transition-colors duration-300 border-b-stone-100 border${selected ? ' checked bg-slate-100' : ' '}${loading ? ' loading' : discarded ? ' idle' : ''}`
+        `overflow-hidden tab-item flex py-2 hover:bg-slate-200 transition-colors duration-300 border-b-stone-100 border${selected ? ' checked bg-slate-100' : ' '}${loading ? ' loading' : discardedStatus}`
       }
       style={{opacity}}
       data-discarded={discarded}
@@ -126,8 +128,7 @@ const Tab = ({
         {parse(markedTitle)}
       </span>
       <button
-        role="button"
-        className="cursor-pointer whitespace-nowrap tab-url flex-grow truncate text-zinc-400 align-self-center"
+        className="cursor-pointer whitespace-nowrap tab-url flex-grow truncate text-zinc-400 align-self-center border-0 bg-transparent text-left"
         onClick={handleTabClick}>
         {parse(markedUrl)}
       </button>

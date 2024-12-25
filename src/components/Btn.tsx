@@ -1,21 +1,21 @@
-import { Button } from 'antd'
-import { memo } from 'react'
+import {Button} from 'antd'
+import {memo} from 'react'
 
-import { btnBorder, btnGradient } from '~/scripts/constants'
+import {btnBorder, btnGradient} from '~/scripts/constants'
 
 
 function Btn({
-  children,
-  size = 'small',
-  gradient = true,
-  border = false,
-  ...props
-}: any) {
+               children,
+               size = 'small',
+               gradient = true,
+               border = false,
+               ...props
+             }: any) {
   return (
     <Button
       size={size}
       {...props}
-      className={`px-5 align-items-center min-w-[30px] shadow-md hover:shadow-sm active:shadow-none
+      className={`px-3 align-items-center min-w-[30px] shadow-md hover:shadow-sm active:shadow-none
       ${!border ? btnBorder : '!border !border-zinc-200'}
       ${gradient ? btnGradient : ''} ${props.className}`}>
       {children?.length > 1 ? (
