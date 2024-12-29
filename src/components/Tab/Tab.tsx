@@ -110,7 +110,7 @@ const Tab = ({
       key={id}
       id={String(id)}
       className={
-        `overflow-hidden tab-item flex py-2 hover:bg-slate-200 transition-colors duration-300 border-b-stone-100 border${selected ? ' checked bg-slate-100' : ' '}${loading ? ' loading' : discardedStatus}`
+        `max-w-[100vw] overflow-hidden tab-item flex py-2 hover:bg-slate-200 transition-colors duration-300 border-b-stone-100 !justify-start border${selected ? ' checked bg-slate-100' : ' '}${loading ? ' loading' : discardedStatus}`
       }
       style={{opacity}}
       data-discarded={discarded}
@@ -120,22 +120,25 @@ const Tab = ({
         onChange={handleSelectedTabsUpdate}
         checked={selected}
         loading={loading}
+        discarded={discarded}
         src={favIconUrl}
         title={title}
       />
-      <span
-        className={`whitespace-nowrap clip font-bolder align-self-center pr-2`}
-        style={{opacity: discarded || loading ? 0.5 : 1}}
-        title={url}>
-        {parse(markedTitle)}
-      </span>
-      <button
-        className="cursor-pointer whitespace-nowrap tab-url flex-grow truncate text-zinc-400 align-self-center border-0 bg-transparent text-left"
-        onClick={handleTabClick}>
-        {parse(markedUrl)}
-      </button>
+      <div className="flex flex-auto truncate">
+        <span
+          className={`truncate font-semibold align-self-center pr-2 shrink-0`}
+          style={{opacity: discarded || loading ? 0.7 : 1}}
+          title={url}>
+          {parse(markedTitle)}
+        </span>
+        <button
+          className="cursor-pointer tab-url truncate text-zinc-400 align-self-center border-0 bg-transparent text-left italic grow-0 shrink"
+          onClick={handleTabClick}>
+          {parse(markedUrl)}
+        </button>
+      </div>
       <div
-        className="tab-actions flex align-self-center justify-self-end mx-3 gap-2"
+        className="tab-actions flex align-self-center justify-self-end mx-3 gap-2 shrink-0"
         aria-label="options">
         {activeTab && (
           <>
