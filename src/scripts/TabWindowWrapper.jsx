@@ -1,5 +1,5 @@
 import {List} from 'antd'
-import React, { useEffect, useLayoutEffect, useState} from 'react'
+import React, {useEffect, useLayoutEffect, useState} from 'react'
 import ContentLoader from 'react-content-loader'
 import {DndProvider} from 'react-dnd'
 import {HTML5Backend} from 'react-dnd-html5-backend'
@@ -7,7 +7,7 @@ import {useDispatch, useSelector} from 'react-redux'
 
 import Tab from '~/components/Tab'
 import {asyncFilterTabs} from './general.js'
-import {updateFilteredTabs} from '../store/tabSlice'
+import {updateFilteredTabs} from '~/store/tabSlice'
 
 const MyLoader = (props) => (
   <ContentLoader
@@ -111,7 +111,7 @@ const TabWindowWrapper = React.memo(() => {
     <div className="tabs-list-container">
       <React.Suspense fallback={<h1>Loading profile...</h1>}>
         <DndProvider backend={HTML5Backend}>
-          <List id={'droppableUL'}>
+          <List id={'droppableUL'} className="mr-[10px]">
             {filteredTabs?.map((tab) => (
               <Tab
                 {...tab}
