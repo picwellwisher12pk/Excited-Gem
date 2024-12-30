@@ -26,7 +26,8 @@ const SortButton = ({tabs}) => {
     <Dropdown menu={{items, onClick}} className="mr-3" trigger={['click']}>
       <Btn>
         <span>Sort Tabs</span>
-        <CaretDownFilled/>
+        <CaretDownFilled
+          style={{fontSize: 12, color: '#bfbfbf'}}/>
       </Btn>
     </Dropdown>
   )

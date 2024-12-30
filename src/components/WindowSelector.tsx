@@ -4,6 +4,7 @@ import {useDispatch, useSelector} from 'react-redux'
 
 import {getAllWindows, getCurrentWindow} from '~/scripts/general'
 import {updateSelectedWindow} from '~/store/tabSlice'
+import {CaretDownFilled} from "@ant-design/icons";
 
 const {Option} = Select
 
@@ -128,8 +129,7 @@ export default function WindowSelector() {
       loading={loading}
       style={{width: 200}}
       size={'small'}
-      bordered={false}
-      showArrow={true}
+      suffixIcon={<CaretDownFilled/>}
       defaultValue={{
         value: selectedWindow
       }}
