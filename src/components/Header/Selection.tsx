@@ -2,7 +2,7 @@ import {Checkbox} from 'antd'
 import {memo, useCallback} from 'react'
 import {useDispatch, useSelector} from 'react-redux'
 
-import {clearSelectedTabs, invertSelectedTabs, selectAllTabs} from '~/store/tabSlice.js'
+import {clearSelectedTabs, invertSelectedTabs, selectAllTabs} from '~/store/tabSlice'
 import Btn from '~/components/Btn'
 
 
@@ -23,7 +23,7 @@ const Selection = () => {
   return (
     <div className="flex shadow-md">
       <span
-        className="bg-zinc-200 px-2 !rounded-l-md text-black select-none"
+        className="bg-zinc-200 px-2 !rounded-l-sm text-black select-none"
         title="Un/Select only filtered or visible tabs">
         <Checkbox
           onChange={handleAllSelection}

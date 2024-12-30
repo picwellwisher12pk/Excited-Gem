@@ -20,13 +20,13 @@ svg {
 
 .ant-select:not(.ant-select-customize-input) .ant-select-selector {
   border: none;
+  border-radius: 2px;
 }
 
 .ant-btn {
   display: flex;
   align-items: center;
   justify-content: center;
-  ;
 }
 
 
@@ -43,12 +43,12 @@ svg {
 
   position: relative;
 
-  .nav>li>a {
+  .nav > li > a {
     color: #fff;
   }
 
   .nav-pills .nav-link.active,
-  .nav-pills .show>.nav-link {
+  .nav-pills .show > .nav-link {
     background-color: transparent;
   }
 
@@ -93,7 +93,7 @@ svg {
 }
 
 .panel-group {
-  .panel+.panel {
+  .panel + .panel {
     margin-top: 0;
   }
 
@@ -150,7 +150,7 @@ svg {
 }
 
 .context-actions {
-  .nav>li>a {
+  .nav > li > a {
     padding: 5px 0;
   }
 
@@ -214,7 +214,7 @@ svg {
   z-index: -1;
   opacity: 0;
 
-  .nav>li>a {
+  .nav > li > a {
     color: #fff;
   }
 }

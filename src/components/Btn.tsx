@@ -7,7 +7,7 @@ import {btnBorder, btnGradient} from '~/scripts/constants'
 function Btn({
                children,
                size = 'small',
-               gradient = true,
+               gradient = false,
                border = false,
                ...props
              }: any) {

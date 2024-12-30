@@ -4,7 +4,6 @@ import {useDispatch, useSelector} from 'react-redux'
 
 import {getAllWindows, getCurrentWindow} from '~/scripts/general'
 import {updateSelectedWindow} from '~/store/tabSlice'
-import {CaretDownFilled} from "@ant-design/icons";
 
 const {Option} = Select
 
@@ -129,11 +128,10 @@ export default function WindowSelector() {
       loading={loading}
       style={{width: 200}}
       size={'small'}
-      suffixIcon={<CaretDownFilled/>}
       defaultValue={{
         value: selectedWindow
       }}
-      className="!border-0 shadow-md hover:shadow-sm active:shadow-none rounded-sm !bg-gradient-to-b !from-white !to-slate-200"
+      className="!border-0 shadow-md hover:shadow-sm active:shadow-none"
       onSelect={setWindow}>
       {[optionAll, optionCurrent, ...options]}
     </Select>

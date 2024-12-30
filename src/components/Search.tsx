@@ -9,13 +9,7 @@ import VolumeIcon from 'react:/src/icons/volume.svg'
 
 import ErrorBoundary from '/src/scripts/ErrorBoundary'
 import {makePlaceholder as doPlaceholder} from '/src/scripts/general'
-import {
-  toggleAudible,
-  togglePinned,
-  toggleRegex,
-  toggleSearchIn,
-  updateSearchTerm
-} from '/src/store/searchSlice'
+import {toggleAudible, togglePinned, toggleRegex, toggleSearchIn, updateSearchTerm} from '/src/store/searchSlice'
 
 const {Search: AntSearch} = Input
 

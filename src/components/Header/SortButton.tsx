@@ -1,4 +1,4 @@
-import {CaretDownFilled} from '@ant-design/icons'
+import {DownOutlined} from '@ant-design/icons'
 import type {MenuProps} from 'antd';
 import {Dropdown} from 'antd'
 //@ts-ignore
@@ -26,7 +26,7 @@ const SortButton = ({tabs}) => {
     <Dropdown menu={{items, onClick}} className="mr-3" trigger={['click']}>
       <Btn>
         <span>Sort Tabs</span>
-        <CaretDownFilled
+        <DownOutlined
           style={{fontSize: 12, color: '#bfbfbf'}}/>
       </Btn>
     </Dropdown>

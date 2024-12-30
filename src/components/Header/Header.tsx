@@ -7,7 +7,7 @@ import ThumbtackIcon from 'react:/src/icons/thumbtack-active.svg'
 import VolumeSlashIcon from 'react:/src/icons/volume-mute.svg'
 
 import {getAllWindows, getCurrentWindow, processTabs} from '~/scripts/general'
-import {clearSelectedTabs} from '~/store/tabSlice.js'
+import {clearSelectedTabs} from '~/store/tabSlice'
 import {MoveModal} from '~/components/Modals/Move'
 import {SaveModal} from '~/components/Modals/Save'
 import WindowSelector from '~/components/WindowSelector'
