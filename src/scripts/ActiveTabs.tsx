@@ -12,7 +12,7 @@ import '~/assets/dev-logo.svg'
 
 import TabWindowWrapper from './TabWindowWrapper'
 import Header from '~/components/Header/Header'
-import Navigation from '~/components/Header/Navigation.jsx'
+import Navigation from '~/components/Header/Navigation'
 import Search from '~/components/Search'
 
 export function updateTabs(getTabs, store) {

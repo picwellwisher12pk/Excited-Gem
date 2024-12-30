@@ -6,7 +6,7 @@ import {HTML5Backend} from 'react-dnd-html5-backend'
 import {useDispatch, useSelector} from 'react-redux'
 
 import Tab from '~/components/Tab'
-import {asyncFilterTabs} from './general.js'
+import {asyncFilterTabs} from './general'
 import {updateFilteredTabs} from '~/store/tabSlice'
 
 const MyLoader = (props) => (

@@ -2,7 +2,7 @@
 
 import {Provider} from 'react-redux'
 import ActiveTabs from '~/scripts/ActiveTabs'
-import store from '~/store/store.js'
+import store from '~/store/store'
 
 import 'antd/dist/reset.css'
 import '~/styles/index.css'

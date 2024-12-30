@@ -1,2 +1,1 @@
-// import TabsGroup from './TabsGroup.js';
-module.exports = require("./TabsGroup.jsx")
+module.exports = require("./TabsGroup")

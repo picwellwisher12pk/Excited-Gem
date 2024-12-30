@@ -1,1 +1,1 @@
-module.exports = require("../../Search.jsx")
+module.exports = require("~/components/Header/Search")

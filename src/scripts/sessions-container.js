@@ -1,7 +1,7 @@
 //Vendors
 import React from 'react';
 import ReactDOM from 'react-dom';
-// import * as general from './components/general.js';
+// import * as general from './components/general';
 import Sessions from './react-components/session';
 import {getSessions, saveSessions} from './components/getsetSessions';
 //Styles
@@ -11,12 +11,12 @@ import {getSessions, saveSessions} from './components/getsetSessions';
 // import '../styles/fontawesome5.scss';
 import '../styles/eg.scss';
 
-$(document).ready(function() {
+$(document).ready(function () {
   $('.collapse').collapse();
-  window.sessions = ReactDOM.render(<Sessions />, document.getElementById('all-sessions'));
-  getSessions().then(items => window.sessions.setState({ data: items }));
+  window.sessions = ReactDOM.render(<Sessions/>, document.getElementById('all-sessions'));
+  getSessions().then(items => window.sessions.setState({data: items}));
 
-  $('#saveSessions-btn').on('click', function(e) {
+  $('#saveSessions-btn').on('click', function (e) {
     e.preventDefault();
     saveSessions(sessions);
   });
