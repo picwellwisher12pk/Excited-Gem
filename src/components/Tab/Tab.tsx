@@ -110,7 +110,7 @@ const Tab = ({
       key={id}
       id={String(id)}
       className={
-        `max-w-[100vw] overflow-hidden tab-item flex py-2 hover:bg-slate-200 transition-colors duration-300 border-b-stone-100 !justify-start border${selected ? ' checked bg-slate-100' : ' '}${loading ? ' loading' : discardedStatus}`
+        `max-w-[100vw] overflow-hidden tab-item flex pr-0 hover:bg-slate-200 transition-colors duration-300 border-b-stone-100 !justify-start border${selected ? ' checked bg-slate-100' : ' '}${loading ? ' loading' : discardedStatus}`
       }
       style={{opacity}}
       data-discarded={discarded}
@@ -138,7 +138,7 @@ const Tab = ({
         </button>
       </div>
       <div
-        className="tab-actions flex align-self-center justify-self-end mx-3 gap-2 shrink-0"
+        className="tab-actions flex align-self-center justify-self-end ms-3 gap-2 shrink-0"
         aria-label="options">
         {activeTab && (
           <>
