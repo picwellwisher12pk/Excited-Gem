@@ -2,14 +2,14 @@ import {Checkbox, Input, Popover} from 'antd'
 import {debounce} from 'lodash'
 import React, {memo, useCallback, useEffect, useState} from 'react'
 import {useDispatch, useSelector} from 'react-redux'
-import ThumbtackActiveIcon from 'react:/src/icons/thumbtack-active.svg'
-import ThumbtackIcon from 'react:/src/icons/thumbtack.svg'
-import VolumeOffIcon from 'react:/src/icons/volume-off.svg'
-import VolumeIcon from 'react:/src/icons/volume.svg'
+import ThumbtackActiveIcon from 'react:~/icons/thumbtack-active.svg'
+import ThumbtackIcon from 'react:~/icons/thumbtack.svg'
+import VolumeOffIcon from 'react:~/icons/volume-off.svg'
+import VolumeIcon from 'react:~/icons/volume.svg'
 
-import ErrorBoundary from '/src/scripts/ErrorBoundary'
-import {makePlaceholder as doPlaceholder} from '/src/scripts/general'
-import {toggleAudible, togglePinned, toggleRegex, toggleSearchIn, updateSearchTerm} from '/src/store/searchSlice'
+import ErrorBoundary from '~/scripts/ErrorBoundary'
+import {makePlaceholder as doPlaceholder} from '~/scripts/general'
+import {toggleAudible, togglePinned, toggleRegex, toggleSearchIn, updateSearchTerm} from '~/store/searchSlice'
 
 const {Search: AntSearch} = Input
 

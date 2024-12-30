@@ -47,7 +47,6 @@ const pinActions: string[] = ['toggle', 'pin', 'unpin']
 const muteActions: string[] = ['toggle', 'mute', 'unmute']
 
 const Header = (props) => {
-  console.log('Header')
   const dispatch = useDispatch()
   const {selectedTabs, tabs, filteredTabs} = useSelector(
     (state) => state.tabs

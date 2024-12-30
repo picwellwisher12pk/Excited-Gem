@@ -23,7 +23,7 @@ const Selection = () => {
   return (
     <div className="flex shadow-md">
       <span
-        className="bg-zinc-200 px-2 !rounded-l-sm text-black select-none"
+        className="bg-zinc-200 px-2 !rounded-l text-black select-none"
         title="Un/Select only filtered or visible tabs">
         <Checkbox
           onChange={handleAllSelection}

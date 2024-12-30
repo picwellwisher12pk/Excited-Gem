@@ -16,9 +16,9 @@ function Home() {
       <Provider store={store}>
         <ConfigProvider theme={{
           token: {
-            borderRadius: 2,
-            borderRadiusSM: 2,
-            borderRadiusLG: 2
+            borderRadius: 4,
+            borderRadiusSM: 4,
+            borderRadiusLG: 4
           }
         }}>
           <ActiveTabs/>
