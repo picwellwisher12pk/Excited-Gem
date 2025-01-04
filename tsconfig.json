@@ -1,19 +1,26 @@
 {
-  "extends": "plasmo/templates/tsconfig.base",
-  "exclude": [
-    "node_modules"
-  ],
-  "include": [
-    ".plasmo/index.d.ts",
-    "./**/*.ts",
-    "./**/*.tsx"
-  ],
   "compilerOptions": {
+    "target": "es5",
+    "lib": ["dom", "dom.iterable", "esnext"],
+    "allowJs": false,
+    "skipLibCheck": true,
+    "esModuleInterop": true,
+    "allowSyntheticDefaultImports": true,
+    "strict": true,
+    "forceConsistentCasingInFileNames": true,
+    "noFallthroughCasesInSwitch": true,
+    "module": "esnext",
+    "moduleResolution": "node",
+    "resolveJsonModule": true,
+    "noEmit": false,
+    "jsx": "react",
     "paths": {
       "~*": [
-        "./*"
+        ".src/*"
       ]
     },
-    "baseUrl": "."
-  }
+    "baseUrl": "./"
+  },
+  "include": ["src/**/*.ts","src/**/*.tsx"],
+  "exclude": ["build", "node_modules"]
 }
