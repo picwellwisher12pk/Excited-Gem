@@ -1,7 +1,7 @@
 // import 'webextension-polyfill';
 // import { exampleThemeStorage } from '@extension/storage';
 
-import { capture } from "../../lib/generic";
+import { capture } from "../lib/generic";
 
 
 // const isFF = /Firefox/.test(navigator.userAgent);

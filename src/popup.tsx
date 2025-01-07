@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from "react"
+import MainCard from "~/components/homePage/MainCard";
 
 const styles = {
   button: {
@@ -30,6 +31,7 @@ function IndexPopup() {
 
   return (
     <div style={{ minWidth: 200, display: 'flex', gap: '10px', flexDirection: 'column' }}>
+      <MainCard />
       <button onClick={() => initiateCapture('visible')} type="button" style={styles.button}>Capture Visible</button>
       <button onClick={() => initiateCapture('all')} type="button" style={styles.button}>Capture All</button>
       <button onClick={() => initiateCapture('selection')} type="button" style={styles.button}>Capture Selection</button>
