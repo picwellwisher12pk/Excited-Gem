@@ -1,1 +1,7 @@
-pnpm dlx lint-staged --allow-empty
+{
+	"lint-staged": {
+		"*.js": "eslint --fix",
+		"*.ts": "eslint --fix",
+		"*.css": "stylelint --fix"
+	}
+}
