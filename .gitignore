@@ -22,3 +22,6 @@
 
 # secrets
 secrets.*.js
+/chrome-extension
+/packages
+/pages
