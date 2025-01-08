@@ -1,0 +1,9 @@
+[?9001h[?1004h[?25l[2J[m[2;1H> @extension/dev-utils@0.3.3 ready C:\Users\amir\Documents\Projects\BetterLogic\WebShot-extension\packages\dev-utils
+> tsc[5;1H]0;C:\Users\amir\AppData\Local\pnpm\pnpm.exe[?25h[?25l[96mlib/logger.ts[m:[93m1[m:[93m30 [m- [91merror [90mTS2307: [mCannot find module '@extension/shared' or its corresponding type declarations.[7m[7;1H1[27m import type { ValueOf } from '@extension/shared';[7m
+ [27m[30X[91m[30C~~~~~~~~~~~~~~~~~~~[10;1H[?25h[?25l[m[96mtsconfig.json[m:[93m2[m:[93m14 [m- [91merror [90mTS6053: [mFile '@extension/tsconfig/utils' not found.[7m[12;1H2[27m   "extends": "@extension/tsconfig/utils",[7m
+ [27m[14X[91m[14C~~~~~~~~~~~~~~~~~~~~~~~~~~~[m[16;1HFound 2 errors in 2 files.[18;1HErrors  Files
+     1  lib/logger.ts[90m:1[?25h[m
+     1  tsconfig.json[90m:2[K[m
+[30m[41m ELIFECYCLE [m [31mCommand failed with exit code 2.[m
+[30m[43m WARN [m  Local package.json exists, but node_modules missing, did you mean to install?
+[?9001l[?1004l

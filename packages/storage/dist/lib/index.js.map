@@ -1,0 +1,7 @@
+{
+  "version": 3,
+  "sources": ["../../lib/index.ts"],
+  "sourcesContent": ["export type { BaseStorage } from './base/types';\nexport * from './impl';\n"],
+  "mappings": "AACA,cAAc;",
+  "names": []
+}

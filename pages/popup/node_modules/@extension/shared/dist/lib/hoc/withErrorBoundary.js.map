@@ -1,0 +1,7 @@
+{
+  "version": 3,
+  "sources": ["../../../lib/hoc/withErrorBoundary.tsx"],
+  "sourcesContent": ["import type { ComponentType, ErrorInfo, ReactElement } from 'react';\nimport { Component } from 'react';\n\nclass ErrorBoundary extends Component<\n  {\n    children: ReactElement;\n    fallback: ReactElement;\n  },\n  {\n    hasError: boolean;\n  }\n> {\n  state = { hasError: false };\n\n  static getDerivedStateFromError() {\n    return { hasError: true };\n  }\n\n  componentDidCatch(error: Error, errorInfo: ErrorInfo) {\n    console.error(error, errorInfo);\n  }\n\n  render() {\n    if (this.state.hasError) {\n      return this.props.fallback;\n    }\n\n    return this.props.children;\n  }\n}\n\nexport function withErrorBoundary<T extends Record<string, unknown>>(\n  Component: ComponentType<T>,\n  ErrorComponent: ReactElement,\n) {\n  return function WithErrorBoundary(props: T) {\n    return (\n      <ErrorBoundary fallback={ErrorComponent}>\n        <Component {...props} />\n      </ErrorBoundary>\n    );\n  };\n}\n"],
+  "mappings": ";;;;;;;;;;;;;;;;;AACA,SAAS,iBAAiB;AAE1B,MAAM,sBAAsB,UAQ1B;AAAA,EARF;AAAA;AASE,iCAAQ,EAAE,UAAU,MAAM;AAAA;AAAA,EAE1B,OAAO,2BAA2B;AAChC,WAAO,EAAE,UAAU,KAAK;AAAA,EAC1B;AAAA,EAEA,kBAAkB,OAAc,WAAsB;AACpD,YAAQ,MAAM,OAAO,SAAS;AAAA,EAChC;AAAA,EAEA,SAAS;AACP,QAAI,KAAK,MAAM,UAAU;AACvB,aAAO,KAAK,MAAM;AAAA,IACpB;AAEA,WAAO,KAAK,MAAM;AAAA,EACpB;AACF;AAEO,gBAAS,kBACdA,YACA,gBACA;AACA,SAAO,SAAS,kBAAkB,OAAU;AAC1C,WACE,oCAAC,iBAAc,UAAU,kBACvB,oCAACA,YAAA,mBAAc,MAAO,CACxB;AAAA,EAEJ;AACF;",
+  "names": ["Component"]
+}

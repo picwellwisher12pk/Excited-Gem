@@ -1,0 +1,8 @@
+[?9001h[?1004h[?25l[2J[m[2;1H> @extension/hmr@0.3.3 ready C:\Users\amir\Documents\Projects\BetterLogic\WebShot-extension\packages\hmr
+> pnpm run build:tsc && pnpm run build:rollup[5;1H]0;C:\Users\amir\AppData\Local\pnpm\pnpm.exe[?25h[?25l
+> @extension/hmr@0.3.3 build:tsc C:\Users\amir\Documents\Projects\BetterLogic\WebShot-extension\packages\hmr
+> tsc -b tsconfig.build.json[9;1H[?25h[?25l[96mtsconfig.build.json[m:[93m2[m:[93m14 [m- [91merror [90mTS6053: [mFile '@extension/tsconfig/utils' not found.[7m[11;1H2[27m   "extends": "@extension/tsconfig/utils",[7m
+ [27m[14X[91m[14C~~~~~~~~~~~~~~~~~~~~~~~~~~~[14;1H[?25h[?25l[m
+Found 1 error.[17;1H[?25h[30m[41m ELIFECYCLE [m [31mCommand failed with exit code 1.
+[m[30m[43m WARN [m  Local package.json exists, but node_modules missing, did you mean to install?
+[?9001l[?1004l

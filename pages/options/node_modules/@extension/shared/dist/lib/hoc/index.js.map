@@ -1,0 +1,7 @@
+{
+  "version": 3,
+  "sources": ["../../../lib/hoc/index.ts"],
+  "sourcesContent": ["import { withSuspense } from './withSuspense';\nimport { withErrorBoundary } from './withErrorBoundary';\n\nexport { withSuspense, withErrorBoundary };\n"],
+  "mappings": "AAAA,SAAS,oBAAoB;AAC7B,SAAS,yBAAyB;AAElC,SAAS,cAAc;",
+  "names": []
+}

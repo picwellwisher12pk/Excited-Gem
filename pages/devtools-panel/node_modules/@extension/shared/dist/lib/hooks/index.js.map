@@ -1,0 +1,7 @@
+{
+  "version": 3,
+  "sources": ["../../../lib/hooks/index.ts"],
+  "sourcesContent": ["export * from './useStorage';\n"],
+  "mappings": "AAAA,cAAc;",
+  "names": []
+}
