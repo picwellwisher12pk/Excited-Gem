@@ -1,3 +1,4 @@
+import MainCard from "../components/homePage/MainCard";
 import "./Popup.css";
 const styles = {
   button: {
@@ -24,10 +25,8 @@ export default function () {
   }
 
   return (
-    <div style={{ minWidth: 200, display: 'flex', gap: '10px', flexDirection: 'column' }}>
-      <button onClick={() => initiateCapture('visible')} type="button" style={styles.button}>Capture Visible</button>
-      <button onClick={() => initiateCapture('all')} type="button" style={styles.button}>Capture All</button>
-      <button onClick={() => initiateCapture('selection')} type="button" style={styles.button}>Capture Selection</button>
-    </div>
+    <section className='flex items-center justify-center min-h-screen'>
+      <MainCard />
+    </section>
   )
 }
