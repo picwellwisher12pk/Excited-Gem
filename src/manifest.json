@@ -1,29 +1,23 @@
 {
-	"manifest_version": 3,
-	"name": "Webshot",
-	"description": "A chrome extension boilerplate built with React 17, Webpack 5, and Webpack Dev Server 4",
-	"options_page": "options.html",
-	"background": { "service_worker": "background.bundle.js" },
-	"action": {
-		"default_popup": "popup.html"
-	},
-	"icons": {
-		"128": "icon-128.png"
-	},
-	"permissions": ["activeTab", "tabs", "contextMenus", "downloads"],
-	"content_scripts": [
-		{
-			"matches": ["http://*/*", "https://*/*", "<all_urls>"],
-			"js": ["contentScript.bundle.js"],
-			"css": ["content.styles.css"]
-		}
-	],
-	"host_permissions": ["<all_urls>"],
-	"devtools_page": "devtools.html",
-	"web_accessible_resources": [
-		{
-			"resources": ["content.styles.css", "icon-128.png", "icon-34.png"],
-			"matches": []
-		}
-	]
+  "{{chrome}}.manifest_version": 3,
+  "{{firefox}}.manifest_version": 2,
+  "icons": {
+    "16": "icon/16.png",
+    "32": "icon/32.png",
+    "48": "icon/48.png",
+    "96": "icon/96.png",
+    "128": "icon/128.png"
+  },
+  "{{chrome}}.action": {
+    "default_popup": "src/popup.html"
+  },
+  "{{firefox}}.browser_action": {
+    "default_popup": "src/popup.html"
+  },
+  "permissions": ["activeTab", "scripting", "storage", "downloads"],
+  "host_permissions": ["<all_urls>"],
+  "background": {
+    "{{chrome}}.service_worker": "src/background.ts",
+    "{{firefox}}.scripts": ["src/background.ts"]
+  }
 }
