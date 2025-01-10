@@ -2,9 +2,21 @@
 @tailwind components;
 @tailwind utilities;
 html,
+:root {
+    --text-dark: #000;
+    --bg-default: #fff;
+    --bg-light: #e5e5e5;
+    --half-white: #f2f2f2;
+    --bg-card: #fff;
+    --border: #b2b2b2;
+    --alert: #fef7ee;
+    --alert-icon: #ffe7cb;
+    --select: #fff;
+    --card-border: #b2b2b2;
+}
 body {
-  width: 300px;
-  height: 400px;
+  width: 388px;
+  /* height: 610px; */
   padding: 0;
   margin: 0;
 }

@@ -1,5 +1,3 @@
-"use client";
-
 import { useState } from "react";
 import { Card } from "@/components/ui/card";
 import { CardHeader } from "./CardHeader";
@@ -9,7 +7,7 @@ export default function MainCard() {
   const [ratingOpen, setRatingOpen] = useState(false);
 
   return (
-    <Card className='overflow-hidden w-[388px] relative high-shadow border-none max-h-[610px] overflow-y-auto scrollbar'>
+    <Card className='overflow-hidden w-[388px] relative'>
       <CardHeader
         onRatingToggle={() => setRatingOpen(!ratingOpen)}
         ratingOpen={ratingOpen}

@@ -18,7 +18,23 @@ import SliderBtn from "../SliderBtn";
 import { ChevronLeft, ChevronRight } from "lucide-react";
 
 import QualityCard from "./videoQuality/QualityCard";
+const initiateCapture = (area: 'visible' | 'all' | 'selection') => {
+  chrome.tabs.query({
+    active: true,
+    currentWindow: true
+  }, (tab) => {
+    console.log(tab[0].id, 'area:', area);
+    chrome.runtime.sendMessage({
+      method: 'capture',
+      area: area,
+      tabId: tab[0].id
+    }, (response) => {
+      console.log('response', response);
+      // window.close();
+    });
+  });
 
+}
 interface CardProps {
   setRatingOpen: (ratingOpen: boolean) => void;
   ratingOpen: boolean;
@@ -37,6 +53,10 @@ export function CardContent({ ratingOpen, setRatingOpen }: CardProps) {
     : smallCard.slice(0, 3);
 
   const handleCardSelect = (text: string) => {
+    console.log("Selected card:", text);
+    if (text === "Visible Part") {
+      initiateCapture('visible');
+    }
     setSelectedCard(text);
     if (!recordVideo) {
       if (text === "Entire Page") {
@@ -105,7 +125,7 @@ export function CardContent({ ratingOpen, setRatingOpen }: CardProps) {
             <SmallCard
               recordVideo={recordVideo}
               setWebCam={setWebCam}
-              key={i}
+              key={item.key}
               setScreenShot={setScreenshot}
               icon={item.icon}
               text={item.name}

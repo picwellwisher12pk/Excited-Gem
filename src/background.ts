@@ -1,7 +1,12 @@
 import browser from "webextension-polyfill";
+import { capture, save } from "./lib/generic";
 
-console.log("Hello from the background!");
-
-browser.runtime.onInstalled.addListener((details) => {
-  console.log("Extension installed:", details);
-});
+browser.runtime.onMessage.addListener((requestType, sender, sendResponse) => {
+  console.log('requestType', requestType);
+  if (requestType.method === 'capture') {
+    capture(requestType.area).then((blob) => {
+      save(blob, { id: requestType.tabId })
+    });
+    return true;
+  }
+})
