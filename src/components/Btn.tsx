@@ -1,16 +1,22 @@
-import {Button} from 'antd'
-import {memo} from 'react'
+import { Button } from 'antd'
+import type { ButtonProps } from 'antd'
+import type { ReactNode } from 'react'
 
-import {btnBorder, btnGradient} from '~/scripts/constants'
+import { btnBorder, btnGradient } from '~/scripts/constants'
 
+interface BtnProps extends ButtonProps {
+  gradient?: boolean
+  border?: boolean
+  children?: ReactNode
+}
 
-function Btn({
-               children,
-               size = 'small',
-               gradient = false,
-               border = false,
-               ...props
-             }: any) {
+export default function Btn({
+  children,
+  size = 'small',
+  gradient = false,
+  border = false,
+  ...props
+}: Readonly<BtnProps>) {
   return (
     <Button
       size={size}
@@ -18,7 +24,7 @@ function Btn({
       className={`align-items-center min-w-[40px] shadow-md hover:shadow-sm active:shadow-none
       ${!border ? btnBorder : '!border !border-zinc-200'}
       ${gradient ? btnGradient : ''} ${props.className}`}>
-      {children?.length > 1 ? (
+      {Array.isArray(children) && children.length > 1 ? (
         <div className="flex items-center gap-1">{children}</div>
       ) : (
         children
@@ -26,5 +32,3 @@ function Btn({
     </Button>
   )
 }
-
-export default memo(Btn)

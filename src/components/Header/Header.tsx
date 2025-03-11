@@ -1,62 +1,66 @@
 import DownOutlined from '@ant-design/icons'
-import {Dropdown, Menu, Select, Space} from 'antd'
-import {memo, useCallback, useEffect, useMemo, useRef, useState} from 'react'
-import {useDispatch, useSelector} from 'react-redux'
+import { Dropdown, Select, Space } from 'antd'
+import { useCallback, useEffect, useMemo, useState } from 'react'
+import { useDispatch, useSelector } from 'react-redux'
+import type { ReactNode } from 'react'
+
+// Import SVG icons
 import SyncAltIcon from 'react:/src/icons/sync-alt.svg'
 import ThumbtackIcon from 'react:/src/icons/thumbtack-active.svg'
 import VolumeSlashIcon from 'react:/src/icons/volume-mute.svg'
+import TimesIcon from "react:/src/icons/xmark-solid.svg"
+import MoveIcon from "react:/src/icons/up-down-left-right-solid.svg"
+import VolumeIcon from "react:/src/icons/volume.svg"
+import SaveIcon from "react:/src/icons/floppy-disk-solid.svg"
+import logo from '~/assets/logo.svg'
 
-import {getAllWindows, getCurrentWindow, processTabs} from '~/scripts/general'
-import {clearSelectedTabs} from '~/store/tabSlice'
-import {MoveModal} from '~/components/Modals/Move'
-import {SaveModal} from '~/components/Modals/Save'
+import { getAllWindows, getCurrentWindow, processTabs } from '~/scripts/general'
+import { clearSelectedTabs } from '~/store/tabSlice'
+import { MoveModal } from '~/components/Modals/Move'
+import { SaveModal } from '~/components/Modals/Save'
 import WindowSelector from '~/components/WindowSelector'
 import Brand from './Brand'
 import MenuItemButton from './MenuItemButton'
 import Selection from './Selection'
 import SortButton from './SortButton'
-//Images
-// @ts-ignore
-import logo from '~/assets/logo.svg'
 import Btn from '~/components/Btn'
-import TimesIcon from "react:/src/icons/xmark-solid.svg"
-import MoveIcon from "react:/src/icons/up-down-left-right-solid.svg"
-import VolumeIcon from "react:/src/icons/volume.svg"
-import SaveIcon from "react:/src/icons/floppy-disk-solid.svg"
 
+const { Option } = Select
 
-const {Option} = Select
+interface HeaderProps {
+  children?: ReactNode
+  allSelected?: boolean
+  allMuted?: boolean
+  allPinned?: boolean
+  processSelectedTabs?: (action: string) => void
+}
 
-function useTraceUpdate(props) {
-  const prev = useRef(props)
-  useEffect(() => {
-    const changedProps = Object.entries(props).reduce((ps, [k, v]) => {
-      if (prev.current[k] !== v) {
-        ps[k] = [prev.current[k], v]
-      }
-      return ps
-    }, {})
-    if (Object.keys(changedProps).length > 0) {
-      console.log('Changed props:', changedProps)
-    }
-    prev.current = props
-  })
+interface TabState {
+  selectedTabs: string[]
+  tabs: any[]
+  filteredTabs: any[]
+}
+
+interface MenuItem {
+  key: number
+  label: ReactNode
 }
 
 const pinActions: string[] = ['toggle', 'pin', 'unpin']
 const muteActions: string[] = ['toggle', 'mute', 'unmute']
 
-const Header = (props) => {
+export default function Header({
+  children,
+  allSelected = false,
+  allMuted = false,
+  allPinned = false,
+  processSelectedTabs = () => { }
+}: Readonly<HeaderProps>) {
   const dispatch = useDispatch()
-  const {selectedTabs, tabs, filteredTabs} = useSelector(
-    (state) => state.tabs
-  )
+  const { selectedTabs, tabs, filteredTabs } = useSelector((state: { tabs: TabState }) => state.tabs)
   const [checkedList, setCheckedList] = useState(selectedTabs)
   const [indeterminate, setIndeterminate] = useState(false)
   const [checkAll, setCheckAll] = useState(false)
-
-  const [allSelected, setAllSelected] = useState(props.allSelected)
-  const [allMuted, setAllMuted] = useState(props.allMuted)
 
   const [allWindows, setAllWindows] = useState([])
   const [currentWindow, setCurrentWindow] = useState({})
@@ -72,120 +76,100 @@ const Header = (props) => {
     getWindows()
   }, [])
 
-  const iconPinned = props.allPinned && (
-    <ThumbtackIcon style={{height: 16, fill: 'white'}}/>
+  const iconPinned = allPinned && (
+    <ThumbtackIcon style={{ height: 16, fill: 'white' }} />
   )
-  const iconSound = <VolumeSlashIcon style={{height: 16}}/>
+  const iconSound = <VolumeSlashIcon style={{ height: 16 }} />
 
-  // chrome.windows.getCurrent({ populate: true }).then((window) => {
-  //   setCurrentWindow(window)
-  // })
-
-  //Event Handlers
-
-  const handlePinning = useCallback((e) => {
+  const handlePinning = useCallback((e: React.MouseEvent) => {
     console.log('pinning', e, e.target)
   }, [])
-  const handleMuting = useCallback((e) => {
+
+  const handleMuting = useCallback((e: React.MouseEvent) => {
     console.log('muting', e)
   }, [])
 
   const handlePin = useCallback(
-    (option, selectedTabs, tabs) => {
+    (option: string, selectedTabs: string[], tabs: any[]) => {
       processTabs(option, selectedTabs, tabs)
     },
     [selectedTabs, tabs]
   )
+
   const handleMute = useCallback(
-    (option: string, selectedTabs, tabs) => {
+    (option: string, selectedTabs: string[], tabs: any[]) => {
       processTabs(option, selectedTabs, tabs)
     },
     [selectedTabs, tabs]
   )
-  const sortButton = useMemo(() => <SortButton tabs={tabs}/>, [])
-  const pinOptions: Item[] = pinActions.map((option, i) => ({
+
+  const sortButton = useMemo(() => <SortButton tabs={tabs} />, [tabs])
+
+  const pinOptions: MenuItem[] = pinActions.map((option, i) => ({
     key: i,
-    label: <MenuItemButton label={option} callback={handlePinning}/>
+    label: <MenuItemButton label={option} callback={handlePinning} />
   }))
-  const muteOptions: Item[] = muteActions.map((option, i) => ({
+
+  const muteOptions: MenuItem[] = muteActions.map((option, i) => ({
     key: i,
-    label: <MenuItemButton label={option} callback={handleMuting}/>
+    label: <MenuItemButton label={option} callback={handleMuting} />
   }))
-  const pinMenu = <Menu items={pinOptions}/>
-  const muteMenu = <Menu items={muteOptions}/>
-  // const muteBtnStyle = "!border-0 !shadow-md !hover:shadow-sm !bg-gradient-to-b !from-white !to-slate-200 ml-2"
+
+  const pinMenu = { items: pinOptions }
+  const muteMenu = { items: muteOptions }
 
   return (
     <header className="bg-gradient-to-t from-cyan-500 to-blue-500 p-2 transition-all duration-200 ease-in-out">
       <section className="flex">
         {Brand(logo)}
-        {props?.children}
+        {children}
       </section>
       <section
         className="flex flex-row justify-between items-center mt-1"
         id="selection-action">
         <div className="flex mb-0">
           <div className="mr-3">
-            <Selection/>
+            <Selection />
           </div>
           <div>{sortButton}</div>
           <div>
-            <WindowSelector/>
+            <WindowSelector />
           </div>
         </div>
         {selectedTabs.length > 0 && (
           <Space>
-            {/* <Select defaultValue={"selected"} className="!border-0 !mr-2">
-                <Option value="selected">With selected</Option>
-                <Option value="filtered">With Filtered</Option>
-              </Select> */}
             <span className="px-2 pl-0 text-white select-none font-semibold">
               Actions for selection ({selectedTabs.length} tabs)
             </span>
             <div>
               <Dropdown menu={pinMenu} trigger={['click']}>
-                <Btn
-                  onClick={(e) => e.preventDefault()}
-                >
-                  <ThumbtackIcon
-                    style={{height: 12}}
-                    className="fill-inherit"
-                  />
+                <Btn onClick={(e) => e.preventDefault()}>
+                  <ThumbtackIcon style={{ height: 12 }} className="fill-inherit" />
                   <span>Un/Pin</span>
-                  <DownOutlined className="text-zinc-500"/>
+                  <DownOutlined className="text-zinc-500" />
                 </Btn>
               </Dropdown>
             </div>
             <div>
               <Dropdown menu={muteMenu} trigger={['click']}>
                 <Btn>
-                  <VolumeIcon style={{height: 12}} className="fill-inherit"/>
+                  <VolumeIcon style={{ height: 12 }} className="fill-inherit" />
                   <span>Un/Mute</span>
-                  <DownOutlined className="text-zinc-500"/>
+                  <DownOutlined className="text-zinc-500" />
                 </Btn>
               </Dropdown>
             </div>
             <div>
-              <Btn
-                onClick={() => {
-                  setSaveModalVisible(true)
-                }}>
-                <SaveIcon
-                  style={{height: 12, width: 14}}
-                  className="inline"
-                />
+              <Btn onClick={() => setSaveModalVisible(true)}>
+                <SaveIcon style={{ height: 12, width: 14 }} className="inline" />
                 <span> Save ...</span>
               </Btn>
             </div>
-
             <div>
               <Btn
                 title="Move Selected Tabs"
-                onClick={() => {
-                  setMoveModalVisible(true)
-                }}
-              >
-                <MoveIcon style={{height: 14}}/>
+                onClick={() => setMoveModalVisible(true)}>
+                <MoveIcon style={{ height: 14 }} />
                 <Space>
                   <span>Move ...</span>
                 </Space>
@@ -198,47 +182,26 @@ const Header = (props) => {
                   processTabs('closeSelected', selectedTabs, tabs, () => {
                     dispatch(clearSelectedTabs())
                   })
-                }}
-              >
-                <TimesIcon style={{height: 14, width: 14, fill: "red"}}/>
+                }}>
+                <TimesIcon style={{ height: 14, width: 14, fill: "red" }} />
                 <span> Close</span>
               </Btn>
-            </div>
-            <div className={'input-group-append'}>
-              {/* <button
-                className="btn btn-default"
-                onClick={() => props.processSelectedTabs("toNewWindow")}
-              >
-                <FA icon={faShareSquare} />
-              </button> */}
             </div>
           </Space>
         )}
         <Space className="mr-1">
           <Btn
             title="Refresh View"
-            onClick={() => {
-              // updateTabs();
-              // this.setState({ tabs: props.tabs });
-            }}
-            style={{minWidth: 33}}>
-            <SyncAltIcon style={{height: 14}}/>
+            onClick={() => { }}
+            style={{ minWidth: 33 }}>
+            <SyncAltIcon style={{ height: 14 }} />
           </Btn>
-
           <div>
             <Btn
               onClick={() => {
-                props.processSelectedTabs(
-                  !props.allMuted ? 'muteSelected' : 'unmuteSelected'
-                  // filterTabs().map((tab) => tab.id)
-                )
-                // setState({ allMuted: !props.allMuted });
+                processSelectedTabs(!allMuted ? 'muteSelected' : 'unmuteSelected')
               }}
-              title={
-                !props.allMuted
-                  ? `Mute All Visible Tabs`
-                  : `Unmute All Visible Tabs`
-              }>
+              title={!allMuted ? 'Mute All Visible Tabs' : 'Unmute All Visible Tabs'}>
               {iconSound}
             </Btn>
           </div>
@@ -259,9 +222,5 @@ const Header = (props) => {
         />
       )}
     </header>
-    // <Profiler id={"header"} onRender={getMetrics}>
-    // </Profiler>
   )
 }
-
-export default memo(Header)
