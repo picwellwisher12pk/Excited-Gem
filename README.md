@@ -1,39 +1,69 @@
 # Excited Gem
 
-This repo is a quest to improve the famous extension for Chrome "OneTab" with respect to UI and UX along with some more useful options for regular Chrome users and developers/programmers.
+Excited Gem is a powerful Chrome extension designed to revolutionize your browsing experience. Inspired by "OneTab" but built for power users, it offers advanced tab management, session saving, and a beautiful, customizable interface.
 
-## Idea
+## Features
 
-The thought to make such a thing happened when I faced few problems while using Chrome browser. I love to read and research a lot. And while doing that I end opening more than 50 tabs. Mostly 60 or 70. It is then when I start having problem of managing my tabs. With so many tabs stacked up, it was hard to know which tab was which. Sometimes I accidentally closed a tab in try to select it.
+### 🚀 Active Tabs Management
+- **Visual Overview**: See all your open tabs in a clean, organized list.
+- **Quick Actions**: Pin, mute, or close tabs directly from the list.
+- **Drag & Drop**: Reorder tabs easily (coming soon).
+- **Search**: Instantly find tabs using text search or Regular Expressions.
 
-I could have gone with some simple solutions like move all my opened tabs to bookmarks and open them later when need it. Then I found an nice Chrome extension "One Tab". It was doing a great job. In fact part of the reason and inspiration to make this project came from that extension.
+### 💾 Sessions
+- **Save for Later**: Save all your open tabs into a "Session" to declutter your browser and save memory.
+- **Restore**: Restore individual tabs or entire sessions with a single click.
+- **Manage**: Rename, delete, or organize your saved sessions.
 
-So I decided to make something useful and also learn something new while making it. That is how I started building it and learned quite a bit about Javascript, Chrome Extension API, ReactJS and Typescript.
+### 🎨 Customizable Interface
+- **Display Modes**: Choose how you want to interact with the extension:
+    - **Sidebar**: Open in the browser side panel for side-by-side management.
+    - **Popup**: Classic extension popup for quick access.
+    - **New Tab**: Open as a full page in a new tab.
+- **Themes**: Modern, clean design with support for dark mode (system preference).
+- **Compact View**: Toggle between compact and expanded views for session lists.
 
-## Visuals
+### ⚙️ Settings
+- **Search Behavior**: Choose between "As you type" (debounced) or "On Enter" for search.
+- **Tab Management**: Configure how tabs are opened (Single instance vs Per Window).
 
-### Main
+## Tech Stack
 
-In the Following screen you can see all the tabs that have been opened in the current browser window. The Active Tabs list show you not only the currently opened tabs but also their attributes like whether it is pinned or not, whether it is audible or not.
-You can make a tab pinned or mute a tab, or go to a tab by clicking on its link(name).
+- **Framework**: [React](https://reactjs.org/)
+- **Language**: [TypeScript](https://www.typescriptlang.org/)
+- **Styling**: [Tailwind CSS](https://tailwindcss.com/) & [Ant Design](https://ant.design/)
+- **Build Tool**: [Plasmo](https://docs.plasmo.com/)
+- **Package Manager**: [Bun](https://bun.sh/)
 
-![Normal](./Designs/Screenshots/main-normal.JPG)
+## Development
 
-The Active Tabs list keep changing , every time the tabs are either moved , removed or created, pinned or muted.
+### Prerequisites
+- [Bun](https://bun.sh/) installed.
 
-The total number of tabs for current window is shown on the extension icon (top right next to address bar).
+### Setup
+1. Clone the repository.
+2. Install dependencies:
+   ```bash
+   bun install
+   ```
 
-### Filtering
+### Running in Development Mode
+To start the development server with hot-reloading:
+```bash
+bun dev
+```
+This will load the extension in a temporary Chrome instance.
 
-![Filtering](./Designs/Screenshots/main-filter.JPG)
+### Building for Production
+To build the extension for production (Chrome MV3):
+```bash
+bun build
+```
+The output will be in the `build/chrome-mv3-prod` directory.
 
-Currently this extension support two types of filtering for Active Tabs.
+## License
 
-1.  Normal (String/text search)
-2.  Regex/Regular Expressions
+MIT License - feel free to use and modify!
 
-The filtering is case Insensitive for now. But I shall soon add option to quickly toggle that.
-
-For now that was it. Got of future plans for this project. Shall keep you updated.
-
-from Pakistan with LOVE.
+---
+*Built with ❤️ by Amir Hameed*

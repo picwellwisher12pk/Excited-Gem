@@ -1,9 +1,9 @@
 {
   "name": "excited-gem",
-  "displayName ": "Excited Gem",
+  "displayName": "Excited Gem",
   "version": "1.0.0",
   "description": "A tool to manage your tabs and other browser related features.",
-  "homepage": "https://picwellwisher12pk.github.io/onetab-advanced/",
+  "homepage": "https://picwellwisher12pk.github.io/excited-gem/",
   "license": "MIT",
   "author": "Amir Hameed",
   "client": {
@@ -21,7 +21,6 @@
     "start": "nodemon",
     "dev": "plasmo dev",
     "build": "plasmo build",
-    "postbuild": "git add . ",
     "package": "plasmo package",
     "start:chromium": "web-ext run --source-dir ./extension --target=chromium",
     "start:firefox": "web-ext run --source-dir ./extension --target=firefox-desktop",
@@ -108,10 +107,14 @@
   "manifest": {
     "permissions": [
       "tabs",
-      "storage"
+      "storage",
+      "sidePanel"
     ],
     "content_security_policy": {
       "extension_pages": "script-src 'self' http://localhost:8097; object-src 'self'"
+    },
+    "side_panel": {
+      "default_path": "tabs/home.html"
     }
   },
   "nodemonConfig": {
