@@ -69,7 +69,7 @@ export default function Sidebar({ currentPage, collapsed: externalCollapsed, onT
             {/* Sidebar */}
             <div
                 className={`fixed left-0 top-0 h-full bg-gradient-to-b from-blue-600 to-indigo-600 shadow-lg transition-transform duration-300 z-40 ${collapsed ? '-translate-x-full' : 'translate-x-0'
-                    }`}
+                    } flex flex-col`}
                 style={{ width: '240px' }}
             >
                 <div className="flex justify-between items-center p-4 border-b border-white/20">
@@ -85,9 +85,15 @@ export default function Sidebar({ currentPage, collapsed: externalCollapsed, onT
                     mode="inline"
                     selectedKeys={[currentPage]}
                     items={items}
-                    className="!bg-transparent !border-0 pt-4"
+                    className="!bg-transparent !border-0 pt-4 flex-1"
                     theme="dark"
                 />
+
+                {/* Footer */}
+                <div className="p-4 border-t border-white/20">
+                    <div className="text-white font-semibold text-sm">Excited Gem</div>
+                    <div className="text-white/60 text-xs mt-1">v{chrome.runtime.getManifest().version}</div>
+                </div>
             </div>
         </>
     );

@@ -9,7 +9,7 @@ export default async function getManifest() {
   // can also be conditional based on your need
   const manifest = {
     manifest_version: manifestVersion,
-    name: pkg.displayName || pkg.name,
+    name: pkg.displayName || pkg.name || "Excited Gem",
     version: pkg.version,
     description: pkg.description,
     // options_ui: {
@@ -31,7 +31,11 @@ export default async function getManifest() {
       "tabs",
       "tabGroups",
       "unlimitedStorage",
+      "sidePanel"
     ],
+    side_panel: {
+      default_path: "tabs/home.html",
+    },
     // content_security_policy: {
     //   extension_pages:
     //     "default-src http://localhost:* 'self';script-src http://localhost:* 'self'; object-src 'none'",

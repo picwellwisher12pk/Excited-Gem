@@ -23,9 +23,9 @@ chrome.runtime.onInstalled.addListener(() => {
   })
   getTabs('current').then((tabs) => setBadge(tabs.length))
 })
-chrome.tabs.onRemoved.addListener((tabId) => {
+chrome.tabs.onRemoved.addListener((tabId, removeInfo) => {
   console.log('Excited Gem: Tab Removed/Closed.')
-  onRemoved()
+  onRemoved(tabId, removeInfo)
   setTabCountInBadge(tabId, true)
 })
 
@@ -67,15 +67,19 @@ async function openInTab(url: string, mode: 'single' | 'per-window', currentWind
 }
 
 chrome.action.onClicked.addListener(async (tab) => {
-  console.info('Extension Page opening');
   const { displayMode = 'sidebar', tabManagementMode = 'single' } = await chrome.storage.local.get(['displayMode', 'tabManagementMode']);
   const extensionUrl = chrome.runtime.getURL('/tabs/home.html');
 
   if (displayMode === 'sidebar') {
     // @ts-ignore - sidePanel types might be missing
     if (chrome.sidePanel && chrome.sidePanel.open) {
-      // @ts-ignore
-      await chrome.sidePanel.open({ windowId: tab.windowId });
+      try {
+        // @ts-ignore
+        await chrome.sidePanel.open({ windowId: tab.windowId });
+      } catch (error) {
+        console.error('Failed to open side panel:', error);
+        await openInTab(extensionUrl, tabManagementMode, tab.windowId);
+      }
     } else {
       await openInTab(extensionUrl, tabManagementMode, tab.windowId);
     }
