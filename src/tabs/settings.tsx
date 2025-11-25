@@ -5,6 +5,7 @@ import Sidebar, { SidebarToggleButton } from '~/components/Sidebar';
 import Brand from '~/components/Header/Brand';
 import logo from '~/assets/logo.svg';
 import store from '~/store/store';
+import { usePageTracking } from '~/components/Analytics/usePageTracking';
 import 'antd/dist/reset.css';
 import '~/styles/index.css';
 import '~/styles/index.scss';
@@ -14,6 +15,8 @@ const { Title, Text } = Typography;
 function SettingsPageContent() {
     const [sessionsView, setSessionsView] = useState<'compact' | 'expanded'>('compact');
     const [sidebarCollapsed, setSidebarCollapsed] = useState(true);
+
+    usePageTracking('/settings', 'Settings');
 
     useEffect(() => {
         chrome.storage.local.get(['sessionsView'], (result) => {
@@ -38,7 +41,6 @@ function SettingsPageContent() {
                 onToggle={() => setSidebarCollapsed(!sidebarCollapsed)}
             />
             <div className="flex flex-col flex-1">
-                {/* Header matching Tabs page structure */}
                 <header className="bg-gradient-to-t from-cyan-500 to-blue-500 p-2 transition-all duration-200 ease-in-out">
                     <section className="flex items-center">
                         <div className="mr-2">
@@ -96,6 +98,12 @@ function SettingsPageContent() {
                                 <div>
                                     <Text type="secondary">
                                         A powerful tab management extension for Chrome
+                                    </Text>
+                                </div>
+                                <div className="mt-4 pt-4 border-t">
+                                    <Text type="secondary" className="text-xs">
+                                        <strong>Privacy Notice:</strong> This extension collects anonymous usage analytics
+                                        to help improve the product. No personal information is collected.
                                     </Text>
                                 </div>
                             </Space>
