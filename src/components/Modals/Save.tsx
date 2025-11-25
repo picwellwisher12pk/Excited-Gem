@@ -1,20 +1,45 @@
-import {Button, Input, Modal, Select} from 'antd'
-import React, {useState} from 'react'
-import {useSelector} from 'react-redux'
+import { Button, Input, Modal, Select } from 'antd'
+import React, { useState } from 'react'
+import { useSelector } from 'react-redux'
 
-const {Option} = Select
+import { saveSession } from '../getsetSessions'
+
+const { Option } = Select
 
 const children = []
 export const SaveModal = (props) => {
-  const {tabs, filteredTabs} = useSelector((state) => state.tabs)
+  const { tabs, filteredTabs } = useSelector((state) => state.tabs)
   console.log(props.selectedTabs)
   const [loading, setLoading] = useState(false)
   const [title, setTitle] = useState('')
   const [tags, setTags] = useState('')
   const [list, setList] = useState([])
+
   const handleCancel = () => {
     props.setSaveModalVisible(false)
   }
+
+  const handleSave = async () => {
+    setLoading(true)
+    try {
+      const tabsToSave = props.selectedTabs.map(id => {
+        const tab = tabs.find(t => t.id === id)
+        return {
+          url: tab.url,
+          title: tab.title,
+          windowId: tab.windowId || 0 // Ensure windowId
+        }
+      }).filter(Boolean)
+
+      await saveSession(tabsToSave, title)
+      props.setSaveModalVisible(false)
+    } catch (error) {
+      console.error("Failed to save session:", error)
+    } finally {
+      setLoading(false)
+    }
+  }
+
   const handleChange = (value) => {
     children.push(value)
     console.log(`selected ${value}`)
@@ -25,13 +50,13 @@ export const SaveModal = (props) => {
       title={'Save Tabs as list'}
       open={true}
       width={800}
-      onOk={handleCancel}
+      onOk={handleSave}
       onCancel={handleCancel}
       footer={[
         <Button key="back" onClick={handleCancel}>
           Cancel
         </Button>,
-        <Button type="primary" loading={loading} onClick={handleCancel}>
+        <Button type="primary" loading={loading} onClick={handleSave}>
           Save
         </Button>
       ]}>

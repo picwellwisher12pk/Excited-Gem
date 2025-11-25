@@ -7,19 +7,22 @@ export const MoveModal = (props) => {
   const [type, setType] = useState(options[0])
   const [windowId, setWindowId] = useState(props.currentWindow.id)
   const [position, setPosition] = useState(0)
+
   function resetComponent() {
     setType(options[0])
     setWindowId(props.currentWindow.id)
     setPosition(0)
   }
+
   function makeMoveTypeUI(type) {
     switch (type) {
       case 'Current Windows':
         return (
-          <Radio.Group onChange={({ target }) => setWindowId(target.value)}>
-            <div className="flex flex-col">
+          <Radio.Group onChange={({ target }) => setWindowId(target.value)} value={windowId}>
+            <div className="flex flex-col max-h-[200px] overflow-auto">
               {props.windows.map((window, i) => (
                 <Radio
+                  key={window.id}
                   value={window.id}
                   disabled={window.id === props.currentWindow.id && true}>
                   {window.id === props.currentWindow.id && 'Current'} Window
@@ -56,67 +59,68 @@ export const MoveModal = (props) => {
         )
     }
   }
-  return (
-    <Modal
-      title={`Move (${props.selectedTabs.length}) Tabs to`}
-      visible={true}
-      onOk={() => {
+
+  const handleOk = async () => {
+    const tabIds = props.selectedTabs.map(Number);
+
+    try {
         switch (type) {
           case 'Current Windows':
             if (windowId === props.currentWindow.id) {
               alert('Select some window to move to')
-              return false
+              return
             }
-            Browser.tabs
-              .move(props.selectedTabs, {
-                windowId: windowId || props.currentWindow.id,
-                index: position
-              })
-              .then(() => {
-                resetComponent()
-                props.setMoveModalVisible(false)
-              })
-            return
+            await chrome.tabs.move(tabIds, {
+                windowId: Number(windowId),
+                index: Number(position) || -1
+            })
+            break
 
           case 'New Window':
-            Browser.windows.create().then((window) => {
-              Browser.tabs
-                .move(props.selectedTabs, { windowId: window.id, index: 0 })
-                .then(() => {
-                  resetComponent()
-                  props.setMoveModalVisible(false)
-                })
-            })
-            return
+            // Create window with first tab
+            const firstTab = tabIds[0];
+            const otherTabs = tabIds.slice(1);
+
+            const newWin = await chrome.windows.create({ tabId: firstTab, focused: true });
+
+            if (otherTabs.length > 0) {
+                await chrome.tabs.move(otherTabs, { windowId: newWin.id, index: -1 });
+            }
+            break
+
           case 'To End':
-            Browser.tabs
-              .move(props.selectedTabs, {
+            await chrome.tabs.move(tabIds, {
                 windowId: props.currentWindow.id,
                 index: -1
-              })
-              .then(() => {
-                resetComponent()
-                props.setMoveModalVisible(false)
-              })
-            return
+            })
+            break
 
           case 'To Start':
-            Browser.tabs
-              .move(props.selectedTabs, {
+            await chrome.tabs.move(tabIds, {
                 windowId: props.currentWindow.id,
                 index: 0
-              })
-              .then(() => {
-                resetComponent()
-                props.setMoveModalVisible(false)
-              })
-            return
+            })
+            break
         }
-      }}
+
+        resetComponent()
+        props.setMoveModalVisible(false)
+
+    } catch (error) {
+        console.error("Move failed:", error);
+        alert("Failed to move tabs. See console for details.");
+    }
+  }
+
+  return (
+    <Modal
+      title={`Move (${props.selectedTabs.length}) Tabs to`}
+      open={true}
+      onOk={handleOk}
       onCancel={() => {
         props.setMoveModalVisible(false)
       }}>
-      <Segmented options={options} onChange={setType} />
+      <Segmented options={options} onChange={setType} value={type} />
       <div className="py-3">{makeMoveTypeUI(type)}</div>
     </Modal>
   )

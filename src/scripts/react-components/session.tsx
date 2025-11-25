@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import { removeSessions } from '~/components/getsetSessions';
 
 // Helper function to convert timestamp to readable date
 function timeConverter(timestamp: number): string {
@@ -14,10 +15,10 @@ function timeConverter(timestamp: number): string {
 }
 
 interface WindowData {
-    [key: string]: any[];
+    [key: string]: { url: string; title: string }[];
 }
 
-interface SessionData {
+export interface SessionData {
     created: number;
     name?: string;
     windows: WindowData;
@@ -26,39 +27,87 @@ interface SessionData {
 interface SessionProps {
     data: SessionData;
     created: number;
+    onDelete?: () => void;
 }
 
-export default function Session({ data, created }: SessionProps) {
+export default function Session({ data, created, onDelete }: SessionProps) {
     const [show, setShow] = useState(false);
     const dateTime = timeConverter(data.created);
 
+    const handleRestore = (url?: string) => {
+        if (url) {
+            chrome.tabs.create({ url });
+        } else {
+            // Restore all
+            Object.values(data.windows).flat().forEach(tab => {
+                chrome.tabs.create({ url: tab.url });
+            });
+        }
+    };
+
+    const handleDelete = async () => {
+        if (confirm('Are you sure you want to delete this session?')) {
+            await removeSessions(data.created);
+            if (onDelete) onDelete();
+        }
+    };
+
     return (
-        <div key={data.created.toString()} data-id={data.created.toString()} className="card">
+        <div key={data.created.toString()} data-id={data.created.toString()} className="card mb-3">
             <div className="card-header clearfix cf" id={data.created.toString()}>
-                <h5 className="mb-0 float-left">
+                <div className="d-flex justify-content-between align-items-center">
                     <button
-                        className="btn btn-link"
+                        className="btn btn-link text-left"
                         type="button"
-                        data-toggle="collapse"
-                        data-target={`#collapse${dateTime}`}
-                        aria-expanded="true"
-                        aria-controls={`collapse${dateTime}`}
-                        onClick={() => setShow(!show)}>
-                        {data.name && <span className="session-name">{data.name}</span>}
-                        <span className="session-datetime">{dateTime}</span>
+                        onClick={() => setShow(!show)}
+                        style={{ textDecoration: 'none', color: 'inherit' }}
+                    >
+                        <span className="font-weight-bold mr-2">{data.name || 'Session'}</span>
+                        <span className="text-muted small">{dateTime}</span>
+                        <span className="ml-2">
+                            {Object.keys(data.windows).map((key, index) => (
+                                <span
+                                    title={`Window ${index + 1}: ${data.windows[key].length} tabs`}
+                                    className="badge badge-secondary mr-1"
+                                    key={index}>
+                                    {data.windows[key].length}
+                                </span>
+                            ))}
+                        </span>
                     </button>
-                    <span className="pull-right">
-                        {Object.keys(data.windows).map((key, index) => (
-                            <small
-                                title="Tab count for window"
-                                className="session-tab-count badge badge-success"
-                                key={index}>
-                                {data.windows[key].length}
-                            </small>
-                        ))}
-                    </span>
-                </h5>
+                    <div>
+                        <button className="btn btn-sm btn-primary mr-2" onClick={() => handleRestore()}>Restore All</button>
+                        <button className="btn btn-sm btn-danger" onClick={handleDelete}>Delete</button>
+                    </div>
+                </div>
             </div>
+
+            {show && (
+                <div className="card-body">
+                    {Object.keys(data.windows).map((winId, index) => (
+                        <div key={winId} className="mb-3">
+                            <h6 className="text-muted">Window {index + 1}</h6>
+                            <ul className="list-group">
+                                {data.windows[winId].map((tab, i) => (
+                                    <li key={i} className="list-group-item d-flex justify-content-between align-items-center p-2">
+                                        <div className="text-truncate" style={{ maxWidth: '80%' }}>
+                                            <a href={tab.url} target="_blank" rel="noopener noreferrer" title={tab.url}>
+                                                {tab.title || tab.url}
+                                            </a>
+                                        </div>
+                                        <button
+                                            className="btn btn-sm btn-outline-primary"
+                                            onClick={() => handleRestore(tab.url)}
+                                        >
+                                            Open
+                                        </button>
+                                    </li>
+                                ))}
+                            </ul>
+                        </div>
+                    ))}
+                </div>
+            )}
         </div>
     );
 }
