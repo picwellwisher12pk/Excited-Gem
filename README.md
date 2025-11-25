@@ -7,8 +7,8 @@ Excited Gem is a powerful Chrome extension designed to revolutionize your browsi
 ### 🚀 Active Tabs Management
 - **Visual Overview**: See all your open tabs in a clean, organized list.
 - **Quick Actions**: Pin, mute, or close tabs directly from the list.
-- **Drag & Drop**: Reorder tabs easily (coming soon).
-- **Search**: Instantly find tabs using text search or Regular Expressions.
+- **Drag & Drop**: Reorder tabs easily by dragging tabs in extension UI .
+- **Search**: Instantly find tabs using text search or Regular Expressions. Search URLs, Titles, or by Audible or Pinned tabs.
 
 ### 💾 Sessions
 - **Save for Later**: Save all your open tabs into a "Session" to declutter your browser and save memory.
@@ -20,12 +20,9 @@ Excited Gem is a powerful Chrome extension designed to revolutionize your browsi
     - **Sidebar**: Open in the browser side panel for side-by-side management.
     - **Popup**: Classic extension popup for quick access.
     - **New Tab**: Open as a full page in a new tab.
-- **Themes**: Modern, clean design with support for dark mode (system preference).
+- **Themes**: Modern, clean design. Dark mode (Coming soon).
 - **Compact View**: Toggle between compact and expanded views for session lists.
 
-### ⚙️ Settings
-- **Search Behavior**: Choose between "As you type" (debounced) or "On Enter" for search.
-- **Tab Management**: Configure how tabs are opened (Single instance vs Per Window).
 
 ## Tech Stack
 
