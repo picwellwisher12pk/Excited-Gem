@@ -24,6 +24,8 @@ export function SortableTab({ tab, children }: SortableTabProps) {
     cursor: 'grab',
   };
 
+  console.log('🔖 SortableTab rendering tab:', tab.id);
+
   return (
     <div
       ref={setNodeRef}

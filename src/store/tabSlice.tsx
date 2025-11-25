@@ -1,12 +1,28 @@
 import { createSlice } from "@reduxjs/toolkit";
 
+export interface Tab {
+  id: number;
+  title: string;
+  url: string;
+  favIconUrl?: string;
+  pinned: boolean;
+  audible: boolean;
+  muted: boolean;
+  mutedInfo: { muted: boolean };
+  discarded: boolean;
+  status: 'loading' | 'complete' | 'error';
+  index: number;
+  windowId: number;
+  groupId?: number;
+}
+
 export const tabSlice = createSlice({
   name: "tabs",
   initialState: {
-    tabs: [],
+    tabs: [] as Tab[],
     windows: [],
-    selectedTabs: [],
-    filteredTabs: [],
+    selectedTabs: [] as number[],
+    filteredTabs: [] as Tab[],
     selectedWindow: "current",
   },
   reducers: {

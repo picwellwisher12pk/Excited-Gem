@@ -11,6 +11,8 @@ interface SortableTabsProps {
 }
 
 export function SortableTabs({ tabs, onDragEnd, children }: SortableTabsProps) {
+  console.log('🎯 SortableTabs rendering with tabs:', tabs?.length, 'tabs');
+
   const sensors = useSensors(
     useSensor(PointerSensor, {
       activationConstraint: {
@@ -27,14 +29,22 @@ export function SortableTabs({ tabs, onDragEnd, children }: SortableTabsProps) {
       onDragEnd={onDragEnd}
     >
       <SortableContext items={tabs.map(tab => tab.id)} strategy={verticalListSortingStrategy}>
-        {tabs.map((tab) => (
-          <SortableTab
-            key={tab.id}
-            tab={tab}
-          >
-            {children(tab)}
-          </SortableTab>
-        ))}
+        {tabs.map((tab, index) => {
+          console.log(`🔄 Mapping tab ${index}:`, tab.id, tab.title);
+          try {
+            return (
+              <SortableTab
+                key={tab.id}
+                tab={tab}
+              >
+                {children(tab)}
+              </SortableTab>
+            );
+          } catch (error) {
+            console.error('❌ Error rendering tab:', tab.id, error);
+            return null;
+          }
+        })}
       </SortableContext>
     </DndContext>
   );
