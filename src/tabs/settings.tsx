@@ -14,22 +14,55 @@ const { Title, Text } = Typography;
 
 function SettingsPageContent() {
     const [sessionsView, setSessionsView] = useState<'compact' | 'expanded'>('compact');
+    const [displayMode, setDisplayMode] = useState<'sidebar' | 'tab' | 'popup'>('sidebar');
+    const [tabManagementMode, setTabManagementMode] = useState<'single' | 'per-window'>('single');
     const [sidebarCollapsed, setSidebarCollapsed] = useState(true);
+    const [searchBehavior, setSearchBehavior] = useState<'debounce' | 'enter'>('debounce');
 
     usePageTracking('/settings', 'Settings');
 
     useEffect(() => {
-        chrome.storage.local.get(['sessionsView'], (result) => {
+        chrome.storage.local.get(['sessionsView', 'displayMode', 'tabManagementMode', 'searchBehavior'], (result) => {
             if (result.sessionsView) {
                 setSessionsView(result.sessionsView);
             }
+            if (result.displayMode) {
+                setDisplayMode(result.displayMode);
+            }
+            if (result.tabManagementMode) {
+                setTabManagementMode(result.tabManagementMode);
+            }
+            if (result.searchBehavior) {
+                setSearchBehavior(result.searchBehavior);
+            }
         });
     }, []);
+
+    const handleSearchBehaviorChange = (value: 'debounce' | 'enter') => {
+        setSearchBehavior(value);
+        chrome.storage.local.set({ searchBehavior: value }, () => {
+            message.success('Search behavior saved');
+        });
+    };
 
     const handleSessionsViewChange = (value: 'compact' | 'expanded') => {
         setSessionsView(value);
         chrome.storage.local.set({ sessionsView: value }, () => {
             message.success('Settings saved');
+        });
+    };
+
+    const handleDisplayModeChange = (value: 'sidebar' | 'tab' | 'popup') => {
+        setDisplayMode(value);
+        chrome.storage.local.set({ displayMode: value }, () => {
+            message.success('Display mode saved');
+        });
+    };
+
+    const handleTabManagementModeChange = (value: 'single' | 'per-window') => {
+        setTabManagementMode(value);
+        chrome.storage.local.set({ tabManagementMode: value }, () => {
+            message.success('Tab management mode saved');
         });
     };
 
@@ -56,10 +89,74 @@ function SettingsPageContent() {
 
                 <div className="flex-1 overflow-auto bg-gray-50 p-6">
                     <div className="max-w-3xl mx-auto">
-                        <Card title="Sessions Display" className="mb-4">
+                        <Card title="Display Settings" className="mb-4">
                             <Space direction="vertical" size="large" className="w-full">
                                 <div>
-                                    <Text strong>Default View Mode</Text>
+                                    <Text strong>Extension Display Mode</Text>
+                                    <div className="mt-2">
+                                        <Radio.Group
+                                            value={displayMode}
+                                            onChange={(e) => handleDisplayModeChange(e.target.value)}
+                                        >
+                                            <Space direction="vertical">
+                                                <Radio value="sidebar">
+                                                    <div>
+                                                        <div className="font-medium">Sidebar</div>
+                                                        <Text type="secondary" className="text-xs">
+                                                            Open in browser sidebar
+                                                        </Text>
+                                                    </div>
+                                                </Radio>
+                                                <Radio value="tab">
+                                                    <div>
+                                                        <div className="font-medium">New Tab</div>
+                                                        <Text type="secondary" className="text-xs">
+                                                            Open in a new tab
+                                                        </Text>
+                                                    </div>
+                                                </Radio>
+                                                <Radio value="popup">
+                                                    <div>
+                                                        <div className="font-medium">Popup</div>
+                                                        <Text type="secondary" className="text-xs">
+                                                            Open as a popup
+                                                        </Text>
+                                                    </div>
+                                                </Radio>
+                                            </Space>
+                                        </Radio.Group>
+                                    </div>
+                                </div>
+                                <div>
+                                    <Text strong>Tab Management Mode</Text>
+                                    <div className="mt-2">
+                                        <Radio.Group
+                                            value={tabManagementMode}
+                                            onChange={(e) => handleTabManagementModeChange(e.target.value)}
+                                        >
+                                            <Space direction="vertical">
+                                                <Radio value="single">
+                                                    <div>
+                                                        <div className="font-medium">Single Extension Tab</div>
+                                                        <Text type="secondary" className="text-xs">
+                                                            Maintain one extension tab across all windows
+                                                        </Text>
+                                                    </div>
+                                                </Radio>
+                                                <Radio value="per-window">
+                                                    <div>
+                                                        <div className="font-medium">Per Window</div>
+                                                        <Text type="secondary" className="text-xs">
+                                                            Allow one extension tab per browser window
+                                                        </Text>
+                                                    </div>
+                                                </Radio>
+                                            </Space>
+                                        </Radio.Group>
+                                    </div>
+                                </div>
+                                <div>
+                                    <Text strong>Sessions View Mode</Text>
                                     <div className="mt-2">
                                         <Radio.Group
                                             value={sessionsView}
@@ -79,6 +176,39 @@ function SettingsPageContent() {
                                                         <div className="font-medium">Expanded</div>
                                                         <Text type="secondary" className="text-xs">
                                                             Show all tabs by default
+                                                        </Text>
+                                                    </div>
+                                                </Radio>
+                                            </Space>
+                                        </Radio.Group>
+                                    </div>
+                                </div>
+                            </Space>
+                        </Card>
+
+                        <Card title="Search Settings" className="mb-4">
+                            <Space direction="vertical" size="large" className="w-full">
+                                <div>
+                                    <Text strong>Search Behavior</Text>
+                                    <div className="mt-2">
+                                        <Radio.Group
+                                            value={searchBehavior}
+                                            onChange={(e) => handleSearchBehaviorChange(e.target.value)}
+                                        >
+                                            <Space direction="vertical">
+                                                <Radio value="debounce">
+                                                    <div>
+                                                        <div className="font-medium">As you type</div>
+                                                        <Text type="secondary" className="text-xs">
+                                                            Search automatically while typing (debounced)
+                                                        </Text>
+                                                    </div>
+                                                </Radio>
+                                                <Radio value="enter">
+                                                    <div>
+                                                        <div className="font-medium">On Enter</div>
+                                                        <Text type="secondary" className="text-xs">
+                                                            Search only when pressing Enter
                                                         </Text>
                                                     </div>
                                                 </Radio>

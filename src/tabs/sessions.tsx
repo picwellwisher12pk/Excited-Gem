@@ -1,23 +1,26 @@
 import React, { useEffect, useState, useRef } from 'react';
 import { Provider } from 'react-redux';
-import { Button, Input, Space, List, Tag, Tooltip, Popconfirm, message, ConfigProvider, Checkbox } from 'antd';
+import { Button, Input, Space, List, Tag, Tooltip, Popconfirm, message, ConfigProvider, Checkbox, Dropdown, Popover } from 'antd';
 import {
-    SaveOutlined,
-    FolderOpenOutlined,
-    DeleteOutlined,
-    SearchOutlined,
-    DownloadOutlined,
-    UploadOutlined,
-    CloseOutlined,
-    DownOutlined,
-    UpOutlined
-} from '@ant-design/icons';
+    Save,
+    FolderOpen,
+    Trash2,
+    Search as SearchIcon,
+    Download,
+    Upload,
+    X,
+    ChevronDown,
+    ChevronUp,
+    MoreHorizontal
+} from 'lucide-react';
 // @ts-ignore
 import { getSessions, saveSessions, removeSessions, removeTab, exportSessions, importSessions } from '~/components/getsetSessions';
 import Sidebar, { SidebarToggleButton } from '~/components/Sidebar';
 import Brand from '~/components/Header/Brand';
 import logo from '~/assets/logo.svg';
 import store from '~/store/store';
+import { analytics } from '~/utils/analytics';
+import { usePageTracking } from '~/components/Analytics/usePageTracking';
 import 'antd/dist/reset.css';
 import '~/styles/index.css';
 import '~/styles/index.scss';
@@ -52,6 +55,8 @@ function SessionsPageContent() {
     });
     const fileInputRef = useRef<HTMLInputElement>(null);
 
+    usePageTracking('/sessions', 'Sessions');
+
     const fetchSessions = async () => {
         setLoading(true);
         try {
@@ -69,6 +74,7 @@ function SessionsPageContent() {
             await saveSessions();
             await fetchSessions();
             message.success('Session saved successfully');
+            analytics.trackEvent('Sessions', 'Save Session');
         } catch (error) {
             message.error('Failed to save session');
         } finally {
@@ -79,11 +85,13 @@ function SessionsPageContent() {
     const handleRestore = (url?: string, sessionData?: SessionData) => {
         if (url) {
             chrome.tabs.create({ url });
+            analytics.trackEvent('Sessions', 'Restore Single Tab');
         } else if (sessionData) {
             Object.values(sessionData.windows).flat().forEach(tab => {
                 chrome.tabs.create({ url: tab.url });
             });
             message.success('Session restored');
+            analytics.trackEvent('Sessions', 'Restore Session', undefined, getTotalTabs(sessionData));
         }
     };
 
@@ -91,12 +99,14 @@ function SessionsPageContent() {
         await removeSessions(sessionId);
         await fetchSessions();
         message.success('Session deleted');
+        analytics.trackEvent('Sessions', 'Delete Session');
     };
 
     const handleRemoveUrl = async (sessionId: number, windowId: string, url: string) => {
         await removeTab(url, windowId, sessionId);
         await fetchSessions();
         message.success('URL removed');
+        analytics.trackEvent('Sessions', 'Remove URL');
     };
 
     const handleExport = async () => {
@@ -111,6 +121,7 @@ function SessionsPageContent() {
             link.click();
             URL.revokeObjectURL(url);
             message.success('Sessions exported');
+            analytics.trackEvent('Sessions', 'Export');
         } catch (error) {
             message.error('Failed to export sessions');
         }
@@ -127,6 +138,7 @@ function SessionsPageContent() {
                 await importSessions(imported, true);
                 await fetchSessions();
                 message.success('Sessions imported successfully');
+                analytics.trackEvent('Sessions', 'Import');
             } catch (error) {
                 message.error('Failed to import sessions');
             }
@@ -199,6 +211,53 @@ function SessionsPageContent() {
         return Object.values(session.windows).reduce((sum, tabs) => sum + tabs.length, 0);
     };
 
+    const searchFilterContent = (
+        <div className="p-2">
+            <Space direction="vertical">
+                <Checkbox
+                    checked={searchFilters.sessionName}
+                    onChange={(e) => setSearchFilters({ ...searchFilters, sessionName: e.target.checked })}
+                >
+                    Name
+                </Checkbox>
+                <Checkbox
+                    checked={searchFilters.tabUrl}
+                    onChange={(e) => setSearchFilters({ ...searchFilters, tabUrl: e.target.checked })}
+                >
+                    URL
+                </Checkbox>
+                <Checkbox
+                    checked={searchFilters.tabTitle}
+                    onChange={(e) => setSearchFilters({ ...searchFilters, tabTitle: e.target.checked })}
+                >
+                    Title
+                </Checkbox>
+            </Space>
+        </div>
+    );
+
+    const actionItems = [
+        {
+            key: 'save',
+            label: 'Save Session',
+            icon: <Save size={16} />,
+            onClick: handleSaveCurrentSession,
+        },
+        {
+            key: 'export',
+            label: 'Export Sessions',
+            icon: <Download size={16} />,
+            onClick: handleExport,
+            disabled: sessions.length === 0,
+        },
+        {
+            key: 'import',
+            label: 'Import Sessions',
+            icon: <Upload size={16} />,
+            onClick: () => fileInputRef.current?.click(),
+        },
+    ];
+
     return (
         <div className="flex h-[100vh] relative overflow-hidden">
             <Sidebar
@@ -209,79 +268,50 @@ function SessionsPageContent() {
             <div className="flex flex-col flex-1">
                 {/* Header matching Tabs page structure */}
                 <header className="bg-gradient-to-t from-cyan-500 to-blue-500 p-2 transition-all duration-200 ease-in-out">
-                    <section className="flex items-center">
-                        <div className="mr-2">
-                            <SidebarToggleButton onClick={() => setSidebarCollapsed(!sidebarCollapsed)} />
+                    <section className="flex items-center justify-between gap-4">
+                        <div className="flex items-center shrink-0">
+                            <div className="mr-2">
+                                <SidebarToggleButton onClick={() => setSidebarCollapsed(!sidebarCollapsed)} />
+                            </div>
+                            {Brand(logo)}
+                            <div className="flex items-center ml-4">
+                                <span className="text-white font-semibold text-lg">Sessions</span>
+                                {sessions.length > 0 && (
+                                    <span className="ml-2 text-white/80 text-sm">({sessions.length})</span>
+                                )}
+                            </div>
                         </div>
-                        {Brand(logo)}
-                        <div className="flex items-center ml-4">
-                            <span className="text-white font-semibold text-lg">Sessions</span>
-                            {sessions.length > 0 && (
-                                <span className="ml-2 text-white/80 text-sm">({sessions.length})</span>
-                            )}
-                        </div>
-                        <div className="flex-1" />
-                    </section>
 
-                    {/* Secondary header row for actions */}
-                    <section className="flex flex-row justify-between items-center mt-1">
-                        <div className="flex items-center space-x-3 flex-1 max-w-2xl">
+                        <div className="flex-1 max-w-xl">
                             <Search
                                 placeholder="Search sessions..."
                                 allowClear
                                 onSearch={handleSearch}
                                 onChange={(e) => handleSearch(e.target.value)}
-                                prefix={<SearchOutlined />}
-                                className="flex-1"
+                                prefix={<SearchIcon size={16} className="text-gray-400" />}
+                                suffix={
+                                    <Popover content={searchFilterContent} trigger="click" placement="bottomRight">
+                                        <Button
+                                            type="text"
+                                            size="small"
+                                            className="text-gray-400 hover:text-blue-500 flex items-center"
+                                        >
+                                            Search in
+                                        </Button>
+                                    </Popover>
+                                }
+                                className="w-full"
                             />
-                            <Space size="small" className="bg-white/10 px-2 py-1 rounded">
-                                <Checkbox
-                                    checked={searchFilters.sessionName}
-                                    onChange={(e) => setSearchFilters({ ...searchFilters, sessionName: e.target.checked })}
-                                    className="!text-white"
-                                >
-                                    <span className="text-white text-xs">Name</span>
-                                </Checkbox>
-                                <Checkbox
-                                    checked={searchFilters.tabUrl}
-                                    onChange={(e) => setSearchFilters({ ...searchFilters, tabUrl: e.target.checked })}
-                                >
-                                    <span className="text-white text-xs">URL</span>
-                                </Checkbox>
-                                <Checkbox
-                                    checked={searchFilters.tabTitle}
-                                    onChange={(e) => setSearchFilters({ ...searchFilters, tabTitle: e.target.checked })}
-                                >
-                                    <span className="text-white text-xs">Title</span>
-                                </Checkbox>
-                            </Space>
                         </div>
 
-                        <Space>
-                            <Button
-                                type="primary"
-                                icon={<SaveOutlined />}
-                                loading={saveLoading}
-                                onClick={handleSaveCurrentSession}
-                                ghost
-                            >
-                                Save
-                            </Button>
-                            <Button
-                                icon={<DownloadOutlined />}
-                                onClick={handleExport}
-                                disabled={sessions.length === 0}
-                                ghost
-                            >
-                                Export
-                            </Button>
-                            <Button
-                                icon={<UploadOutlined />}
-                                onClick={() => fileInputRef.current?.click()}
-                                ghost
-                            >
-                                Import
-                            </Button>
+                        <div className="shrink-0">
+                            <Dropdown menu={{ items: actionItems }} trigger={['click']} placement="bottomRight">
+                                <Button
+                                    icon={<MoreHorizontal size={20} className="text-white" />}
+                                    type="text"
+                                    className="flex items-center justify-center hover:bg-white/10"
+                                />
+                            </Dropdown>
                             <input
                                 ref={fileInputRef}
                                 type="file"
@@ -289,7 +319,7 @@ function SessionsPageContent() {
                                 onChange={handleImport}
                                 style={{ display: 'none' }}
                             />
-                        </Space>
+                        </div>
                     </section>
                 </header>
 
@@ -313,7 +343,8 @@ function SessionsPageContent() {
                                                 <Button
                                                     type="text"
                                                     size="small"
-                                                    icon={isExpanded ? <UpOutlined /> : <DownOutlined />}
+                                                    icon={isExpanded ? <ChevronUp size={16} /> : <ChevronDown size={16} />}
+                                                    className="flex items-center justify-center"
                                                 />
                                                 <span className="font-medium">{session.name || 'Unnamed Session'}</span>
                                                 <Tag color="blue">{formatDate(session.created)}</Tag>
@@ -324,11 +355,12 @@ function SessionsPageContent() {
                                                     <Button
                                                         type="primary"
                                                         size="small"
-                                                        icon={<FolderOpenOutlined />}
+                                                        icon={<FolderOpen size={16} />}
                                                         onClick={(e) => {
                                                             e.stopPropagation();
                                                             handleRestore(undefined, session);
                                                         }}
+                                                        className="flex items-center justify-center"
                                                     />
                                                 </Tooltip>
                                                 <Popconfirm
@@ -343,8 +375,9 @@ function SessionsPageContent() {
                                                     <Button
                                                         danger
                                                         size="small"
-                                                        icon={<DeleteOutlined />}
+                                                        icon={<Trash2 size={16} />}
                                                         onClick={(e) => e.stopPropagation()}
+                                                        className="flex items-center justify-center"
                                                     />
                                                 </Popconfirm>
                                             </Space>
@@ -391,7 +424,8 @@ function SessionsPageContent() {
                                                                                 type="text"
                                                                                 size="small"
                                                                                 danger
-                                                                                icon={<CloseOutlined />}
+                                                                                icon={<X size={14} />}
+                                                                                className="flex items-center justify-center"
                                                                             />
                                                                         </Popconfirm>
                                                                     </Space>

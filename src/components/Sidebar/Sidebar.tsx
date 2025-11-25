@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { Menu, Button } from 'antd';
-import { AppstoreOutlined, FolderOutlined, SettingOutlined, MenuOutlined, CloseOutlined } from '@ant-design/icons';
+import { LayoutGrid, Folder, Settings, Menu as MenuIcon, X } from 'lucide-react';
 import type { MenuProps } from 'antd';
 
 interface SidebarProps {
@@ -13,11 +13,14 @@ export function SidebarToggleButton({ onClick }: { onClick: () => void }) {
     return (
         <Button
             type="primary"
-            icon={<MenuOutlined />}
+            icon={<MenuIcon size={16} />}
             onClick={onClick}
             style={{
                 backgroundColor: '#1890ff',
-                borderColor: '#1890ff'
+                borderColor: '#1890ff',
+                display: 'flex',
+                alignItems: 'center',
+                justifyContent: 'center'
             }}
         />
     );
@@ -38,17 +41,17 @@ export default function Sidebar({ currentPage, collapsed: externalCollapsed, onT
     const items: MenuProps['items'] = [
         {
             key: 'tabs',
-            icon: <AppstoreOutlined />,
+            icon: <LayoutGrid size={18} />,
             label: <a href="/tabs/home.html">Tabs</a>,
         },
         {
             key: 'sessions',
-            icon: <FolderOutlined />,
+            icon: <Folder size={18} />,
             label: <a href="/tabs/sessions.html">Sessions</a>,
         },
         {
             key: 'settings',
-            icon: <SettingOutlined />,
+            icon: <Settings size={18} />,
             label: <a href="/tabs/settings.html">Settings</a>,
         },
     ];
@@ -73,9 +76,9 @@ export default function Sidebar({ currentPage, collapsed: externalCollapsed, onT
                     <h2 className="text-white font-semibold text-lg">Menu</h2>
                     <Button
                         type="text"
-                        icon={<CloseOutlined />}
+                        icon={<X size={20} />}
                         onClick={handleToggle}
-                        className="!text-white hover:!bg-white/10"
+                        className="!text-white hover:!bg-white/10 flex items-center justify-center"
                     />
                 </div>
                 <Menu

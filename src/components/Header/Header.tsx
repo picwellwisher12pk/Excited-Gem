@@ -1,18 +1,19 @@
-import DownOutlined from '@ant-design/icons'
 import { Dropdown, Select, Space } from 'antd'
 import { useCallback, useEffect, useMemo, useState } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 import type { ReactNode } from 'react'
+import {
+  RefreshCw,
+  Pin,
+  VolumeX,
+  X,
+  Move,
+  Volume2,
+  Save,
+  Moon,
+  ChevronDown
+} from 'lucide-react'
 
-// Import SVG icons
-import SyncAltIcon from 'react:/src/icons/sync-alt.svg'
-import ThumbtackIcon from 'react:/src/icons/thumbtack-active.svg'
-import VolumeSlashIcon from 'react:/src/icons/volume-mute.svg'
-import TimesIcon from "react:/src/icons/xmark-solid.svg"
-import MoveIcon from "react:/src/icons/up-down-left-right-solid.svg"
-import VolumeIcon from "react:/src/icons/volume.svg"
-import SaveIcon from "react:/src/icons/floppy-disk-solid.svg"
-import MoonIcon from "react:/src/icons/light/moon.svg"
 import logo from '~/assets/logo.svg'
 
 import { getAllWindows, getCurrentWindow, processTabs } from '~/scripts/general'
@@ -81,9 +82,9 @@ export default function Header({
   }, [])
 
   const iconPinned = allPinned && (
-    <ThumbtackIcon style={{ height: 16, fill: 'white' }} />
+    <Pin size={16} className="text-white fill-white" />
   )
-  const iconSound = <VolumeSlashIcon style={{ height: 16 }} />
+  const iconSound = <VolumeX size={16} />
 
   // Handlers for pin and mute actions using Select components
   const handlePin = useCallback(
@@ -113,9 +114,10 @@ export default function Header({
 
   const pinSelect = (
     <Dropdown menu={pinMenu} trigger={['click']}>
-      <Btn className="mr-2">
+      <Btn className="mr-2 flex items-center">
+        <Pin size={14} className="mr-1" />
         <span>Pin</span>
-        <DownOutlined className="ml-2 text-zinc-500" />
+        <ChevronDown size={14} className="ml-2 text-zinc-500" />
       </Btn>
     </Dropdown>
   )
@@ -130,22 +132,25 @@ export default function Header({
 
   const muteSelect = (
     <Dropdown menu={muteMenu} trigger={['click']}>
-      <Btn className="mr-2">
+      <Btn className="mr-2 flex items-center">
+        <VolumeX size={14} className="mr-1" />
         <span>Mute</span>
-        <DownOutlined className="ml-2 text-zinc-500" />
+        <ChevronDown size={14} className="ml-2 text-zinc-500" />
       </Btn>
     </Dropdown>
   )
 
   return (
     <header className="bg-gradient-to-t from-cyan-500 to-blue-500 p-2 transition-all duration-200 ease-in-out">
-      <section className="flex">
-        {sidebarToggle && (
-          <div className="mr-2">
-            <SidebarToggleButton onClick={sidebarToggle} />
-          </div>
-        )}
-        {Brand(logo)}
+      <section className="flex w-full overflow-hidden items-center">
+        <div className="flex-none flex items-center">
+          {sidebarToggle && (
+            <div className="mr-2">
+              <SidebarToggleButton onClick={sidebarToggle} />
+            </div>
+          )}
+          {Brand(logo)}
+        </div>
         {children}
       </section>
       <section
@@ -173,7 +178,7 @@ export default function Header({
             </div>
             <div>
               <Btn onClick={() => setSaveModalVisible(true)}>
-                <SaveIcon style={{ height: 12, width: 14 }} className="inline" />
+                <Save size={14} className="inline mr-1" />
                 <span> Save ...</span>
               </Btn>
             </div>
@@ -182,7 +187,7 @@ export default function Header({
                 title="Move Selected Tabs"
                 onClick={() => setMoveModalVisible(true)}
               >
-                <MoveIcon style={{ height: 14 }} />
+                <Move size={14} className="mr-1" />
                 <Space>
                   <span>Move ...</span>
                 </Space>
@@ -197,7 +202,7 @@ export default function Header({
                   })
                 }}
               >
-                <TimesIcon style={{ height: 14, width: 14, fill: "red" }} />
+                <X size={14} className="mr-1 text-red-500" />
                 <span> Close</span>
               </Btn>
             </div>
@@ -208,7 +213,7 @@ export default function Header({
                   processTabs('discardSelected', selectedTabs, tabs)
                 }}
               >
-                <MoonIcon style={{ height: 14, width: 14 }} />
+                <Moon size={14} className="mr-1" />
                 <span> Discard</span>
               </Btn>
             </div>
@@ -219,7 +224,7 @@ export default function Header({
             title="Refresh View"
             onClick={() => { }}
             style={{ minWidth: 33 }}>
-            <SyncAltIcon style={{ height: 14 }} />
+            <RefreshCw size={14} />
           </Btn>
           <div>
             <Btn

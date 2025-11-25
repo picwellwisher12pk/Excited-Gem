@@ -5,6 +5,7 @@ interface ItemBtnProps {
   title?: string;
   'aria-label'?: string;
   children?: React.ReactNode;
+  className?: string;
 }
 
 export default function ItemBtn({ onClick, ...props }: ItemBtnProps) {

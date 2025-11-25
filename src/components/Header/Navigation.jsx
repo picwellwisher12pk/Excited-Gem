@@ -4,8 +4,8 @@ import React, { memo } from 'react'
 const Navigation = ({ tabCount }) => {
   console.log('navigation')
   return (
-    <div className="flex flex-grow" id="navbarNav">
-      <div className="flex justify-start w-fdivl mb-0">
+    <div className="flex-none" id="navbarNav">
+      <div className="flex justify-start w-auto mb-0">
         <div className="px-4 py-3">
           <Badge
             overflowCount={999}
@@ -22,11 +22,6 @@ const Navigation = ({ tabCount }) => {
               <span className="sr-only">(current)</span>
             </a>
           </Badge>
-        </div>
-        <div className="px-4 py-3">
-          <a className=" text-white" href="/tabs/sessions.html">
-            Sessions
-          </a>
         </div>
       </div>
     </div>

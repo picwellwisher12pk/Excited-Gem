@@ -2,11 +2,7 @@ import { Checkbox, Input, Popover, message } from 'antd'
 import { debounce } from 'lodash'
 import React, { memo, useCallback, useEffect, useState } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
-import ThumbtackActiveIcon from 'react:~/icons/thumbtack-active.svg'
-import ThumbtackIcon from 'react:~/icons/thumbtack.svg'
-import VolumeOffIcon from 'react:~/icons/volume-off.svg'
-import VolumeIcon from 'react:~/icons/volume.svg'
-
+import { Pin, PinOff, Volume2, VolumeX } from 'lucide-react'
 import ErrorBoundary from '~/scripts/ErrorBoundary'
 import { makePlaceholder as doPlaceholder } from '~/scripts/general'
 import { toggleAudible, togglePinned, toggleRegex, toggleSearchIn, updateSearchTerm } from '~/store/searchSlice'
@@ -26,6 +22,15 @@ const Search = () => {
   const [placeholder, setPlaceholder] = useState(() =>
     doPlaceholder(searchIn, regex)
   )
+  const [searchBehavior, setSearchBehavior] = useState('debounce')
+
+  useEffect(() => {
+    chrome.storage.local.get(['searchBehavior'], (result) => {
+      if (result.searchBehavior) {
+        setSearchBehavior(result.searchBehavior)
+      }
+    })
+  }, [])
 
   useEffect(() => {
     setPlaceholder(doPlaceholder(searchIn, regex))
@@ -35,6 +40,7 @@ const Search = () => {
   useEffect(() => {
     if (searchTerm === '') {
       const inputSearch = document.getElementById('search-field')
+      // @ts-ignore
       inputSearch.value = ''
     }
   }, [searchTerm])
@@ -48,7 +54,8 @@ const Search = () => {
       return
     }
   }, [])
-  const handleChange = useCallback(
+
+  const debouncedUpdate = useCallback(
     debounce((value) => {
       dispatch(updateSearchTerm(value))
     }, 300),
@@ -92,86 +99,87 @@ const Search = () => {
 
   return (
     <ErrorBoundary>
-      <AntSearch
-        className="!w-3/4"
-        id="search-field"
-        ref={searchField}
-        onKeyUp={handleKeyUp}
-        prefix={
-          regex ? (
-            <span className="text-zinc-300">/</span>
-          ) : (
-            <span className="text-white">/</span>
-          )
-        }
-        suffix={
-          <>
-            {searchTerm && (
-              <span className="text-zinc-400">
-                {filteredTabs.length + ' Tabs found... '}
-              </span>
-            )}
-            {regex && <span className="text-zinc-300 pr-3">/gi</span>}
-            <div className="flex align-items-center ml-3">
-              <div className="mr-3">
+      <div className="flex-1 ml-4 min-w-0 flex items-center gap-2 overflow-hidden">
+        <AntSearch
+          className="!w-3/4 !ml-auto !ms-auto"
+          id="search-field"
+          ref={searchField}
+          onKeyUp={handleKeyUp}
+          prefix={
+            regex ? (
+              <span className="text-zinc-300">/</span>
+            ) : (
+              <span className="text-white">/</span>
+            )
+          }
+          suffix={
+            <div className="flex items-center">
+              {searchTerm && (
+                <span className="text-zinc-400 max-w-[100px] truncate inline-block align-middle mr-2">
+                  {filteredTabs.length + ' found'}
+                </span>
+              )}
+              {regex && <span className="text-zinc-300 mr-2">/gi</span>}
+
+              <div className="flex items-center gap-2 border-l border-zinc-200 pl-2 ml-1">
                 <button
-                  className="!border-0 flex align-items-center"
+                  className="!border-0 flex align-items-center bg-transparent cursor-pointer p-0"
                   type="button"
-                  aria-label={audibleSearch ? "Show all tabs (currently filtering audible only)" : "Filter audible tabs only"}
-                  title={audibleSearch ? "Show all tabs" : "Filter audible tabs only"}
+                  aria-label={audibleSearch ? "Show all tabs" : "Filter audible only"}
+                  title={audibleSearch ? "Show all tabs" : "Filter audible only"}
                   onClick={() => dispatch(toggleAudible())}>
                   {audibleSearch ? (
-                    <VolumeIcon className="fill-[#0487cf] h-[16px]" aria-hidden="true" />
+                    <Volume2 size={16} className="text-[#0487cf]" aria-hidden="true" />
                   ) : (
-                    <VolumeOffIcon className="fill-[#0487cf] h-[16px]" aria-hidden="true" />
+                    <VolumeX size={16} className="text-[#0487cf]" aria-hidden="true" />
                   )}
-                  <span className="sr-only">
-                    {audibleSearch ? "Currently showing audible tabs only" : "Showing all tabs"}
-                  </span>
                 </button>
-              </div>
-              <div className="mr-3">
+
                 <button
-                  className="!border-0 bg-transparent cursor-pointer"
+                  className="!border-0 bg-transparent cursor-pointer flex align-items-center p-0"
                   type="button"
-                  aria-label={pinnedSearch ? "Show all tabs (currently filtering pinned only)" : "Filter pinned tabs only"}
-                  title={pinnedSearch ? "Show all tabs" : "Filter pinned tabs only"}
+                  aria-label={pinnedSearch ? "Show all tabs" : "Filter pinned only"}
+                  title={pinnedSearch ? "Show all tabs" : "Filter pinned only"}
                   onClick={() => dispatch(togglePinned())}>
                   {pinnedSearch ? (
-                    <ThumbtackActiveIcon className="fill-[#0487cf] h-[16px]" aria-hidden="true" />
+                    <Pin size={16} className="text-[#0487cf] fill-current" aria-hidden="true" />
                   ) : (
-                    <ThumbtackIcon className="fill-[#0487cf] h-[16px]" aria-hidden="true" />
+                    <Pin size={16} className="text-[#0487cf]" aria-hidden="true" />
                   )}
-                  <span className="sr-only">
-                    {pinnedSearch ? "Currently showing pinned tabs only" : "Showing all tabs"}
-                  </span>
                 </button>
+
+                <label htmlFor="regex-checkbox" className="flex items-center cursor-pointer select-none">
+                  <Checkbox
+                    id="regex-checkbox"
+                    defaultChecked={regex}
+                    onChange={() => dispatch(toggleRegex())}
+                    aria-label="Enable regex"
+                    className="mr-1"
+                  />
+                  <span className="text-xs text-zinc-500">Regex</span>
+                </label>
+
+                <Popover content={content} trigger="click">
+                  <button
+                    type="button"
+                    className="bg-transparent border-0 text-blue-600 cursor-pointer hover:underline text-xs whitespace-nowrap p-0"
+                    aria-label="Search options">
+                    Search in
+                  </button>
+                </Popover>
               </div>
             </div>
-            <label htmlFor="regex-checkbox">
-              <Checkbox
-                id="regex-checkbox"
-                defaultChecked={regex}
-                onChange={() => dispatch(toggleRegex())}
-                aria-label="Enable regular expression search mode"
-              />{' '}
-              Regex
-            </label>
-            <Popover content={content} trigger="click">
-              <button
-                type="button"
-                className="ml-3 bg-transparent border-0 text-blue-600 cursor-pointer hover:underline"
-                aria-label="Choose search fields (title and/or URL)">
-                Search by...
-              </button>
-            </Popover>
-          </>
-        }
-        placeholder={placeholder}
-        autoFocus
-        // onChange={(e) => handleChange(e.target.value)}
-        onSearch={(value, e) => handleChange(value)}
-      />
+          }
+          placeholder={placeholder}
+          autoFocus
+          onChange={(e) => {
+            if (searchBehavior === 'debounce') {
+              debouncedUpdate(e.target.value)
+            }
+          }}
+          onSearch={(value) => dispatch(updateSearchTerm(value))}
+        />
+      </div>
     </ErrorBoundary>
   )
 }

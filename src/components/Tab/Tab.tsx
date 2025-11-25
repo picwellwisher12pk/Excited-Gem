@@ -2,12 +2,13 @@ import { List } from 'antd'
 import React from 'react'
 import parse from 'html-react-parser'
 import { useDispatch, useSelector } from 'react-redux'
+import { Pin, Volume2, VolumeX, X } from 'lucide-react'
 import { updateSelectedTabs } from '../../store/tabSlice'
 import ItemBtn from '../ItemBtn'
 import { TabIcon } from './TabIcon'
 import { markSearchedTerm, renderAudioIcon } from './helpers'
-import { IconPinned } from './IconPinned'
 import { TabContextMenu } from './ContextMenu'
+import { faviconCache } from '~/utils/faviconCache'
 
 interface MutedInfo {
   muted: boolean;
@@ -57,7 +58,7 @@ export function Tab({
   title = '',
   url = '',
 }: Readonly<TabProps>) {
-  console.log('📌 Tab component rendering:', id, title);
+  // console.log('📌 Tab component rendering:', id, title);
 
   const dispatch = useDispatch()
   const { searchTerm, searchIn } = useSelector<{ search: SearchState }, SearchState>(state => state.search)
@@ -95,6 +96,10 @@ export function Tab({
     return searchIn.url ? markSearchedTerm(url, searchTerm) : url
   }, [searchIn.url, url, searchTerm])
 
+  const cachedFavicon = React.useMemo(() => {
+    return faviconCache.getOrSet(url, favIconUrl);
+  }, [url, favIconUrl]);
+
   const isLoading = status === 'loading'
   const discardedClass = discarded ? ' idle' : ''
 
@@ -104,9 +109,9 @@ export function Tab({
       key={id}
       id={String(id)}
       className={`
-        max-w-[100vw] overflow-hidden tab-item flex pr-0
+        w-full overflow-hidden tab-item flex items-center pr-2 pl-2 py-2
         hover:bg-slate-200 transition-colors duration-300
-        border-b-stone-100 !justify-start border
+        border-b border-stone-100 !justify-start
         ${selected ? ' checked bg-slate-100' : ''}
         ${isLoading ? ' loading' : discardedClass}
       `}
@@ -119,7 +124,7 @@ export function Tab({
             checked={selected}
             loading={isLoading}
             discarded={discarded}
-            src={favIconUrl}
+            src={cachedFavicon}
             title={title}
           />
           <div className="flex flex-auto truncate">
@@ -140,35 +145,36 @@ export function Tab({
             className="tab-actions flex align-self-center justify-self-end ms-3 gap-2 shrink-0"
             role="group"
             aria-label={`Actions for tab: ${title}`}>
+            {(audible || mutedInfo.muted) && (
+              <ItemBtn
+                title={mutedInfo.muted ? "Unmute Tab" : "Mute Tab"}
+                aria-label={`${mutedInfo.muted ? 'Unmute' : 'Mute'} tab: ${title}`}
+                onClick={handleMuteTab}
+                className="rounded-full !bg-slate-200 hover:!bg-slate-300 !border-0 !shadow-none w-7 h-7 flex items-center justify-center"
+              >
+                {mutedInfo.muted ? <VolumeX size={14} /> : <Volume2 size={14} />}
+              </ItemBtn>
+            )}
             {activeTab && (
               <>
                 <ItemBtn
                   title={pinned ? "Unpin Tab" : "Pin Tab"}
                   aria-label={`${pinned ? 'Unpin' : 'Pin'} tab: ${title}`}
-                  onClick={handlePinTab}>
-                  <IconPinned pinned={pinned} />
+                  onClick={handlePinTab}
+                  className="rounded-full !bg-slate-200 hover:!bg-slate-300 !border-0 !shadow-none w-7 h-7 flex items-center justify-center"
+                >
+                  <Pin size={14} className={pinned ? "fill-current" : ""} />
                 </ItemBtn>
                 <ItemBtn
-                  title={mutedInfo.muted ? "Unmute Tab" : "Mute Tab"}
-                  aria-label={`${mutedInfo.muted ? 'Unmute' : 'Mute'} tab: ${title}`}
-                  onClick={handleMuteTab}>
-                  {renderAudioIcon(audible, mutedInfo)}
+                  title="Close Tab"
+                  aria-label={`Close tab: ${title}`}
+                  onClick={handleRemove}
+                  className="rounded-full !bg-slate-200 hover:!bg-slate-300 !border-0 !shadow-none group w-7 h-7 flex items-center justify-center"
+                >
+                  <X size={14} className="text-red-500 group-hover:text-red-600" />
                 </ItemBtn>
               </>
             )}
-            <ItemBtn
-              onClick={handleRemove}
-              title="Close Tab"
-              aria-label={`Close tab: ${title}`}>
-              <svg
-                xmlns="http://www.w3.org/2000/svg"
-                viewBox="0 0 352 512"
-                style={{ height: 14, fill: 'red' }}
-                aria-hidden="true"
-              >
-                <path d="M242.72 256l100.07-100.07c12.28-12.28 12.28-32.19 0-44.48l-22.24-22.24c-12.28-12.28-32.19-12.28-44.48 0L176 189.28 75.93 89.21c-12.28-12.28-32.19-12.28-44.48 0L9.21 111.45c-12.28 12.28-12.28 32.19 0 44.48L109.28 256 9.21 356.07c-12.28 12.28-12.28 32.19 0 44.48l22.24 22.24c12.28 12.28 32.2 12.28 44.48 0L176 322.72l100.07 100.07c12.28 12.28 32.2 12.28 44.48 0l22.24-22.24c12.28-12.28 12.28-32.19 0-44.48L242.72 256z" />
-              </svg>
-            </ItemBtn>
           </div>
         </div>
       </TabContextMenu>

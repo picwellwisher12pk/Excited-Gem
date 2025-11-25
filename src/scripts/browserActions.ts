@@ -44,12 +44,12 @@ export function getAllWindows() {
 //   return chrome.tabs.query({})
 // }
 
-export function getTabs(selectedWindow = 'current') {
+export function getTabs(selectedWindow: string | number = 'current') {
   if (selectedWindow === 'current')
     return chrome.tabs.query({ currentWindow: true })
   if (selectedWindow === 'all') return chrome.tabs.query({})
   else {
-    chrome.tabs.query({ windowId: selectedWindow })
+    return chrome.tabs.query({ windowId: Number(selectedWindow) })
   }
 }
 

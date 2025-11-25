@@ -15,6 +15,7 @@ import Header from '~/components/Header/Header'
 import Navigation from '~/components/Header/Navigation'
 import Search from '~/components/Search'
 import Sidebar from '~/components/Sidebar'
+import { usePageTracking } from '~/components/Analytics/usePageTracking'
 
 export function updateTabs(getTabs, store) {
   getTabs(store.getState().tabs.selectedWindow).then((tabs) => {
@@ -62,15 +63,30 @@ export function updateTabs(getTabs, store) {
   })
 }
 
+// Listen to tab events
 chrome.tabs.onRemoved.addListener(() => updateTabs(getTabs, store))
 chrome.tabs.onDetached.addListener(() => updateTabs(getTabs, store))
 chrome.tabs.onCreated.addListener(() => updateTabs(getTabs, store))
 chrome.tabs.onAttached.addListener(() => updateTabs(getTabs, store))
 chrome.tabs.onUpdated.addListener(() => updateTabs(getTabs, store))
 chrome.tabs.onMoved.addListener(() => updateTabs(getTabs, store))
+
+// Listen to store changes for selectedWindow
+let previousSelectedWindow = store.getState().tabs.selectedWindow
+store.subscribe(() => {
+  const currentSelectedWindow = store.getState().tabs.selectedWindow
+  if (currentSelectedWindow !== previousSelectedWindow) {
+    console.log('Selected window changed:', previousSelectedWindow, '->', currentSelectedWindow)
+    previousSelectedWindow = currentSelectedWindow
+    updateTabs(getTabs, store)
+  }
+})
+
+// Initial load
 updateTabs(getTabs, store)
 
 const ActiveTabs = () => {
+  usePageTracking('/tabs', 'Active Tabs')
   console.log('ActiveTabs rendered')
   // @ts-ignore
   const { tabs } = useSelector((state) => state.tabs)
@@ -91,13 +107,9 @@ const ActiveTabs = () => {
           <Navigation tabCount={tabs.length} />
           <Search />
         </Header>
-        <CustomScroll
-          heightRelativeToParent="100%"
-          keepAtBottom={true}
-          key="scroll"
-          className="flex-grow">
+        <div className="flex-1 min-h-0 relative overflow-hidden">
           <TabWindowWrapper />
-        </CustomScroll>
+        </div>
       </div>
     </div>
   )
