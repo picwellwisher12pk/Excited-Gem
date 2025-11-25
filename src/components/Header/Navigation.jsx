@@ -16,7 +16,7 @@ const Navigation = ({ tabCount }) => {
             className="!border-0">
             <a
               className=" text-white font-weight-bold"
-              href="/tabs.html"
+              href="/tabs/home.html"
               id="go-to-tabs">
               Tabs
               <span className="sr-only">(current)</span>
@@ -24,7 +24,7 @@ const Navigation = ({ tabCount }) => {
           </Badge>
         </div>
         <div className="px-4 py-3">
-          <a className=" text-white" href="/sessions.html">
+          <a className=" text-white" href="/tabs/sessions.html">
             Sessions
           </a>
         </div>

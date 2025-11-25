@@ -1,4 +1,4 @@
-import {saveTabs, saveURLs} from '~/components/getsetSessions'
+import { saveTabs, saveURLs } from '~/components/getsetSessions'
 
 
 export const HOMEPAGEURL = chrome.runtime.getURL('/tabs/home.html')
@@ -68,7 +68,7 @@ export function saveData(data, message = 'Data saved') {
         message: message
       },
       () =>
-        // notificationId
+      // notificationId
       {
       }
     )
@@ -133,7 +133,7 @@ export function propertyToArray(array, property) {
 }
 
 // Hide method from for-in loops
-Object.defineProperty(Array.prototype, 'equals', {enumerable: false})
+Object.defineProperty(Array.prototype, 'equals', { enumerable: false })
 
 // module.exports = general;
 export function hasClass2(elem, className) {
@@ -224,7 +224,7 @@ export function timeConverter(UNIX_timestamp) {
 }
 
 // Hide method from for-in loops
-Object.defineProperty(Array.prototype, 'equals', {enumerable: false})
+Object.defineProperty(Array.prototype, 'equals', { enumerable: false })
 
 function quicksort(sortby, array) {
   log('quicksort array', array)
@@ -265,7 +265,7 @@ export function sortTabs(sortby, tabs) {
     log('after quicksort', tabsList)
     tabsList.forEach((tab, i) => {
       setTimeout(() => {
-        chrome.tabs.move(tab.id, {index: i})
+        chrome.tabs.move(tab.id, { index: i })
       }, sortDelay)
       console.log('sorting: still moving')
     })
@@ -401,8 +401,8 @@ export function processTabs(action, selection, state, setState) {
       let message = 'Are you sure you want to close selected tabs'
       //State is Tabs here
       selection.length === state.length &&
-      (message =
-        'Are you sure you want to close all the tabs? This will also close this window.')
+        (message =
+          'Are you sure you want to close all the tabs? This will also close this window.')
       const userPermission = confirm(message)
       if (!userPermission) return false
       chrome.tabs.remove(selection)
@@ -411,7 +411,7 @@ export function processTabs(action, selection, state, setState) {
     case 'toNewWindow':
       let targetWindow = chrome.windows.create()
       targetWindow.then((windowInfo) => {
-        chrome.tabs.move(selection, {windowId: windowInfo.id, index: 0})
+        chrome.tabs.move(selection, { windowId: windowInfo.id, index: 0 })
       })
       break
     case 'toSession':
@@ -431,11 +431,11 @@ export function processTabs(action, selection, state, setState) {
       break
     case 'pinSelected':
       for (let tabId of selection)
-        chrome.tabs.update(parseInt(tabId), {pinned: true})
+        chrome.tabs.update(parseInt(tabId), { pinned: true })
       break
     case 'unpinSelected':
       for (let tabId of selection)
-        chrome.tabs.update(parseInt(tabId), {pinned: false})
+        chrome.tabs.update(parseInt(tabId), { pinned: false })
       break
     case 'togglePinSelected':
       for (let tabId of selection)
@@ -447,11 +447,11 @@ export function processTabs(action, selection, state, setState) {
     //Mute
     case 'muteSelected':
       for (let tabId of selection)
-        chrome.tabs.update(parseInt(tabId), {muted: true})
+        chrome.tabs.update(parseInt(tabId), { muted: true })
       break
     case 'unmuteSelected':
       for (let tabId of selection)
-        chrome.tabs.update(parseInt(tabId), {muted: false})
+        chrome.tabs.update(parseInt(tabId), { muted: false })
       break
     case 'toggleMuteSelected':
       for (let tabId of selection)
@@ -460,16 +460,22 @@ export function processTabs(action, selection, state, setState) {
         })
       break
 
+    // Discard
+    case 'discardSelected':
+      for (let tabId of selection)
+        chrome.tabs.discard(parseInt(tabId))
+      break
+
     //Selection
     case 'selectAll':
-      setState({selectedTabs: filterTabs().map((tab) => tab.id)})
+      setState({ selectedTabs: filterTabs().map((tab) => tab.id) })
       addClass(
         document.querySelectorAll('#selection-action'),
         'selection-active'
       )
       break
     case 'selectNone':
-      setState({selectedTabs: []})
+      setState({ selectedTabs: [] })
       removeClass(
         document.querySelectorAll('#selection-action'),
         'selection-active'
@@ -479,7 +485,7 @@ export function processTabs(action, selection, state, setState) {
       let inverted = props.tabs
         .filter((tab) => !props.selectedTabs.includes(tab.id))
         .map((tab) => tab.id)
-      setState({selectedTabs: inverted})
+      setState({ selectedTabs: inverted })
       break
   }
 }
@@ -510,15 +516,18 @@ export function processTabs(action, selection, state, setState) {
  * @returns A promise that resolves to an array of filtered tabs.
  */
 export const asyncFilterTabs = async (
-  {searchTerm, audibleSearch, pinnedSearch, searchIn},
-  {ignoreCase, regex},
+  { searchTerm, audibleSearch, pinnedSearch, searchIn },
+  { ignoreCase, regex },
   tabs
 ) => {
   return await new Promise(async (resolve) => {
-    if (searchTerm === '' && !audibleSearch && !pinnedSearch) return tabs
+    if (searchTerm === '' && !audibleSearch && !pinnedSearch) {
+      resolve(tabs)
+      return
+    }
     const filteredTabs = reduceTabs(
-      {searchTerm, audibleSearch, pinnedSearch, searchIn},
-      {ignoreCase, regex},
+      { searchTerm, audibleSearch, pinnedSearch, searchIn },
+      { ignoreCase, regex },
       tabs
     )
     resolve(filteredTabs)
@@ -532,11 +541,11 @@ export const asyncFilterTabs = async (
  * @returns The filtered tabs.
  */
 export const filterTabs = (
-  {searchTerm, audibleSearch, pinnedSearch, searchIn},
-  {ignoreCase, regex},
+  { searchTerm, audibleSearch, pinnedSearch, searchIn },
+  { ignoreCase, regex },
   tabs
 ) => {
-  let filteredTabs = tabs?.filter(({title, url, audible, pinned}) => {
+  let filteredTabs = tabs?.filter(({ title, url, audible, pinned }) => {
     const isAudible = audibleSearch ? audible === true : true
     const isPinned = pinnedSearch ? pinned === true : true
     if (regex) {
@@ -578,13 +587,13 @@ export const filterTabs = (
  * @returns An array of tab objects.
  */
 export const reduceTabs = (
-  {searchTerm, audibleSearch, pinnedSearch, searchIn},
-  {ignoreCase, regex},
+  { searchTerm, audibleSearch, pinnedSearch, searchIn },
+  { ignoreCase, regex },
   tabs
 ) => {
   console.time('reduceTabs')
   let reducedTabs = tabs?.reduce((accumulator, tab) => {
-    const {title, url, audible, pinned} = tab
+    const { title, url, audible, pinned } = tab
     const isAudible = audibleSearch ? audible === true : true
     const isPinned = pinnedSearch ? pinned === true : true
     if (regex) {
@@ -676,7 +685,7 @@ export const makePlaceholder = (searchIn, regex = false) => {
 }
 
 export function getCurrentWindow() {
-  return chrome.windows.getCurrent({populate: true})
+  return chrome.windows.getCurrent({ populate: true })
 }
 
 export function getAllWindows() {

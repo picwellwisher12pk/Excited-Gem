@@ -1,14 +1,15 @@
 import { List } from 'antd'
 import React, { useEffect } from 'react'
 import ContentLoader from 'react-content-loader'
-import { DndProvider } from 'react-dnd'
-import { HTML5Backend } from 'react-dnd-html5-backend'
 import { useDispatch, useSelector } from 'react-redux'
+import type { DragEndEvent } from '@dnd-kit/core'
+import { arrayMove } from '@dnd-kit/sortable'
+import type { RootState } from '~/store/store'
 
-import Tab from '~/components/Tab'
+import { Tab } from '~/components/Tab/Tab'
+import { SortableTabs } from '~/components/Tab/SortableTabs'
 import { asyncFilterTabs } from './general'
 import { updateFilteredTabs } from '~/store/tabSlice'
-import { filterTabs } from '~/store/tabSlice'
 
 const MyLoader = (props) => (
   <ContentLoader
@@ -49,15 +50,15 @@ const MyLoader = (props) => (
 function useTabOperations() {
   return {
     moveTab: (itemId: string, dragIndex: number, index: number) => {
-      chrome.tabs.move(itemId, { index })
+      chrome.tabs.move(Number(itemId), { index })
     },
-    removeTab: (itemId: string) => {
+    remove: (itemId: number) => {
       chrome.tabs.remove(itemId)
     },
-    toggleMuteTab: (itemId: string, status: boolean) => {
+    toggleMuteTab: (itemId: number, status: boolean) => {
       chrome.tabs.update(itemId, { muted: !status })
     },
-    togglePinTab: (itemId: string, status: boolean) => {
+    togglePinTab: (itemId: number, status: boolean) => {
       chrome.tabs.update(itemId, { pinned: !status })
     }
   }
@@ -65,34 +66,89 @@ function useTabOperations() {
 
 function TabList() {
   const dispatch = useDispatch()
-  const { tabs, filteredTabs, selectedTabs } = useSelector((state) => state.tabs)
-  const searchState = useSelector((state) => state.search)
+  const { tabs, filteredTabs, selectedTabs } = useSelector((state: RootState) => state.tabs)
+  const searchState = useSelector((state: RootState) => state.search)
   const tabOperations = useTabOperations()
-  const { isLoading } = useSelector((state) => state.ui)
+  const [isLoading, setIsLoading] = React.useState(false)
 
   useEffect(() => {
-    dispatch(filterTabs({ searchObject: searchState, tabs }))
-  }, [searchState, tabs])
+    const filterAndUpdate = async () => {
+      try {
+        setIsLoading(true)
+        console.log('🔄 Starting filter with tabs:', tabs.length)
+        const filtered = await asyncFilterTabs(
+          {
+            searchTerm: searchState.searchTerm,
+            audibleSearch: searchState.audibleSearch,
+            pinnedSearch: searchState.pinnedSearch,
+            searchIn: searchState.searchIn
+          },
+          {
+            ignoreCase: true,
+            regex: searchState.regex
+          },
+          tabs
+        )
+        console.log('🔍 Filtered tabs result:', filtered?.length, 'Original tabs:', tabs.length)
+        dispatch(updateFilteredTabs(filtered || tabs))
+      } catch (error) {
+        console.error('❌ Error filtering tabs:', error)
+        // Fallback to showing all tabs if filter fails
+        dispatch(updateFilteredTabs(tabs))
+      } finally {
+        setIsLoading(false)
+      }
+    }
+
+    if (tabs.length > 0) {
+      filterAndUpdate()
+    } else {
+      setIsLoading(false)
+    }
+  }, [searchState, tabs, dispatch])
+
+  console.log('📋 TabList render - filteredTabs:', filteredTabs, 'length:', filteredTabs?.length)
+
+  const handleDragEnd = (event: DragEndEvent) => {
+    const { active, over } = event;
+    if (active.id !== over?.id) {
+      const oldIndex = filteredTabs.findIndex((tab) => tab.id === active.id);
+      const newIndex = filteredTabs.findIndex((tab) => tab.id === over?.id);
+
+      // Update local state (Redux)
+      const newTabs = arrayMove(filteredTabs, oldIndex, newIndex);
+      dispatch(updateFilteredTabs(newTabs));
+
+      // Update Chrome tabs
+      // We move the tab to the index of the target tab (the one we dropped over/replaced)
+      const targetTab = filteredTabs[newIndex];
+      if (targetTab && typeof targetTab.index === 'number') {
+        chrome.tabs.move(Number(active.id), { index: targetTab.index });
+      }
+    }
+  };
 
   if (isLoading) {
-    return <TabListLoader />
+    return <MyLoader width={400} />
   }
 
   return (
-    <DndProvider backend={HTML5Backend}>
-      <List id="droppableUL" className="mr-[10px]">
-        {filteredTabs?.map((tab) => (
-          <Tab
-            {...tab}
-            key={tab.id}
-            activeTab={true}
-            index={tab.index}
-            selected={selectedTabs.includes(tab.id)}
-            {...tabOperations}
-          />
-        ))}
+    <div className="mr-[10px] overflow-x-hidden w-full">
+      <List>
+        <SortableTabs tabs={filteredTabs || []} onDragEnd={handleDragEnd}>
+          {(tab) => (
+            <Tab
+              {...tab}
+              key={tab.id}
+              activeTab={true}
+              index={tab.index}
+              selected={selectedTabs.includes(tab.id)}
+              {...tabOperations}
+            />
+          )}
+        </SortableTabs>
       </List>
-    </DndProvider>
+    </div>
   )
 }
 

@@ -12,6 +12,7 @@ import TimesIcon from "react:/src/icons/xmark-solid.svg"
 import MoveIcon from "react:/src/icons/up-down-left-right-solid.svg"
 import VolumeIcon from "react:/src/icons/volume.svg"
 import SaveIcon from "react:/src/icons/floppy-disk-solid.svg"
+import MoonIcon from "react:/src/icons/light/moon.svg"
 import logo from '~/assets/logo.svg'
 
 import { getAllWindows, getCurrentWindow, processTabs } from '~/scripts/general'
@@ -24,6 +25,7 @@ import MenuItemButton from './MenuItemButton'
 import Selection from './Selection'
 import SortButton from './SortButton'
 import Btn from '~/components/Btn'
+import { SidebarToggleButton } from '~/components/Sidebar'
 
 const { Option } = Select
 
@@ -33,6 +35,7 @@ interface HeaderProps {
   allMuted?: boolean
   allPinned?: boolean
   processSelectedTabs?: (action: string) => void
+  sidebarToggle?: () => void
 }
 
 interface TabState {
@@ -54,7 +57,8 @@ export default function Header({
   allSelected = false,
   allMuted = false,
   allPinned = false,
-  processSelectedTabs = () => { }
+  processSelectedTabs = () => { },
+  sidebarToggle
 }: Readonly<HeaderProps>) {
   const dispatch = useDispatch()
   const { selectedTabs, tabs, filteredTabs } = useSelector((state: { tabs: TabState }) => state.tabs)
@@ -81,46 +85,66 @@ export default function Header({
   )
   const iconSound = <VolumeSlashIcon style={{ height: 16 }} />
 
-  const handlePinning = useCallback((e: React.MouseEvent) => {
-    console.log('pinning', e, e.target)
-  }, [])
-
-  const handleMuting = useCallback((e: React.MouseEvent) => {
-    console.log('muting', e)
-  }, [])
-
+  // Handlers for pin and mute actions using Select components
   const handlePin = useCallback(
-    (option: string, selectedTabs: string[], tabs: any[]) => {
-      processTabs(option, selectedTabs, tabs)
+    (value: string) => {
+      processTabs(value, selectedTabs, tabs)
     },
     [selectedTabs, tabs]
   )
 
   const handleMute = useCallback(
-    (option: string, selectedTabs: string[], tabs: any[]) => {
-      processTabs(option, selectedTabs, tabs)
+    (value: string) => {
+      processTabs(value, selectedTabs, tabs)
     },
     [selectedTabs, tabs]
   )
 
   const sortButton = useMemo(() => <SortButton tabs={tabs} />, [tabs])
 
-  const pinOptions: MenuItem[] = pinActions.map((option, i) => ({
-    key: i,
-    label: <MenuItemButton label={option} callback={handlePinning} />
-  }))
+  // Replace Dropdown menus with Select components for pin and mute actions
+  const pinMenu = {
+    items: pinActions.map((action) => ({
+      key: action,
+      label: action,
+    })),
+    onClick: ({ key }) => handlePin(key),
+  }
 
-  const muteOptions: MenuItem[] = muteActions.map((option, i) => ({
-    key: i,
-    label: <MenuItemButton label={option} callback={handleMuting} />
-  }))
+  const pinSelect = (
+    <Dropdown menu={pinMenu} trigger={['click']}>
+      <Btn className="mr-2">
+        <span>Pin</span>
+        <DownOutlined className="ml-2 text-zinc-500" />
+      </Btn>
+    </Dropdown>
+  )
 
-  const pinMenu = { items: pinOptions }
-  const muteMenu = { items: muteOptions }
+  const muteMenu = {
+    items: muteActions.map((action) => ({
+      key: action,
+      label: action,
+    })),
+    onClick: ({ key }) => handleMute(key),
+  }
+
+  const muteSelect = (
+    <Dropdown menu={muteMenu} trigger={['click']}>
+      <Btn className="mr-2">
+        <span>Mute</span>
+        <DownOutlined className="ml-2 text-zinc-500" />
+      </Btn>
+    </Dropdown>
+  )
 
   return (
     <header className="bg-gradient-to-t from-cyan-500 to-blue-500 p-2 transition-all duration-200 ease-in-out">
       <section className="flex">
+        {sidebarToggle && (
+          <div className="mr-2">
+            <SidebarToggleButton onClick={sidebarToggle} />
+          </div>
+        )}
         {Brand(logo)}
         {children}
       </section>
@@ -142,22 +166,10 @@ export default function Header({
               Actions for selection ({selectedTabs.length} tabs)
             </span>
             <div>
-              <Dropdown menu={pinMenu} trigger={['click']}>
-                <Btn onClick={(e) => e.preventDefault()}>
-                  <ThumbtackIcon style={{ height: 12 }} className="fill-inherit" />
-                  <span>Un/Pin</span>
-                  <DownOutlined className="text-zinc-500" />
-                </Btn>
-              </Dropdown>
+              {pinSelect}
             </div>
             <div>
-              <Dropdown menu={muteMenu} trigger={['click']}>
-                <Btn>
-                  <VolumeIcon style={{ height: 12 }} className="fill-inherit" />
-                  <span>Un/Mute</span>
-                  <DownOutlined className="text-zinc-500" />
-                </Btn>
-              </Dropdown>
+              {muteSelect}
             </div>
             <div>
               <Btn onClick={() => setSaveModalVisible(true)}>
@@ -168,7 +180,8 @@ export default function Header({
             <div>
               <Btn
                 title="Move Selected Tabs"
-                onClick={() => setMoveModalVisible(true)}>
+                onClick={() => setMoveModalVisible(true)}
+              >
                 <MoveIcon style={{ height: 14 }} />
                 <Space>
                   <span>Move ...</span>
@@ -182,9 +195,21 @@ export default function Header({
                   processTabs('closeSelected', selectedTabs, tabs, () => {
                     dispatch(clearSelectedTabs())
                   })
-                }}>
+                }}
+              >
                 <TimesIcon style={{ height: 14, width: 14, fill: "red" }} />
                 <span> Close</span>
+              </Btn>
+            </div>
+            <div>
+              <Btn
+                title="Discard Selected"
+                onClick={() => {
+                  processTabs('discardSelected', selectedTabs, tabs)
+                }}
+              >
+                <MoonIcon style={{ height: 14, width: 14 }} />
+                <span> Discard</span>
               </Btn>
             </div>
           </Space>

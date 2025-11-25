@@ -37,6 +37,9 @@
   },
   "dependencies": {
     "@ant-design/icons": "^5.5.2",
+    "@dnd-kit/core": "^6.3.1",
+    "@dnd-kit/sortable": "^10.0.0",
+    "@dnd-kit/utilities": "^3.2.2",
     "@ffflorian/jszip-cli": "^3.8.2",
     "@plasmohq/redux-persist": "6.1.0",
     "@plasmohq/storage": "^1.13.0",
@@ -44,28 +47,28 @@
     "@react-buddy/palette-antd": "^5.3.1",
     "@reduxjs/toolkit": "^2.5.0",
     "@tailwindcss/forms": "^0.5.10",
-
     "antd": "^5.24.3",
     "chokidar": "^4.0.3",
+    "content-security-policy-parser": "^0.6.0",
     "cross-env": "^7.0.3",
+    "cross-spawn": "^7.0.6",
     "cssnano": "^7.0.6",
     "dotenv": "^16.3.1",
     "esno": "^0.16.3",
     "fs-extra": "^11.1.1",
+    "glob": "^13.0.0",
     "html-react-parser": "^5.2.1",
     "immutability-helper": "^3.1.1",
     "kolorist": "^1.8.0",
     "lodash": "^4.17.21",
     "mocha": "10.2.0",
-    "plasmo": "0.90.3",
+    "msgpackr": "^1.11.5",
+    "plasmo": "0.90.5",
     "postcss-import": "^15.1.0",
     "postcss-preset-env": "^9.0.0",
     "react": "^18.2.0",
     "react-content-loader": "^7.0.2",
     "react-custom-scroll": "^7.0.0",
-
-    "react-dnd": "^16.0.1",
-    "react-dnd-html5-backend": "^16.0.1",
     "react-dom": "^18.2.0",
     "react-hot-toast": "^2.5.2",
     "react-lazy-load-image-component": "^1.6.3",
@@ -99,14 +102,19 @@
     "typescript": "^5.7.2"
   },
   "manifest": {
-    "host_permissions": ["https://*/*"],
-    "permissions": ["tabs", "storage"],
+    "permissions": [
+      "tabs",
+      "storage"
+    ],
     "content_security_policy": {
       "extension_pages": "script-src 'self' http://localhost:8097; object-src 'self'"
     }
   },
   "nodemonConfig": {
-    "ignore": ["test/*", "docs/*"],
+    "ignore": [
+      "test/*",
+      "docs/*"
+    ],
     "delay": 1000
   }
 }

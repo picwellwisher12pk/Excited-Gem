@@ -1,24 +1,24 @@
-import {Checkbox, Input, Popover} from 'antd'
-import {debounce} from 'lodash'
-import React, {memo, useCallback, useEffect, useState} from 'react'
-import {useDispatch, useSelector} from 'react-redux'
+import { Checkbox, Input, Popover, message } from 'antd'
+import { debounce } from 'lodash'
+import React, { memo, useCallback, useEffect, useState } from 'react'
+import { useDispatch, useSelector } from 'react-redux'
 import ThumbtackActiveIcon from 'react:~/icons/thumbtack-active.svg'
 import ThumbtackIcon from 'react:~/icons/thumbtack.svg'
 import VolumeOffIcon from 'react:~/icons/volume-off.svg'
 import VolumeIcon from 'react:~/icons/volume.svg'
 
 import ErrorBoundary from '~/scripts/ErrorBoundary'
-import {makePlaceholder as doPlaceholder} from '~/scripts/general'
-import {toggleAudible, togglePinned, toggleRegex, toggleSearchIn, updateSearchTerm} from '~/store/searchSlice'
+import { makePlaceholder as doPlaceholder } from '~/scripts/general'
+import { toggleAudible, togglePinned, toggleRegex, toggleSearchIn, updateSearchTerm } from '~/store/searchSlice'
 
-const {Search: AntSearch} = Input
+const { Search: AntSearch } = Input
 
 const Search = () => {
   const dispatch = useDispatch()
-  const {filteredTabs} = useSelector((state) => state.tabs)
+  const { filteredTabs } = useSelector((state) => state.tabs)
 
   //Global States
-  const {searchTerm, pinnedSearch, audibleSearch, searchIn, regex} =
+  const { searchTerm, pinnedSearch, audibleSearch, searchIn, regex } =
     useSelector((state) => state.search)
   //Refs
   const searchField = React.useRef()
@@ -40,7 +40,7 @@ const Search = () => {
   }, [searchTerm])
 
   const handleKeyUp = useCallback((event) => {
-    const {value} = event.target
+    const { value } = event.target
     if (value === '' || event.key === 'Escape') {
       // @ts-ignore
       searchField.current.input.value = ''
@@ -56,11 +56,11 @@ const Search = () => {
   )
 
   const toggleSearchInHandle = (param, event) => {
-    const newSearchIn = {...searchIn, [param]: !searchIn[param]}
+    const newSearchIn = { ...searchIn, [param]: !searchIn[param] }
     if (Object.values(newSearchIn).every((v) => v === false)) {
       event.preventDefault()
-      alert(
-        "Sorry! You can't uncheck both Title and URL at the same time. One must remain checked."
+      message.warning(
+        "At least one search field must remain active. Please keep either Title or URL checked."
       )
       event.target.checked = true
       return false
@@ -116,39 +116,54 @@ const Search = () => {
               <div className="mr-3">
                 <button
                   className="!border-0 flex align-items-center"
-                  title="Search audible only"
+                  type="button"
+                  aria-label={audibleSearch ? "Show all tabs (currently filtering audible only)" : "Filter audible tabs only"}
+                  title={audibleSearch ? "Show all tabs" : "Filter audible tabs only"}
                   onClick={() => dispatch(toggleAudible())}>
                   {audibleSearch ? (
-                    <VolumeIcon className="fill-[#0487cf] h-[16px]"/>
+                    <VolumeIcon className="fill-[#0487cf] h-[16px]" aria-hidden="true" />
                   ) : (
-                    <VolumeOffIcon className="fill-[#0487cf] h-[16px]"/>
+                    <VolumeOffIcon className="fill-[#0487cf] h-[16px]" aria-hidden="true" />
                   )}
+                  <span className="sr-only">
+                    {audibleSearch ? "Currently showing audible tabs only" : "Showing all tabs"}
+                  </span>
                 </button>
               </div>
               <div className="mr-3">
-                <a
-                  className="!border-0"
-                  title="Search pinned only"
+                <button
+                  className="!border-0 bg-transparent cursor-pointer"
+                  type="button"
+                  aria-label={pinnedSearch ? "Show all tabs (currently filtering pinned only)" : "Filter pinned tabs only"}
+                  title={pinnedSearch ? "Show all tabs" : "Filter pinned tabs only"}
                   onClick={() => dispatch(togglePinned())}>
                   {pinnedSearch ? (
-                    <ThumbtackActiveIcon className="fill-[#0487cf] h-[16px]"/>
+                    <ThumbtackActiveIcon className="fill-[#0487cf] h-[16px]" aria-hidden="true" />
                   ) : (
-                    <ThumbtackIcon className="fill-[#0487cf] h-[16px]"/>
+                    <ThumbtackIcon className="fill-[#0487cf] h-[16px]" aria-hidden="true" />
                   )}
-                </a>
+                  <span className="sr-only">
+                    {pinnedSearch ? "Currently showing pinned tabs only" : "Showing all tabs"}
+                  </span>
+                </button>
               </div>
             </div>
-            <label>
+            <label htmlFor="regex-checkbox">
               <Checkbox
+                id="regex-checkbox"
                 defaultChecked={regex}
                 onChange={() => dispatch(toggleRegex())}
+                aria-label="Enable regular expression search mode"
               />{' '}
               Regex
             </label>
-            <Popover content={content}>
-              <a type="link" className="ml-3">
+            <Popover content={content} trigger="click">
+              <button
+                type="button"
+                className="ml-3 bg-transparent border-0 text-blue-600 cursor-pointer hover:underline"
+                aria-label="Choose search fields (title and/or URL)">
                 Search by...
-              </a>
+              </button>
             </Popover>
           </>
         }

@@ -6,7 +6,6 @@ import TimesIcon from '../../icons/times.svg'
 import { updateSelectedTabs } from '../../store/tabSlice'
 import ItemBtn from '../ItemBtn'
 import { TabIcon } from './TabIcon'
-import { getUseDrag, getUseDrop } from './dnd-reducers'
 import { markSearchedTerm, renderAudioIcon } from './helpers'
 import { IconPinned } from './IconPinned'
 
@@ -15,7 +14,7 @@ interface MutedInfo {
   reason?: string;
 }
 
-interface TabProps {
+export interface TabProps {
   id: number;
   title: string;
   url: string;
@@ -29,7 +28,6 @@ interface TabProps {
   favIconUrl: string;
   activeTab: boolean;
   index: number;
-  moveTab: (id: number, dragIndex: number, hoverIndex: number) => void;
   remove: (id: number) => void;
   toggleMuteTab: (id: number, muted: boolean) => void;
   togglePinTab: (id: number, pinned: boolean) => void;
@@ -58,27 +56,10 @@ export function Tab({
   favIconUrl,
   title = '',
   url = '',
-  index,
-  moveTab
 }: Readonly<TabProps>) {
   const dispatch = useDispatch()
   const { searchTerm, searchIn } = useSelector<{ search: SearchState }, SearchState>(state => state.search)
   const ref = React.useRef<HTMLDivElement>(null)
-
-  // DnD setup
-  const [{ handlerId }, drop] = getUseDrop(ref, {
-    id,
-    index,
-    moveTab
-  })
-
-  const [{ isDragging }, drag] = getUseDrag({
-    id,
-    index,
-    moveTab
-  })
-
-  drag(drop(ref))
 
   // Event handlers
   const handleSelectedTabsUpdate = React.useCallback(() => {
@@ -114,7 +95,6 @@ export function Tab({
 
   const isLoading = status === 'loading'
   const discardedClass = discarded ? ' idle' : ''
-  const opacity = isDragging ? 0 : 1
 
   return (
     <List.Item
@@ -128,10 +108,8 @@ export function Tab({
         ${selected ? ' checked bg-slate-100' : ''}
         ${isLoading ? ' loading' : discardedClass}
       `}
-      style={{ opacity }}
       data-discarded={discarded}
-      data-handler-id={handlerId}
-      draggable>
+    >
       <TabIcon
         onChange={handleSelectedTabsUpdate}
         checked={selected}
@@ -156,19 +134,29 @@ export function Tab({
       </div>
       <div
         className="tab-actions flex align-self-center justify-self-end ms-3 gap-2 shrink-0"
-        aria-label="options">
+        role="group"
+        aria-label={`Actions for tab: ${title}`}>
         {activeTab && (
           <>
-            <ItemBtn title="Un/Pin Tab" onClick={handlePinTab}>
+            <ItemBtn
+              title={pinned ? "Unpin Tab" : "Pin Tab"}
+              aria-label={`${pinned ? 'Unpin' : 'Pin'} tab: ${title}`}
+              onClick={handlePinTab}>
               <IconPinned pinned={pinned} />
             </ItemBtn>
-            <ItemBtn title="Un/Mute Tab" onClick={handleMuteTab}>
+            <ItemBtn
+              title={mutedInfo.muted ? "Unmute Tab" : "Mute Tab"}
+              aria-label={`${mutedInfo.muted ? 'Unmute' : 'Mute'} tab: ${title}`}
+              onClick={handleMuteTab}>
               {renderAudioIcon(audible, mutedInfo)}
             </ItemBtn>
           </>
         )}
-        <ItemBtn onClick={handleRemove} title="Close Tab">
-          <TimesIcon style={{ height: 14, fill: 'red' }} />
+        <ItemBtn
+          onClick={handleRemove}
+          title="Close Tab"
+          aria-label={`Close tab: ${title}`}>
+          <TimesIcon style={{ height: 14, fill: 'red' }} aria-hidden="true" />
         </ItemBtn>
       </div>
     </List.Item>

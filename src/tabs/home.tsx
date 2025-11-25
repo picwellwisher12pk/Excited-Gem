@@ -1,14 +1,15 @@
 // import "react-devtools";
 
-import {Provider} from 'react-redux'
+import { Provider } from 'react-redux'
 import ActiveTabs from '~/scripts/ActiveTabs'
 import store from '~/store/store'
 
 import 'antd/dist/reset.css'
 import '~/styles/index.css'
 import '~/styles/index.scss'
-import {StrictMode} from 'react'
-import {ConfigProvider} from "antd";
+import '~/styles/accessibility.css'
+import { StrictMode } from 'react'
+import { ConfigProvider } from "antd";
 
 function Home() {
   return (
@@ -21,7 +22,7 @@ function Home() {
             borderRadiusLG: 4
           }
         }}>
-          <ActiveTabs/>
+          <ActiveTabs />
           {/* <PersistGate loading={null} persistor={persistor}>
         </PersistGate> */}
         </ConfigProvider>
