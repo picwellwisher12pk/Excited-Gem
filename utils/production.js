@@ -5,7 +5,7 @@ require('./prepare');
 
 delete config.chromeExtensionBoilerplate;
 
-config.general[0].plugins.push(
+config.plugins.push(
   new webpack.LoaderOptionsPlugin({
     minimize: true,
     debug: false,
@@ -13,6 +13,6 @@ config.general[0].plugins.push(
   new UglifyJsPlugin()
 );
 
-webpack(config.general[0], function (err) {
+webpack(config, function (err) {
   if (err) throw err;
 });

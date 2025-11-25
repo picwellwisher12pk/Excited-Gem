@@ -1,6 +1,6 @@
 @import "../bootstrap/_variables";
 .tab-item {
-  padding: 10px 16px 0;
+  padding: 0 16px 0;
   padding-left: 15px;
   margin-bottom: -1px;
   border: 1px solid #ddd;
@@ -11,17 +11,24 @@
   text-overflow: ellipsis;
   white-space: nowrap;
   position: relative;
-  transition: all 0.3s;
   background-color: #fff;
-  min-height: 41px;
+  flex-basis: 40px;
+  transition: all 0.2s;
+
+  &.hidden {
+    display: none;
+  }
+
   &.idle .tab-name,
     // &.idle .tab-url,
-    &.idle .tab-favicon {
+  &.idle .tab-favicon {
     opacity: 0.5;
   }
+
   &.selected {
     background-color: #acd8fb;
   }
+
   &:hover {
     background-color: #eee;
   }
@@ -52,18 +59,16 @@
   .tab-favicon {
     margin-right: 15px;
     width: 16px;
+    height: 16px;
     img {
       margin: 0;
       transition: all 0.2s;
     }
     .checkbox {
       opacity: 0;
-      width: 16px;
-      height: 16px;
-      transition: all 0.2s;
       position: absolute;
-      left: 14px;
-      top: 15px;
+      left: 0;
+      top: 3px;
     }
     &:hover {
       .checkbox {
@@ -75,16 +80,16 @@
     }
   }
   &.checked {
-    background-color: #80b7e4;
+    background-color: #e3f1fc;
     border-color: #548dbb;
     .dimmed.tab-url {
-      color: white;
+      color: #0062cc;
     }
   }
   &.checked .tab-favicon {
     .checkbox {
       opacity: 1;
-      left: 14px;
+      //left: 0;
     }
     img {
       opacity: 0;
@@ -115,10 +120,21 @@
   }
   .tab-actions {
     width: auto;
+
+    li {
+      display: none;
+    }
+
+    li.active {
+      display: inline-block;
+    }
   }
   &:hover .tab-actions {
+    display: block;
     width: auto;
+
     li {
+      display: inline-block;
       width: auto;
     }
   }
