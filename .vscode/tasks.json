@@ -1,0 +1,12 @@
+{
+	"version": "2.0.0",
+	"tasks": [
+		{
+			"type": "npm",
+			"script": "firefoxd",
+			"problemMatcher": [],
+			"label": "npm: firefoxd",
+			"detail": "SET mode=development & npm run start"
+		}
+	]
+}

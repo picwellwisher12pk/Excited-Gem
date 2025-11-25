@@ -15,5 +15,20 @@
 		{
 			"path": "D:/xampp/htdocs/my/excited-gem"
 		}
-	]
+	],
+	"ignored_packages":
+	[
+		"Bootstrap 3 Autocomplete",
+		"Bootstrap 3 Snippets",
+		"BracketHighlighter",
+		"CSS Snippets",
+		"DocBlockr",
+		"FileDiffs",
+		"Pretty JSON",
+		"SasSubmit",
+		"SublimeCodeIntel",
+		"SublimeLinter",
+		"Zeal",
+		"ColorHighlighter"
+	],
 }

@@ -1,0 +1,32 @@
+{
+  "jsc": {
+    "target": "es2017",
+    "transform": {
+      "react": {
+        "runtime": "automatic",
+        "development": true
+      }
+    },
+    "parser": {
+      "syntax": "ecmascript",
+      "jsx": true,
+      "dynamicImport": true,
+      "privateMethod": false,
+      "functionBind": false,
+      "exportDefaultFrom": false,
+      "exportNamespaceFrom": false,
+      "decorators": false,
+      "decoratorsBeforeExport": false,
+      "topLevelAwait": false,
+      "importMeta": false
+    },
+    "loose": false,
+    "externalHelpers": false,
+    // Requires v1.2.50 or upper and requires target to be es2016 or upper.
+    "keepClassNames": false
+  },
+  "module": {
+    "type": "es6"
+  },
+  "minify": false
+}

@@ -1,0 +1,25 @@
+{
+  "folders": [
+    {
+      "path": "."
+    }
+  ],
+  "settings": {
+    "window.zoomLevel": 0,
+    "workbench.editor.tabSizing": "shrink",
+    "html.format.enable": true,
+    "workbench.sideBar.location": "left",
+    "extensions.ignoreRecommendations": true,
+    // "workbench.colorTheme": "Default Dark+",
+    "workbench.editor.tabCloseButton": "off",
+    "emmet.includeLanguages": {
+      "javascript": "javascriptreact"
+    },
+    "workbench.editor.enablePreviewFromQuickOpen": false,
+    "window.title": "${dirty} ${activeEditorMedium}${separator}${rootName}",
+    "eslint.alwaysShowStatus": true,
+    "mocha.enabled": true,
+    "workbench.colorCustomizations": {},
+    "workbench.editor.tabActionCloseVisibility": false
+  }
+}

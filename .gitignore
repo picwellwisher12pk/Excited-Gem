@@ -1,53 +1,89 @@
-$RECYCLE.BIN/
-*.cache
-*.csv
-*.dat
-*.gz
-*.log
-*.log
-*.out
-*.pid
-*.seed
-./js/*.js
-._*
-.AppleDouble
+# Dependencies
+/node_modules
+/.pnp
+.pnp.js
+
+# Testing
+/coverage
+
+# Miscellaneous
 .DS_Store
 .DS_STORE
+*.pem
+
+# Debug
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+.pnpm-debug.log*
+
+# Local Environment Files
+.env*
+out/
+build/
+dist/
+
+# Plasmo - https://www.plasmo.com
+.plasmo
+
+# BPP - http://bpp.browser.market/
+keys.json
+
+# TypeScript
+.tsbuildinfo
+
+# Editor and System Files
+._*
+.AppleDouble
+.history/
 .LSOverride
 .remote-sync.json
 .sass-cache
 .Spotlight-V100
 .Trashes
+.vite-ssg-dist
+.vite-ssg-temp
+.vscode/extensions.json
 .vscode/launch.json
 .vscode/settings.json
+
+# Archive and Binary Files
+*.cache
+*.crx
+*.csv
+*.dat
+*.gz
+*.local
+*.log
+*.out
+*.pid
+*.seed
+*.xpi
+
+# Build Output and Assets
 /css
 /js/*.js
-assets/
+$RECYCLE.BIN/
 bower_components/
-build/
 certs/key.pem
 commonjs/
 Desktop.ini
-dist/
-thumbs.db
+dist-ssr
 excited-gem.sublime-workspace
+firefox/
 Icon
 lib-cov
 logs
+New folder/
 node_modules
 npm-debug.log
+package-lock.json
 pids
 results
-src/components
-Thumbs.db
-.history/
-New folder/
-.idea/workspace.xml
-.idea/excited-gem.iml
-.vscode/extensions.json
+src/auto-imports.d.ts
+src/images/light/
+src/images/regular/
+src/images/solid/
+thumbs.db
 utils/.npmrc
-package-lock.json
-firefox/
-chrome/
-.idea/watcherTasks.xml
-build.zip
+/.idea

@@ -1,5 +1,6 @@
 @import "../bootstrap/_variables";
 .tab-item {
+<<<<<<< HEAD
     padding-left: 15px;
     padding: 10px 10px 0;
     margin-bottom: -1px;
@@ -25,11 +26,80 @@
     &.idle .tab-url,
     &.idle .tab-favicon {
         opacity: 0.5;
+=======
+  padding: 0 16px 0;
+  padding-left: 15px;
+  margin-bottom: -1px;
+  border: 1px solid #ddd;
+  display: flex;
+  flex: 1;
+  width: 100%;
+  border-radius: 0;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  position: relative;
+  background-color: #fff;
+  flex-basis: 40px;
+  transition: all 0.2s;
+
+  &.hidden {
+    display: none;
+  }
+
+  &.idle .tab-name,
+    // &.idle .tab-url,
+  &.idle .tab-favicon {
+    opacity: 0.5;
+  }
+
+  &.selected {
+    background-color: #acd8fb;
+  }
+
+  &:hover {
+    background-color: #eee;
+  }
+  .tab-title {
+    max-width: 50vw;
+  }
+  .clickable {
+    color: #000;
+    &:hover {
+      color: #000;
+      text-decoration: none;
+>>>>>>> plasmo
     }
-    &.selected {
-        background-color: #acd8fb;
+  }
+
+  img,
+  span.favicon {
+    width: 16px;
+    height: 16px;
+    margin: 0 5px;
+
+    &[src=""], &[src^="chrome-extension://"], &[src^="chrome://"]
+    {
+      display: inline-block;
+      border: 1px solid gray;
+      text-indent: -9999px;
+    }
+  }
+  .tab-favicon {
+    margin-right: 15px;
+    width: 16px;
+    height: 16px;
+    img {
+      margin: 0;
+      transition: all 0.2s;
+    }
+    .checkbox {
+      opacity: 0;
+      position: absolute;
+      left: 0;
+      top: 3px;
     }
     &:hover {
+<<<<<<< HEAD
         background-color: #eee;
     }
     .clickable {
@@ -89,39 +159,101 @@
         img {
             opacity: 0;
         }
+=======
+      .checkbox {
+        opacity: 1;
+      }
+      img {
+        opacity: 0;
+      }
+>>>>>>> plasmo
     }
-    .glyphicon {
-        padding-left: 5px;
-        padding-right: 5px;
+  }
+  &.checked {
+    background-color: #e3f1fc;
+    border-color: #548dbb;
+    .dimmed.tab-url {
+      color: #0062cc;
     }
-    .glyphicon.disabled {
-        color: #aaa;
+  }
+  &.checked .tab-favicon {
+    .checkbox {
+      opacity: 1;
+      //left: 0;
     }
-    .dimmed {
-        color: #aebdd0;
+    img {
+      opacity: 0;
     }
-    .trimmed {
-        margin-left: 15px;
+  }
+  .glyphicon {
+    padding-left: 5px;
+    padding-right: 5px;
+  }
+  .glyphicon.disabled {
+    color: #aaa;
+  }
+  .dimmed {
+    color: #aebdd0;
+  }
+  .trimmed {
+    margin-left: 15px;
+  }
+  .tab-url {
+    flex: 1;
+  }
+  .tab-name {
+    flex-shrink: 0;
+    max-width: 600px;
+  }
+  .tab-name:hover {
+    color: blue;
+  }
+  .tab-actions {
+    width: auto;
+
+    li {
+      display: none;
     }
+<<<<<<< HEAD
     .tab-url {
         flex: 1;
     }
     .tab-name {
         flex-shrink: 0;
         max-width: 600px;
+=======
+
+    li.active {
+      display: inline-block;
     }
-    .tab-name:hover {
-        color: blue;
+  }
+  &:hover .tab-actions {
+    display: block;
+    width: auto;
+
+    li {
+      display: inline-block;
+      width: auto;
+>>>>>>> plasmo
     }
-    .tab-actions {
-        width: auto;
+  }
+  .tab-actions {
+    li {
+      opacity: 0.4;
     }
-    &:hover .tab-actions {
-        width: auto;
-        li {
-            width: auto;
-        }
+    &:hover li {
+      display: inline-block;
+      opacity: 1;
     }
+  }
+}
+
+.clip {
+  word-wrap: break-word;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  text-align: left;
+  white-space: nowrap;
 }
 
 .clip {
@@ -133,8 +265,14 @@
 }
 
 .tab-actions {
-    flex-shrink: 0;
+  flex-shrink: 0;
+  overflow: hidden;
+  transition: all 0.4s;
+  li {
+    transition: all 0.2s;
+    display: inline-block;
     overflow: hidden;
+<<<<<<< HEAD
     transition: all 0.4s;
     li {
         //width: 0;
@@ -149,22 +287,34 @@
         i {
             padding: 6px;
         }
+=======
+    margin-right: 5px;
+    &:last-child {
+      margin-right: 0;
+>>>>>>> plasmo
     }
-    li.active {
-        //width: auto !important;
-        opacity: 1;
+    i {
+      padding: 6px;
     }
-    &:hover li {
-        display: inline-block;
-        opacity: 1;
-    }
-    li.pin-tab i {
-        color: $link-color;
-    }
-    li.sound-tab i {
-        color: $info;
-    }
-    li.remove-tab i {
-        color: $brand-secondary-color;
-    }
+<<<<<<< HEAD
 }
+=======
+  }
+  li.active {
+    opacity: 1;
+  }
+  &:hover li {
+    display: inline-block;
+    opacity: 1;
+  }
+  li.pin-tab i {
+    color: $link-color;
+  }
+  li.sound-tab i {
+    color: $info;
+  }
+  li.remove-tab i {
+    color: $brand-secondary-color;
+  }
+}
+>>>>>>> plasmo

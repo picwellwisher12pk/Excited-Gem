@@ -1,0 +1,2334 @@
+{
+  "tabs": [
+    {
+      "audible": false,
+      "discarded": false,
+      "favIconUrl": "",
+      "id": 1593,
+      "index": 0,
+      "mutedInfo": {
+        "muted": false
+      },
+      "pinned": true,
+      "status": "complete",
+      "title": "Excited Gem | Tabs",
+      "url": "chrome-extension://ndmfbpjadedofeohnpefljloeiekhcbc/tabs.html#",
+      "groupId": -1,
+      "windowId": 1
+    },
+    {
+      "audible": false,
+      "discarded": false,
+      "favIconUrl": "chrome-extension://fbjpiapnokpadgcekamdbgimajopamha/dev-logo.png",
+      "id": 2273,
+      "index": 1,
+      "mutedInfo": {
+        "muted": false
+      },
+      "pinned": true,
+      "status": "complete",
+      "title": "Excited Gem | Tabs",
+      "url": "chrome-extension://fbjpiapnokpadgcekamdbgimajopamha/excited-gem.html",
+      "groupId": -1,
+      "windowId": 1
+    },
+    {
+      "audible": false,
+      "discarded": false,
+      "favIconUrl": "https://www.gstatic.com/devrel-devsite/prod/vcae487c0dff40bc5593506bdb11c223a0a7a0f8d61f5e1811b1f7e89c817bc78/developers/images/favicon.png",
+      "id": 1597,
+      "index": 2,
+      "mutedInfo": {
+        "muted": false
+      },
+      "pinned": false,
+      "status": "complete",
+      "title": "Workbox  |  Google Developers",
+      "url": "https://developers.google.com/web/tools/workbox/",
+      "groupId": -1,
+      "windowId": 1
+    },
+    {
+      "audible": false,
+      "discarded": false,
+      "favIconUrl": "https://blitzjs.com/32x32-Favicon-Purple.png",
+      "id": 1600,
+      "index": 3,
+      "mutedInfo": {
+        "muted": false
+      },
+      "pinned": false,
+      "status": "unloaded",
+      "title": "Tutorial - Blitz.js",
+      "url": "https://blitzjs.com/docs/tutorial",
+      "groupId": -1,
+      "windowId": 1
+    },
+    {
+      "audible": false,
+      "discarded": false,
+      "favIconUrl": "",
+      "id": 1603,
+      "index": 4,
+      "mutedInfo": {
+        "muted": false
+      },
+      "pinned": false,
+      "status": "complete",
+      "title": "2 - coursesity.com",
+      "url": "chrome-extension://chaoejepfhlcelgpicelfccoiojpiofn/group.html?coursesity.com",
+      "groupId": -1,
+      "windowId": 1
+    },
+    {
+      "audible": false,
+      "discarded": false,
+      "favIconUrl": "https://d3njjcbhbojbot.cloudfront.net/web/images/favicons/favicon-v2-32x32.png",
+      "id": 1606,
+      "index": 5,
+      "mutedInfo": {
+        "muted": false
+      },
+      "pinned": false,
+      "status": "unloaded",
+      "title": "Learning How to Learn: Powerful mental tools to help you master tough subjects | Coursera",
+      "url": "https://www.coursera.org/learn/learning-how-to-learn?ranMID=40328&ranEAID=0F1O0otUXQc&ranSiteID=0F1O0otUXQc-nKXWTdLcM1wsgZ7Kn5V_Dg&siteID=0F1O0otUXQc-nKXWTdLcM1wsgZ7Kn5V_Dg&utm_content=10&utm_medium=partners&utm_source=linkshare&utm_campaign=0F1O0otUXQc#syllabus",
+      "groupId": -1,
+      "windowId": 1
+    },
+    {
+      "audible": false,
+      "discarded": false,
+      "favIconUrl": "",
+      "id": 1609,
+      "index": 6,
+      "mutedInfo": {
+        "muted": false
+      },
+      "pinned": false,
+      "status": "complete",
+      "title": "91 - tutgee.com",
+      "url": "chrome-extension://chaoejepfhlcelgpicelfccoiojpiofn/group.html?tutgee.com",
+      "groupId": -1,
+      "windowId": 1
+    },
+    {
+      "audible": false,
+      "discarded": false,
+      "favIconUrl": "",
+      "id": 1612,
+      "index": 7,
+      "mutedInfo": {
+        "muted": false
+      },
+      "pinned": false,
+      "status": "complete",
+      "title": "171 - devcourseweb.com",
+      "url": "chrome-extension://chaoejepfhlcelgpicelfccoiojpiofn/group.html?devcourseweb.com",
+      "groupId": -1,
+      "windowId": 1
+    },
+    {
+      "audible": false,
+      "discarded": false,
+      "favIconUrl": "",
+      "id": 1615,
+      "index": 8,
+      "mutedInfo": {
+        "muted": false
+      },
+      "pinned": false,
+      "status": "complete",
+      "title": "11 - freecourseweb.com",
+      "url": "chrome-extension://chaoejepfhlcelgpicelfccoiojpiofn/group.html?freecourseweb.com",
+      "groupId": -1,
+      "windowId": 1
+    },
+    {
+      "audible": false,
+      "discarded": false,
+      "favIconUrl": "",
+      "id": 1618,
+      "index": 9,
+      "mutedInfo": {
+        "muted": false
+      },
+      "pinned": false,
+      "status": "complete",
+      "title": "12 - youtube.com",
+      "url": "chrome-extension://chaoejepfhlcelgpicelfccoiojpiofn/group.html?youtube.com",
+      "groupId": -1,
+      "windowId": 1
+    },
+    {
+      "audible": false,
+      "discarded": false,
+      "favIconUrl": "https://static.xx.fbcdn.net/rsrc.php/yD/r/d4ZIVX-5C-b.ico?_nc_eui2=AeHUz87j8Z0_qepUyHtY1dzBaBWfmC2eGbdoFZ-YLZ4Zt4eSwySAxVgWndLmcmJoD7w",
+      "id": 1621,
+      "index": 10,
+      "mutedInfo": {
+        "muted": false
+      },
+      "pinned": false,
+      "status": "complete",
+      "title": "The Action Elite – Posts | Facebook",
+      "url": "https://www.facebook.com/ActionElite/posts/5113210632044537",
+      "groupId": -1,
+      "windowId": 1
+    },
+    {
+      "audible": false,
+      "discarded": false,
+      "favIconUrl": "",
+      "id": 1624,
+      "index": 11,
+      "mutedInfo": {
+        "muted": false
+      },
+      "pinned": false,
+      "status": "complete",
+      "title": "3 - coursesghar.com",
+      "url": "chrome-extension://chaoejepfhlcelgpicelfccoiojpiofn/group.html?coursesghar.com",
+      "groupId": -1,
+      "windowId": 1
+    },
+    {
+      "audible": false,
+      "discarded": false,
+      "favIconUrl": "https://wefunder.com/favicon/favicon-32x32.png",
+      "id": 1627,
+      "index": 12,
+      "mutedInfo": {
+        "muted": false
+      },
+      "pinned": false,
+      "status": "unloaded",
+      "title": "Invest in Harmony Turbines, Inc.: Next Generation Residential and Small Scale Wind Turbine Development | Wefunder",
+      "url": "https://wefunder.com/harmony.turbines?utm_source=Taboola&utm_term=linkvertise-link-to_1191006&utm_content=3025134331&utm_medium=referral&utm_campaign=Main+Unit&tblci=GiAxtCBwH_TW84DbRJHQ9AdRk7tmXwdwC-ONXTuHcQLaeyC4n1Eo9qbNnMzttZ5L#tblciGiAxtCBwH_TW84DbRJHQ9AdRk7tmXwdwC-ONXTuHcQLaeyC4n1Eo9qbNnMzttZ5L",
+      "groupId": -1,
+      "windowId": 1
+    },
+    {
+      "audible": false,
+      "discarded": false,
+      "favIconUrl": "https://miro.medium.com/fit/c/160/160/1*ds6iXWSFwycgEjbhZiCB4A.png",
+      "id": 1630,
+      "index": 13,
+      "mutedInfo": {
+        "muted": false
+      },
+      "pinned": false,
+      "status": "unloaded",
+      "title": "5 Ways to Avoid React Component Re-Renderings | by Chameera Dulanga | Jan, 2022 | Bits and Pieces",
+      "url": "https://blog.bitsrc.io/5-ways-to-avoid-react-component-re-renderings-90241e775b8c",
+      "groupId": -1,
+      "windowId": 1
+    },
+    {
+      "audible": false,
+      "discarded": false,
+      "favIconUrl": "",
+      "id": 1633,
+      "index": 14,
+      "mutedInfo": {
+        "muted": false
+      },
+      "pinned": false,
+      "status": "complete",
+      "title": "4 - nextjs.org",
+      "url": "chrome-extension://chaoejepfhlcelgpicelfccoiojpiofn/group.html?nextjs.org",
+      "groupId": -1,
+      "windowId": 1
+    },
+    {
+      "audible": false,
+      "discarded": false,
+      "favIconUrl": "",
+      "id": 1636,
+      "index": 15,
+      "mutedInfo": {
+        "muted": false
+      },
+      "pinned": false,
+      "status": "complete",
+      "title": "16 - imdb.com",
+      "url": "chrome-extension://chaoejepfhlcelgpicelfccoiojpiofn/group.html?imdb.com",
+      "groupId": -1,
+      "windowId": 1
+    },
+    {
+      "audible": false,
+      "discarded": false,
+      "favIconUrl": "https://cdn.shopify.com/shopifycloud/shopify/assets/no-image-50-3d8cc48bd078edcd544c8d60f929ed2d8800a3fc52e0f602e84b1767e392bfcd_16x16.gif",
+      "id": 1639,
+      "index": 16,
+      "mutedInfo": {
+        "muted": false
+      },
+      "pinned": false,
+      "status": "unloaded",
+      "title": "The Official Website of Dr Joe Dispenza – Unlimited with Dr Joe Dispenza",
+      "url": "https://drjoedispenza.com/",
+      "groupId": -1,
+      "windowId": 1
+    },
+    {
+      "audible": false,
+      "discarded": false,
+      "favIconUrl": "https://headlessui.dev/favicon.ico",
+      "id": 1642,
+      "index": 17,
+      "mutedInfo": {
+        "muted": false
+      },
+      "pinned": false,
+      "status": "unloaded",
+      "title": "Headless UI – Unstyled, fully accessible UI components",
+      "url": "https://headlessui.dev/react/switch",
+      "groupId": -1,
+      "windowId": 1
+    },
+    {
+      "audible": false,
+      "discarded": false,
+      "favIconUrl": "https://www.learnenough.com/favicon-le.png",
+      "id": 1645,
+      "index": 18,
+      "mutedInfo": {
+        "muted": false
+      },
+      "pinned": false,
+      "status": "unloaded",
+      "title": "Ruby on Rails Tutorial | Learn Enough to Be Dangerous",
+      "url": "https://www.learnenough.com/ruby-on-rails-6th-edition",
+      "groupId": -1,
+      "windowId": 1
+    },
+    {
+      "audible": false,
+      "discarded": false,
+      "favIconUrl": "https://lh3.googleusercontent.com/dWbPCAmf5syGRyRGZKt20phkXmaZLjv1Uhy2iOfodcebTZBv19-gYpW7O-F9k63NojRmfyTpfpr1UqAgYF3wUETUv6Kk2jOiWAE=s32",
+      "id": 1648,
+      "index": 19,
+      "mutedInfo": {
+        "muted": false
+      },
+      "pinned": false,
+      "status": "unloaded",
+      "title": "The Formula - Dr Joe Dispenza",
+      "url": "https://theformula.drjoedispenza.com/?utm_term=best%20online%20courses&utm_campaign=New+Year+of+Change+The+Formula&utm_source=adwords&utm_medium=ppc&hsa_acc=1816596169&hsa_cam=15733713074&hsa_grp=132469636300&hsa_ad=572325730982&hsa_src=d&hsa_tgt=kwd-19236820&hsa_kw=best%20online%20courses&hsa_mt=&hsa_net=adwords&hsa_ver=3&gclid=Cj0KCQiAoY-PBhCNARIsABcz771vocChKEIpW5CLG_G81iTu3OHN7JcXglCIGiWPR8XEPhp-tBRXyG0aAubvEALw_wcB",
+      "groupId": -1,
+      "windowId": 1
+    },
+    {
+      "audible": false,
+      "discarded": false,
+      "favIconUrl": "https://ucarecdn.com/832ee284-08d9-4079-b244-12714275fafa/",
+      "id": 1651,
+      "index": 20,
+      "mutedInfo": {
+        "muted": false
+      },
+      "pinned": false,
+      "status": "unloaded",
+      "title": "JavaScript appendchild(): What it is and when to use it",
+      "url": "https://flexiple.com/blog/javascript-appendchild/#:~:text=Difference%20between%20appendChild()%20and%20append()&text=append()%20also%20allows%20you,it%20has%20no%20return%20value.&text=Further%2C%20parentNode.,append%20several%20nodes%20and%20strings.",
+      "groupId": -1,
+      "windowId": 1
+    },
+    {
+      "audible": false,
+      "discarded": false,
+      "favIconUrl": "https://static.xx.fbcdn.net/rsrc.php/yD/r/d4ZIVX-5C-b.ico?_nc_eui2=AeHUz87j8Z0_qepUyHtY1dzBaBWfmC2eGbdoFZ-YLZ4Zt4eSwySAxVgWndLmcmJoD7w",
+      "id": 1654,
+      "index": 21,
+      "mutedInfo": {
+        "muted": false
+      },
+      "pinned": false,
+      "status": "unloaded",
+      "title": "(3) Watch | Facebook",
+      "url": "https://www.facebook.com/watch?v=1281260302351974",
+      "groupId": -1,
+      "windowId": 1
+    },
+    {
+      "audible": false,
+      "discarded": false,
+      "favIconUrl": "https://miro.medium.com/1*m-R_BkNf1Qjr1YbyOIJY2w.png",
+      "id": 1657,
+      "index": 22,
+      "mutedInfo": {
+        "muted": false
+      },
+      "pinned": false,
+      "status": "unloaded",
+      "title": "React Worst Practices. Hello World 🌎 | by राहुल मिश्रा | Dec, 2021 | Medium",
+      "url": "https://rahuulmiishra.medium.com/react-worst-practices-bdf924efe470",
+      "groupId": -1,
+      "windowId": 1
+    },
+    {
+      "audible": false,
+      "discarded": false,
+      "favIconUrl": "https://galaxy.pk/wp-content/uploads/2021/04/gradient-1.png",
+      "id": 1660,
+      "index": 23,
+      "mutedInfo": {
+        "muted": false
+      },
+      "pinned": false,
+      "status": "unloaded",
+      "title": "Aoc ‣ Galaxy.pk",
+      "url": "https://galaxy.pk/product-category/display/leds/aoc-led/",
+      "groupId": -1,
+      "windowId": 1
+    },
+    {
+      "audible": false,
+      "discarded": false,
+      "favIconUrl": "https://galaxy.pk/wp-content/uploads/2021/04/gradient-1.png",
+      "id": 1663,
+      "index": 24,
+      "mutedInfo": {
+        "muted": false
+      },
+      "pinned": false,
+      "status": "unloaded",
+      "title": "Cart ‣ Galaxy.pk",
+      "url": "https://galaxy.pk/cart-2/",
+      "groupId": -1,
+      "windowId": 1
+    },
+    {
+      "audible": false,
+      "discarded": false,
+      "favIconUrl": "",
+      "id": 1666,
+      "index": 25,
+      "mutedInfo": {
+        "muted": false
+      },
+      "pinned": false,
+      "status": "complete",
+      "title": "7 - galaxy.pk",
+      "url": "chrome-extension://chaoejepfhlcelgpicelfccoiojpiofn/group.html?galaxy.pk",
+      "groupId": -1,
+      "windowId": 1
+    },
+    {
+      "audible": false,
+      "discarded": false,
+      "favIconUrl": "",
+      "id": 1669,
+      "index": 26,
+      "mutedInfo": {
+        "muted": false
+      },
+      "pinned": false,
+      "status": "complete",
+      "title": "4 - medium.com",
+      "url": "chrome-extension://chaoejepfhlcelgpicelfccoiojpiofn/group.html?medium.com",
+      "groupId": -1,
+      "windowId": 1
+    },
+    {
+      "audible": false,
+      "discarded": false,
+      "id": 1672,
+      "index": 27,
+      "mutedInfo": {
+        "muted": false
+      },
+      "pinned": false,
+      "status": "unloaded",
+      "title": "Is Ruby and Rails still relevant in 2022? | by Alessandro De Simone | Dec, 2021 | Medium",
+      "url": "https://alexdesi.medium.com/is-ruby-and-rails-still-relevant-in-2022-34219fb8f1a4",
+      "groupId": -1,
+      "windowId": 1
+    },
+    {
+      "audible": false,
+      "discarded": false,
+      "favIconUrl": "https://ssl.gstatic.com/images/branding/product/1x/drive_2020q4_32dp.png",
+      "id": 1675,
+      "index": 28,
+      "mutedInfo": {
+        "muted": false
+      },
+      "pinned": false,
+      "status": "complete",
+      "title": "2. Digital Marketing Strategy - Google Drive",
+      "url": "https://drive.google.com/drive/folders/1hyyY2OrxeUBU70fpWt3DaLfa3z6dyCze",
+      "groupId": -1,
+      "windowId": 1
+    },
+    {
+      "audible": false,
+      "discarded": false,
+      "favIconUrl": "https://curiositystream.com/favicon.ico",
+      "id": 1678,
+      "index": 29,
+      "mutedInfo": {
+        "muted": false
+      },
+      "pinned": false,
+      "status": "unloaded",
+      "title": "https://curiositystream.com/browse/watching",
+      "url": "https://curiositystream.com/browse/watching",
+      "groupId": -1,
+      "windowId": 1
+    },
+    {
+      "audible": false,
+      "discarded": false,
+      "favIconUrl": "",
+      "id": 1681,
+      "index": 30,
+      "mutedInfo": {
+        "muted": false
+      },
+      "pinned": false,
+      "status": "complete",
+      "title": "3 - pinterest.com",
+      "url": "chrome-extension://chaoejepfhlcelgpicelfccoiojpiofn/group.html?pinterest.com",
+      "groupId": -1,
+      "windowId": 1
+    },
+    {
+      "audible": false,
+      "discarded": false,
+      "favIconUrl": "https://qpro.pk/favicon.ico",
+      "id": 1684,
+      "index": 31,
+      "mutedInfo": {
+        "muted": false
+      },
+      "pinned": false,
+      "status": "unloaded",
+      "title": "Pakistan Freelancers, Programmers, Designers & Digital Marketers Community",
+      "url": "https://qpro.pk/users?available_for_learning_peer=1",
+      "groupId": -1,
+      "windowId": 1
+    },
+    {
+      "audible": false,
+      "discarded": false,
+      "favIconUrl": "https://qpro.pk/favicon.ico",
+      "id": 1687,
+      "index": 32,
+      "mutedInfo": {
+        "muted": false
+      },
+      "pinned": false,
+      "status": "unloaded",
+      "title": "Pakistan Freelancers, Programmers, Designers & Digital Marketers Community",
+      "url": "https://qpro.pk/najianizami",
+      "groupId": -1,
+      "windowId": 1
+    },
+    {
+      "audible": false,
+      "discarded": false,
+      "favIconUrl": "https://qpro.pk/favicon.ico",
+      "id": 1690,
+      "index": 33,
+      "mutedInfo": {
+        "muted": false
+      },
+      "pinned": false,
+      "status": "unloaded",
+      "title": "Pakistan Freelancers, Programmers, Designers & Digital Marketers Community",
+      "url": "https://qpro.pk/shumaillanoureen",
+      "groupId": -1,
+      "windowId": 1
+    },
+    {
+      "audible": false,
+      "discarded": false,
+      "favIconUrl": "https://www.mightydeals.com/favicon.ico",
+      "id": 1693,
+      "index": 34,
+      "mutedInfo": {
+        "muted": false
+      },
+      "pinned": false,
+      "status": "unloaded",
+      "title": "Abstract Gradients and Shapes Collection - only $12! - MightyDeals",
+      "url": "https://www.mightydeals.com/deal/abstract-gradients-shapes-collection.html",
+      "groupId": -1,
+      "windowId": 1
+    },
+    {
+      "audible": false,
+      "discarded": false,
+      "favIconUrl": "https://www.mightydeals.com/favicon.ico",
+      "id": 1696,
+      "index": 35,
+      "mutedInfo": {
+        "muted": false
+      },
+      "pinned": false,
+      "status": "complete",
+      "title": "Ultimate Illustrator Bundle - 7 Courses in 1 - only $29! - MightyDeals",
+      "url": "https://www.mightydeals.com/deal/ultimate-illustrator-bundle.html",
+      "groupId": -1,
+      "windowId": 1
+    },
+    {
+      "audible": false,
+      "discarded": false,
+      "favIconUrl": "https://www.mightydeals.com/favicon.ico",
+      "id": 1699,
+      "index": 36,
+      "mutedInfo": {
+        "muted": false
+      },
+      "pinned": false,
+      "status": "unloaded",
+      "title": "Complete Artegra Sans Family (162 Fonts) - only $17! - MightyDeals",
+      "url": "https://www.mightydeals.com/deal/complete-artegra-sans-font-family.html",
+      "groupId": -1,
+      "windowId": 1
+    },
+    {
+      "audible": false,
+      "discarded": false,
+      "favIconUrl": "https://www.mightydeals.com/favicon.ico",
+      "id": 1702,
+      "index": 37,
+      "mutedInfo": {
+        "muted": false
+      },
+      "pinned": false,
+      "status": "unloaded",
+      "title": "Magic of Tarot Collection - only $7! - MightyDeals",
+      "url": "https://www.mightydeals.com/deal/magic-of-tarot-collection.html",
+      "groupId": -1,
+      "windowId": 1
+    },
+    {
+      "audible": false,
+      "discarded": false,
+      "favIconUrl": "",
+      "id": 1705,
+      "index": 38,
+      "mutedInfo": {
+        "muted": false
+      },
+      "pinned": false,
+      "status": "complete",
+      "title": "7 - academy.zerotomastery.io",
+      "url": "chrome-extension://chaoejepfhlcelgpicelfccoiojpiofn/group.html?academy.zerotomastery.io",
+      "groupId": -1,
+      "windowId": 1
+    },
+    {
+      "audible": false,
+      "discarded": false,
+      "favIconUrl": "https://d2culxnxbccemt.cloudfront.net/craft/content/uploads/2020/07/27201506/cropped-craftsy-favicon-32x32.png",
+      "id": 1708,
+      "index": 39,
+      "mutedInfo": {
+        "muted": false
+      },
+      "pinned": false,
+      "status": "unloaded",
+      "title": "My account | Craftsy",
+      "url": "https://www.craftsy.com/my-account/membership-sharing/",
+      "groupId": -1,
+      "windowId": 1
+    },
+    {
+      "audible": false,
+      "discarded": false,
+      "favIconUrl": "https://themindstudios.com/favicon.ico",
+      "id": 1711,
+      "index": 40,
+      "mutedInfo": {
+        "muted": false
+      },
+      "pinned": false,
+      "status": "unloaded",
+      "title": "Building an App Like Google Classroom for Remote Studying - Mind Studios",
+      "url": "https://themindstudios.com/blog/make-an-app-like-google-classroom/",
+      "groupId": -1,
+      "windowId": 1
+    },
+    {
+      "audible": false,
+      "discarded": false,
+      "favIconUrl": "https://static.npmjs.com/b0f1a8318363185cc2ea6a40ac23eeb2.png",
+      "id": 1714,
+      "index": 41,
+      "mutedInfo": {
+        "muted": false
+      },
+      "pinned": false,
+      "status": "unloaded",
+      "title": "express-app-boilerplate - npm",
+      "url": "https://www.npmjs.com/package/express-app-boilerplate",
+      "groupId": -1,
+      "windowId": 1
+    },
+    {
+      "audible": false,
+      "discarded": false,
+      "favIconUrl": "https://miro.medium.com/fit/c/160/160/1*7f8ZMJRwy10UGSDQzt8LqQ.png",
+      "id": 1717,
+      "index": 42,
+      "mutedInfo": {
+        "muted": false
+      },
+      "pinned": false,
+      "status": "unloaded",
+      "title": "I made a prototype. Elon Musk didn’t like it. Then the internet went nuts. | by Hans van de Bruggen | Jan, 2022 | UX Collective",
+      "url": "https://uxdesign.cc/i-made-a-prototype-elon-musk-didnt-like-it-then-the-internet-went-nuts-9cef407ec686",
+      "groupId": -1,
+      "windowId": 1
+    },
+    {
+      "audible": false,
+      "discarded": false,
+      "favIconUrl": "https://tauri.studio/img/favicon-32x32.png",
+      "id": 1720,
+      "index": 43,
+      "mutedInfo": {
+        "muted": false
+      },
+      "pinned": false,
+      "status": "unloaded",
+      "title": "Setup for Linux | Tauri Studio",
+      "url": "https://tauri.studio/docs/get-started/setup-linux",
+      "groupId": -1,
+      "windowId": 1
+    },
+    {
+      "audible": false,
+      "discarded": false,
+      "favIconUrl": "https://github.githubassets.com/favicons/favicon.svg",
+      "id": 1723,
+      "index": 44,
+      "mutedInfo": {
+        "muted": false
+      },
+      "pinned": false,
+      "status": "unloaded",
+      "title": "webview/webview: Tiny cross-platform webview library for C/C++/Golang. Uses WebKit (Gtk/Cocoa) and Edge (Windows)",
+      "url": "https://github.com/webview/webview",
+      "groupId": -1,
+      "windowId": 1
+    },
+    {
+      "audible": false,
+      "discarded": false,
+      "favIconUrl": "https://laz-img-cdn.alicdn.com/imgextra/i1/O1CN01V8uEDV1jdZ9U2wL90_!!6000000004571-73-tps-64-64.ico",
+      "id": 1726,
+      "index": 45,
+      "mutedInfo": {
+        "muted": false
+      },
+      "pinned": false,
+      "status": "unloaded",
+      "title": "https://www.daraz.pk/products/pack-of-4-spiral-silicone-cable-protector-for-android-iphone-headphones-earphones-i2566652-s1254608678.html?spm=a2a0e.home.flashSale.7.434e4937lBoVeP&search=1&mp=1&c=fs",
+      "url": "https://www.daraz.pk/products/pack-of-4-spiral-silicone-cable-protector-for-android-iphone-headphones-earphones-i2566652-s1254608678.html?spm=a2a0e.home.flashSale.7.434e4937lBoVeP&search=1&mp=1&c=fs",
+      "groupId": -1,
+      "windowId": 1
+    },
+    {
+      "audible": false,
+      "discarded": false,
+      "favIconUrl": "https://vanilla.futurecdn.net/creativebloq/401620/favicon.ico",
+      "id": 1729,
+      "index": 46,
+      "mutedInfo": {
+        "muted": false
+      },
+      "pinned": false,
+      "status": "unloaded",
+      "title": "These motivational posters from the 1920s are hilarious (and terrifying) | Creative Bloq",
+      "url": "https://www.creativebloq.com/news/motivation-posters-1920",
+      "groupId": -1,
+      "windowId": 1
+    },
+    {
+      "audible": false,
+      "discarded": false,
+      "favIconUrl": "",
+      "id": 1732,
+      "index": 47,
+      "mutedInfo": {
+        "muted": false
+      },
+      "pinned": false,
+      "status": "complete",
+      "title": "10 - aliexpress.com",
+      "url": "chrome-extension://chaoejepfhlcelgpicelfccoiojpiofn/group.html?aliexpress.com",
+      "groupId": -1,
+      "windowId": 1
+    },
+    {
+      "audible": false,
+      "discarded": false,
+      "favIconUrl": "",
+      "id": 1735,
+      "index": 48,
+      "mutedInfo": {
+        "muted": false
+      },
+      "pinned": false,
+      "status": "complete",
+      "title": "2 - sale.aliexpress.com",
+      "url": "chrome-extension://chaoejepfhlcelgpicelfccoiojpiofn/group.html?sale.aliexpress.com",
+      "groupId": -1,
+      "windowId": 1
+    },
+    {
+      "audible": false,
+      "discarded": false,
+      "favIconUrl": "https://www.eduonix.com/favicon.ico",
+      "id": 1738,
+      "index": 49,
+      "mutedInfo": {
+        "muted": false
+      },
+      "pinned": false,
+      "status": "complete",
+      "title": "Online Degree Programs on Development and Programming",
+      "url": "https://www.eduonix.com/edegree",
+      "groupId": -1,
+      "windowId": 1
+    },
+    {
+      "audible": false,
+      "discarded": false,
+      "favIconUrl": "https://www.eduonix.com/favicon.ico",
+      "id": 1741,
+      "index": 50,
+      "mutedInfo": {
+        "muted": false
+      },
+      "pinned": false,
+      "status": "unloaded",
+      "title": "Live Online Training On MERN Stack Development",
+      "url": "https://www.eduonix.com/live-online-mern-stack-edegree?utm_source=browser&utm_medium=notification&utm_id=429313",
+      "groupId": -1,
+      "windowId": 1
+    },
+    {
+      "audible": false,
+      "discarded": true,
+      "favIconUrl": "https://www.eduonix.com/favicon.ico",
+      "id": 2257,
+      "index": 51,
+      "mutedInfo": {
+        "muted": false
+      },
+      "pinned": false,
+      "status": "complete",
+      "title": "Lifetime Ethical Hacking & Cyber Security Membership",
+      "url": "https://www.eduonix.com/lifetime-ethical-hacking-and-cyber-security-membership?coupon_code=TPLIFE10&utm_source=browser&utm_medium=notification&utm_id=672897",
+      "groupId": -1,
+      "windowId": 1
+    },
+    {
+      "audible": false,
+      "discarded": false,
+      "favIconUrl": "https://github.githubassets.com/favicons/favicon.svg",
+      "id": 1747,
+      "index": 52,
+      "mutedInfo": {
+        "muted": false
+      },
+      "pinned": false,
+      "status": "unloaded",
+      "title": "vitalets/awesome-smart-tv: A curated list of awesome resources for building Smart TV apps",
+      "url": "https://github.com/vitalets/awesome-smart-tv",
+      "groupId": -1,
+      "windowId": 1
+    },
+    {
+      "audible": false,
+      "discarded": false,
+      "favIconUrl": "https://s8v8k3v9.stackpathcdn.com/wp-content/themes/designcuts/favicon.ico",
+      "id": 1750,
+      "index": 53,
+      "mutedInfo": {
+        "muted": false
+      },
+      "pinned": false,
+      "status": "unloaded",
+      "title": "Procreate Watercolor Masterclass - Design Cuts",
+      "url": "https://www.designcuts.com/product/procreate-watercolor-masterclass/",
+      "groupId": -1,
+      "windowId": 1
+    },
+    {
+      "audible": false,
+      "discarded": false,
+      "favIconUrl": "https://d2aov160eccqlv.cloudfront.net/271739eb287c43adb004792095a0b2fc/images/7e26cb80ef4e68f870f1e40b5ef46584.ico",
+      "id": 1753,
+      "index": 54,
+      "mutedInfo": {
+        "muted": false
+      },
+      "pinned": false,
+      "status": "unloaded",
+      "title": "Mastering PostCSS for Web Design | Packt",
+      "url": "https://www.packtpub.com/product/mastering-postcss-for-web-design/9781785885891",
+      "groupId": -1,
+      "windowId": 1
+    },
+    {
+      "audible": false,
+      "discarded": false,
+      "favIconUrl": "https://www.oreilly.com/favicon.ico",
+      "id": 1756,
+      "index": 55,
+      "mutedInfo": {
+        "muted": false
+      },
+      "pinned": false,
+      "status": "unloaded",
+      "title": "Humane Code Video Series [Video]",
+      "url": "https://www.oreilly.com/videos/humane-code-video/9780137865031/",
+      "groupId": -1,
+      "windowId": 1
+    },
+    {
+      "audible": false,
+      "discarded": false,
+      "favIconUrl": "https://cdn.freecodecamp.org/universal/favicons/favicon.ico",
+      "id": 1759,
+      "index": 56,
+      "mutedInfo": {
+        "muted": false
+      },
+      "pinned": false,
+      "status": "unloaded",
+      "title": "How I solved and debugged my Webpack issue through trial, error, and a little outside help.",
+      "url": "https://www.freecodecamp.org/news/how-to-solve-webpack-problems-the-practical-case-79fb676417f4/",
+      "groupId": -1,
+      "windowId": 1
+    },
+    {
+      "audible": false,
+      "discarded": false,
+      "favIconUrl": "https://s.pinimg.com/webapp/favicon-54a5b2af.png",
+      "id": 1762,
+      "index": 57,
+      "mutedInfo": {
+        "muted": false
+      },
+      "pinned": false,
+      "status": "unloaded",
+      "title": "(536) Pinterest",
+      "url": "https://www.pinterest.com/news_hub/5212787279222856765/?utm_campaign=REALTIME_USER_ACTION_BOARD_RECS&utm_medium=2902&utm_source=67&e_t=gX6vgJXrS%3A76",
+      "groupId": -1,
+      "windowId": 1
+    },
+    {
+      "audible": false,
+      "discarded": false,
+      "favIconUrl": "https://yts.mx/assets/images/website/favicon-32x32.png",
+      "id": 1765,
+      "index": 58,
+      "mutedInfo": {
+        "muted": false
+      },
+      "pinned": false,
+      "status": "unloaded",
+      "title": "Trending YIFY Movies Torrents Downloads - YTS",
+      "url": "https://yts.mx/trending-movies",
+      "groupId": 657098774,
+      "windowId": 1
+    },
+    {
+      "audible": false,
+      "discarded": false,
+      "id": 1768,
+      "index": 59,
+      "mutedInfo": {
+        "muted": false
+      },
+      "pinned": false,
+      "status": "unloaded",
+      "title": "Marquis de Sade's Justine (1969) YIFY - Download Movie TORRENT - YTS",
+      "url": "https://yts.mx/movies/marquis-de-sades-justine-1969",
+      "groupId": 657098774,
+      "windowId": 1
+    },
+    {
+      "audible": false,
+      "discarded": false,
+      "favIconUrl": "https://yts.mx/assets/images/website/favicon-32x32.png",
+      "id": 1771,
+      "index": 60,
+      "mutedInfo": {
+        "muted": false
+      },
+      "pinned": false,
+      "status": "unloaded",
+      "title": "Pink Curtain (1982) YIFY - Download Movie TORRENT - YTS",
+      "url": "https://yts.mx/movies/pink-curtain-1982",
+      "groupId": 657098774,
+      "windowId": 1
+    },
+    {
+      "audible": false,
+      "discarded": false,
+      "favIconUrl": "https://yts.mx/assets/images/website/favicon-32x32.png",
+      "id": 1774,
+      "index": 61,
+      "mutedInfo": {
+        "muted": false
+      },
+      "pinned": false,
+      "status": "unloaded",
+      "title": "Nina (2018) YIFY - Download Movie TORRENT - YTS",
+      "url": "https://yts.mx/movies/nina-2018",
+      "groupId": 657098774,
+      "windowId": 1
+    },
+    {
+      "audible": false,
+      "discarded": false,
+      "favIconUrl": "https://yts.mx/assets/images/website/favicon-32x32.png",
+      "id": 1777,
+      "index": 62,
+      "mutedInfo": {
+        "muted": false
+      },
+      "pinned": false,
+      "status": "complete",
+      "title": "The Water Man (2020) YIFY - Download Movie TORRENT - YTS",
+      "url": "https://yts.mx/movies/the-water-man-2020",
+      "groupId": 657098774,
+      "windowId": 1
+    },
+    {
+      "audible": false,
+      "discarded": false,
+      "favIconUrl": "https://yts.mx/assets/images/website/favicon-32x32.png",
+      "id": 1780,
+      "index": 63,
+      "mutedInfo": {
+        "muted": false
+      },
+      "pinned": false,
+      "status": "unloaded",
+      "title": "Honey Hunters (2016) YIFY - Download Movie TORRENT - YTS",
+      "url": "https://yts.mx/movies/honey-hunters-2016",
+      "groupId": 657098774,
+      "windowId": 1
+    },
+    {
+      "audible": false,
+      "discarded": false,
+      "favIconUrl": "https://yts.mx/assets/images/website/favicon-32x32.png",
+      "id": 1783,
+      "index": 64,
+      "mutedInfo": {
+        "muted": false
+      },
+      "pinned": false,
+      "status": "unloaded",
+      "title": "Drifting (2021) YIFY - Download Movie TORRENT - YTS",
+      "url": "https://yts.mx/movies/drifting-2021",
+      "groupId": 657098774,
+      "windowId": 1
+    },
+    {
+      "audible": false,
+      "discarded": false,
+      "favIconUrl": "https://yts.mx/assets/images/website/favicon-32x32.png",
+      "id": 1786,
+      "index": 65,
+      "mutedInfo": {
+        "muted": false
+      },
+      "pinned": false,
+      "status": "complete",
+      "title": "Blue Bloods (2010) YIFY - Download Movie TORRENT - YTS",
+      "url": "https://yts.mx/movies/blue-bloods-2010",
+      "groupId": 657098774,
+      "windowId": 1
+    },
+    {
+      "audible": false,
+      "discarded": false,
+      "favIconUrl": "https://yts.mx/assets/images/website/favicon-32x32.png",
+      "id": 1789,
+      "index": 66,
+      "mutedInfo": {
+        "muted": false
+      },
+      "pinned": false,
+      "status": "unloaded",
+      "title": "The Red Ghost (2020) YIFY - Download Movie TORRENT - YTS",
+      "url": "https://yts.mx/movies/the-red-ghost-2020",
+      "groupId": 657098774,
+      "windowId": 1
+    },
+    {
+      "audible": false,
+      "discarded": false,
+      "favIconUrl": "https://yts.mx/assets/images/website/favicon-32x32.png",
+      "id": 1792,
+      "index": 67,
+      "mutedInfo": {
+        "muted": false
+      },
+      "pinned": false,
+      "status": "complete",
+      "title": "Trending YIFY Movies Torrents Downloads - YTS",
+      "url": "https://yts.mx/trending-movies",
+      "groupId": 657098774,
+      "windowId": 1
+    },
+    {
+      "audible": false,
+      "discarded": false,
+      "favIconUrl": "https://yts.mx/assets/images/website/favicon-32x32.png",
+      "id": 1795,
+      "index": 68,
+      "mutedInfo": {
+        "muted": false
+      },
+      "pinned": false,
+      "status": "unloaded",
+      "title": "Nightmare Alley (2021) YIFY - Download Movie TORRENT - YTS",
+      "url": "https://yts.mx/movies/nightmare-alley-2021",
+      "groupId": 657098774,
+      "windowId": 1
+    },
+    {
+      "audible": false,
+      "discarded": false,
+      "favIconUrl": "https://yts.mx/assets/images/website/favicon-32x32.png",
+      "id": 1798,
+      "index": 69,
+      "mutedInfo": {
+        "muted": false
+      },
+      "pinned": false,
+      "status": "unloaded",
+      "title": "Catwoman: Hunted (2022) YIFY - Download Movie TORRENT - YTS",
+      "url": "https://yts.mx/movies/catwoman-hunted-2022",
+      "groupId": 657098774,
+      "windowId": 1
+    },
+    {
+      "audible": false,
+      "discarded": false,
+      "favIconUrl": "https://yts.mx/assets/images/website/favicon-32x32.png",
+      "id": 1801,
+      "index": 70,
+      "mutedInfo": {
+        "muted": false
+      },
+      "pinned": false,
+      "status": "unloaded",
+      "title": "Shao Lin xiao zi (1975) YIFY - Download Movie TORRENT - YTS",
+      "url": "https://yts.mx/movies/shao-lin-xiao-zi-1975",
+      "groupId": 657098774,
+      "windowId": 1
+    },
+    {
+      "audible": false,
+      "discarded": false,
+      "favIconUrl": "https://yts.mx/assets/images/website/favicon-32x32.png",
+      "id": 1804,
+      "index": 71,
+      "mutedInfo": {
+        "muted": false
+      },
+      "pinned": false,
+      "status": "unloaded",
+      "title": "Under the Stadium Lights (2021) YIFY - Download Movie TORRENT - YTS",
+      "url": "https://yts.mx/movies/under-the-stadium-lights-2021",
+      "groupId": 657098774,
+      "windowId": 1
+    },
+    {
+      "audible": false,
+      "discarded": false,
+      "favIconUrl": "https://yts.mx/assets/images/website/favicon-32x32.png",
+      "id": 1807,
+      "index": 72,
+      "mutedInfo": {
+        "muted": false
+      },
+      "pinned": false,
+      "status": "unloaded",
+      "title": "Ice House (2020) YIFY - Download Movie TORRENT - YTS",
+      "url": "https://yts.mx/movies/ice-house-2020",
+      "groupId": 657098774,
+      "windowId": 1
+    },
+    {
+      "audible": false,
+      "discarded": false,
+      "favIconUrl": "https://yts.mx/assets/images/website/favicon-32x32.png",
+      "id": 1810,
+      "index": 73,
+      "mutedInfo": {
+        "muted": false
+      },
+      "pinned": false,
+      "status": "complete",
+      "title": "City of Vultures 2 (2022) YIFY - Download Movie TORRENT - YTS",
+      "url": "https://yts.mx/movies/city-of-vultures-2-2022",
+      "groupId": 657098774,
+      "windowId": 1
+    },
+    {
+      "audible": false,
+      "discarded": false,
+      "favIconUrl": "https://yts.mx/assets/images/website/favicon-32x32.png",
+      "id": 1813,
+      "index": 74,
+      "mutedInfo": {
+        "muted": false
+      },
+      "pinned": false,
+      "status": "complete",
+      "title": "Super High Me (2007) YIFY - Download Movie TORRENT - YTS",
+      "url": "https://yts.mx/movies/super-high-me-2007",
+      "groupId": 657098774,
+      "windowId": 1
+    },
+    {
+      "audible": false,
+      "discarded": false,
+      "favIconUrl": "https://yts.mx/assets/images/website/favicon-32x32.png",
+      "id": 1816,
+      "index": 75,
+      "mutedInfo": {
+        "muted": false
+      },
+      "pinned": false,
+      "status": "unloaded",
+      "title": "Pink Curtain (1982) YIFY - Download Movie TORRENT - YTS",
+      "url": "https://yts.mx/movies/pink-curtain-1982",
+      "groupId": 657098774,
+      "windowId": 1
+    },
+    {
+      "audible": false,
+      "discarded": false,
+      "favIconUrl": "https://yts.mx/assets/images/website/favicon-32x32.png",
+      "id": 1819,
+      "index": 76,
+      "mutedInfo": {
+        "muted": false
+      },
+      "pinned": false,
+      "status": "complete",
+      "title": "Vincent Van Gogh - A New Way Of Seeing (2015) YIFY - Download Movie TORRENT - YTS",
+      "url": "https://yts.mx/movies/vincent-van-gogh-a-new-way-of-seeing-2015",
+      "groupId": 657098774,
+      "windowId": 1
+    },
+    {
+      "audible": false,
+      "discarded": false,
+      "favIconUrl": "https://yts.mx/assets/images/website/favicon-32x32.png",
+      "id": 1822,
+      "index": 77,
+      "mutedInfo": {
+        "muted": false
+      },
+      "pinned": false,
+      "status": "complete",
+      "title": "Frida Kahlo (2020) YIFY - Download Movie TORRENT - YTS",
+      "url": "https://yts.mx/movies/frida-kahlo-2020",
+      "groupId": 657098774,
+      "windowId": 1
+    },
+    {
+      "audible": false,
+      "discarded": false,
+      "favIconUrl": "https://yts.mx/assets/images/website/favicon-32x32.png",
+      "id": 1825,
+      "index": 78,
+      "mutedInfo": {
+        "muted": false
+      },
+      "pinned": false,
+      "status": "unloaded",
+      "title": "Martyrs Lane (2021) YIFY - Download Movie TORRENT - YTS",
+      "url": "https://yts.mx/movies/martyrs-lane-2021",
+      "groupId": 657098774,
+      "windowId": 1
+    },
+    {
+      "audible": false,
+      "discarded": false,
+      "favIconUrl": "https://yts.mx/assets/images/website/favicon-32x32.png",
+      "id": 1828,
+      "index": 79,
+      "mutedInfo": {
+        "muted": false
+      },
+      "pinned": false,
+      "status": "unloaded",
+      "title": "The Heroics (2021) YIFY - Download Movie TORRENT - YTS",
+      "url": "https://yts.mx/movies/the-heroics-2021",
+      "groupId": 657098774,
+      "windowId": 1
+    },
+    {
+      "audible": false,
+      "discarded": false,
+      "favIconUrl": "https://yts.mx/assets/images/website/favicon-32x32.png",
+      "id": 1831,
+      "index": 80,
+      "mutedInfo": {
+        "muted": false
+      },
+      "pinned": false,
+      "status": "unloaded",
+      "title": "Clean (2020) YIFY - Download Movie TORRENT - YTS",
+      "url": "https://yts.mx/movies/clean-2020",
+      "groupId": 657098774,
+      "windowId": 1
+    },
+    {
+      "audible": false,
+      "discarded": false,
+      "favIconUrl": "https://yts.mx/assets/images/website/favicon-32x32.png",
+      "id": 1834,
+      "index": 81,
+      "mutedInfo": {
+        "muted": false
+      },
+      "pinned": false,
+      "status": "unloaded",
+      "title": "Eastern (2019) YIFY - Download Movie TORRENT - YTS",
+      "url": "https://yts.mx/movies/eastern-2019",
+      "groupId": 657098774,
+      "windowId": 1
+    },
+    {
+      "audible": false,
+      "discarded": false,
+      "favIconUrl": "https://yts.mx/assets/images/website/favicon-32x32.png",
+      "id": 1837,
+      "index": 82,
+      "mutedInfo": {
+        "muted": false
+      },
+      "pinned": false,
+      "status": "unloaded",
+      "title": "Leave No Traces (2021) YIFY - Download Movie TORRENT - YTS",
+      "url": "https://yts.mx/movies/leave-no-traces-2021",
+      "groupId": 657098774,
+      "windowId": 1
+    },
+    {
+      "audible": false,
+      "discarded": false,
+      "favIconUrl": "https://yts.mx/assets/images/website/favicon-32x32.png",
+      "id": 1840,
+      "index": 83,
+      "mutedInfo": {
+        "muted": false
+      },
+      "pinned": false,
+      "status": "complete",
+      "title": "My Best Friend Anne Frank (2021) YIFY - Download Movie TORRENT - YTS",
+      "url": "https://yts.mx/movies/my-best-friend-anne-frank-2021",
+      "groupId": 657098774,
+      "windowId": 1
+    },
+    {
+      "audible": false,
+      "discarded": false,
+      "favIconUrl": "https://yts.mx/assets/images/website/favicon-32x32.png",
+      "id": 1843,
+      "index": 84,
+      "mutedInfo": {
+        "muted": false
+      },
+      "pinned": false,
+      "status": "complete",
+      "title": "Die Grenze (2021) YIFY - Download Movie TORRENT - YTS",
+      "url": "https://yts.mx/movies/die-grenze-2021",
+      "groupId": 657098774,
+      "windowId": 1
+    },
+    {
+      "audible": false,
+      "discarded": false,
+      "favIconUrl": "https://yts.mx/assets/images/website/favicon-32x32.png",
+      "id": 1846,
+      "index": 85,
+      "mutedInfo": {
+        "muted": false
+      },
+      "pinned": false,
+      "status": "unloaded",
+      "title": "Los ritos sexuales del diablo (1982) YIFY - Download Movie TORRENT - YTS",
+      "url": "https://yts.mx/movies/los-ritos-sexuales-del-diablo-1982",
+      "groupId": 657098774,
+      "windowId": 1
+    },
+    {
+      "audible": false,
+      "discarded": false,
+      "favIconUrl": "https://yts.mx/assets/images/website/favicon-32x32.png",
+      "id": 1849,
+      "index": 86,
+      "mutedInfo": {
+        "muted": false
+      },
+      "pinned": false,
+      "status": "complete",
+      "title": "Leonardo: The Works (2019) YIFY - Download Movie TORRENT - YTS",
+      "url": "https://yts.mx/movies/leonardo-the-works-2019",
+      "groupId": 657098774,
+      "windowId": 1
+    },
+    {
+      "audible": false,
+      "discarded": false,
+      "favIconUrl": "https://yts.mx/assets/images/website/favicon-32x32.png",
+      "id": 1852,
+      "index": 87,
+      "mutedInfo": {
+        "muted": false
+      },
+      "pinned": false,
+      "status": "unloaded",
+      "title": "Exhibition on Screen: I, Claude Monet (2017) YIFY - Download Movie TORRENT - YTS",
+      "url": "https://yts.mx/movies/exhibition-on-screen-i-claude-monet-2017",
+      "groupId": 657098774,
+      "windowId": 1
+    },
+    {
+      "audible": false,
+      "discarded": false,
+      "favIconUrl": "https://yts.mx/assets/images/website/favicon-32x32.png",
+      "id": 1855,
+      "index": 88,
+      "mutedInfo": {
+        "muted": false
+      },
+      "pinned": false,
+      "status": "unloaded",
+      "title": "Primal Doubt (2007) YIFY - Download Movie TORRENT - YTS",
+      "url": "https://yts.mx/movies/primal-doubt-2007",
+      "groupId": 657098774,
+      "windowId": 1
+    },
+    {
+      "audible": false,
+      "discarded": false,
+      "favIconUrl": "https://yts.mx/assets/images/website/favicon-32x32.png",
+      "id": 1858,
+      "index": 89,
+      "mutedInfo": {
+        "muted": false
+      },
+      "pinned": false,
+      "status": "unloaded",
+      "title": "A Hero (2021) YIFY - Download Movie TORRENT - YTS",
+      "url": "https://yts.mx/movies/a-hero-2021",
+      "groupId": 657098774,
+      "windowId": 1
+    },
+    {
+      "audible": false,
+      "discarded": false,
+      "favIconUrl": "https://yts.mx/assets/images/website/favicon-32x32.png",
+      "id": 1861,
+      "index": 90,
+      "mutedInfo": {
+        "muted": false
+      },
+      "pinned": false,
+      "status": "unloaded",
+      "title": "Aerial New Zealand (2017) YIFY - Download Movie TORRENT - YTS",
+      "url": "https://yts.mx/movies/aerial-new-zealand-2017",
+      "groupId": 657098774,
+      "windowId": 1
+    },
+    {
+      "audible": false,
+      "discarded": false,
+      "favIconUrl": "https://yts.mx/assets/images/website/favicon-32x32.png",
+      "id": 1864,
+      "index": 91,
+      "mutedInfo": {
+        "muted": false
+      },
+      "pinned": false,
+      "status": "unloaded",
+      "title": "The Requin (2022) YIFY - Download Movie TORRENT - YTS",
+      "url": "https://yts.mx/movies/the-requin-2022",
+      "groupId": 657098774,
+      "windowId": 1
+    },
+    {
+      "audible": false,
+      "discarded": false,
+      "favIconUrl": "https://yts.mx/assets/images/website/favicon-32x32.png",
+      "id": 1867,
+      "index": 92,
+      "mutedInfo": {
+        "muted": false
+      },
+      "pinned": false,
+      "status": "complete",
+      "title": "Trending YIFY Movies Torrents Downloads - YTS",
+      "url": "https://yts.mx/trending-movies",
+      "groupId": 657098774,
+      "windowId": 1
+    },
+    {
+      "audible": false,
+      "discarded": false,
+      "favIconUrl": "https://yts.mx/assets/images/website/favicon-32x32.png",
+      "id": 1870,
+      "index": 93,
+      "mutedInfo": {
+        "muted": false
+      },
+      "pinned": false,
+      "status": "complete",
+      "title": "Luther (1974) YIFY - Download Movie TORRENT - YTS",
+      "url": "https://yts.mx/movies/luther-1974",
+      "groupId": 657098774,
+      "windowId": 1
+    },
+    {
+      "audible": false,
+      "discarded": false,
+      "favIconUrl": "https://yts.mx/assets/images/website/favicon-32x32.png",
+      "id": 1873,
+      "index": 94,
+      "mutedInfo": {
+        "muted": false
+      },
+      "pinned": false,
+      "status": "unloaded",
+      "title": "Moon Crash (2022) YIFY - Download Movie TORRENT - YTS",
+      "url": "https://yts.mx/movies/moon-crash-2022",
+      "groupId": 657098774,
+      "windowId": 1
+    },
+    {
+      "audible": false,
+      "discarded": false,
+      "favIconUrl": "https://yts.mx/assets/images/website/favicon-32x32.png",
+      "id": 1876,
+      "index": 95,
+      "mutedInfo": {
+        "muted": false
+      },
+      "pinned": false,
+      "status": "unloaded",
+      "title": "Exhibition on Screen: Michelangelo Love and Death (2017) YIFY - Download Movie TORRENT - YTS",
+      "url": "https://yts.mx/movies/exhibition-on-screen-michelangelo-love-and-death-2017",
+      "groupId": 657098774,
+      "windowId": 1
+    },
+    {
+      "audible": false,
+      "discarded": false,
+      "id": 1879,
+      "index": 96,
+      "mutedInfo": {
+        "muted": false
+      },
+      "pinned": false,
+      "status": "unloaded",
+      "title": "Immanence (2022) YIFY - Download Movie TORRENT - YTS",
+      "url": "https://yts.mx/movies/immanence-2022",
+      "groupId": 657098774,
+      "windowId": 1
+    },
+    {
+      "audible": false,
+      "discarded": false,
+      "favIconUrl": "https://yts.mx/assets/images/website/favicon-32x32.png",
+      "id": 1885,
+      "index": 97,
+      "mutedInfo": {
+        "muted": false
+      },
+      "pinned": false,
+      "status": "unloaded",
+      "title": "Le sourire (1994) YIFY - Download Movie TORRENT - YTS",
+      "url": "https://yts.mx/movies/le-sourire-1994",
+      "groupId": 657098774,
+      "windowId": 1
+    },
+    {
+      "audible": false,
+      "discarded": false,
+      "favIconUrl": "https://yts.mx/assets/images/website/favicon-32x32.png",
+      "id": 1888,
+      "index": 98,
+      "mutedInfo": {
+        "muted": false
+      },
+      "pinned": false,
+      "status": "unloaded",
+      "title": "2 - I, a Woman, Part II (1968) YIFY - Download Movie TORRENT - YTS",
+      "url": "https://yts.mx/movies/2-i-a-woman-part-ii-1968",
+      "groupId": 657098774,
+      "windowId": 1
+    },
+    {
+      "audible": false,
+      "discarded": false,
+      "favIconUrl": "https://yts.mx/assets/images/website/favicon-32x32.png",
+      "id": 1891,
+      "index": 99,
+      "mutedInfo": {
+        "muted": false
+      },
+      "pinned": false,
+      "status": "unloaded",
+      "title": "Slapface (2021) YIFY - Download Movie TORRENT - YTS",
+      "url": "https://yts.mx/movies/slapface-2021",
+      "groupId": 657098774,
+      "windowId": 1
+    },
+    {
+      "audible": false,
+      "discarded": false,
+      "favIconUrl": "https://yts.mx/assets/images/website/favicon-32x32.png",
+      "id": 1894,
+      "index": 100,
+      "mutedInfo": {
+        "muted": false
+      },
+      "pinned": false,
+      "status": "unloaded",
+      "title": "The Official Home of YIFY Movies Torrent Download - YTS",
+      "url": "https://yts.mx/",
+      "groupId": 657098774,
+      "windowId": 1
+    },
+    {
+      "audible": false,
+      "discarded": false,
+      "favIconUrl": "https://yts.mx/assets/images/website/favicon-32x32.png",
+      "id": 1897,
+      "index": 101,
+      "mutedInfo": {
+        "muted": false
+      },
+      "pinned": false,
+      "status": "complete",
+      "title": "The Forbidden Door (2009) YIFY - Download Movie TORRENT - YTS",
+      "url": "https://yts.mx/movies/the-forbidden-door-2009",
+      "groupId": 657098774,
+      "windowId": 1
+    },
+    {
+      "audible": false,
+      "discarded": false,
+      "favIconUrl": "https://yts.mx/assets/images/website/favicon-32x32.png",
+      "id": 1903,
+      "index": 102,
+      "mutedInfo": {
+        "muted": false
+      },
+      "pinned": false,
+      "status": "complete",
+      "title": "Forbidden World (1982) YIFY - Download Movie TORRENT - YTS",
+      "url": "https://yts.mx/movies/forbidden-world-1982",
+      "groupId": 657098774,
+      "windowId": 1
+    },
+    {
+      "audible": false,
+      "discarded": false,
+      "favIconUrl": "https://yts.mx/assets/images/website/favicon-32x32.png",
+      "id": 1909,
+      "index": 103,
+      "mutedInfo": {
+        "muted": false
+      },
+      "pinned": false,
+      "status": "complete",
+      "title": "The Door (2014) YIFY - Download Movie TORRENT - YTS",
+      "url": "https://yts.mx/movies/the-door-2014",
+      "groupId": 657098774,
+      "windowId": 1
+    },
+    {
+      "audible": false,
+      "discarded": false,
+      "favIconUrl": "https://yts.mx/assets/images/website/favicon-32x32.png",
+      "id": 2229,
+      "index": 104,
+      "mutedInfo": {
+        "muted": false
+      },
+      "pinned": false,
+      "status": "complete",
+      "title": "The Official Home of YIFY Movies Torrent Download - YTS",
+      "url": "https://yts.mx/",
+      "groupId": 657098774,
+      "windowId": 1
+    },
+    {
+      "audible": false,
+      "discarded": false,
+      "favIconUrl": "https://yts.mx/assets/images/website/favicon-32x32.png",
+      "id": 2278,
+      "index": 105,
+      "mutedInfo": {
+        "muted": false
+      },
+      "pinned": false,
+      "status": "complete",
+      "title": "Flooded Tombs of the Nile (2021) YIFY - Download Movie TORRENT - YTS",
+      "url": "https://yts.mx/movies/flooded-tombs-of-the-nile-2021",
+      "groupId": 657098774,
+      "windowId": 1
+    },
+    {
+      "audible": false,
+      "discarded": false,
+      "favIconUrl": "https://w41.torlook.info/favicon.ico",
+      "id": 1915,
+      "index": 106,
+      "mutedInfo": {
+        "muted": false
+      },
+      "pinned": false,
+      "status": "complete",
+      "title": "Download torrent - Pdf | Fast and easy torrent search",
+      "url": "https://w41.torlook.info/pdf",
+      "groupId": -1,
+      "windowId": 1
+    },
+    {
+      "audible": false,
+      "discarded": false,
+      "favIconUrl": "https://store.steampowered.com/favicon.ico",
+      "id": 1918,
+      "index": 107,
+      "mutedInfo": {
+        "muted": false
+      },
+      "pinned": false,
+      "status": "complete",
+      "title": "Strategy Games",
+      "url": "https://store.steampowered.com/category/strategy",
+      "groupId": -1,
+      "windowId": 1
+    },
+    {
+      "audible": false,
+      "discarded": false,
+      "favIconUrl": "https://store.steampowered.com/favicon.ico",
+      "id": 1921,
+      "index": 108,
+      "mutedInfo": {
+        "muted": false
+      },
+      "pinned": false,
+      "status": "complete",
+      "title": "Simulation",
+      "url": "https://store.steampowered.com/category/simulation",
+      "groupId": -1,
+      "windowId": 1
+    },
+    {
+      "audible": false,
+      "discarded": false,
+      "favIconUrl": "https://store.steampowered.com/favicon.ico",
+      "id": 1924,
+      "index": 109,
+      "mutedInfo": {
+        "muted": false
+      },
+      "pinned": false,
+      "status": "complete",
+      "title": "Free To Play Games",
+      "url": "https://store.steampowered.com/genre/Free%20to%20Play",
+      "groupId": -1,
+      "windowId": 1
+    },
+    {
+      "audible": false,
+      "discarded": false,
+      "favIconUrl": "https://store.steampowered.com/favicon.ico",
+      "id": 1927,
+      "index": 110,
+      "mutedInfo": {
+        "muted": false
+      },
+      "pinned": false,
+      "status": "complete",
+      "title": "Save 30% on Dream Date on Steam",
+      "url": "https://store.steampowered.com/app/1256610/Dream_Date/",
+      "groupId": -1,
+      "windowId": 1
+    },
+    {
+      "audible": false,
+      "discarded": true,
+      "favIconUrl": "https://www.youtube.com/s/desktop/ef96fcf5/img/favicon_32x32.png",
+      "id": 2269,
+      "index": 111,
+      "mutedInfo": {
+        "muted": false
+      },
+      "pinned": false,
+      "status": "complete",
+      "title": "YouTube",
+      "url": "https://www.youtube.com/",
+      "groupId": -1,
+      "windowId": 1
+    },
+    {
+      "audible": false,
+      "discarded": true,
+      "favIconUrl": "https://www.youtube.com/s/desktop/ef96fcf5/img/favicon_32x32.png",
+      "id": 2263,
+      "index": 112,
+      "mutedInfo": {
+        "muted": false
+      },
+      "pinned": false,
+      "status": "complete",
+      "title": "How To Create A 7 Figure Business Idea In One Hour - YouTube",
+      "url": "https://www.youtube.com/watch?v=Wak7iN4JZzU",
+      "groupId": -1,
+      "windowId": 1
+    },
+    {
+      "audible": false,
+      "discarded": true,
+      "favIconUrl": "https://www.youtube.com/s/desktop/ef96fcf5/img/favicon_32x32.png",
+      "id": 2266,
+      "index": 113,
+      "mutedInfo": {
+        "muted": false
+      },
+      "pinned": false,
+      "status": "complete",
+      "title": "Weird \"Color Profile\" Trick to Instantly Make Colors Pop! - Photoshop Tutorial - YouTube",
+      "url": "https://www.youtube.com/watch?v=fhEuPDa-Xxc",
+      "groupId": -1,
+      "windowId": 1
+    },
+    {
+      "audible": false,
+      "discarded": false,
+      "favIconUrl": "https://www.youtube.com/s/desktop/29944424/img/favicon_32x32.png",
+      "id": 1933,
+      "index": 114,
+      "mutedInfo": {
+        "muted": false
+      },
+      "pinned": false,
+      "status": "complete",
+      "title": "Reply to Mufti Tariq Masood on Deleting Video | Engineer Muhammad Ali Mirza | Real Deen Islam - YouTube",
+      "url": "https://www.youtube.com/watch?v=NQji-Gvwbro",
+      "groupId": -1,
+      "windowId": 1
+    },
+    {
+      "audible": false,
+      "discarded": false,
+      "favIconUrl": "https://www.youtube.com/s/desktop/29944424/img/favicon_32x32.png",
+      "id": 1936,
+      "index": 115,
+      "mutedInfo": {
+        "muted": false
+      },
+      "pinned": false,
+      "status": "complete",
+      "title": "Naseeruddin Shah K Baray Mein Aftab Iqbal Ki Raye | Aftabiyan - YouTube",
+      "url": "https://www.youtube.com/watch?v=XebNyjxTBmE",
+      "groupId": -1,
+      "windowId": 1
+    },
+    {
+      "audible": false,
+      "discarded": false,
+      "favIconUrl": "https://www.youtube.com/s/desktop/29944424/img/favicon_32x32.png",
+      "id": 1939,
+      "index": 116,
+      "mutedInfo": {
+        "muted": false
+      },
+      "pinned": false,
+      "status": "complete",
+      "title": "The Chase: Agents vs Morpheus | The Matrix Reloaded [Open Matte] - YouTube",
+      "url": "https://www.youtube.com/watch?v=Q8IntKW4sKA",
+      "groupId": -1,
+      "windowId": 1
+    },
+    {
+      "audible": false,
+      "discarded": false,
+      "favIconUrl": "https://www.youtube.com/s/desktop/29944424/img/favicon_32x32.png",
+      "id": 1942,
+      "index": 117,
+      "mutedInfo": {
+        "muted": false
+      },
+      "pinned": false,
+      "status": "complete",
+      "title": "Sugar ka operation se ilaaj? Lecture 152 - YouTube",
+      "url": "https://www.youtube.com/watch?v=yvedIVN1_2M",
+      "groupId": -1,
+      "windowId": 1
+    },
+    {
+      "audible": false,
+      "discarded": false,
+      "favIconUrl": "https://www.youtube.com/s/desktop/29944424/img/favicon_32x32.png",
+      "id": 1945,
+      "index": 118,
+      "mutedInfo": {
+        "muted": false
+      },
+      "pinned": false,
+      "status": "complete",
+      "title": "Womens High Jump | Romanian Athletics | National Championships Bucarest 2021 - YouTube",
+      "url": "https://www.youtube.com/watch?v=0jWbhk8F-ZI",
+      "groupId": -1,
+      "windowId": 1
+    },
+    {
+      "audible": false,
+      "discarded": false,
+      "favIconUrl": "https://www.youtube.com/s/desktop/29944424/img/favicon_32x32.png",
+      "id": 1948,
+      "index": 119,
+      "mutedInfo": {
+        "muted": false
+      },
+      "pinned": false,
+      "status": "complete",
+      "title": "How To Find A Job with the help of Linkedin | Strong profile & Online Earning Skills | Sohaib Hasan - YouTube",
+      "url": "https://www.youtube.com/watch?v=Xm2H7lr87gw",
+      "groupId": -1,
+      "windowId": 1
+    },
+    {
+      "audible": false,
+      "discarded": false,
+      "favIconUrl": "https://www.youtube.com/s/desktop/29944424/img/favicon_32x32.png",
+      "id": 1951,
+      "index": 120,
+      "mutedInfo": {
+        "muted": false
+      },
+      "pinned": false,
+      "status": "complete",
+      "title": "Best VS Code Extensions I Wish I Knew Before - YouTube",
+      "url": "https://www.youtube.com/watch?v=ZqW8JT1gt4U",
+      "groupId": -1,
+      "windowId": 1
+    },
+    {
+      "audible": false,
+      "discarded": false,
+      "favIconUrl": "https://www.youtube.com/s/desktop/29944424/img/favicon_32x32.png",
+      "id": 1954,
+      "index": 121,
+      "mutedInfo": {
+        "muted": false
+      },
+      "pinned": false,
+      "status": "complete",
+      "title": "Story of Makkah by Sahil Adeem | Emotional Speech by Sahil adeem | A simple argument - YouTube",
+      "url": "https://www.youtube.com/watch?v=tUmkptT23bs",
+      "groupId": -1,
+      "windowId": 1
+    },
+    {
+      "audible": false,
+      "discarded": false,
+      "favIconUrl": "https://www.youtube.com/s/desktop/29944424/img/favicon_32x32.png",
+      "id": 1957,
+      "index": 122,
+      "mutedInfo": {
+        "muted": false
+      },
+      "pinned": false,
+      "status": "complete",
+      "title": "Quaid e Azam ki Zahanat ke Dilchasp Waqiat | Quaid Ki Hazir Jawabi | Islam My True Belief - YouTube",
+      "url": "https://www.youtube.com/watch?v=tgg_BAA8-Fk",
+      "groupId": -1,
+      "windowId": 1
+    },
+    {
+      "audible": false,
+      "discarded": false,
+      "favIconUrl": "https://www.youtube.com/s/desktop/29944424/img/favicon_32x32.png",
+      "id": 1960,
+      "index": 123,
+      "mutedInfo": {
+        "muted": false
+      },
+      "pinned": false,
+      "status": "complete",
+      "title": "Top 5 Online Certificates That Are Actually Worth It | For students - YouTube",
+      "url": "https://www.youtube.com/watch?v=lJ3GTn-mL2k",
+      "groupId": -1,
+      "windowId": 1
+    },
+    {
+      "audible": false,
+      "discarded": false,
+      "favIconUrl": "https://www.youtube.com/s/desktop/29944424/img/favicon_32x32.png",
+      "id": 1963,
+      "index": 124,
+      "mutedInfo": {
+        "muted": false
+      },
+      "pinned": false,
+      "status": "complete",
+      "title": "I love you - Omer Faruk Tekbilek - Music: Hasan Isakkut - احبك - عزف قانون - فرح الفارسي - YouTube",
+      "url": "https://www.youtube.com/watch?v=KsXWlKx867A",
+      "groupId": -1,
+      "windowId": 1
+    },
+    {
+      "audible": false,
+      "discarded": false,
+      "favIconUrl": "https://www.youtube.com/s/desktop/29944424/img/favicon_32x32.png",
+      "id": 1966,
+      "index": 125,
+      "mutedInfo": {
+        "muted": false
+      },
+      "pinned": false,
+      "status": "complete",
+      "title": "Be intha Mardana Taqat ke liye lajawab Nuskha 🎯 Mufti Tariq Masood| Qaaf tv - YouTube",
+      "url": "https://www.youtube.com/watch?v=6PlOC5rSBfk",
+      "groupId": -1,
+      "windowId": 1
+    },
+    {
+      "audible": false,
+      "discarded": false,
+      "favIconUrl": "https://www.youtube.com/s/desktop/29944424/img/favicon_32x32.png",
+      "id": 1969,
+      "index": 126,
+      "mutedInfo": {
+        "muted": false
+      },
+      "pinned": false,
+      "status": "complete",
+      "title": "کیا فارمی اور دیسی انڈے ایک جیسے ہیں | How many eggs you can eat - YouTube",
+      "url": "https://www.youtube.com/watch?v=Rx8q7TqEGIs",
+      "groupId": -1,
+      "windowId": 1
+    },
+    {
+      "audible": false,
+      "discarded": false,
+      "favIconUrl": "https://www.youtube.com/s/desktop/29944424/img/favicon_32x32.png",
+      "id": 1972,
+      "index": 127,
+      "mutedInfo": {
+        "muted": false
+      },
+      "pinned": false,
+      "status": "complete",
+      "title": "Jewish vs Christian vs Muslim Recitations | Shocking Outcome 2022 - YouTube",
+      "url": "https://www.youtube.com/watch?v=VXE4aJDzaPo",
+      "groupId": -1,
+      "windowId": 1
+    },
+    {
+      "audible": false,
+      "discarded": false,
+      "favIconUrl": "https://www.youtube.com/s/desktop/29944424/img/favicon_32x32.png",
+      "id": 1975,
+      "index": 128,
+      "mutedInfo": {
+        "muted": false
+      },
+      "pinned": false,
+      "status": "complete",
+      "title": "Mysterious Discovery in Milky Way Found By Scientists - YouTube",
+      "url": "https://www.youtube.com/watch?v=lgYajfITTnc",
+      "groupId": -1,
+      "windowId": 1
+    },
+    {
+      "audible": false,
+      "discarded": false,
+      "favIconUrl": "https://www.youtube.com/s/desktop/29944424/img/favicon_32x32.png",
+      "id": 1978,
+      "index": 129,
+      "mutedInfo": {
+        "muted": false
+      },
+      "pinned": false,
+      "status": "complete",
+      "title": "Miss world yogini pooja patel - YouTube",
+      "url": "https://www.youtube.com/watch?v=1gBwAe64yhE",
+      "groupId": -1,
+      "windowId": 1
+    },
+    {
+      "audible": false,
+      "discarded": true,
+      "favIconUrl": "https://www.youtube.com/s/desktop/ef96fcf5/img/favicon_32x32.png",
+      "id": 2232,
+      "index": 130,
+      "mutedInfo": {
+        "muted": false
+      },
+      "pinned": false,
+      "status": "complete",
+      "title": "Cristiano Ronaldo Goals Worth Watching Again - 2022 - YouTube",
+      "url": "https://www.youtube.com/watch?v=nHBIl7_DbNU",
+      "groupId": -1,
+      "windowId": 1
+    },
+    {
+      "audible": false,
+      "discarded": true,
+      "favIconUrl": "https://www.youtube.com/s/desktop/ef96fcf5/img/favicon_32x32.png",
+      "id": 2239,
+      "index": 131,
+      "mutedInfo": {
+        "muted": false
+      },
+      "pinned": false,
+      "status": "complete",
+      "title": "Mustafa Kamal Pasha History | Mustafa Kemal Ataturk | Turkish Field Marshal | Dr Israr | Mubaligh TV - YouTube",
+      "url": "https://www.youtube.com/watch?v=I5rcheLL46Q",
+      "groupId": -1,
+      "windowId": 1
+    },
+    {
+      "audible": false,
+      "discarded": true,
+      "favIconUrl": "https://www.youtube.com/s/desktop/ef96fcf5/img/favicon_32x32.png",
+      "id": 2242,
+      "index": 132,
+      "mutedInfo": {
+        "muted": false
+      },
+      "pinned": false,
+      "status": "complete",
+      "title": "Subha Jaldi Uthne KaTariqa? | Zaida Neend Anay Ka Ilaj? By Qari Sohaib Ahmed Meer Muhammadi - YouTube",
+      "url": "https://www.youtube.com/watch?v=ZWfeBd7oIZY",
+      "groupId": -1,
+      "windowId": 1
+    },
+    {
+      "audible": false,
+      "discarded": true,
+      "favIconUrl": "https://www.youtube.com/s/desktop/ef96fcf5/img/favicon_32x32.png",
+      "id": 2245,
+      "index": 133,
+      "mutedInfo": {
+        "muted": false
+      },
+      "pinned": false,
+      "status": "complete",
+      "title": "Vit K, C, B cheap plant source for bones - YouTube",
+      "url": "https://www.youtube.com/watch?v=-whfZsH2_iU",
+      "groupId": -1,
+      "windowId": 1
+    },
+    {
+      "audible": false,
+      "discarded": true,
+      "favIconUrl": "https://www.youtube.com/s/desktop/ef96fcf5/img/favicon_32x32.png",
+      "id": 2248,
+      "index": 134,
+      "mutedInfo": {
+        "muted": false
+      },
+      "pinned": false,
+      "status": "complete",
+      "title": "کوہ طور جہاں الله کی تجلی ٹکرائی وہ پہاڑ کہاں پر ہے | Koh E Toor | Mount Sinai - YouTube",
+      "url": "https://www.youtube.com/watch?v=dPE3fuRihJw",
+      "groupId": -1,
+      "windowId": 1
+    },
+    {
+      "audible": false,
+      "discarded": false,
+      "favIconUrl": "https://www.youtube.com/s/desktop/29944424/img/favicon_32x32.png",
+      "id": 1996,
+      "index": 135,
+      "mutedInfo": {
+        "muted": false
+      },
+      "pinned": false,
+      "status": "complete",
+      "title": "PAKISTANIS ARE SAVAGE PT. 7 ft @Zakir Khan - YouTube",
+      "url": "https://www.youtube.com/watch?v=s0vkObVu92Y",
+      "groupId": -1,
+      "windowId": 1
+    },
+    {
+      "audible": false,
+      "discarded": false,
+      "id": 1999,
+      "index": 136,
+      "mutedInfo": {
+        "muted": false
+      },
+      "pinned": false,
+      "status": "unloaded",
+      "title": "JavaScript Roadmap to Becoming a 100k/Year Developer | by Matteo Possamai | Feb, 2022 | JavaScript in Plain English",
+      "url": "https://javascript.plainenglish.io/javascript-roadmap-to-becoming-a-100000k-year-developer-78cf3ec3d466",
+      "groupId": -1,
+      "windowId": 1
+    },
+    {
+      "audible": false,
+      "discarded": false,
+      "id": 2002,
+      "index": 137,
+      "mutedInfo": {
+        "muted": false
+      },
+      "pinned": false,
+      "status": "unloaded",
+      "title": "5 Different Ways You Can Make Money As A Developer While You Sleep | by Nitin Sharma | Jan, 2022 | JavaScript in Plain English",
+      "url": "https://javascript.plainenglish.io/5-different-ways-you-can-make-money-as-a-developer-while-you-sleep-ad54715b6ad7",
+      "groupId": -1,
+      "windowId": 1
+    },
+    {
+      "audible": false,
+      "discarded": false,
+      "id": 2005,
+      "index": 138,
+      "mutedInfo": {
+        "muted": false
+      },
+      "pinned": false,
+      "status": "unloaded",
+      "title": "Too Lazy to Write Documentation? Let the AI Write It for You | by Hahnbee Lee | Jan, 2022 | Better Programming",
+      "url": "https://betterprogramming.pub/too-lazy-to-write-documentation-let-the-ai-write-it-for-you-8574f7cd11b2",
+      "groupId": -1,
+      "windowId": 1
+    },
+    {
+      "audible": false,
+      "discarded": false,
+      "favIconUrl": "https://fontawesome.com/favicon.ico",
+      "id": 2008,
+      "index": 139,
+      "mutedInfo": {
+        "muted": false
+      },
+      "pinned": false,
+      "status": "unloaded",
+      "title": "Loading Icons | Font Awesome",
+      "url": "https://fontawesome.com/v5.15/icons?d=gallery&p=2&q=loading",
+      "groupId": -1,
+      "windowId": 1
+    },
+    {
+      "audible": false,
+      "discarded": false,
+      "favIconUrl": "https://www.google.com/favicon.ico",
+      "id": 2011,
+      "index": 140,
+      "mutedInfo": {
+        "muted": false
+      },
+      "pinned": false,
+      "status": "complete",
+      "title": "shameless series pakistani - Google Search",
+      "url": "https://www.google.com/search?q=shameless+series+pakistani&sxsrf=APq-WBt2OUKI54ur-FTjuoVs4ZWvTaH8mg%3A1643991965652&ei=nVP9YZicJ4G9lwTtpqzIDw&oq=shameless+series+pakistan&gs_lcp=Cgdnd3Mtd2l6EAMYADIFCCEQoAE6BAgAEEc6BQgAEIAEOgYIABAWEB46BwghEAoQoAFKBAhBGABKBAhGGABQ5glY2Q5g5xtoAHADeAGAAZwCiAGFEpIBAzItOZgBAKABAcgBCMABAQ&sclient=gws-wiz",
+      "groupId": -1,
+      "windowId": 1
+    },
+    {
+      "audible": false,
+      "discarded": false,
+      "favIconUrl": "https://en.wikipedia.org/static/favicon/wikipedia.ico",
+      "id": 2014,
+      "index": 141,
+      "mutedInfo": {
+        "muted": false
+      },
+      "pinned": false,
+      "status": "unloaded",
+      "title": "Shameless Proposals - Wikipedia",
+      "url": "https://en.wikipedia.org/wiki/Shameless_Proposals",
+      "groupId": -1,
+      "windowId": 1
+    },
+    {
+      "audible": false,
+      "discarded": false,
+      "favIconUrl": "https://www.google.com/favicon.ico",
+      "id": 2017,
+      "index": 142,
+      "mutedInfo": {
+        "muted": false
+      },
+      "pinned": false,
+      "status": "complete",
+      "title": "Rukhsana mehtab - Google Search",
+      "url": "https://www.google.com/imgres?imgurl=https%3A%2F%2Fpbs.twimg.com%2Fext_tw_video_thumb%2F1245064818060660736%2Fpu%2Fimg%2Fa_hqGel2hzrx5Oo_.jpg&imgrefurl=https%3A%2F%2Fmobile.twitter.com%2Frukhsanamehtab7&tbnid=uWz89HemVEpndM&vet=12ahUKEwiqpN7Huub1AhVXmosKHZiXAZgQxiAoA3oECAAQJw..i&docid=sXI89TlKTB750M&w=576&h=1024&itg=1&q=Rukhsana%20mehtab&ved=2ahUKEwiqpN7Huub1AhVXmosKHZiXAZgQxiAoA3oECAAQJw",
+      "groupId": -1,
+      "windowId": 1
+    },
+    {
+      "audible": false,
+      "discarded": false,
+      "favIconUrl": "https://i0.wp.com/www.thelibrarypk.com/wp-content/uploads/2018/05/thelibrarypk.com-2.png?fit=32%2C32&ssl=1",
+      "id": 2020,
+      "index": 143,
+      "mutedInfo": {
+        "muted": false
+      },
+      "pinned": false,
+      "status": "complete",
+      "title": "List of Shaheena Chanda Mehtab Books - Free Download Shaheena Chanda Mehtab Books - The Library Pk",
+      "url": "https://www.thelibrarypk.com/tag/shaheena-chanda-mehtab/",
+      "groupId": -1,
+      "windowId": 1
+    },
+    {
+      "audible": false,
+      "discarded": false,
+      "favIconUrl": "https://www.google.com/favicon.ico",
+      "id": 2297,
+      "index": 144,
+      "mutedInfo": {
+        "muted": false
+      },
+      "pinned": false,
+      "status": "complete",
+      "title": "mocha vs jest - Google Search",
+      "url": "https://www.google.com/search?q=mocha+vs+jest&oq=mocha+vs+jest&aqs=chrome..69i57j0i271.6985j0j7&sourceid=chrome&ie=UTF-8",
+      "groupId": -1,
+      "windowId": 1
+    },
+    {
+      "audible": false,
+      "discarded": false,
+      "favIconUrl": "https://res.cloudinary.com/practicaldev/image/fetch/s--E8ak4Hr1--/c_limit,f_auto,fl_progressive,q_auto,w_32/https://dev-to.s3.us-east-2.amazonaws.com/favicon.ico",
+      "id": 2304,
+      "index": 145,
+      "mutedInfo": {
+        "muted": false
+      },
+      "pinned": false,
+      "status": "complete",
+      "title": "Jest vs Mocha: Comparing the top 3 Javascript testing frameworks - DEV Community",
+      "url": "https://dev.to/heroku/comparing-the-top-3-javascript-testing-frameworks-2cco",
+      "groupId": -1,
+      "windowId": 1
+    }
+  ]
+}

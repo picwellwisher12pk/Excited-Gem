@@ -1,25 +1,26 @@
-exports.preferences = {
-  search:{
-    regex : true,
-    ignoreCase : true,
-    searchIn: [true,true] // title,url
+export const preferences = {
+  search: {
+    regex: false,
+    ignoreCase: true,
+    searchIn: { title: true, url: true }, // title,url
+    empty: true,
   },
-  defaultTabsFrom : "current",
-  tempTabsFrom: 'current',
+  defaultTabsFrom: "current",
+  tempTabsFrom: "current",
   tabsGroup: {
-    promptForClosure :true,/**/
+    promptForClosure: true /**/,
     tabsListAnimation: true,
     tabSortAnimation: true,
     //selection by ckeckbox/hover mode/click mode
-    selectionBy: 'checkbox',
-    display:{
+    selectionBy: "checkbox",
+    display: {
       favicon: true,
       title: true,
-      url:true,
-      pin:true,
+      url: true,
+      pin: true,
       sound: true,
       // close:true
-    }
-  }
-
+    },
+  },
+  selectedTabs: [],
 };
