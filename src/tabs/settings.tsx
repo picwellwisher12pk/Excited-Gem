@@ -8,7 +8,7 @@ import store from '~/store/store';
 import { usePageTracking } from '~/components/Analytics/usePageTracking';
 import 'antd/dist/reset.css';
 import '~/styles/index.css';
-import '~/styles/index.scss';
+import '~/styles/index.css';
 
 const { Title, Text } = Typography;
 
@@ -18,6 +18,8 @@ function SettingsPageContent() {
     const [tabManagementMode, setTabManagementMode] = useState<'single' | 'per-window'>('single');
     const [sidebarCollapsed, setSidebarCollapsed] = useState(true);
     const [searchBehavior, setSearchBehavior] = useState<'debounce' | 'enter'>('debounce');
+    const [groupedTabs, setGroupedTabs] = useState(true);
+    const [tabActionButtons, setTabActionButtons] = useState<'always' | 'hover'>('hover');
 
     usePageTracking('/settings', 'Settings');
 
@@ -34,6 +36,12 @@ function SettingsPageContent() {
             }
             if (result.searchBehavior) {
                 setSearchBehavior(result.searchBehavior);
+            }
+            if (result.groupedTabs !== undefined) {
+                setGroupedTabs(result.groupedTabs);
+            }
+            if (result.tabActionButtons) {
+                setTabActionButtons(result.tabActionButtons);
             }
         });
     }, []);
@@ -63,6 +71,20 @@ function SettingsPageContent() {
         setTabManagementMode(value);
         chrome.storage.local.set({ tabManagementMode: value }, () => {
             message.success('Tab management mode saved');
+        });
+    };
+
+    const handleGroupedTabsChange = (value: boolean) => {
+        setGroupedTabs(value);
+        chrome.storage.local.set({ groupedTabs: value }, () => {
+            message.success('Grouped tabs setting saved');
+        });
+    };
+
+    const handleTabActionButtonsChange = (value: 'always' | 'hover') => {
+        setTabActionButtons(value);
+        chrome.storage.local.set({ tabActionButtons: value }, () => {
+            message.success('Tab action buttons setting saved');
         });
     };
 
@@ -176,6 +198,62 @@ function SettingsPageContent() {
                                                         <div className="font-medium">Expanded</div>
                                                         <Text type="secondary" className="text-xs">
                                                             Show all tabs by default
+                                                        </Text>
+                                                    </div>
+                                                </Radio>
+                                            </Space>
+                                        </Radio.Group>
+                                    </div>
+                                </div>
+                                <div>
+                                    <Text strong>Group Tabs by Window</Text>
+                                    <div className="mt-2">
+                                        <Radio.Group
+                                            value={groupedTabs}
+                                            onChange={(e) => handleGroupedTabsChange(e.target.value)}
+                                        >
+                                            <Space direction="vertical">
+                                                <Radio value={true}>
+                                                    <div>
+                                                        <div className="font-medium">Enabled</div>
+                                                        <Text type="secondary" className="text-xs">
+                                                            Group tabs by window when "All windows" is selected
+                                                        </Text>
+                                                    </div>
+                                                </Radio>
+                                                <Radio value={false}>
+                                                    <div>
+                                                        <div className="font-medium">Disabled</div>
+                                                        <Text type="secondary" className="text-xs">
+                                                            Show tabs as a flat list
+                                                        </Text>
+                                                    </div>
+                                                </Radio>
+                                            </Space>
+                                        </Radio.Group>
+                                    </div>
+                                </div>
+                                <div>
+                                    <Text strong>Tab Action Buttons</Text>
+                                    <div className="mt-2">
+                                        <Radio.Group
+                                            value={tabActionButtons}
+                                            onChange={(e) => handleTabActionButtonsChange(e.target.value)}
+                                        >
+                                            <Space direction="vertical">
+                                                <Radio value="hover">
+                                                    <div>
+                                                        <div className="font-medium">On Hover</div>
+                                                        <Text type="secondary" className="text-xs">
+                                                            Show buttons only when hovering over the tab
+                                                        </Text>
+                                                    </div>
+                                                </Radio>
+                                                <Radio value="always">
+                                                    <div>
+                                                        <div className="font-medium">Always Visible</div>
+                                                        <Text type="secondary" className="text-xs">
+                                                            Always show action buttons
                                                         </Text>
                                                     </div>
                                                 </Radio>

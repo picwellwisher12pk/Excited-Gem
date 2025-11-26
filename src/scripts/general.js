@@ -592,42 +592,57 @@ export const reduceTabs = (
   tabs
 ) => {
   console.time('reduceTabs')
-  let reducedTabs = tabs?.reduce((accumulator, tab) => {
-    const { title, url, audible, pinned } = tab
-    const isAudible = audibleSearch ? audible === true : true
-    const isPinned = pinnedSearch ? pinned === true : true
-    if (regex) {
-      try {
-        let regexTest = new RegExp(searchTerm, ignoreCase ? 'i' : '')
-        if (searchIn.title && regexTest.test(title) && isAudible && isPinned)
-          accumulator.push(tab)
-        if (searchIn.url && regexTest.test(url) && isAudible && isPinned)
-          accumulator.push(tab)
-      } catch (error) {
-        console.error('Search error:', error)
-      }
-    } else {
-      if (searchIn.title && !ignoreCase)
-        if (title.includes(searchTerm) && isAudible && isPinned)
-          accumulator.push(tab)
-      if (searchIn.title && ignoreCase)
-        if (
-          title.toLowerCase().includes(searchTerm.toLowerCase()) &&
-          isAudible &&
-          isPinned
-        )
-          accumulator.push(tab)
-      if (searchIn.url)
-        if (
-          url.toLowerCase().includes(searchTerm.toLowerCase()) &&
-          isAudible &&
-          isPinned
-        )
-          accumulator.push(tab)
+
+  if (!tabs) return [];
+
+  // Pre-calculate search criteria
+  let searchRegex;
+  let lowerSearchTerm;
+
+  if (regex) {
+    try {
+      searchRegex = new RegExp(searchTerm, ignoreCase ? 'i' : '');
+    } catch (error) {
+      console.error('Invalid Regex:', error);
+      return []; // Return empty or original tabs? Returning empty on invalid regex seems safer to indicate error
     }
-    return accumulator
-  }, [])
-  reducedTabs = [...new Set(reducedTabs)]
+  } else if (ignoreCase) {
+    lowerSearchTerm = searchTerm.toLowerCase();
+  }
+
+  const reducedTabs = tabs.filter((tab) => {
+    const { title, url, audible, pinned } = tab;
+
+    // 1. Filter by properties (Audible/Pinned)
+    // Optimization: Check these boolean flags first as they are faster than string matching
+    if (audibleSearch && !audible) return false;
+    if (pinnedSearch && !pinned) return false;
+
+    // 2. Filter by Search Term
+    // If no search term, we keep it (assuming the caller handles empty search check, but good to be safe)
+    if (!searchTerm) return true;
+
+    let matchesTitle = false;
+    let matchesUrl = false;
+
+    if (regex) {
+      if (searchIn.title) matchesTitle = searchRegex.test(title);
+      // Optimization: If title matched and we don't need to know specifically which one matched, we can stop here.
+      // But if we need to check URL only if title didn't match:
+      if (!matchesTitle && searchIn.url) matchesUrl = searchRegex.test(url);
+    } else {
+      if (ignoreCase) {
+        if (searchIn.title) matchesTitle = title.toLowerCase().includes(lowerSearchTerm);
+        if (!matchesTitle && searchIn.url) matchesUrl = url.toLowerCase().includes(lowerSearchTerm);
+      } else {
+        if (searchIn.title) matchesTitle = title.includes(searchTerm);
+        if (!matchesTitle && searchIn.url) matchesUrl = url.includes(searchTerm);
+      }
+    }
+
+    return matchesTitle || matchesUrl;
+  });
+
   console.timeEnd('reduceTabs')
   return reducedTabs
 }

@@ -23,7 +23,7 @@ import { analytics } from '~/utils/analytics';
 import { usePageTracking } from '~/components/Analytics/usePageTracking';
 import 'antd/dist/reset.css';
 import '~/styles/index.css';
-import '~/styles/index.scss';
+import '~/styles/index.css';
 
 interface TabData {
     url: string;

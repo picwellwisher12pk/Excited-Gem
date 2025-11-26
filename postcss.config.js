@@ -1,11 +1,6 @@
-"use strict";
-
 module.exports = {
   plugins: {
-    "@tailwindcss/postcss": {},
-    "postcss-preset-env": {
-      browsers: "last 2 versions",
-    },
-    cssnano: {},
-  },
-};
+    tailwindcss: {},
+    autoprefixer: {}
+  }
+}
