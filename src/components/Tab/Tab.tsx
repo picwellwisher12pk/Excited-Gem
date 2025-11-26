@@ -32,6 +32,9 @@ export interface TabProps {
   remove: (id: number) => void;
   toggleMuteTab: (id: number, muted: boolean) => void;
   togglePinTab: (id: number, pinned: boolean) => void;
+  tabActionButtons?: 'always' | 'hover';
+  groupColor?: string;
+  isGrouped?: boolean;
 }
 
 interface SearchState {
@@ -57,6 +60,9 @@ export function Tab({
   favIconUrl,
   title = '',
   url = '',
+  tabActionButtons = 'hover',
+  groupColor,
+  isGrouped
 }: Readonly<TabProps>) {
   // console.log('📌 Tab component rendering:', id, title);
 
@@ -111,10 +117,12 @@ export function Tab({
       className={`
         w-full overflow-hidden tab-item flex items-center pr-2 pl-2 py-2
         hover:bg-slate-200 transition-colors duration-300
-        border-b border-stone-100 !justify-start
+        border-b border-stone-100 !justify-start group
         ${selected ? ' checked bg-slate-100' : ''}
         ${isLoading ? ' loading' : discardedClass}
+        ${isGrouped ? 'ml-4 border-l-4 bg-slate-50/50' : ''}
       `}
+      style={isGrouped && groupColor ? { borderLeftColor: groupColor } : undefined}
       data-discarded={discarded}
     >
       <TabContextMenu tab={{ id, title, url, pinned, mutedInfo, discarded }}>
@@ -142,7 +150,8 @@ export function Tab({
             </button>
           </div>
           <div
-            className="tab-actions flex align-self-center justify-self-end ms-3 gap-2 shrink-0"
+            className={`tab-actions flex align-self-center justify-self-end ms-3 gap-2 shrink-0 transition-opacity duration-200 ${tabActionButtons === 'hover' ? 'opacity-0 group-hover:opacity-100' : 'opacity-100'
+              } ${audible || mutedInfo.muted ? '!opacity-100' : ''}`}
             role="group"
             aria-label={`Actions for tab: ${title}`}>
             {(audible || mutedInfo.muted) && (

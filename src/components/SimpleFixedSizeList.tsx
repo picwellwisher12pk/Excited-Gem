@@ -5,7 +5,7 @@ type Props = {
     width: number;
     itemCount: number;
     itemSize: number;
-    children: (props: { index: number; style: React.CSSProperties }) => React.ReactNode;
+    children: React.ComponentType<any>;
     itemData?: any;
 };
 
@@ -14,7 +14,9 @@ export const SimpleFixedSizeList = React.forwardRef<HTMLDivElement, Props>(({
     width,
     itemCount,
     itemSize,
+
     children,
+    itemData,
 }, ref) => {
     const [scrollTop, setScrollTop] = useState(0);
     const innerRef = useRef<HTMLDivElement>(null);
@@ -33,18 +35,22 @@ export const SimpleFixedSizeList = React.forwardRef<HTMLDivElement, Props>(({
     );
 
     const items = [];
+    const Item = children;
+
     for (let i = startIndex; i <= endIndex; i++) {
         items.push(
-            children({
-                index: i,
-                style: {
+            <Item
+                key={i}
+                index={i}
+                style={{
                     position: 'absolute',
                     top: i * itemSize,
                     left: 0,
                     width: '100%',
                     height: itemSize,
-                },
-            })
+                }}
+                data={itemData}
+            />
         );
     }
 

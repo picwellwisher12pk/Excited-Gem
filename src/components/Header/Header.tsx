@@ -27,6 +27,7 @@ import Selection from './Selection'
 import SortButton from './SortButton'
 import Btn from '~/components/Btn'
 import { SidebarToggleButton } from '~/components/Sidebar'
+import MoreActionsMenu from './MoreActionsMenu'
 
 const { Option } = Select
 
@@ -219,6 +220,8 @@ export default function Header({
             </div>
           </Space>
         )}
+
+
         <Space className="mr-1">
           <Btn
             title="Refresh View"
@@ -234,6 +237,9 @@ export default function Header({
               title={!allMuted ? 'Mute All Visible Tabs' : 'Unmute All Visible Tabs'}>
               {iconSound}
             </Btn>
+          </div>
+          <div>
+            <MoreActionsMenu />
           </div>
         </Space>
       </section>

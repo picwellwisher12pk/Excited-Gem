@@ -1,7 +1,7 @@
-import {createSlice} from "@reduxjs/toolkit";
-import {preferences} from "../scripts/defaultPreferences";
+import { createSlice } from "@reduxjs/toolkit";
+import { preferences } from "../scripts/defaultPreferences";
 
-const searchIn = {...preferences.search.searchIn};
+const searchIn = { ...preferences.search.searchIn };
 const regex = preferences.search.regex || false;
 export const searchSlice = createSlice({
   name: "search",
@@ -19,8 +19,11 @@ export const searchSlice = createSlice({
     toggleRegex: (state) => {
       state.regex = !state.regex;
     },
+    setRegex: (state, action) => {
+      state.regex = action.payload;
+    },
     toggleSearchIn: (state, action) => {
-      state.searchIn = {...action.payload};
+      state.searchIn = { ...action.payload };
     },
     toggleAudible: (state) => {
       state.audibleSearch = !state.audibleSearch;
