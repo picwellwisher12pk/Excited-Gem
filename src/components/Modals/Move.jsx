@@ -1,16 +1,22 @@
 import { Segmented } from 'antd'
-import { Button, Modal, Radio } from 'antd'
-import React, { useState } from 'react'
+import { Button, Modal, Radio, Alert } from 'antd'
+import React, { useState, useEffect } from 'react'
 
 export const MoveModal = (props) => {
   const options = ['Current Windows', 'New Window', 'To End', 'To Start']
   const [type, setType] = useState(options[0])
-  const [windowId, setWindowId] = useState(props.currentWindow.id)
+  const [windowId, setWindowId] = useState(props.currentWindow?.id)
   const [position, setPosition] = useState(0)
+
+  useEffect(() => {
+    if (props.currentWindow?.id) {
+        setWindowId(props.currentWindow.id)
+    }
+  }, [props.currentWindow])
 
   function resetComponent() {
     setType(options[0])
-    setWindowId(props.currentWindow.id)
+    setWindowId(props.currentWindow?.id)
     setPosition(0)
   }
 
@@ -24,8 +30,8 @@ export const MoveModal = (props) => {
                 <Radio
                   key={window.id}
                   value={window.id}
-                  disabled={window.id === props.currentWindow.id && true}>
-                  {window.id === props.currentWindow.id && 'Current'} Window
+                  disabled={window.id === props.currentWindow?.id}>
+                  {window.id === props.currentWindow?.id && 'Current'} Window
                   {i + 1}{' '}
                   <small className="text-orange-500">
                     ({window.tabs.length} tabs)
@@ -38,24 +44,30 @@ export const MoveModal = (props) => {
         )
       case 'New Window':
         return (
-          <>
-            <p>This will move your selected tabs to new window.</p>
-            <strong className="text-cyan-500">Hit OK to continue!</strong>
-          </>
+          <Alert
+            message="New Window"
+            description="This will move your selected tabs to a new window."
+            type="info"
+            showIcon
+          />
         )
       case 'To End':
         return (
-          <>
-            <p>This will move your selected tabs to end of current window.</p>
-            <strong className="text-cyan-500">Hit OK to continue!</strong>
-          </>
+          <Alert
+            message="To End"
+            description="This will move your selected tabs to the end of the current window."
+            type="info"
+            showIcon
+          />
         )
       case 'To Start':
         return (
-          <>
-            <p>This will move your selected tabs to start of current window.</p>
-            <strong className="text-cyan-500">Hit OK to continue!</strong>
-          </>
+          <Alert
+            message="To Start"
+            description="This will move your selected tabs to the start of the current window."
+            type="info"
+            showIcon
+          />
         )
     }
   }
@@ -66,13 +78,17 @@ export const MoveModal = (props) => {
     try {
         switch (type) {
           case 'Current Windows':
-            if (windowId === props.currentWindow.id) {
-              alert('Select some window to move to')
+            if (!windowId || windowId === props.currentWindow?.id) {
+              // If user selected "Current Windows" but didn't pick a DIFFERENT window, warn them
+              // UNLESS they really meant to move within the same window?
+              // But the UI disables the current window radio button.
+              // So if windowId is still currentWindow.id, they haven't picked a valid target.
+              alert('Select a different window to move to')
               return
             }
             await chrome.tabs.move(tabIds, {
                 windowId: Number(windowId),
-                index: Number(position) || -1
+                index: -1 // Append to end of target window
             })
             break
 
@@ -114,13 +130,24 @@ export const MoveModal = (props) => {
 
   return (
     <Modal
-      title={`Move (${props.selectedTabs.length}) Tabs to`}
+      title={`Move (${props.selectedTabs.length}) Tabs`}
       open={true}
       onOk={handleOk}
       onCancel={() => {
         props.setMoveModalVisible(false)
-      }}>
-      <Segmented options={options} onChange={setType} value={type} />
+      }}
+      footer={
+        <div className="flex justify-end gap-2">
+            <Button key="back" onClick={() => props.setMoveModalVisible(false)}>
+                Cancel
+            </Button>
+            <Button key="submit" type="primary" onClick={handleOk}>
+                OK
+            </Button>
+        </div>
+      }
+    >
+      <Segmented options={options} onChange={setType} value={type} className="mb-4" />
       <div className="py-3">{makeMoveTypeUI(type)}</div>
     </Modal>
   )

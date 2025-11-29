@@ -80,7 +80,7 @@ export default function Header({
 
   useEffect(() => {
     getWindows()
-  }, [])
+  }, [moveModalVisible])
 
   const iconPinned = allPinned && (
     <Pin size={16} className="text-white fill-white" />
