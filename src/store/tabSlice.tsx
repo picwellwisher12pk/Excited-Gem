@@ -14,17 +14,35 @@ export interface Tab {
   index: number;
   windowId: number;
   groupId?: number;
+  youtubeInfo?: {
+    duration: number;
+    currentTime: number;
+    paused: boolean;
+    title: string;
+    percentage: number;
+    tabId: number;
+  };
 }
+
+interface TabState {
+  tabs: Tab[];
+  filteredTabs: Tab[];
+  selectedTabs: number[];
+  selectedWindow: number;
+  youtubePermissionGranted: boolean;
+}
+
+const initialState: TabState = {
+  tabs: [],
+  filteredTabs: [],
+  selectedTabs: [],
+  selectedWindow: chrome.windows?.WINDOW_ID_CURRENT || -1,
+  youtubePermissionGranted: false,
+};
 
 export const tabSlice = createSlice({
   name: "tabs",
-  initialState: {
-    tabs: [] as Tab[],
-    windows: [],
-    selectedTabs: [] as number[],
-    filteredTabs: [] as Tab[],
-    selectedWindow: "current",
-  },
+  initialState,
   reducers: {
     updateActiveTabs: (state, action) => {
       state.tabs = action.payload;
@@ -59,6 +77,20 @@ export const tabSlice = createSlice({
       state.selectedWindow = action.payload;
       window.selectedWindow = action.payload;
     },
+    updateYouTubeInfo: (state, action) => {
+      const { tabId, info } = action.payload;
+      const tab = state.tabs.find((t) => t.id === tabId);
+      if (tab) {
+        tab.youtubeInfo = info;
+      }
+      const filteredTab = state.filteredTabs.find((t) => t.id === tabId);
+      if (filteredTab) {
+        filteredTab.youtubeInfo = info;
+      }
+    },
+    updateYouTubePermission: (state, action) => {
+      state.youtubePermissionGranted = action.payload;
+    },
   },
 });
 
@@ -71,6 +103,8 @@ export const {
   updateFilteredTabs,
   clearSelectedTabs,
   updateSelectedWindow,
+  updateYouTubeInfo,
+  updateYouTubePermission,
 } = tabSlice.actions;
 
 export default tabSlice.reducer;

@@ -1,34 +1,38 @@
-import { Button, Input, Modal, Select } from 'antd'
+import { Button, Input, Modal, Select, List, Typography, Space, Avatar } from 'antd'
 import React, { useState } from 'react'
 import { useSelector } from 'react-redux'
 
 import { saveSession } from '../getsetSessions'
 
 const { Option } = Select
+const { Text } = Typography
 
 const children = []
 export const SaveModal = (props) => {
-  const { tabs, filteredTabs } = useSelector((state) => state.tabs)
-  console.log(props.selectedTabs)
+  const { tabs } = useSelector((state: any) => state.tabs)
   const [loading, setLoading] = useState(false)
   const [title, setTitle] = useState('')
-  const [tags, setTags] = useState('')
-  const [list, setList] = useState([])
+  const [tags, setTags] = useState([])
 
   const handleCancel = () => {
     props.setSaveModalVisible(false)
   }
 
   const handleSave = async () => {
+    if (!title.trim()) {
+      alert("Please enter a title")
+      return
+    }
     setLoading(true)
     try {
       const tabsToSave = props.selectedTabs.map(id => {
         const tab = tabs.find(t => t.id === id)
-        return {
+        return tab ? {
           url: tab.url,
           title: tab.title,
-          windowId: tab.windowId || 0 // Ensure windowId
-        }
+          windowId: tab.windowId || 0,
+          favIconUrl: tab.favIconUrl
+        } : null
       }).filter(Boolean)
 
       await saveSession(tabsToSave, title)
@@ -40,61 +44,75 @@ export const SaveModal = (props) => {
     }
   }
 
-  const handleChange = (value) => {
-    children.push(value)
-    console.log(`selected ${value}`)
-  }
+  const selectedTabsData = props.selectedTabs.map(id => tabs.find(t => t.id === id)).filter(Boolean)
 
   return (
     <Modal
-      title={'Save Tabs as list'}
+      title={`Save (${props.selectedTabs.length}) Tabs as List`}
       open={true}
       width={800}
       onOk={handleSave}
       onCancel={handleCancel}
-      footer={[
-        <Button key="back" onClick={handleCancel}>
-          Cancel
-        </Button>,
-        <Button type="primary" loading={loading} onClick={handleSave}>
-          Save
-        </Button>
-      ]}>
-      <Input
-        className="mb-3"
-        defaultValue={''}
-        onChange={(e) => setTitle(e.target.value)}
-        placeholder="Title"
-      />
-      <div className="mt-3">
-        {/* <span>Tags</span> */}
-        <Select
-          className="border"
-          mode="tags"
-          style={{
-            width: '100%'
-          }}
-          placeholder="Tags"
-          onChange={setTags}>
-          {children}
-        </Select>
-      </div>
-      <div className="mt-5">
-        <span>Tabs ({props.selectedTabs.length})</span>
-
-        <div className="max-h-[300px] overflow-auto">
-          {props.selectedTabs.map((tabId) => {
-            const tab = tabs.find((tab) => tab.id === tabId)
-            return (
-              <div
-                className="overflow-hidden tab-item flex p-2 bg-slate-100 hover:bg-slate-100 transition-colors duration-300 border-b-stone-100 border text-xs"
-                title={tab.url}>
-                <strong>{tab.title}</strong>
-              </div>
-            )
-          })}
+      footer={
+        <div className="flex justify-end gap-2">
+          <Button key="back" onClick={handleCancel}>
+            Cancel
+          </Button>
+          <Button type="primary" loading={loading} onClick={handleSave} disabled={!title.trim()}>
+            Save List
+          </Button>
         </div>
-      </div>
+      }>
+
+      <Space direction="vertical" size="middle" style={{ width: '100%' }}>
+        <div>
+          <Text strong>List Title</Text>
+          <Input
+            className="mt-1"
+            value={title}
+            onChange={(e) => setTitle(e.target.value)}
+            placeholder="e.g., Research for Project X"
+            autoFocus
+          />
+        </div>
+
+        <div>
+          <Text strong>Tags (Optional)</Text>
+          <Select
+            className="mt-1 w-full"
+            mode="tags"
+            placeholder="Add tags..."
+            onChange={setTags}
+            tokenSeparators={[',']}
+          >
+            {children}
+          </Select>
+        </div>
+
+        <div>
+          <Text strong>Tabs Preview</Text>
+          <div className="mt-1 border rounded-md max-h-[50vh] overflow-y-auto bg-slate-50">
+            <List
+              size="small"
+              dataSource={selectedTabsData}
+              renderItem={(tab: any) => (
+                <List.Item className="!px-2 !py-1 hover:bg-slate-100 transition-colors border-b border-slate-100 last:border-0">
+                  <div className="flex items-center gap-2 w-full overflow-hidden">
+                    {tab.favIconUrl ?
+                      <Avatar src={tab.favIconUrl} size={16} shape="square" className="flex-shrink-0" /> :
+                      <Avatar size={16} shape="square" className="flex-shrink-0 text-[10px] flex items-center justify-center">{tab.title?.[0] || 'T'}</Avatar>
+                    }
+                    <div className="flex-1 min-w-0 flex flex-col">
+                      <Text ellipsis className="text-xs font-medium leading-tight">{tab.title}</Text>
+                      <Text type="secondary" ellipsis className="text-[10px] leading-tight">{tab.url}</Text>
+                    </div>
+                  </div>
+                </List.Item>
+              )}
+            />
+          </div>
+        </div>
+      </Space>
     </Modal>
   )
 }
