@@ -31,7 +31,12 @@ export default async function getManifest() {
       "tabs",
       "tabGroups",
       "unlimitedStorage",
-      "sidePanel"
+      "sidePanel",
+      "scripting"
+    ],
+    optional_host_permissions: [
+      "https://*.youtube.com/*",
+      "http://*.youtube.com/*"
     ],
     side_panel: {
       default_path: "tabs/home.html",
@@ -40,12 +45,16 @@ export default async function getManifest() {
     //   extension_pages:
     //     "default-src http://localhost:* 'self';script-src http://localhost:* 'self'; object-src 'none'",
     // },
-    // content_scripts: [
-    //   {
-    //     matches: ["http://*/*", "https://*/*"],
-    //     js: ["./dist/contentScripts/index.global.js"],
-    //   },
-    // ],
+    content_scripts: [
+      {
+        matches: ["http://*/*", "https://*/*"],
+        js: ["./dist/contentScripts/index.global.js"],
+      },
+      {
+        matches: ["*://*.youtube.com/watch*"],
+        js: ["./dist/contentScripts/youtube.js"],
+      },
+    ],
     // web_accessible_resources: ["dist/contentScripts/style.css"],
   };
   const SHA256 =

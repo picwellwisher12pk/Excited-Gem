@@ -5,9 +5,7 @@ import {
 } from './scripts/browserActions'
 import { preferences } from './scripts/defaultPreferences'
 
-
-
-
+console.log("DEBUG: Background script loaded");
 
 function onRemoved(tabId, removeInfo) {
   getTabs().then((tabs) => {
@@ -90,7 +88,49 @@ chrome.action.onClicked.addListener(async (tab) => {
       width: 450,
       height: 600
     });
-  } else {
     await openInTab(extensionUrl, tabManagementMode, tab.windowId);
   }
 });
+
+// Store YouTube video information by tab ID
+const youtubeVideoInfo = new Map<number, any>();
+
+// Restore state from storage on startup
+chrome.storage.local.get('youtubeInfoMap').then(({ youtubeInfoMap }) => {
+  if (youtubeInfoMap) {
+    Object.entries(youtubeInfoMap).forEach(([tabId, info]) => {
+      youtubeVideoInfo.set(Number(tabId), info);
+    });
+    console.log('DEBUG: Restored youtubeVideoInfo from storage:', youtubeVideoInfo);
+  }
+});
+
+// Listen for messages from content scripts
+chrome.runtime.onMessage.addListener((message, sender, sendResponse) => {
+  // Handle messages from YouTube content script
+  if (message.type === "YOUTUBE_VIDEO_INFO" && sender.tab?.id) {
+    console.log("DEBUG: Background received YOUTUBE_VIDEO_INFO", message.data);
+    const tabId = sender.tab.id;
+    message.data.tabId = tabId;
+    youtubeVideoInfo.set(tabId, message.data);
+
+    // Store in local storage so UI components can pick it up
+    chrome.storage.local.set({ youtubeInfoMap: Object.fromEntries(youtubeVideoInfo) });
+  }
+
+  // Handle requests for YouTube info
+  if (message.type === "GET_ALL_YOUTUBE_INFO") {
+    sendResponse(Array.from(youtubeVideoInfo.entries()));
+    return true;
+  }
+});
+
+// Clean up data when a tab is closed
+chrome.tabs.onRemoved.addListener((tabId) => {
+  if (youtubeVideoInfo.has(tabId)) {
+    youtubeVideoInfo.delete(tabId);
+    chrome.storage.local.set({ youtubeInfoMap: Object.fromEntries(youtubeVideoInfo) });
+  }
+});
+
+// Dynamic Content Script Registration removed as we are using host_permissions and static declaration

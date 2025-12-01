@@ -14,7 +14,12 @@
     "tabs",
     "tabGroups",
     "unlimitedStorage",
-    "sidePanel"
+    "sidePanel",
+    "scripting"
+  ],
+  "host_permissions": [
+    "https://*.youtube.com/*",
+    "http://*.youtube.com/*"
   ],
   "{{chrome}}.action": {
     "default_icon": {
@@ -30,9 +35,9 @@
     "default_popup": "src/popup.html"
   },
   "background": {
-    "{{chrome}}.service_worker": "src/background.js",
+    "{{chrome}}.service_worker": "src/background.ts",
     "{{firefox}}.scripts": [
-      "src/background.js"
+      "src/background.ts"
     ]
   }
 }

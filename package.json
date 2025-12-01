@@ -112,7 +112,11 @@
     ],
     "side_panel": {
       "default_path": "tabs/home.html"
-    }
+    },
+    "host_permissions": [
+      "https://*.youtube.com/*",
+      "http://*.youtube.com/*"
+    ]
   },
   "nodemonConfig": {
     "ignore": [

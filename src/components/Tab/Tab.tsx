@@ -1,6 +1,9 @@
-import { List } from 'antd'
-import React from 'react'
+import { List, Button, Tooltip } from 'antd'
+import type { CheckboxChangeEvent } from 'antd/es/checkbox';
+import { CloseOutlined, PlayCircleOutlined, PauseCircleOutlined } from '@ant-design/icons'
+import React, { useState, useEffect } from 'react'
 import parse from 'html-react-parser'
+import { controlYouTubeVideo } from '~/services/tabService';
 import { useDispatch, useSelector } from 'react-redux'
 import { Pin, Volume2, VolumeX, X } from 'lucide-react'
 import { updateSelectedTabs } from '../../store/tabSlice'
@@ -13,6 +16,15 @@ import { faviconCache } from '~/utils/faviconCache'
 interface MutedInfo {
   muted: boolean;
   reason?: string;
+}
+
+export interface YouTubeInfo {
+  duration: number;
+  currentTime: number;
+  paused: boolean;
+  title: string;
+  percentage: number;
+  tabId: number;
 }
 
 export interface TabProps {
@@ -35,6 +47,7 @@ export interface TabProps {
   tabActionButtons?: 'always' | 'hover';
   groupColor?: string;
   isGrouped?: boolean;
+  youtubeInfo?: YouTubeInfo; // Added youtubeInfo to TabProps
 }
 
 interface SearchState {
@@ -62,13 +75,80 @@ export function Tab({
   url = '',
   tabActionButtons = 'hover',
   groupColor,
-  isGrouped
+  isGrouped,
+  youtubeInfo
 }: Readonly<TabProps>) {
   // console.log('📌 Tab component rendering:', id, title);
 
   const dispatch = useDispatch()
   const { searchTerm, searchIn } = useSelector<{ search: SearchState }, SearchState>(state => state.search)
+  const youtubePermissionGranted = useSelector((state: any) => state.tabs.youtubePermissionGranted);
+  // Helper function to format time in HH:MM:SS or MM:SS
+  const formatTime = (seconds: number): string => {
+    if (isNaN(seconds)) return '0:00';
+    const hrs = Math.floor(seconds / 3600);
+    const mins = Math.floor((seconds % 3600) / 60);
+    const secs = Math.floor(seconds % 60);
+    if (hrs > 0) {
+      return `${hrs}:${mins.toString().padStart(2, '0')}:${secs.toString().padStart(2, '0')}`;
+    }
+    return `${mins}:${secs.toString().padStart(2, '0')}`;
+  };
+
   const ref = React.useRef<HTMLDivElement>(null)
+
+  const [seekValue, setSeekValue] = useState<number>(0);
+  const [isYouTube, setIsYouTube] = useState<boolean>(false);
+
+  // Update seekValue when youtubeInfo changes
+  useEffect(() => {
+    if (youtubeInfo) {
+      setSeekValue(youtubeInfo.percentage);
+      setIsYouTube(true);
+    } else if (url && url.includes("youtube.com/watch")) {
+      setIsYouTube(true);
+    } else {
+      setIsYouTube(false);
+    }
+  }, [youtubeInfo, url]);
+
+  const handlePlayPause = async (e: React.MouseEvent) => {
+    e.stopPropagation();
+    if (youtubeInfo) {
+      try {
+        const action = youtubeInfo.paused ? 'play' : 'pause';
+        await controlYouTubeVideo(id, action);
+      } catch (error) {
+        console.error('Error controlling YouTube playback:', error);
+      }
+    }
+  };
+
+  const handleSeek = async (value: number) => {
+    if (youtubeInfo) {
+      try {
+        setSeekValue(value);
+        await controlYouTubeVideo(id, 'seek', value);
+      } catch (error) {
+        console.error('Error seeking YouTube video:', error);
+      }
+    }
+  };
+
+  const handleRequestPermission = async (e: React.MouseEvent) => {
+    e.stopPropagation();
+    try {
+      const granted = await chrome.permissions.request({
+        origins: ["https://*.youtube.com/*", "http://*.youtube.com/*"]
+      });
+      if (granted) {
+        // Permission granted, background script should handle injection
+        console.log('YouTube permission granted');
+      }
+    } catch (error) {
+      console.error('Error requesting permission:', error);
+    }
+  };
 
   // Event handlers
   const handleSelectedTabsUpdate = React.useCallback(() => {
@@ -149,6 +229,83 @@ export function Tab({
               {parse(markedUrl)}
             </button>
           </div>
+          {/* YouTube Video Controls */}
+          {isYouTube && (
+            <>
+              {youtubeInfo ? (
+                <div
+                  className="flex items-center ml-2 mr-2"
+                  style={{ minWidth: 180, maxWidth: 240, width: 220 }}
+                  onClick={(e) => e.stopPropagation()}
+                >
+                  <Button
+                    type="text"
+                    size="small"
+                    onClick={handlePlayPause}
+                    icon={youtubeInfo.paused ? (
+                      <PlayCircleOutlined style={{ color: '#ff0000', fontSize: 16 }} />
+                    ) : (
+                      <PauseCircleOutlined style={{ color: '#ff0000', fontSize: 16 }} />
+                    )}
+                    style={{ width: 24, height: 24, padding: 0, marginRight: 4 }}
+                    aria-label={youtubeInfo.paused ? 'Play' : 'Pause'}
+                  />
+                  <span className="text-xs text-gray-500 mr-1 min-w-[36px] text-right" style={{ width: 36 }}>
+                    {formatTime(youtubeInfo.currentTime)}
+                  </span>
+                  <input
+                    type="range"
+                    min={0}
+                    max={100}
+                    step={0.1}
+                    value={seekValue}
+                    onChange={e => handleSeek(Number(e.target.value))}
+                    className="youtube-seekbar"
+                    style={{
+                      width: '90px',
+                      height: '1px',
+                      background: `linear-gradient(to right, #ff0000 0%, #ff0000 ${seekValue}%, #ccc ${seekValue}%, #ccc 100%)`,
+                      margin: '0 6px',
+                      padding: 0,
+                      WebkitAppearance: 'none',
+                    }}
+                  />
+                  <style>{`
+                    input.youtube-seekbar::-webkit-slider-thumb {
+                      -webkit-appearance: none;
+                      appearance: none;
+                      width: 6px;
+                      height: 6px;
+                      background: #ff0000;
+                      border-radius: 6px;
+                      cursor: pointer;
+                      margin-top: -3px;
+                    }
+                    input.youtube-seekbar::-webkit-slider-runnable-track {
+                      height: 1px;
+                      background: transparent;
+                    }
+                  `}</style>
+                  <span className="text-xs text-gray-500 ml-1 min-w-[36px] text-left" style={{ width: 36 }}>
+                    {formatTime(youtubeInfo.duration)}
+                  </span>
+                </div>
+              ) : (
+                !youtubePermissionGranted && (
+                  <Button
+                    size="small"
+                    type="text"
+                    onClick={handleRequestPermission}
+                    className="ml-2 text-xs text-gray-500 hover:text-red-600 flex items-center"
+                    icon={<PlayCircleOutlined />}
+                  >
+                    Enable Controls
+                  </Button>
+                )
+              )}
+            </>
+          )}
+
           <div
             className={`tab-actions flex align-self-center justify-self-end ms-3 gap-2 shrink-0 transition-opacity duration-200 ${tabActionButtons === 'hover' ? 'opacity-0 group-hover:opacity-100' : 'opacity-100'
               } ${audible || mutedInfo.muted ? '!opacity-100' : ''}`}
@@ -185,6 +342,8 @@ export function Tab({
               </>
             )}
           </div>
+
+
         </div>
       </TabContextMenu>
     </List.Item>

@@ -17,15 +17,41 @@ import Search from '~/components/Search'
 import Sidebar from '~/components/Sidebar'
 import { usePageTracking } from '~/components/Analytics/usePageTracking'
 
-export function updateTabs(getTabs, store) {
-  getTabs(store.getState().tabs.selectedWindow).then((tabs) => {
-    console.log(
-      'inside updatetabs function:',
-      tabs,
-      store.getState().tabs.selectedWindow
-    )
-    const processed = tabs.map((tab) => {
-      const {
+export async function updateTabs(getTabs, store) {
+  const tabs = await getTabs(store.getState().tabs.selectedWindow);
+
+  // Fetch YouTube info from storage
+  const { youtubeInfoMap } = await chrome.storage.local.get('youtubeInfoMap');
+  console.log('DEBUG: youtubeInfoMap from storage:', youtubeInfoMap);
+
+  console.log(
+    'inside updatetabs function:',
+    tabs,
+    store.getState().tabs.selectedWindow
+  )
+  const processed = tabs.map((tab) => {
+    const {
+      audible,
+      discarded,
+      favIconUrl,
+      id,
+      index,
+      mutedInfo,
+      pinned,
+      status,
+      title,
+      url,
+      windowId,
+      groupId
+    } = tab
+    if (url) {
+      // Merge YouTube info if available
+      const youtubeInfo = youtubeInfoMap && youtubeInfoMap[id] ? youtubeInfoMap[id] : undefined;
+      if (youtubeInfo) {
+        console.log(`DEBUG: Found YouTube info for tab ${id}:`, youtubeInfo);
+      }
+
+      return {
         audible,
         discarded,
         favIconUrl,
@@ -36,31 +62,16 @@ export function updateTabs(getTabs, store) {
         status,
         title,
         url,
+        groupId,
         windowId,
-        groupId
-      } = tab
-      if (url) {
-        return {
-          audible,
-          discarded,
-          favIconUrl,
-          id,
-          index,
-          mutedInfo,
-          pinned,
-          status,
-          title,
-          url,
-          groupId,
-          windowId
-        }
+        youtubeInfo // Add youtubeInfo to the tab object
       }
-      return null
-    }).filter(Boolean)
-    // Update both active and filtered tabs so UI shows the list initially
-    store.dispatch(updateActiveTabs(processed))
-    store.dispatch(updateFilteredTabs(processed))
-  })
+    }
+    return null
+  }).filter(Boolean)
+  // Update both active and filtered tabs so UI shows the list initially
+  store.dispatch(updateActiveTabs(processed))
+  store.dispatch(updateFilteredTabs(processed))
 }
 
 // Listen to tab events
@@ -82,8 +93,43 @@ store.subscribe(() => {
   }
 })
 
+// Listen for YouTube info changes in storage
+chrome.storage.onChanged.addListener((changes, area) => {
+  if (area === 'local' && changes.youtubeInfoMap) {
+    const newValue = changes.youtubeInfoMap.newValue;
+    if (newValue) {
+      console.log('DEBUG: Storage changed youtubeInfoMap:', newValue);
+      Object.values(newValue).forEach((info: any) => {
+        store.dispatch({
+          type: 'tabs/updateYouTubeInfo',
+          payload: { tabId: info.tabId, info }
+        });
+      });
+    }
+  }
+});
+
+// Check and listen for YouTube permission
+const checkYouTubePermission = () => {
+  chrome.permissions.contains({ origins: ["https://*.youtube.com/*", "http://*.youtube.com/*"] }, (result) => {
+    store.dispatch({ type: 'tabs/updateYouTubePermission', payload: result });
+  });
+};
+
+checkYouTubePermission();
+chrome.permissions.onAdded.addListener(checkYouTubePermission);
+chrome.permissions.onRemoved.addListener(checkYouTubePermission);
+
 // Initial load
-updateTabs(getTabs, store)
+// Get current window ID and update store, then fetch tabs
+chrome.windows.getCurrent().then(window => {
+  if (window.id) {
+    store.dispatch({ type: 'tabs/updateSelectedWindow', payload: window.id });
+    updateTabs(getTabs, store);
+  } else {
+    updateTabs(getTabs, store);
+  }
+});
 
 const ActiveTabs = () => {
   usePageTracking('/tabs', 'Active Tabs')
