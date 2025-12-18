@@ -223,6 +223,9 @@ export default function Header({
 
 
         <Space className="mr-1">
+          <div>
+            <MoreActionsMenu />
+          </div>
           <Btn
             title="Refresh View"
             onClick={() => { }}
@@ -237,9 +240,6 @@ export default function Header({
               title={!allMuted ? 'Mute All Visible Tabs' : 'Unmute All Visible Tabs'}>
               {iconSound}
             </Btn>
-          </div>
-          <div>
-            <MoreActionsMenu />
           </div>
         </Space>
       </section>

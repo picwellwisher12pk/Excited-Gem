@@ -5,7 +5,7 @@ import React, { useState, useEffect } from 'react'
 import parse from 'html-react-parser'
 import { controlYouTubeVideo } from '~/services/tabService';
 import { useDispatch, useSelector } from 'react-redux'
-import { Pin, Volume2, VolumeX, X } from 'lucide-react'
+import { Pin, Volume2, VolumeX, X, Moon } from 'lucide-react'
 import { updateSelectedTabs } from '../../store/tabSlice'
 import ItemBtn from '../ItemBtn'
 import { TabIcon } from './TabIcon'
@@ -31,6 +31,7 @@ export interface TabProps {
   id: number;
   title: string;
   url: string;
+  active: boolean; // Add active prop
   selected: boolean;
   pinned: boolean;
   discarded: boolean;
@@ -47,6 +48,7 @@ export interface TabProps {
   tabActionButtons?: 'always' | 'hover';
   groupColor?: string;
   isGrouped?: boolean;
+  discardTab?: (id: number) => void;
   youtubeInfo?: YouTubeInfo; // Added youtubeInfo to TabProps
 }
 
@@ -60,7 +62,8 @@ interface SearchState {
 
 export function Tab({
   id,
-  activeTab,
+  active, // Add active to destructured props
+  activeTab, // Note: activeTab is passed as 'true' from parent, likely meaning 'enable actions'
   remove,
   toggleMuteTab,
   togglePinTab,
@@ -76,6 +79,7 @@ export function Tab({
   tabActionButtons = 'hover',
   groupColor,
   isGrouped,
+  discardTab,
   youtubeInfo
 }: Readonly<TabProps>) {
   // console.log('📌 Tab component rendering:', id, title);
@@ -311,12 +315,26 @@ export function Tab({
               } ${audible || mutedInfo.muted ? '!opacity-100' : ''}`}
             role="group"
             aria-label={`Actions for tab: ${title}`}>
+            {/* Discard button: show only if tab is NOT already discarded */}
+            {!discarded && (
+              <ItemBtn
+                title="Discard Tab"
+                aria-label={`Discard tab: ${title}`}
+                onClick={(e) => {
+                  e.stopPropagation();
+                  discardTab?.(id);
+                }}
+                className="rounded-full !bg-slate-300 hover:!bg-slate-400 !border-0 !shadow-none w-7 h-7 !min-w-0 flex items-center justify-center transition-colors"
+              >
+                <Moon size={14} className="text-slate-500" />
+              </ItemBtn>
+            )}
             {(audible || mutedInfo.muted) && (
               <ItemBtn
                 title={mutedInfo.muted ? "Unmute Tab" : "Mute Tab"}
                 aria-label={`${mutedInfo.muted ? 'Unmute' : 'Mute'} tab: ${title}`}
                 onClick={handleMuteTab}
-                className="rounded-full !bg-slate-200 hover:!bg-slate-300 !border-0 !shadow-none w-7 h-7 flex items-center justify-center"
+                className="rounded-full !bg-slate-300 hover:!bg-slate-400 !border-0 !shadow-none w-7 h-7 !min-w-0 flex items-center justify-center transition-colors"
               >
                 {mutedInfo.muted ? <VolumeX size={14} /> : <Volume2 size={14} />}
               </ItemBtn>
@@ -327,7 +345,7 @@ export function Tab({
                   title={pinned ? "Unpin Tab" : "Pin Tab"}
                   aria-label={`${pinned ? 'Unpin' : 'Pin'} tab: ${title}`}
                   onClick={handlePinTab}
-                  className="rounded-full !bg-slate-200 hover:!bg-slate-300 !border-0 !shadow-none w-7 h-7 flex items-center justify-center"
+                  className="rounded-full !bg-slate-300 hover:!bg-slate-400 !border-0 !shadow-none w-7 h-7 !min-w-0 flex items-center justify-center transition-colors"
                 >
                   <Pin size={14} className={pinned ? "fill-current" : ""} />
                 </ItemBtn>
@@ -335,7 +353,7 @@ export function Tab({
                   title="Close Tab"
                   aria-label={`Close tab: ${title}`}
                   onClick={handleRemove}
-                  className="rounded-full !bg-slate-200 hover:!bg-slate-300 !border-0 !shadow-none group w-7 h-7 flex items-center justify-center"
+                  className="rounded-full !bg-slate-300 hover:!bg-slate-400 !border-0 !shadow-none group w-7 h-7 !min-w-0 flex items-center justify-center transition-colors"
                 >
                   <X size={14} className="text-red-500 group-hover:text-red-600" />
                 </ItemBtn>

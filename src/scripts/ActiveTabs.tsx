@@ -31,6 +31,7 @@ export async function updateTabs(getTabs, store) {
   )
   const processed = tabs.map((tab) => {
     const {
+      active,
       audible,
       discarded,
       favIconUrl,
@@ -52,6 +53,7 @@ export async function updateTabs(getTabs, store) {
       }
 
       return {
+        active,
         audible,
         discarded,
         favIconUrl,

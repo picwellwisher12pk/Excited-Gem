@@ -68,6 +68,9 @@ function useTabOperations() {
     },
     togglePinTab: (itemId: number, status: boolean) => {
       chrome.tabs.update(itemId, { pinned: !status })
+    },
+    discardTab: (itemId: number) => {
+      chrome.tabs.discard(itemId)
     }
   }
 }
