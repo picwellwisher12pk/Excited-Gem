@@ -1,18 +1,21 @@
 import React, { useEffect, useState } from 'react';
 import { Provider } from 'react-redux';
-import { Card, Radio, Space, Typography, message, ConfigProvider } from 'antd';
+import { Card, Radio, Space, Typography, message, ConfigProvider, Checkbox } from 'antd';
 import Sidebar, { SidebarToggleButton } from '~/components/Sidebar';
 import Brand from '~/components/Header/Brand';
 import logo from '~/assets/logo.svg';
 import store from '~/store/store';
 import { usePageTracking } from '~/components/Analytics/usePageTracking';
+import { useDispatch, useSelector } from 'react-redux';
+import { toggleRegex, toggleSearchIn } from '~/store/searchSlice';
 import 'antd/dist/reset.css';
-import '~/styles/index.css';
 import '~/styles/index.css';
 
 const { Title, Text } = Typography;
 
 function SettingsPageContent() {
+    const dispatch = useDispatch();
+    const { regex, searchIn } = useSelector((state: any) => state.search);
     const [sessionsView, setSessionsView] = useState<'compact' | 'expanded'>('compact');
     const [displayMode, setDisplayMode] = useState<'sidebar' | 'tab' | 'popup'>('sidebar');
     const [tabManagementMode, setTabManagementMode] = useState<'single' | 'per-window'>('single');
@@ -24,25 +27,13 @@ function SettingsPageContent() {
     usePageTracking('/settings', 'Settings');
 
     useEffect(() => {
-        chrome.storage.local.get(['sessionsView', 'displayMode', 'tabManagementMode', 'searchBehavior'], (result) => {
-            if (result.sessionsView) {
-                setSessionsView(result.sessionsView);
-            }
-            if (result.displayMode) {
-                setDisplayMode(result.displayMode);
-            }
-            if (result.tabManagementMode) {
-                setTabManagementMode(result.tabManagementMode);
-            }
-            if (result.searchBehavior) {
-                setSearchBehavior(result.searchBehavior);
-            }
-            if (result.groupedTabs !== undefined) {
-                setGroupedTabs(result.groupedTabs);
-            }
-            if (result.tabActionButtons) {
-                setTabActionButtons(result.tabActionButtons);
-            }
+        chrome.storage.local.get(['sessionsView', 'displayMode', 'tabManagementMode', 'searchBehavior', 'groupedTabs', 'tabActionButtons'], (result) => {
+            if (result.sessionsView) setSessionsView(result.sessionsView);
+            if (result.displayMode) setDisplayMode(result.displayMode);
+            if (result.tabManagementMode) setTabManagementMode(result.tabManagementMode);
+            if (result.searchBehavior) setSearchBehavior(result.searchBehavior);
+            if (result.groupedTabs !== undefined) setGroupedTabs(result.groupedTabs);
+            if (result.tabActionButtons) setTabActionButtons(result.tabActionButtons);
         });
     }, []);
 
@@ -131,7 +122,7 @@ function SettingsPageContent() {
                                                 </Radio>
                                                 <Radio value="tab">
                                                     <div>
-                                                        <div className="font-medium">New Tab</div>
+                                                        <div className="font-medium">Tab</div>
                                                         <Text type="secondary" className="text-xs">
                                                             Open in a new tab
                                                         </Text>
@@ -149,34 +140,38 @@ function SettingsPageContent() {
                                         </Radio.Group>
                                     </div>
                                 </div>
-                                <div>
-                                    <Text strong>Tab Management Mode</Text>
-                                    <div className="mt-2">
-                                        <Radio.Group
-                                            value={tabManagementMode}
-                                            onChange={(e) => handleTabManagementModeChange(e.target.value)}
-                                        >
-                                            <Space direction="vertical">
-                                                <Radio value="single">
-                                                    <div>
-                                                        <div className="font-medium">Single Extension Tab</div>
-                                                        <Text type="secondary" className="text-xs">
-                                                            Maintain one extension tab across all windows
-                                                        </Text>
-                                                    </div>
-                                                </Radio>
-                                                <Radio value="per-window">
-                                                    <div>
-                                                        <div className="font-medium">Per Window</div>
-                                                        <Text type="secondary" className="text-xs">
-                                                            Allow one extension tab per browser window
-                                                        </Text>
-                                                    </div>
-                                                </Radio>
-                                            </Space>
-                                        </Radio.Group>
+
+                                {displayMode === 'tab' && (
+                                    <div>
+                                        <Text strong>Tab Management Mode</Text>
+                                        <div className="mt-2">
+                                            <Radio.Group
+                                                value={tabManagementMode}
+                                                onChange={(e) => handleTabManagementModeChange(e.target.value)}
+                                            >
+                                                <Space direction="vertical">
+                                                    <Radio value="single">
+                                                        <div>
+                                                            <div className="font-medium">Single Extension Tab</div>
+                                                            <Text type="secondary" className="text-xs">
+                                                                Maintain one extension tab across all windows
+                                                            </Text>
+                                                        </div>
+                                                    </Radio>
+                                                    <Radio value="per-window">
+                                                        <div>
+                                                            <div className="font-medium">Per Window</div>
+                                                            <Text type="secondary" className="text-xs">
+                                                                Allow one extension tab per browser window
+                                                            </Text>
+                                                        </div>
+                                                    </Radio>
+                                                </Space>
+                                            </Radio.Group>
+                                        </div>
                                     </div>
-                                </div>
+                                )}
+
                                 <div>
                                     <Text strong>Sessions View Mode</Text>
                                     <div className="mt-2">
@@ -292,6 +287,36 @@ function SettingsPageContent() {
                                                 </Radio>
                                             </Space>
                                         </Radio.Group>
+                                    </div>
+                                </div>
+                                <div>
+                                    <Text strong>Search in</Text>
+                                    <div className="mt-2">
+                                        <Space>
+                                            <Checkbox
+                                                checked={searchIn.title}
+                                                onChange={() => dispatch(toggleSearchIn({ ...searchIn, title: !searchIn.title }))}
+                                            >
+                                                Title
+                                            </Checkbox>
+                                            <Checkbox
+                                                checked={searchIn.url}
+                                                onChange={() => dispatch(toggleSearchIn({ ...searchIn, url: !searchIn.url }))}
+                                            >
+                                                URL
+                                            </Checkbox>
+                                        </Space>
+                                    </div>
+                                </div>
+                                <div>
+                                    <Text strong>Regular Expression Search</Text>
+                                    <div className="mt-2">
+                                        <Space>
+                                            <Radio.Group value={regex} onChange={() => dispatch(toggleRegex())}>
+                                                <Radio value={true}>Enabled</Radio>
+                                                <Radio value={false}>Disabled</Radio>
+                                            </Radio.Group>
+                                        </Space>
                                     </div>
                                 </div>
                             </Space>

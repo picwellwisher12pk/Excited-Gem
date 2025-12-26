@@ -65,31 +65,14 @@ async function openInTab(url: string, mode: 'single' | 'per-window', currentWind
 }
 
 chrome.action.onClicked.addListener(async (tab) => {
-  const { displayMode = 'sidebar', tabManagementMode = 'single' } = await chrome.storage.local.get(['displayMode', 'tabManagementMode']);
+  // If openPanelOnActionClick is true (sidebar mode), this listener will NOT fire.
+  // If popup is set (popup mode), this listener will NOT fire.
+  // So this only fires for 'tab' mode or fallback.
+  const { tabManagementMode = 'single' } = await chrome.storage.local.get(['tabManagementMode']);
   const extensionUrl = chrome.runtime.getURL('/tabs/home.html');
 
-  if (displayMode === 'sidebar') {
-    // @ts-ignore - sidePanel types might be missing
-    if (chrome.sidePanel && chrome.sidePanel.open) {
-      try {
-        // @ts-ignore
-        await chrome.sidePanel.open({ windowId: tab.windowId });
-      } catch (error) {
-        console.error('Failed to open side panel:', error);
-        await openInTab(extensionUrl, tabManagementMode, tab.windowId);
-      }
-    } else {
-      await openInTab(extensionUrl, tabManagementMode, tab.windowId);
-    }
-  } else if (displayMode === 'popup') {
-    await chrome.windows.create({
-      url: extensionUrl,
-      type: 'popup',
-      width: 450,
-      height: 600
-    });
-    await openInTab(extensionUrl, tabManagementMode, tab.windowId);
-  }
+  console.log('DEBUG: onClicked fired. Assuming Tab Mode.');
+  await openInTab(extensionUrl, tabManagementMode, tab.windowId);
 });
 
 // Store YouTube video information by tab ID
@@ -130,6 +113,44 @@ chrome.tabs.onRemoved.addListener((tabId) => {
   if (youtubeVideoInfo.has(tabId)) {
     youtubeVideoInfo.delete(tabId);
     chrome.storage.local.set({ youtubeInfoMap: Object.fromEntries(youtubeVideoInfo) });
+  }
+});
+
+// Update Action Popup state based on settings
+// Update Action Popup and SidePanel behavior based on settings
+const updateActionState = async (mode: string) => {
+  console.log('DEBUG: Updating action state to:', mode);
+
+  // 1. Configure SidePanel Behavior (if supported)
+  // @ts-ignore
+  if (chrome.sidePanel && chrome.sidePanel.setPanelBehavior) {
+    try {
+      // @ts-ignore
+      await chrome.sidePanel.setPanelBehavior({
+        openPanelOnActionClick: mode === 'sidebar'
+      });
+      console.log('DEBUG: setPanelBehavior success');
+    } catch (e) {
+      console.error('DEBUG: setPanelBehavior failed', e);
+    }
+  }
+
+  // 2. Configure Popup
+  if (mode === 'popup') {
+    await chrome.action.setPopup({ popup: 'tabs/home.html' });
+  } else {
+    // For 'sidebar' (native open) or 'tab' (handled by onClicked), remove popup
+    await chrome.action.setPopup({ popup: '' });
+  }
+};
+
+chrome.storage.local.get('displayMode').then(({ displayMode }) => {
+  updateActionState(displayMode || 'sidebar');
+});
+
+chrome.storage.onChanged.addListener((changes, area) => {
+  if (area === 'local' && changes.displayMode) {
+    updateActionState(changes.displayMode.newValue);
   }
 });
 

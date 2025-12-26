@@ -142,7 +142,7 @@ export default function Header({
   )
 
   return (
-    <header className="bg-gradient-to-t from-cyan-500 to-blue-500 p-2 transition-all duration-200 ease-in-out">
+    <header className="bg-gradient-to-t from-cyan-500 to-blue-500 p-1 transition-all duration-200 ease-in-out">
       <section className="flex w-full overflow-hidden items-center">
         <div className="flex-none flex items-center">
           {sidebarToggle && (
@@ -150,19 +150,21 @@ export default function Header({
               <SidebarToggleButton onClick={sidebarToggle} />
             </div>
           )}
-          {Brand(logo)}
+          <div className="hidden sm:block">
+            {Brand(logo)}
+          </div>
         </div>
         {children}
       </section>
       <section
         className="flex flex-row justify-between items-center mt-1"
         id="selection-action">
-        <div className="flex mb-0">
-          <div className="mr-3">
+        <div className="flex mb-0 overflow-x-auto sm:overflow-visible no-scrollbar">
+          <div className="mr-3 shrink-0">
             <Selection />
           </div>
-          <div>{sortButton}</div>
-          <div>
+          <div className="shrink-0 mr-3">{sortButton}</div>
+          <div className="hidden sm:block">
             <WindowSelector />
           </div>
         </div>
@@ -226,12 +228,7 @@ export default function Header({
           <div>
             <MoreActionsMenu />
           </div>
-          <Btn
-            title="Refresh View"
-            onClick={() => { }}
-            style={{ minWidth: 33 }}>
-            <RefreshCw size={14} />
-          </Btn>
+
           <div>
             <Btn
               onClick={() => {

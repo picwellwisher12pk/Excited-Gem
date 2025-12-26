@@ -1,12 +1,12 @@
 import { List, Button, Tooltip } from 'antd'
 import type { CheckboxChangeEvent } from 'antd/es/checkbox';
 import { CloseOutlined, PlayCircleOutlined, PauseCircleOutlined } from '@ant-design/icons'
-import React, { useState, useEffect } from 'react'
+import React, { useState, useEffect, useRef } from 'react'
 import parse from 'html-react-parser'
 import { controlYouTubeVideo } from '~/services/tabService';
 import { useDispatch, useSelector } from 'react-redux'
 import { Pin, Volume2, VolumeX, X, Moon } from 'lucide-react'
-import { updateSelectedTabs } from '../../store/tabSlice'
+import { toggleSelectionMode, updateSelectedTabs } from '~/store/tabSlice'
 import ItemBtn from '../ItemBtn'
 import { TabIcon } from './TabIcon'
 import { markSearchedTerm, renderAudioIcon } from './helpers'
@@ -50,7 +50,10 @@ export interface TabProps {
   isGrouped?: boolean;
   discardTab?: (id: number) => void;
   youtubeInfo?: YouTubeInfo; // Added youtubeInfo to TabProps
+  isCompact?: boolean; // Add isCompact prop
+  isSelectionMode?: boolean; // Add isSelectionMode prop
 }
+
 
 interface SearchState {
   searchTerm: string;
@@ -60,10 +63,12 @@ interface SearchState {
   };
 }
 
+
+
 export function Tab({
   id,
-  active, // Add active to destructured props
-  activeTab, // Note: activeTab is passed as 'true' from parent, likely meaning 'enable actions'
+  active,
+  activeTab,
   remove,
   toggleMuteTab,
   togglePinTab,
@@ -80,8 +85,37 @@ export function Tab({
   groupColor,
   isGrouped,
   discardTab,
-  youtubeInfo
+  youtubeInfo,
+  isCompact = false
 }: Readonly<TabProps>) {
+  // Long Press Logic
+  const longPressTimer = useRef<any>(null);
+
+  const handlePointerDown = (e: React.PointerEvent) => {
+    if (isSelectionMode || !isCompact) return; // Only trigger on compact mode when not yet in selection mode
+
+    // Start timer
+    longPressTimer.current = setTimeout(() => {
+      dispatch(toggleSelectionMode(true));
+      dispatch(updateSelectedTabs({ id, selected: true }));
+    }, 500); // 500ms long press
+  };
+
+  const handlePointerUp = () => {
+    if (longPressTimer.current) {
+      clearTimeout(longPressTimer.current);
+      longPressTimer.current = null;
+    }
+  };
+
+  const handlePointerLeave = () => {
+    if (longPressTimer.current) {
+      clearTimeout(longPressTimer.current);
+      longPressTimer.current = null;
+    }
+  };
+
+  // ... existing code ...
   // console.log('📌 Tab component rendering:', id, title);
 
   const dispatch = useDispatch()
@@ -103,6 +137,7 @@ export function Tab({
 
   const [seekValue, setSeekValue] = useState<number>(0);
   const [isYouTube, setIsYouTube] = useState<boolean>(false);
+  const { isSelectionMode } = useSelector((state: any) => state.tabs);
 
   // Update seekValue when youtubeInfo changes
   useEffect(() => {
@@ -199,18 +234,21 @@ export function Tab({
       key={id}
       id={String(id)}
       className={`
-        w-full overflow-hidden tab-item flex items-center pr-2 pl-2 py-2
+        w-full overflow-hidden tab-item flex items-center py-2
         hover:bg-slate-200 transition-colors duration-300
         border-b border-stone-100 !justify-start group
+        flex-col sm:flex-row min-h-[50px] sm:min-h-0
         ${selected ? ' checked bg-slate-100' : ''}
+        ${active ? 'border-l-4 border-l-blue-600 bg-blue-50' : ''}
         ${isLoading ? ' loading' : discardedClass}
-        ${isGrouped ? 'ml-4 border-l-4 bg-slate-50/50' : ''}
+        ${isGrouped && !active ? 'ml-4 border-l-4 bg-slate-50/50' : ''}
+        ${isGrouped && active ? 'ml-4' : ''}
       `}
-      style={isGrouped && groupColor ? { borderLeftColor: groupColor } : undefined}
+      style={isGrouped && groupColor && !active ? { borderLeftColor: groupColor } : undefined}
       data-discarded={discarded}
     >
       <TabContextMenu tab={{ id, title, url, pinned, mutedInfo, discarded }}>
-        <div className="flex w-full items-center">
+        <div className="flex w-full items-center items-stretch sm:items-center">
           <TabIcon
             onChange={handleSelectedTabsUpdate}
             checked={selected}
@@ -218,17 +256,23 @@ export function Tab({
             discarded={discarded}
             src={cachedFavicon}
             title={title}
+            isSelectionMode={isSelectionMode}
           />
-          <div className="flex flex-auto truncate">
+          <div className="flex flex-auto truncate flex-col justify-center ml-2">
             <span
-              className="truncate font-semibold align-self-center pr-2 shrink-0"
+              className="truncate font-semibold shrink-0"
               style={{ opacity: discarded || isLoading ? 0.7 : 1 }}
               title={url}>
               {parse(markedTitle)}
             </span>
+            {/* Mobile: Show URL below title */}
+            <span className="text-xs text-slate-400 truncate w-full text-left sm:hidden block leading-none">
+              {parse(markedUrl)}
+            </span>
+            {/* Desktop: Show URL next to title (hidden on mobile) */}
             <button
-              type="button"
-              className="cursor-pointer tab-url truncate text-zinc-400 align-self-center border-0 bg-transparent text-left italic grow-0 shrink"
+              className="text-xs text-slate-400 truncate w-full text-left hover:text-slate-600 transition-colors hidden sm:block"
+              title={url}
               onClick={handleTabClick}>
               {parse(markedUrl)}
             </button>
@@ -311,8 +355,14 @@ export function Tab({
           )}
 
           <div
-            className={`tab-actions flex align-self-center justify-self-end ms-3 gap-2 shrink-0 transition-opacity duration-200 ${tabActionButtons === 'hover' ? 'opacity-0 group-hover:opacity-100' : 'opacity-100'
-              } ${audible || mutedInfo.muted ? '!opacity-100' : ''}`}
+            className={`
+                tab-actions flex items-center bg-white/90 backdrop-blur-sm
+                transition-all duration-200 ease-out
+                ${tabActionButtons === 'always' ? 'opacity-100 translate-x-0' : 'opacity-0 translate-x-4 group-hover:opacity-100 group-hover:translate-x-0'}
+                absolute right-2 top-1/2 -translate-y-1/2 shadow-sm rounded-lg border border-slate-100
+                hidden sm:flex
+                ${audible || mutedInfo.muted ? '!opacity-100' : ''}
+              `}
             role="group"
             aria-label={`Actions for tab: ${title}`}>
             {/* Discard button: show only if tab is NOT already discarded */}
@@ -360,8 +410,6 @@ export function Tab({
               </>
             )}
           </div>
-
-
         </div>
       </TabContextMenu>
     </List.Item>

@@ -30,6 +30,7 @@ interface TabState {
   selectedTabs: number[];
   selectedWindow: number;
   youtubePermissionGranted: boolean;
+  isSelectionMode: boolean; // Add selection mode state
 }
 
 const initialState: TabState = {
@@ -38,6 +39,7 @@ const initialState: TabState = {
   selectedTabs: [],
   selectedWindow: chrome.windows?.WINDOW_ID_CURRENT || -1,
   youtubePermissionGranted: false,
+  isSelectionMode: false, // Default false
 };
 
 export const tabSlice = createSlice({
@@ -91,6 +93,14 @@ export const tabSlice = createSlice({
     updateYouTubePermission: (state, action) => {
       state.youtubePermissionGranted = action.payload;
     },
+    toggleSelectionMode: (state, action) => {
+      state.isSelectionMode = action.payload;
+      // If turning off, clear selection? Maybe not, user might want to keep selection but exit mode.
+      // For now, let's keep separate actions.
+      if (!action.payload) {
+        state.selectedTabs = []; // Clear selection when exiting mode? Review requirement.
+      }
+    },
   },
 });
 
@@ -105,6 +115,7 @@ export const {
   updateSelectedWindow,
   updateYouTubeInfo,
   updateYouTubePermission,
+  toggleSelectionMode,
 } = tabSlice.actions;
 
 export default tabSlice.reducer;

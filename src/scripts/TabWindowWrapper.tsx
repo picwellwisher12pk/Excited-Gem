@@ -18,6 +18,8 @@ import { asyncFilterTabs, getCurrentWindow } from './general'
 import { updateFilteredTabs } from '~/store/tabSlice'
 // @ts-ignore
 import { saveSession } from '~/components/getsetSessions'
+import { useResponsive } from '~/hooks/useResponsive';
+import { FloatingActionBar } from '~/components/FloatingActionBar';
 
 const MyLoader = ({ width }: { width: number }) => (
   <ContentLoader
@@ -94,7 +96,9 @@ const Row = ({ index, style, data }: { index: number; style: React.CSSProperties
     handleSaveTabGroup,
     handleDiscardTabGroup,
     handleCloseTabGroup,
-    handleFocusTabGroup
+    handleFocusTabGroup, // Restore handleFocusTabGroup
+    isCompact,
+    isSelectionMode,
   } = data;
 
   const item = displayItems[index];
@@ -139,6 +143,15 @@ const Row = ({ index, style, data }: { index: number; style: React.CSSProperties
     )
   }
 
+  if (item.type === 'domain-header') {
+    return (
+      <div style={style} className="px-4 py-2 bg-slate-100 flex items-center justify-between cursor-pointer border-b border-white" onClick={() => toggleGroup(`domain-${item.title}`)}>
+        <span className="font-bold text-slate-700">{item.title}</span>
+        <span className="text-xs text-slate-500 bg-slate-200 px-2 py-0.5 rounded-full">{item.count}</span>
+      </div>
+    )
+  }
+
   if (item.type === 'tab-group-header') {
     return (
       <div ref={setNodeRef} style={dndStyle}>
@@ -175,7 +188,8 @@ const Row = ({ index, style, data }: { index: number; style: React.CSSProperties
 
 function TabList() {
   const dispatch = useDispatch()
-  const { tabs, filteredTabs, selectedTabs, selectedWindow } = useSelector((state: RootState) => state.tabs)
+  const { tabs, filteredTabs, selectedTabs, selectedWindow, isSelectionMode } = useSelector((state: RootState) => state.tabs)
+  const { isCompact } = useResponsive(); // Add useResponsive
   const searchState = useSelector((state: RootState) => state.search)
   const tabOperations = useTabOperations()
   const [isLoading, setIsLoading] = React.useState(false)
@@ -183,7 +197,7 @@ function TabList() {
   const [groupedTabsSetting, setGroupedTabsSetting] = React.useState(true)
   const [tabActionButtonsSetting, setTabActionButtonsSetting] = React.useState<'always' | 'hover'>('hover')
   const [currentWindowId, setCurrentWindowId] = React.useState<number | null>(null)
-  const [collapsedGroups, setCollapsedGroups] = React.useState<Set<number>>(new Set())
+  const [collapsedGroups, setCollapsedGroups] = React.useState<Set<number | string>>(new Set())
   const [collapsedTabGroups, setCollapsedTabGroups] = React.useState<Set<number>>(new Set())
   const [tabGroups, setTabGroups] = React.useState<Record<number, chrome.tabGroups.TabGroup>>({})
 
@@ -196,9 +210,10 @@ function TabList() {
     useSensor(KeyboardSensor)
   )
 
-  const toggleGroup = (windowId: number) => {
+  const toggleGroup = (windowId: number | string) => {
     setCollapsedGroups(prev => {
       const next = new Set(prev)
+      // @ts-ignore
       if (next.has(windowId)) next.delete(windowId)
       else next.add(windowId)
       return next
@@ -535,7 +550,9 @@ function TabList() {
     handleSaveTabGroup,
     handleDiscardTabGroup,
     handleCloseTabGroup,
-    handleFocusTabGroup
+    handleFocusTabGroup,
+    isCompact, // Add isCompact
+    isSelectionMode // Add isSelectionMode
   }), [
     displayItems,
     collapsedGroups,
@@ -543,11 +560,12 @@ function TabList() {
     selectedTabs,
     tabActionButtonsSetting,
     tabOperations,
-    // Functions are stable or we don't care if they change (Row will re-render)
+    isCompact,
+    isSelectionMode
   ]);
 
   return (
-    <div className="absolute inset-0 pr-[10px] overflow-hidden">
+    <div className="absolute inset-0 overflow-hidden">
       <DndContext
         sensors={sensors}
         collisionDetection={closestCenter}
@@ -570,6 +588,7 @@ function TabList() {
           )}
         </SimpleAutoSizer>
       </DndContext>
+      <FloatingActionBar />
     </div>
   )
 }
