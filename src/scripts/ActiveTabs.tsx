@@ -6,6 +6,8 @@ import { useSelector } from 'react-redux'
 import store from '~/store/store'
 import { updateActiveTabs, updateFilteredTabs } from '~/store/tabSlice'
 import { getTabs } from "~/scripts/browserActions"
+import { extractVideoId } from '~/utils/youtube'
+
 
 import '~/assets/logo.svg'
 import '~/assets/dev-logo.svg'
@@ -21,7 +23,7 @@ export async function updateTabs(getTabs, store) {
   const tabs = await getTabs(store.getState().tabs.selectedWindow);
 
   // Fetch YouTube info from storage
-  const { youtubeInfoMap } = await chrome.storage.local.get('youtubeInfoMap');
+  const { youtubeInfoMap, youtubeApiCache } = await chrome.storage.local.get(['youtubeInfoMap', 'youtubeApiCache']);
   console.log('DEBUG: youtubeInfoMap from storage:', youtubeInfoMap);
 
   console.log(
@@ -47,7 +49,22 @@ export async function updateTabs(getTabs, store) {
     } = tab
     if (url) {
       // Merge YouTube info if available
-      const youtubeInfo = youtubeInfoMap && youtubeInfoMap[id] ? youtubeInfoMap[id] : undefined;
+      let youtubeInfo = youtubeInfoMap && youtubeInfoMap[url] ? youtubeInfoMap[url] : undefined;
+
+      if (!youtubeInfo && url.includes('youtube.com/watch')) {
+        const videoId = extractVideoId(url);
+        if (videoId && youtubeApiCache && youtubeApiCache[videoId]) {
+          const apiInfo = youtubeApiCache[videoId];
+          youtubeInfo = {
+            title: apiInfo.title,
+            duration: apiInfo.duration,
+            currentTime: 0,
+            paused: true,
+            percentage: 0
+          };
+        }
+      }
+
       if (youtubeInfo) {
         console.log(`DEBUG: Found YouTube info for tab ${id}:`, youtubeInfo);
       }
@@ -97,16 +114,16 @@ store.subscribe(() => {
 
 // Listen for YouTube info changes in storage
 chrome.storage.onChanged.addListener((changes, area) => {
-  if (area === 'local' && changes.youtubeInfoMap) {
-    const newValue = changes.youtubeInfoMap.newValue;
-    if (newValue) {
-      console.log('DEBUG: Storage changed youtubeInfoMap:', newValue);
-      Object.values(newValue).forEach((info: any) => {
-        store.dispatch({
-          type: 'tabs/updateYouTubeInfo',
-          payload: { tabId: info.tabId, info }
-        });
-      });
+  if (area === 'local') {
+    if (changes.youtubeInfoMap) {
+      const newValue = changes.youtubeInfoMap.newValue;
+      if (newValue) {
+        // console.log('DEBUG: Storage changed youtubeInfoMap:', newValue);
+        updateTabs(getTabs, store);
+      }
+    }
+    if (changes.youtubeApiCache) {
+      updateTabs(getTabs, store);
     }
   }
 });
