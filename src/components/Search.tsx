@@ -1,4 +1,4 @@
-import { Checkbox, Input, Popover, message } from 'antd'
+import { Input, message } from 'antd'
 import { debounce } from 'lodash'
 import React, { memo, useCallback, useEffect, useState } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
@@ -62,60 +62,25 @@ const Search = () => {
     []
   )
 
-  const toggleSearchInHandle = (param, event) => {
-    const newSearchIn = { ...searchIn, [param]: !searchIn[param] }
-    if (Object.values(newSearchIn).every((v) => v === false)) {
-      event.preventDefault()
-      message.warning(
-        "At least one search field must remain active. Please keep either Title or URL checked."
-      )
-      event.target.checked = true
-      return false
-    }
-    dispatch(toggleSearchIn(newSearchIn))
-  }
-  const content = (
-    <div>
-      <p>
-        <label>
-          <Checkbox
-            checked={searchIn.title}
-            onChange={(e) => toggleSearchInHandle('title', e)}
-          />{' '}
-          Title
-        </label>
-      </p>
-      <p className="mb-0 pb-0">
-        <label>
-          <Checkbox
-            checked={searchIn.url}
-            onChange={(e) => toggleSearchInHandle('url', e)}
-          />{' '}
-          URL
-        </label>
-      </p>
-    </div>
-  )
-
   return (
     <ErrorBoundary>
       <div className="flex-1 ml-4 min-w-0 flex items-center gap-2 overflow-hidden">
         <AntSearch
-          className="!w-3/4 !ml-auto !ms-auto"
+          className="flex-1 w-full !ml-auto !ms-auto"
           id="search-field"
           ref={searchField}
           onKeyUp={handleKeyUp}
           prefix={
             regex ? (
-              <span className="text-zinc-300">/</span>
+              <span className="text-zinc-300 hidden sm:inline">/</span>
             ) : (
-              <span className="text-white">/</span>
+              <span className="text-white hidden sm:inline">/</span>
             )
           }
           suffix={
             <div className="flex items-center">
               {searchTerm && (
-                <span className="text-zinc-400 max-w-[100px] truncate inline-block align-middle mr-2">
+                <span className="text-zinc-400 max-w-[100px] truncate inline-block align-middle mr-2 hidden sm:inline-block">
                   {filteredTabs.length + ' found'}
                 </span>
               )}
@@ -148,30 +113,13 @@ const Search = () => {
                   )}
                 </button>
 
-                <label htmlFor="regex-checkbox" className="flex items-center cursor-pointer select-none">
-                  <Checkbox
-                    id="regex-checkbox"
-                    defaultChecked={regex}
-                    onChange={() => dispatch(toggleRegex())}
-                    aria-label="Enable regex"
-                    className="mr-1"
-                  />
-                  <span className="text-xs text-zinc-500">Regex</span>
-                </label>
 
-                <Popover content={content} trigger="click">
-                  <button
-                    type="button"
-                    className="bg-transparent border-0 text-blue-600 cursor-pointer hover:underline text-xs whitespace-nowrap p-0"
-                    aria-label="Search options">
-                    Search in
-                  </button>
-                </Popover>
+
               </div>
             </div>
           }
           placeholder={placeholder}
-          autoFocus
+          autoFocus={true}
           onChange={(e) => {
             if (searchBehavior === 'debounce') {
               debouncedUpdate(e.target.value)

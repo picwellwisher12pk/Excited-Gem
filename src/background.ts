@@ -4,6 +4,8 @@ import {
   setTabCountInBadge
 } from './scripts/browserActions'
 import { preferences } from './scripts/defaultPreferences'
+import { extractVideoId, parseIsoDuration } from './utils/youtube'
+
 
 console.log("DEBUG: Background script loaded");
 
@@ -29,9 +31,16 @@ chrome.tabs.onRemoved.addListener((tabId, removeInfo) => {
 
 chrome.tabs.onDetached.addListener(onRemoved)
 
-chrome.tabs.onCreated.addListener(() => {
+chrome.tabs.onCreated.addListener((tab) => {
   getTabs('current').then((tabs) => setBadge(tabs.length))
+  if (tab.url) handleTabForYouTubeApi(tab.url);
 })
+chrome.tabs.onUpdated.addListener((tabId, changeInfo, tab) => {
+  if (changeInfo.url) {
+    handleTabForYouTubeApi(changeInfo.url);
+  }
+})
+
 chrome.tabs.onAttached.addListener(() => {
   getTabs('current').then((tabs) => setBadge(tabs.length))
 })
@@ -65,54 +74,85 @@ async function openInTab(url: string, mode: 'single' | 'per-window', currentWind
 }
 
 chrome.action.onClicked.addListener(async (tab) => {
-  const { displayMode = 'sidebar', tabManagementMode = 'single' } = await chrome.storage.local.get(['displayMode', 'tabManagementMode']);
+  // If openPanelOnActionClick is true (sidebar mode), this listener will NOT fire.
+  // If popup is set (popup mode), this listener will NOT fire.
+  // So this only fires for 'tab' mode or fallback.
+  const { tabManagementMode = 'single' } = await chrome.storage.local.get(['tabManagementMode']);
   const extensionUrl = chrome.runtime.getURL('/tabs/home.html');
 
-  if (displayMode === 'sidebar') {
-    // @ts-ignore - sidePanel types might be missing
-    if (chrome.sidePanel && chrome.sidePanel.open) {
-      try {
-        // @ts-ignore
-        await chrome.sidePanel.open({ windowId: tab.windowId });
-      } catch (error) {
-        console.error('Failed to open side panel:', error);
-        await openInTab(extensionUrl, tabManagementMode, tab.windowId);
-      }
-    } else {
-      await openInTab(extensionUrl, tabManagementMode, tab.windowId);
-    }
-  } else if (displayMode === 'popup') {
-    await chrome.windows.create({
-      url: extensionUrl,
-      type: 'popup',
-      width: 450,
-      height: 600
-    });
-    await openInTab(extensionUrl, tabManagementMode, tab.windowId);
-  }
+  console.log('DEBUG: onClicked fired. Assuming Tab Mode.');
+  await openInTab(extensionUrl, tabManagementMode, tab.windowId);
 });
 
 // Store YouTube video information by tab ID
 const youtubeVideoInfo = new Map<number, any>();
+const youtubeApiCache = new Map<string, any>();
 
 // Restore state from storage on startup
-chrome.storage.local.get('youtubeInfoMap').then(({ youtubeInfoMap }) => {
+chrome.storage.local.get(['youtubeInfoMap', 'youtubeApiCache']).then(({ youtubeInfoMap, youtubeApiCache: savedCache }) => {
   if (youtubeInfoMap) {
-    Object.entries(youtubeInfoMap).forEach(([tabId, info]) => {
-      youtubeVideoInfo.set(Number(tabId), info);
+    Object.entries(youtubeInfoMap).forEach(([url, info]) => {
+      youtubeVideoInfo.set(url, info);
     });
     console.log('DEBUG: Restored youtubeVideoInfo from storage:', youtubeVideoInfo);
   }
+  if (savedCache) {
+    Object.entries(savedCache).forEach(([videoId, info]) => {
+      youtubeApiCache.set(videoId, info);
+    });
+    console.log('DEBUG: Restored youtubeApiCache from storage:', youtubeApiCache);
+  }
 });
+
+async function fetchYouTubeApiInfo(videoId: string) {
+  if (youtubeApiCache.has(videoId)) {
+    const cached = youtubeApiCache.get(videoId)!;
+    if (Date.now() - cached.timestamp < 24 * 60 * 60 * 1000) {
+      return cached;
+    }
+  }
+
+  const { youtubeApiKey: customApiKey } = await chrome.storage.local.get('youtubeApiKey');
+  const apiKey = customApiKey || process.env.PLASMO_PUBLIC_YOUTUBE_API_KEY;
+  if (!apiKey || apiKey === "YOUR_YOUTUBE_API_KEY_HERE" || apiKey === "") return null;
+
+  try {
+    const res = await fetch(`https://www.googleapis.com/youtube/v3/videos?id=${videoId}&part=snippet,contentDetails&key=${apiKey}`);
+    const data = await res.json();
+    if (data.items && data.items.length > 0) {
+      const item = data.items[0];
+      const title = item.snippet.title;
+      const durationStr = item.contentDetails.duration;
+      const duration = parseIsoDuration(durationStr);
+
+      const info = { title, duration, timestamp: Date.now() };
+      youtubeApiCache.set(videoId, info);
+      chrome.storage.local.set({ youtubeApiCache: Object.fromEntries(youtubeApiCache) });
+      return info;
+    }
+  } catch (e) {
+    console.error("DEBUG: Failed to fetch YT API", e);
+  }
+  return null;
+}
+
+function handleTabForYouTubeApi(url?: string) {
+  if (url && url.includes('youtube.com/watch')) {
+    const videoId = extractVideoId(url);
+    if (videoId) {
+      fetchYouTubeApiInfo(videoId);
+    }
+  }
+}
+
 
 // Listen for messages from content scripts
 chrome.runtime.onMessage.addListener((message, sender, sendResponse) => {
-  // Handle messages from YouTube content script
-  if (message.type === "YOUTUBE_VIDEO_INFO" && sender.tab?.id) {
-    console.log("DEBUG: Background received YOUTUBE_VIDEO_INFO", message.data);
-    const tabId = sender.tab.id;
-    message.data.tabId = tabId;
-    youtubeVideoInfo.set(tabId, message.data);
+// Handle messages from YouTube content script
+  if (message.type === "YOUTUBE_VIDEO_INFO" && message.url) {
+    // console.log("DEBUG: Background received YOUTUBE_VIDEO_INFO", message.data);
+    const url = message.url;
+    youtubeVideoInfo.set(url, message.data);
 
     // Store in local storage so UI components can pick it up
     chrome.storage.local.set({ youtubeInfoMap: Object.fromEntries(youtubeVideoInfo) });
@@ -126,10 +166,60 @@ chrome.runtime.onMessage.addListener((message, sender, sendResponse) => {
 });
 
 // Clean up data when a tab is closed
-chrome.tabs.onRemoved.addListener((tabId) => {
-  if (youtubeVideoInfo.has(tabId)) {
-    youtubeVideoInfo.delete(tabId);
-    chrome.storage.local.set({ youtubeInfoMap: Object.fromEntries(youtubeVideoInfo) });
+chrome.tabs.onRemoved.addListener(async (tabId) => {
+  try {
+    const tabs = await chrome.tabs.query({});
+    const activeUrls = new Set(tabs.map(t => t.url).filter(Boolean));
+    let changed = false;
+    for (const url of youtubeVideoInfo.keys()) {
+      if (!activeUrls.has(url)) {
+        youtubeVideoInfo.delete(url);
+        changed = true;
+      }
+    }
+    if (changed) {
+      chrome.storage.local.set({ youtubeInfoMap: Object.fromEntries(youtubeVideoInfo) });
+    }
+  } catch (e) {
+    console.error('Error cleaning up youtubeVideoInfo', e);
+  }
+});
+
+// Update Action Popup state based on settings
+// Update Action Popup and SidePanel behavior based on settings
+const updateActionState = async (mode: string) => {
+  console.log('DEBUG: Updating action state to:', mode);
+
+  // 1. Configure SidePanel Behavior (if supported)
+  // @ts-ignore
+  if (chrome.sidePanel && chrome.sidePanel.setPanelBehavior) {
+    try {
+      // @ts-ignore
+      await chrome.sidePanel.setPanelBehavior({
+        openPanelOnActionClick: mode === 'sidebar'
+      });
+      console.log('DEBUG: setPanelBehavior success');
+    } catch (e) {
+      console.error('DEBUG: setPanelBehavior failed', e);
+    }
+  }
+
+  // 2. Configure Popup
+  if (mode === 'popup') {
+    await chrome.action.setPopup({ popup: 'tabs/home.html' });
+  } else {
+    // For 'sidebar' (native open) or 'tab' (handled by onClicked), remove popup
+    await chrome.action.setPopup({ popup: '' });
+  }
+};
+
+chrome.storage.local.get('displayMode').then(({ displayMode }) => {
+  updateActionState(displayMode || 'sidebar');
+});
+
+chrome.storage.onChanged.addListener((changes, area) => {
+  if (area === 'local' && changes.displayMode) {
+    updateActionState(changes.displayMode.newValue);
   }
 });
 

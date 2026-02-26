@@ -1,7 +1,7 @@
 import Btn from './Btn'
 
 interface ItemBtnProps {
-  onClick: () => void;
+  onClick: React.MouseEventHandler<HTMLElement>;
   title?: string;
   'aria-label'?: string;
   children?: React.ReactNode;

@@ -1,4 +1,4 @@
-import { Dropdown } from 'antd';
+import { Dropdown, message } from 'antd';
 import type { MenuProps } from 'antd';
 import React from 'react';
 
@@ -13,6 +13,14 @@ export const TabContextMenu: React.FC<TabContextMenuProps> = ({ children, tab })
         const tabId = tab.id;
         try {
             switch (key) {
+                case 'copyTitle':
+                    await navigator.clipboard.writeText(tab.title);
+                    message.success('Title copied');
+                    break;
+                case 'copyUrl':
+                    await navigator.clipboard.writeText(tab.url);
+                    message.success('URL copied');
+                    break;
                 case 'pin':
                     await chrome.tabs.update(tabId, { pinned: !tab.pinned });
                     break;
@@ -35,6 +43,17 @@ export const TabContextMenu: React.FC<TabContextMenuProps> = ({ children, tab })
     };
 
     const items: MenuProps['items'] = [
+        {
+            key: 'copyTitle',
+            label: 'Copy Title',
+        },
+        {
+            key: 'copyUrl',
+            label: 'Copy URL',
+        },
+        {
+            type: 'divider',
+        },
         {
             key: 'pin',
             label: tab.pinned ? 'Unpin Tab' : 'Pin Tab',
@@ -65,9 +84,16 @@ export const TabContextMenu: React.FC<TabContextMenuProps> = ({ children, tab })
         },
     ];
 
+    const [open, setOpen] = React.useState(false);
+
     return (
-        <Dropdown menu={{ items, onClick: handleMenuClick }} trigger={['contextMenu']}>
-            <div style={{ display: 'contents' }}>
+        <Dropdown
+            menu={{ items, onClick: handleMenuClick }}
+            trigger={['contextMenu']}
+            onOpenChange={setOpen}
+            overlayClassName="compact-context-menu"
+        >
+            <div className={`transition-all duration-200 ${open ? 'ring-2 ring-inset ring-blue-400 bg-blue-50/80 rounded-lg' : ''}`}>
                 {children}
             </div>
         </Dropdown>

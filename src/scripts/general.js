@@ -592,7 +592,6 @@ export const reduceTabs = (
   tabs
 ) => {
   console.time('reduceTabs')
-
   if (!tabs) return [];
 
   // Pre-calculate search criteria
@@ -696,7 +695,7 @@ export const makePlaceholder = (searchIn, regex = false) => {
   placeholder += searchIn.title ? 'Titles' : ''
   placeholder += searchIn.title && searchIn.url ? ' and ' : ''
   placeholder += searchIn.url ? 'URLs' : ''
-  return regex ? `/ ${placeholder} /gi` : placeholder
+  return regex ? `${placeholder} using regular expression` : placeholder
 }
 
 export function getCurrentWindow() {

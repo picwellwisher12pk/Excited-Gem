@@ -23,6 +23,7 @@ export default async function getManifest() {
       48: "assets/icon.svg",
       128: "assets/icon.svg",
     },
+    incognito: "split",
     permissions: [
       "activeTab",
       "contextMenus",
@@ -57,6 +58,7 @@ export default async function getManifest() {
     ],
     // web_accessible_resources: ["dist/contentScripts/style.css"],
   };
+
   const SHA256 =
     manifestVersion === 2
       ? "sha256-9402wHbGtjqsZ8WISJUnqSRxLJpuyt9R0E8g410kSr4="

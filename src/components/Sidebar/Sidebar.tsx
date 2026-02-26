@@ -61,7 +61,7 @@ export default function Sidebar({ currentPage, collapsed: externalCollapsed, onT
             {/* Overlay */}
             {!collapsed && (
                 <div
-                    className="fixed inset-0 bg-black bg-opacity-50 z-40"
+                    className="fixed inset-0 bg-black bg-opacity-40 backdrop-blur-sm z-40"
                     onClick={handleToggle}
                 />
             )}

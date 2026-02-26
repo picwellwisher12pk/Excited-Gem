@@ -30,6 +30,7 @@ interface TabState {
   selectedTabs: number[];
   selectedWindow: number;
   youtubePermissionGranted: boolean;
+  isSelectionMode: boolean; // Add selection mode state
 }
 
 const initialState: TabState = {
@@ -38,6 +39,7 @@ const initialState: TabState = {
   selectedTabs: [],
   selectedWindow: chrome.windows?.WINDOW_ID_CURRENT || -1,
   youtubePermissionGranted: false,
+  isSelectionMode: false, // Default false
 };
 
 export const tabSlice = createSlice({
@@ -91,6 +93,29 @@ export const tabSlice = createSlice({
     updateYouTubePermission: (state, action) => {
       state.youtubePermissionGranted = action.payload;
     },
+    toggleSelectionMode: (state, action) => {
+      state.isSelectionMode = action.payload;
+      if (!action.payload) {
+        state.selectedTabs = [];
+      }
+    },
+    reorderTabs: (state, action) => {
+      const { fromIndex, toIndex } = action.payload;
+      const newTabs = [...state.tabs];
+      const [movedTab] = newTabs.splice(fromIndex, 1);
+      newTabs.splice(toIndex, 0, movedTab);
+
+      const reindexedTabs = newTabs.map((tab, index) => ({
+        ...tab,
+        index: index
+      }));
+
+      state.tabs = reindexedTabs;
+
+      if (state.filteredTabs && state.filteredTabs.length === state.tabs.length) {
+        state.filteredTabs = [...reindexedTabs];
+      }
+    },
   },
 });
 
@@ -105,6 +130,8 @@ export const {
   updateSelectedWindow,
   updateYouTubeInfo,
   updateYouTubePermission,
+  toggleSelectionMode,
+  reorderTabs,
 } = tabSlice.actions;
 
 export default tabSlice.reducer;

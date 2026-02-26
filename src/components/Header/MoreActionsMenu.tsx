@@ -1,5 +1,5 @@
 import { Dropdown, MenuProps, Badge } from 'antd'
-import { MoreVertical, Copy } from 'lucide-react'
+import { MoreVertical, Copy, RefreshCw } from 'lucide-react'
 import React, { useMemo, useState } from 'react'
 import { useSelector } from 'react-redux'
 import Btn from '~/components/Btn'
@@ -24,6 +24,13 @@ const MoreActionsMenu = () => {
             icon: <Copy size={14} />,
             onClick: () => setIsDuplicateModalOpen(true),
             disabled: duplicateCount === 0,
+        },
+
+        {
+            key: 'force-refresh',
+            label: 'Force refresh tabs view',
+            icon: <RefreshCw size={14} />,
+            onClick: () => window.location.reload(),
         },
     ]
 

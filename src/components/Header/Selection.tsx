@@ -1,14 +1,15 @@
-import {Checkbox} from 'antd'
-import {memo, useCallback} from 'react'
-import {useDispatch, useSelector} from 'react-redux'
+import { Checkbox } from 'antd'
+import { memo, useCallback } from 'react'
+import { useDispatch, useSelector } from 'react-redux'
 
-import {clearSelectedTabs, invertSelectedTabs, selectAllTabs} from '~/store/tabSlice'
+import { clearSelectedTabs, invertSelectedTabs, selectAllTabs } from '~/store/tabSlice'
+import { ArrowRightLeft } from 'lucide-react'
 import Btn from '~/components/Btn'
 
 
 const Selection = () => {
   const dispatch = useDispatch()
-  const {selectedTabs, tabs, filteredTabs} = useSelector(
+  const { selectedTabs, tabs, filteredTabs } = useSelector(
     (state) => state['tabs']
   )
   //Event Handlers
@@ -36,8 +37,9 @@ const Selection = () => {
       <Btn
         title="Invert Selection"
         onClick={handleInversion}
-        className="!rounded-l-[0] shdow-none">
-        Invert
+        className="!rounded-l-[0] shdow-none flex items-center gap-1">
+        <ArrowRightLeft size={14} className="text-zinc-600" />
+        <span className="hidden sm:inline">Invert</span>
       </Btn>
     </div>
   )

@@ -4,7 +4,7 @@ import React, { memo } from 'react'
 const Navigation = ({ tabCount }) => {
   console.log('navigation')
   return (
-    <div className="flex-none" id="navbarNav">
+    <div className="flex-none hidden sm:block" id="navbarNav">
       <div className="flex justify-start w-auto mb-0">
         <div className="px-4 py-3">
           <Badge
