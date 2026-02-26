@@ -95,10 +95,25 @@ export const tabSlice = createSlice({
     },
     toggleSelectionMode: (state, action) => {
       state.isSelectionMode = action.payload;
-      // If turning off, clear selection? Maybe not, user might want to keep selection but exit mode.
-      // For now, let's keep separate actions.
       if (!action.payload) {
-        state.selectedTabs = []; // Clear selection when exiting mode? Review requirement.
+        state.selectedTabs = [];
+      }
+    },
+    reorderTabs: (state, action) => {
+      const { fromIndex, toIndex } = action.payload;
+      const newTabs = [...state.tabs];
+      const [movedTab] = newTabs.splice(fromIndex, 1);
+      newTabs.splice(toIndex, 0, movedTab);
+
+      const reindexedTabs = newTabs.map((tab, index) => ({
+        ...tab,
+        index: index
+      }));
+
+      state.tabs = reindexedTabs;
+
+      if (state.filteredTabs && state.filteredTabs.length === state.tabs.length) {
+        state.filteredTabs = [...reindexedTabs];
       }
     },
   },
@@ -116,6 +131,7 @@ export const {
   updateYouTubeInfo,
   updateYouTubePermission,
   toggleSelectionMode,
+  reorderTabs,
 } = tabSlice.actions;
 
 export default tabSlice.reducer;

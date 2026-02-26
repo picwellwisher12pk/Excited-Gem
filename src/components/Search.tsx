@@ -62,8 +62,6 @@ const Search = () => {
     []
   )
 
-
-
   return (
     <ErrorBoundary>
       <div className="flex-1 ml-4 min-w-0 flex items-center gap-2 overflow-hidden">
