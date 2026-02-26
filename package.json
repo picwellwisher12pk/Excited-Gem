@@ -108,7 +108,8 @@
       "tabs",
       "storage",
       "sidePanel",
-      "tabGroups"
+      "tabGroups",
+      "identity"
     ],
     "side_panel": {
       "default_path": "tabs/home.html"
@@ -116,7 +117,16 @@
     "host_permissions": [
       "https://*.youtube.com/*",
       "http://*.youtube.com/*"
-    ]
+    ],
+    "oauth2": {
+      "client_id": "895689043158-ilstmlvd16i9p88n22b7sva0d6mhnp6n.apps.googleusercontent.com",
+      "scopes": [
+        "openid",
+        "email",
+        "profile",
+        "https://www.googleapis.com/auth/drive.appdata"
+      ]
+    }
   },
   "nodemonConfig": {
     "ignore": [
