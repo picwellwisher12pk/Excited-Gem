@@ -1,13 +1,8 @@
-import {
-  getTabs,
-  setBadge,
-  setTabCountInBadge
-} from './scripts/browserActions'
+import { getTabs, setBadge, setTabCountInBadge } from './scripts/browserActions'
 import { preferences } from './scripts/defaultPreferences'
 import { extractVideoId, parseIsoDuration } from './utils/youtube'
 
-
-console.log("DEBUG: Background script loaded");
+console.log('DEBUG: Background script loaded')
 
 function onRemoved(tabId, removeInfo) {
   getTabs().then((tabs) => {
@@ -33,11 +28,11 @@ chrome.tabs.onDetached.addListener(onRemoved)
 
 chrome.tabs.onCreated.addListener((tab) => {
   getTabs('current').then((tabs) => setBadge(tabs.length))
-  if (tab.url) handleTabForYouTubeApi(tab.url);
+  if (tab.url) handleTabForYouTubeApi(tab.url)
 })
 chrome.tabs.onUpdated.addListener((tabId, changeInfo, tab) => {
   if (changeInfo.url) {
-    handleTabForYouTubeApi(changeInfo.url);
+    handleTabForYouTubeApi(changeInfo.url)
   }
 })
 
@@ -47,148 +42,212 @@ chrome.tabs.onAttached.addListener(() => {
 
 /* Chrome Actions */
 
-async function openInTab(url: string, mode: 'single' | 'per-window', currentWindowId: number) {
+async function openInTab(
+  url: string,
+  mode: 'single' | 'per-window',
+  currentWindowId: number
+) {
   if (mode === 'single') {
-    const tabs = await chrome.tabs.query({ url });
+    const tabs = await chrome.tabs.query({ url })
     if (tabs.length > 0) {
-      const tab = tabs[0];
+      const tab = tabs[0]
       if (tab.id) {
-        await chrome.tabs.update(tab.id, { active: true });
-        await chrome.windows.update(tab.windowId, { focused: true });
+        await chrome.tabs.update(tab.id, { active: true })
+        await chrome.windows.update(tab.windowId, { focused: true })
       }
-      return;
+      return
     }
   } else {
     // per-window
-    const tabs = await chrome.tabs.query({ url, windowId: currentWindowId });
+    const tabs = await chrome.tabs.query({ url, windowId: currentWindowId })
     if (tabs.length > 0) {
       if (tabs[0].id) {
-        await chrome.tabs.update(tabs[0].id, { active: true });
+        await chrome.tabs.update(tabs[0].id, { active: true })
       }
-      return;
+      return
     }
   }
 
   // If not found, create
-  await chrome.tabs.create({ url, pinned: true });
+  await chrome.tabs.create({ url, pinned: true })
 }
 
 chrome.action.onClicked.addListener(async (tab) => {
   // If openPanelOnActionClick is true (sidebar mode), this listener will NOT fire.
   // If popup is set (popup mode), this listener will NOT fire.
   // So this only fires for 'tab' mode or fallback.
-  const { tabManagementMode = 'single' } = await chrome.storage.local.get(['tabManagementMode']);
-  const extensionUrl = chrome.runtime.getURL('/tabs/home.html');
+  const { tabManagementMode = 'single' } = await chrome.storage.local.get([
+    'tabManagementMode'
+  ])
+  const extensionUrl = chrome.runtime.getURL('/tabs/home.html')
 
-  console.log('DEBUG: onClicked fired. Assuming Tab Mode.');
-  await openInTab(extensionUrl, tabManagementMode, tab.windowId);
-});
+  console.log('DEBUG: onClicked fired. Assuming Tab Mode.')
+  await openInTab(extensionUrl, tabManagementMode, tab.windowId)
+})
 
 // Store YouTube video information by tab ID
-const youtubeVideoInfo = new Map<number, any>();
-const youtubeApiCache = new Map<string, any>();
+const youtubeVideoInfo = new Map<number, any>()
+const youtubeApiCache = new Map<string, any>()
 
 // Restore state from storage on startup
-chrome.storage.local.get(['youtubeInfoMap', 'youtubeApiCache']).then(({ youtubeInfoMap, youtubeApiCache: savedCache }) => {
-  if (youtubeInfoMap) {
-    Object.entries(youtubeInfoMap).forEach(([url, info]) => {
-      youtubeVideoInfo.set(url, info);
-    });
-    console.log('DEBUG: Restored youtubeVideoInfo from storage:', youtubeVideoInfo);
-  }
-  if (savedCache) {
-    Object.entries(savedCache).forEach(([videoId, info]) => {
-      youtubeApiCache.set(videoId, info);
-    });
-    console.log('DEBUG: Restored youtubeApiCache from storage:', youtubeApiCache);
-  }
-});
+chrome.storage.local
+  .get(['youtubeInfoMap', 'youtubeApiCache'])
+  .then(({ youtubeInfoMap, youtubeApiCache: savedCache }) => {
+    if (youtubeInfoMap) {
+      Object.entries(youtubeInfoMap).forEach(([url, info]) => {
+        youtubeVideoInfo.set(url, info)
+      })
+      console.log(
+        'DEBUG: Restored youtubeVideoInfo from storage:',
+        youtubeVideoInfo
+      )
+    }
+    if (savedCache) {
+      Object.entries(savedCache).forEach(([videoId, info]) => {
+        youtubeApiCache.set(videoId, info)
+      })
+      console.log(
+        'DEBUG: Restored youtubeApiCache from storage:',
+        youtubeApiCache
+      )
+    }
+  })
+
+const fetchingYoutubeApi = new Set<string>()
 
 async function fetchYouTubeApiInfo(videoId: string) {
+  console.log(`DEBUG: fetchYouTubeApiInfo called for ${videoId}`)
   if (youtubeApiCache.has(videoId)) {
-    const cached = youtubeApiCache.get(videoId)!;
-    if (Date.now() - cached.timestamp < 24 * 60 * 60 * 1000) {
+    const cached = youtubeApiCache.get(videoId)!
+    const isRecent = Date.now() - cached.timestamp < 24 * 60 * 60 * 1000;
+    // If it's recent AND actually has a duration (or it's been less than 5 minutes for failures)
+    if (isRecent && (cached.duration > 0 || Date.now() - cached.timestamp < 5 * 60 * 1000)) {
+      console.log(`DEBUG: Using cached info for ${videoId}`);
       return cached;
     }
   }
 
-  const { youtubeApiKey: customApiKey } = await chrome.storage.local.get('youtubeApiKey');
-  const apiKey = customApiKey || process.env.PLASMO_PUBLIC_YOUTUBE_API_KEY;
-  if (!apiKey || apiKey === "YOUR_YOUTUBE_API_KEY_HERE" || apiKey === "") return null;
+  if (fetchingYoutubeApi.has(videoId)) return null
+  fetchingYoutubeApi.add(videoId)
+
+  const { youtubeApiKey: customApiKey } =
+    await chrome.storage.local.get('youtubeApiKey')
+  const apiKey = customApiKey || process.env.PLASMO_PUBLIC_YOUTUBE_API_KEY
+  if (!apiKey || apiKey === 'YOUR_YOUTUBE_API_KEY_HERE' || apiKey === '') {
+    fetchingYoutubeApi.delete(videoId)
+    return null
+  }
 
   try {
-    const res = await fetch(`https://www.googleapis.com/youtube/v3/videos?id=${videoId}&part=snippet,contentDetails&key=${apiKey}`);
-    const data = await res.json();
+    const res = await fetch(
+      `https://www.googleapis.com/youtube/v3/videos?id=${videoId}&part=snippet,contentDetails&key=${apiKey}`
+    )
+    const data = await res.json()
     if (data.items && data.items.length > 0) {
-      const item = data.items[0];
-      const title = item.snippet.title;
-      const durationStr = item.contentDetails.duration;
-      const duration = parseIsoDuration(durationStr);
+      const item = data.items[0]
+      const title = item.snippet.title
+      const durationStr = item.contentDetails.duration
+      const duration = parseIsoDuration(durationStr)
 
-      const info = { title, duration, timestamp: Date.now() };
-      youtubeApiCache.set(videoId, info);
-      chrome.storage.local.set({ youtubeApiCache: Object.fromEntries(youtubeApiCache) });
-      return info;
+      const info = { title, duration, timestamp: Date.now() }
+      youtubeApiCache.set(videoId, info)
+      chrome.storage.local.set({
+        youtubeApiCache: Object.fromEntries(youtubeApiCache)
+      })
+      fetchingYoutubeApi.delete(videoId)
+    } else {
+      // API request succeeded but returned no items (e.g. video private/deleted)
+      const info = {
+        title: 'Unknown/Private Video',
+        duration: 0,
+        timestamp: Date.now()
+      }
+      youtubeApiCache.set(videoId, info)
+      chrome.storage.local.set({
+        youtubeApiCache: Object.fromEntries(youtubeApiCache)
+      })
+      fetchingYoutubeApi.delete(videoId)
+      return info
     }
   } catch (e) {
-    console.error("DEBUG: Failed to fetch YT API", e);
+    console.error('DEBUG: Failed to fetch YT API', e)
   }
-  return null;
+
+  // Also cache as failed if there's a network error so we don't spam requests
+  const info = { title: 'Unknown Video', duration: 0, timestamp: Date.now() }
+  youtubeApiCache.set(videoId, info)
+  chrome.storage.local.set({
+    youtubeApiCache: Object.fromEntries(youtubeApiCache)
+  })
+  fetchingYoutubeApi.delete(videoId)
+  return info
 }
 
 function handleTabForYouTubeApi(url?: string) {
-  if (url && url.includes('youtube.com/watch')) {
-    const videoId = extractVideoId(url);
+  if (url && (url.includes('youtube.com/') || url.includes('youtu.be/'))) {
+    const videoId = extractVideoId(url)
     if (videoId) {
-      fetchYouTubeApiInfo(videoId);
+      fetchYouTubeApiInfo(videoId)
     }
   }
 }
 
-
 // Listen for messages from content scripts
 chrome.runtime.onMessage.addListener((message, sender, sendResponse) => {
-// Handle messages from YouTube content script
-  if (message.type === "YOUTUBE_VIDEO_INFO" && message.url) {
+  // Handle messages from YouTube content script
+  if (message.type === 'YOUTUBE_VIDEO_INFO' && message.url) {
     // console.log("DEBUG: Background received YOUTUBE_VIDEO_INFO", message.data);
-    const url = message.url;
-    youtubeVideoInfo.set(url, message.data);
+    const url = message.url
+    youtubeVideoInfo.set(url, message.data)
 
     // Store in local storage so UI components can pick it up
-    chrome.storage.local.set({ youtubeInfoMap: Object.fromEntries(youtubeVideoInfo) });
+    chrome.storage.local.set({
+      youtubeInfoMap: Object.fromEntries(youtubeVideoInfo)
+    })
   }
 
   // Handle requests for YouTube info
-  if (message.type === "GET_ALL_YOUTUBE_INFO") {
-    sendResponse(Array.from(youtubeVideoInfo.entries()));
-    return true;
+  if (message.type === 'GET_ALL_YOUTUBE_INFO') {
+    sendResponse(Array.from(youtubeVideoInfo.entries()))
+    return true
   }
-});
+
+  // Handle on-demand requests for YouTube API info (e.g. unloaded tabs)
+  if (message.type === 'FETCH_YOUTUBE_API_INFO' && message.videoId) {
+    console.log(
+      'DEBUG: Background received FETCH_YOUTUBE_API_INFO for',
+      message.videoId
+    )
+    fetchYouTubeApiInfo(message.videoId)
+  }
+})
 
 // Clean up data when a tab is closed
 chrome.tabs.onRemoved.addListener(async (tabId) => {
   try {
-    const tabs = await chrome.tabs.query({});
-    const activeUrls = new Set(tabs.map(t => t.url).filter(Boolean));
-    let changed = false;
+    const tabs = await chrome.tabs.query({})
+    const activeUrls = new Set(tabs.map((t) => t.url).filter(Boolean))
+    let changed = false
     for (const url of youtubeVideoInfo.keys()) {
       if (!activeUrls.has(url)) {
-        youtubeVideoInfo.delete(url);
-        changed = true;
+        youtubeVideoInfo.delete(url)
+        changed = true
       }
     }
     if (changed) {
-      chrome.storage.local.set({ youtubeInfoMap: Object.fromEntries(youtubeVideoInfo) });
+      chrome.storage.local.set({
+        youtubeInfoMap: Object.fromEntries(youtubeVideoInfo)
+      })
     }
   } catch (e) {
-    console.error('Error cleaning up youtubeVideoInfo', e);
+    console.error('Error cleaning up youtubeVideoInfo', e)
   }
-});
+})
 
 // Update Action Popup state based on settings
 // Update Action Popup and SidePanel behavior based on settings
 const updateActionState = async (mode: string) => {
-  console.log('DEBUG: Updating action state to:', mode);
+  console.log('DEBUG: Updating action state to:', mode)
 
   // 1. Configure SidePanel Behavior (if supported)
   // @ts-ignore
@@ -197,30 +256,30 @@ const updateActionState = async (mode: string) => {
       // @ts-ignore
       await chrome.sidePanel.setPanelBehavior({
         openPanelOnActionClick: mode === 'sidebar'
-      });
-      console.log('DEBUG: setPanelBehavior success');
+      })
+      console.log('DEBUG: setPanelBehavior success')
     } catch (e) {
-      console.error('DEBUG: setPanelBehavior failed', e);
+      console.error('DEBUG: setPanelBehavior failed', e)
     }
   }
 
   // 2. Configure Popup
   if (mode === 'popup') {
-    await chrome.action.setPopup({ popup: 'tabs/home.html' });
+    await chrome.action.setPopup({ popup: 'tabs/home.html' })
   } else {
     // For 'sidebar' (native open) or 'tab' (handled by onClicked), remove popup
-    await chrome.action.setPopup({ popup: '' });
+    await chrome.action.setPopup({ popup: '' })
   }
-};
+}
 
 chrome.storage.local.get('displayMode').then(({ displayMode }) => {
-  updateActionState(displayMode || 'sidebar');
-});
+  updateActionState(displayMode || 'sidebar')
+})
 
 chrome.storage.onChanged.addListener((changes, area) => {
   if (area === 'local' && changes.displayMode) {
-    updateActionState(changes.displayMode.newValue);
+    updateActionState(changes.displayMode.newValue)
   }
-});
+})
 
 // Dynamic Content Script Registration removed as we are using host_permissions and static declaration

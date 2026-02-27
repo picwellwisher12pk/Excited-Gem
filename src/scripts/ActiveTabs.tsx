@@ -5,9 +5,8 @@ import { useSelector } from 'react-redux'
 // import { profilerCallback } from "/src/scripts/general"
 import store from '~/store/store'
 import { updateActiveTabs, updateFilteredTabs } from '~/store/tabSlice'
-import { getTabs } from "~/scripts/browserActions"
+import { getTabs } from '~/scripts/browserActions'
 import { extractVideoId } from '~/utils/youtube'
-
 
 import '~/assets/logo.svg'
 import '~/assets/dev-logo.svg'
@@ -20,56 +19,23 @@ import Sidebar from '~/components/Sidebar'
 import { usePageTracking } from '~/components/Analytics/usePageTracking'
 
 export async function updateTabs(getTabs, store) {
-  const tabs = await getTabs(store.getState().tabs.selectedWindow);
+  const tabs = await getTabs(store.getState().tabs.selectedWindow)
 
   // Fetch YouTube info from storage
-  const { youtubeInfoMap, youtubeApiCache } = await chrome.storage.local.get(['youtubeInfoMap', 'youtubeApiCache']);
-  console.log('DEBUG: youtubeInfoMap from storage:', youtubeInfoMap);
+  const { youtubeInfoMap, youtubeApiCache } = await chrome.storage.local.get([
+    'youtubeInfoMap',
+    'youtubeApiCache'
+  ])
+  console.log('DEBUG: youtubeInfoMap from storage:', youtubeInfoMap)
 
   console.log(
     'inside updatetabs function:',
     tabs,
     store.getState().tabs.selectedWindow
   )
-  const processed = tabs.map((tab) => {
-    const {
-      active,
-      audible,
-      discarded,
-      favIconUrl,
-      id,
-      index,
-      mutedInfo,
-      pinned,
-      status,
-      title,
-      url,
-      windowId,
-      groupId
-    } = tab
-    if (url) {
-      // Merge YouTube info if available
-      let youtubeInfo = youtubeInfoMap && youtubeInfoMap[url] ? youtubeInfoMap[url] : undefined;
-
-      if (!youtubeInfo && url.includes('youtube.com/watch')) {
-        const videoId = extractVideoId(url);
-        if (videoId && youtubeApiCache && youtubeApiCache[videoId]) {
-          const apiInfo = youtubeApiCache[videoId];
-          youtubeInfo = {
-            title: apiInfo.title,
-            duration: apiInfo.duration,
-            currentTime: 0,
-            paused: true,
-            percentage: 0
-          };
-        }
-      }
-
-      if (youtubeInfo) {
-        console.log(`DEBUG: Found YouTube info for tab ${id}:`, youtubeInfo);
-      }
-
-      return {
+  const processed = tabs
+    .map((tab) => {
+      const {
         active,
         audible,
         discarded,
@@ -81,13 +47,66 @@ export async function updateTabs(getTabs, store) {
         status,
         title,
         url,
-        groupId,
         windowId,
-        youtubeInfo // Add youtubeInfo to the tab object
+        groupId
+      } = tab
+      if (url) {
+        // Merge YouTube info if available
+        let youtubeInfo =
+          youtubeInfoMap && youtubeInfoMap[url]
+            ? youtubeInfoMap[url]
+            : undefined
+
+        const isYoutubeUrl = url.includes('youtube.com/') || url.includes('youtu.be/')
+        if (
+          isYoutubeUrl && (!youtubeInfo || !youtubeInfo.duration)
+        ) {
+          const videoId = extractVideoId(url)
+          if (videoId && youtubeApiCache && youtubeApiCache[videoId]) {
+            const apiInfo = youtubeApiCache[videoId]
+            youtubeInfo = {
+              title: apiInfo.title || youtubeInfo?.title || 'Unknown Video',
+              duration: apiInfo.duration || 0,
+              currentTime: youtubeInfo?.currentTime || 0,
+              paused: youtubeInfo?.paused ?? true,
+              percentage: youtubeInfo?.percentage || 0
+            }
+          } else if (videoId) {
+            // Trigger a fetch if we don't have the info yet
+            console.log(
+              `DEBUG: Triggering FETCH_YOUTUBE_API_INFO for videoId ${videoId} (url: ${url})`
+            )
+            chrome.runtime.sendMessage({
+              type: 'FETCH_YOUTUBE_API_INFO',
+              videoId
+            })
+          }
+        }
+
+        if (youtubeInfo) {
+          console.log(`DEBUG: Found YouTube info for tab ${id}:`, youtubeInfo)
+        }
+
+        return {
+          active,
+          audible,
+          discarded,
+          favIconUrl,
+          id,
+          index,
+          mutedInfo,
+          pinned,
+          status,
+          title,
+          url,
+          groupId,
+          windowId,
+          youtubeInfo // Add youtubeInfo to the tab object
+        }
       }
-    }
-    return null
-  }).filter(Boolean)
+      return null
+    })
+    .filter(Boolean)
   // Update both active and filtered tabs so UI shows the list initially
   store.dispatch(updateActiveTabs(processed))
   store.dispatch(updateFilteredTabs(processed))
@@ -106,7 +125,12 @@ let previousSelectedWindow = store.getState().tabs.selectedWindow
 store.subscribe(() => {
   const currentSelectedWindow = store.getState().tabs.selectedWindow
   if (currentSelectedWindow !== previousSelectedWindow) {
-    console.log('Selected window changed:', previousSelectedWindow, '->', currentSelectedWindow)
+    console.log(
+      'Selected window changed:',
+      previousSelectedWindow,
+      '->',
+      currentSelectedWindow
+    )
     previousSelectedWindow = currentSelectedWindow
     updateTabs(getTabs, store)
   }
@@ -116,39 +140,42 @@ store.subscribe(() => {
 chrome.storage.onChanged.addListener((changes, area) => {
   if (area === 'local') {
     if (changes.youtubeInfoMap) {
-      const newValue = changes.youtubeInfoMap.newValue;
+      const newValue = changes.youtubeInfoMap.newValue
       if (newValue) {
         // console.log('DEBUG: Storage changed youtubeInfoMap:', newValue);
-        updateTabs(getTabs, store);
+        updateTabs(getTabs, store)
       }
     }
     if (changes.youtubeApiCache) {
-      updateTabs(getTabs, store);
+      updateTabs(getTabs, store)
     }
   }
-});
+})
 
 // Check and listen for YouTube permission
 const checkYouTubePermission = () => {
-  chrome.permissions.contains({ origins: ["https://*.youtube.com/*", "http://*.youtube.com/*"] }, (result) => {
-    store.dispatch({ type: 'tabs/updateYouTubePermission', payload: result });
-  });
-};
+  chrome.permissions.contains(
+    { origins: ['https://*.youtube.com/*', 'http://*.youtube.com/*'] },
+    (result) => {
+      store.dispatch({ type: 'tabs/updateYouTubePermission', payload: result })
+    }
+  )
+}
 
-checkYouTubePermission();
-chrome.permissions.onAdded.addListener(checkYouTubePermission);
-chrome.permissions.onRemoved.addListener(checkYouTubePermission);
+checkYouTubePermission()
+chrome.permissions.onAdded.addListener(checkYouTubePermission)
+chrome.permissions.onRemoved.addListener(checkYouTubePermission)
 
 // Initial load
 // Get current window ID and update store, then fetch tabs
-chrome.windows.getCurrent().then(window => {
+chrome.windows.getCurrent().then((window) => {
   if (window.id) {
-    store.dispatch({ type: 'tabs/updateSelectedWindow', payload: window.id });
-    updateTabs(getTabs, store);
+    store.dispatch({ type: 'tabs/updateSelectedWindow', payload: window.id })
+    updateTabs(getTabs, store)
   } else {
-    updateTabs(getTabs, store);
+    updateTabs(getTabs, store)
   }
-});
+})
 
 const ActiveTabs = () => {
   usePageTracking('/tabs', 'Active Tabs')
