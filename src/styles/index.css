@@ -8,11 +8,11 @@
 /* Global sizing for extension popup */
 html,
 body {
-    /* Ensure we take up max space in popup mode */
-    min-width: 320px;
-    /* Chrome max popup size is approx 800x600 */
-    /* We can set a large max-width which acts as a default width in popup */
-    /* but in a tab it will just be full width */
+  /* Ensure we take up max space in popup mode */
+  min-width: 320px;
+  /* Chrome max popup size is approx 800x600 */
+  /* We can set a large max-width which acts as a default width in popup */
+  /* but in a tab it will just be full width */
 }
 
 /*
@@ -23,291 +23,290 @@ body {
  * For now, setting a sensible default for the root container if needed.
  */
 body {
-    margin: 0;
-    padding: 0;
-    overflow-x: hidden;
+  margin: 0;
+  padding: 0;
+  overflow-x: hidden;
 }
 
 /* Header */
 svg {
-    vertical-align: initial;
+  vertical-align: initial;
 }
 
 .ant-select:not(.ant-select-customize-input) .ant-select-selector {
-    border: none;
-    border-radius: 4px;
+  border: none;
+  border-radius: 4px;
 }
 
 .ant-btn {
-    display: flex;
-    align-items: center;
-    justify-content: center;
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }
 
-
 .ant-btn:active {
-    background-image: white !important;
-    background: white !important;
-    border-color: #fff;
+  background-image: white !important;
+  background: white !important;
+  border-color: #fff;
 }
 
 .page-header {
-    z-index: 999;
-    position: relative;
+  z-index: 999;
+  position: relative;
 }
 
-.page-header .nav>li>a {
-    color: #fff;
+.page-header .nav > li > a {
+  color: #fff;
 }
 
 .page-header .nav-pills .nav-link.active,
-.page-header .nav-pills .show>.nav-link {
-    background-color: transparent;
+.page-header .nav-pills .show > .nav-link {
+  background-color: transparent;
 }
 
 .modal-body {
-    overflow: hidden;
+  overflow: hidden;
 }
 
 .modal-body .table {
-    margin: 0;
-    margin-top: -15px;
-    margin-bottom: -15px;
+  margin: 0;
+  margin-top: -15px;
+  margin-bottom: -15px;
 }
 
 .label {
-    margin-left: 5px;
+  margin-left: 5px;
 }
 
 .tabs-list-container {
-    flex: 1;
-    min-height: 0;
-    min-width: 0;
+  flex: 1;
+  min-height: 0;
+  min-width: 0;
 }
 
 #feedback {
-    font-size: 1.4em;
+  font-size: 1.4em;
 }
 
 .navbar {
-    color: #fff;
-    border: none;
-    border-radius: 0;
+  color: #fff;
+  border: none;
+  border-radius: 0;
 }
 
-.panel-group .panel+.panel {
-    margin-top: 0;
+.panel-group .panel + .panel {
+  margin-top: 0;
 }
 
 .panel-group .panel {
-    border-radius: 0;
+  border-radius: 0;
 }
 
 .panel-group .panel-body {
-    padding: 0;
+  padding: 0;
 }
 
 .panel-group .panel-body .list-group {
-    border-bottom: 2px solid gray;
+  border-bottom: 2px solid gray;
 }
 
 .panel-group .panel-body .list-group:after {
-    content: "Window Boundary";
-    background-color: gray;
-    color: #fff;
-    display: block;
-    text-align: right;
-    padding-right: 15px;
+  content: "Window Boundary";
+  background-color: gray;
+  color: #fff;
+  display: block;
+  text-align: right;
+  padding-right: 15px;
 }
 
 .panel-group .panel-heading h4 a {
-    text-decoration: none;
-    color: gray;
-    font-weight: normal;
+  text-decoration: none;
+  color: gray;
+  font-weight: normal;
 }
 
 .panel-group .panel-heading .session-name button.btn {
-    display: none;
+  display: none;
 }
 
 .panel-group .panel-heading .session-name:hover button.btn.btn-primary {
-    display: block;
-    position: absolute;
-    right: 0;
-    top: 0;
-    border-radius: 50%;
-    width: 20px;
-    height: 20px;
-    padding: 0;
-    font-size: 9px;
+  display: block;
+  position: absolute;
+  right: 0;
+  top: 0;
+  border-radius: 50%;
+  width: 20px;
+  height: 20px;
+  padding: 0;
+  font-size: 9px;
 }
 
 .panel-group .panel-heading input.form-control[readOnly] {
-    transition: all 0.4s;
-    border: none;
-    box-shadow: none;
+  transition: all 0.4s;
+  border: none;
+  box-shadow: none;
 }
 
-.context-actions .nav>li>a {
-    padding: 5px 0;
+.context-actions .nav > li > a {
+  padding: 5px 0;
 }
 
 .context-actions .custom-checkbox-container {
-    padding: 0;
+  padding: 0;
 }
 
 .context-actions .custom-checkbox-container label {
-    background: none;
-    border: none;
-    color: white;
-    padding: 5px 0;
-    font-size: 14px;
+  background: none;
+  border: none;
+  color: white;
+  padding: 5px 0;
+  font-size: 14px;
 }
 
 .context-actions .custom-checkbox-container label:before,
 .context-actions .custom-checkbox-container label:after {
-    top: 0.45rem;
+  top: 0.45rem;
 }
 
 .fade-enter {
-    opacity: 0.01;
+  opacity: 0.01;
 }
 
 .fade-enter.fade-enter-active {
-    opacity: 1;
-    transition: all 200ms ease-in;
+  opacity: 1;
+  transition: all 200ms ease-in;
 }
 
 .fade-exit {
-    opacity: 1;
-    background-color: yellow;
+  opacity: 1;
+  background-color: yellow;
 }
 
 .fade-exit-active {
-    opacity: 0.01;
-    max-height: 0;
+  opacity: 0.01;
+  max-height: 0;
 }
 
 #selection-action {
-    -webkit-transition: all 0.3s;
-    -moz-transition: all 0.3s;
-    -ms-transition: all 0.3s;
-    -o-transition: all 0.3s;
-    transition: all 0.3s;
-    background-color: transparent;
+  -webkit-transition: all 0.3s;
+  -moz-transition: all 0.3s;
+  -ms-transition: all 0.3s;
+  -o-transition: all 0.3s;
+  transition: all 0.3s;
+  background-color: transparent;
 }
 
 .selection-active {
-    background-color: #14819a;
-    background: linear-gradient(to bottom, #0c9db2 0%, #4acade 100%);
+  background-color: #14819a;
+  background: linear-gradient(to bottom, #0c9db2 0%, #4acade 100%);
 }
 
 .selection-action {
-    -webkit-transition: all 0.1s;
-    -moz-transition: all 0.1s;
-    -ms-transition: all 0.1s;
-    -o-transition: all 0.1s;
-    transition: all 0.1s;
-    z-index: -1;
-    opacity: 0;
+  -webkit-transition: all 0.1s;
+  -moz-transition: all 0.1s;
+  -ms-transition: all 0.1s;
+  -o-transition: all 0.1s;
+  transition: all 0.1s;
+  z-index: -1;
+  opacity: 0;
 }
 
-.selection-action .nav>li>a {
-    color: #fff;
+.selection-action .nav > li > a {
+  color: #fff;
 }
 
 .selection-active .selection-action {
-    opacity: 1;
-    z-index: 1;
-    width: 100%;
+  opacity: 1;
+  z-index: 1;
+  width: 100%;
 }
 
 mark {
-    background-color: yellow;
-    padding: 0;
+  background-color: yellow;
+  padding: 0;
 }
 
 .card-header h5 button:hover {
-    text-decoration: none;
-    cursor: pointer;
+  text-decoration: none;
+  cursor: pointer;
 }
 
 .card-header h5 button span:first-child {
-    color: #343a40;
-    /* var(--gray-dark) */
-    font-weight: 600;
-    display: inline-block;
-    margin-right: 15px;
+  color: #343a40;
+  /* var(--gray-dark) */
+  font-weight: 600;
+  display: inline-block;
+  margin-right: 15px;
 }
 
 .card-header h5 button span {
-    color: #6c757d;
-    /* var(--secondary) */
-    font-weight: 400;
+  color: #6c757d;
+  /* var(--secondary) */
+  font-weight: 400;
 }
 
 .session-tab-count {
-    display: inline-block;
-    margin-right: 5px;
+  display: inline-block;
+  margin-right: 5px;
 }
 
 .context-menu {
-    width: 120px;
-    box-shadow: 0 4px 5px 3px rgba(0, 0, 0, 0.2);
-    position: absolute;
-    background-color: #fff;
-    display: none;
+  width: 120px;
+  box-shadow: 0 4px 5px 3px rgba(0, 0, 0, 0.2);
+  position: absolute;
+  background-color: #fff;
+  display: none;
 }
 
 .context-menu .menu-options {
-    list-style: none;
-    padding: 10px 0;
+  list-style: none;
+  padding: 10px 0;
 }
 
 .context-menu .menu-options .menu-option {
-    font-weight: 500;
-    font-size: 14px;
-    padding: 10px 40px 10px 20px;
-    cursor: pointer;
+  font-weight: 500;
+  font-size: 14px;
+  padding: 10px 40px 10px 20px;
+  cursor: pointer;
 }
 
 .context-menu .menu-options .menu-option:hover {
-    background: rgba(0, 0, 0, 0.2);
+  background: rgba(0, 0, 0, 0.2);
 }
 
 .spinner {
-    -webkit-animation: spin 2s linear infinite;
-    -moz-animation: spin 2s linear infinite;
-    animation: spin 2s linear infinite;
+  -webkit-animation: spin 2s linear infinite;
+  -moz-animation: spin 2s linear infinite;
+  animation: spin 2s linear infinite;
 }
 
 @-moz-keyframes spin {
-    100% {
-        -moz-transform: rotate(360deg);
-    }
+  100% {
+    -moz-transform: rotate(360deg);
+  }
 }
 
 @-webkit-keyframes spin {
-    100% {
-        -webkit-transform: rotate(360deg);
-    }
+  100% {
+    -webkit-transform: rotate(360deg);
+  }
 }
 
 @keyframes spin {
-    100% {
-        -webkit-transform: rotate(360deg);
-        transform: rotate(360deg);
-    }
+  100% {
+    -webkit-transform: rotate(360deg);
+    transform: rotate(360deg);
+  }
 }
 
 .checkbox {
-    width: 16px;
-    height: 16px;
-    transition: all 0.2s;
+  width: 16px;
+  height: 16px;
+  transition: all 0.2s;
 }
 
 .ant-input-search-button {
-    background-color: #eee !important;
+  background-color: #eee !important;
 }
 
 /*
@@ -317,23 +316,23 @@ mark {
  * but setting explicit min-dims helps usage as a popup
  */
 body {
-    width: 100%;
-    height: 100vh;
+  width: 100%;
+  height: 100vh;
 }
 
 /* Ensure #app or root element also takes full size */
 #root,
 #app {
-    width: 100%;
-    height: 100%;
-    display: flex;
-    flex-direction: column;
+  width: 100%;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
 }
 
 /* Allow popup to be as wide as possible up to limit */
 body {
-    min-width: 780px;
-    min-height: 580px;
+  min-width: 780px;
+  min-height: 580px;
 }
 
 /*
@@ -354,8 +353,8 @@ body {
  * Reverting strict min-width to avoid breaking sidebar.
  */
 body {
-    min-width: 0 !important;
-    /* Reset override */
+  min-width: 0 !important;
+  /* Reset override */
 }
 
 /* Targeted sizing: Only apply min-width if we are NOT in a narrow container?
@@ -422,28 +421,28 @@ body {
 */
 html,
 body {
-    width: 100%;
-    height: 100%;
-    margin: 0;
-    padding: 0;
-    overflow: hidden;
-    /* App handles scrolling */
+  width: 100%;
+  height: 100%;
+  margin: 0;
+  padding: 0;
+  overflow: hidden;
+  /* App handles scrolling */
 }
 
 /* Compact Context Menu Styles */
 .compact-context-menu .ant-dropdown-menu {
-    padding: 4px !important;
-    border-radius: 8px !important;
+  padding: 4px !important;
+  border-radius: 8px !important;
 }
 
 .compact-context-menu .ant-dropdown-menu-item {
-    padding: 6px 12px !important;
-    font-size: 13px !important;
-    line-height: 1.2 !important;
-    border-radius: 4px !important;
-    min-height: 28px !important;
+  padding: 6px 12px !important;
+  font-size: 13px !important;
+  line-height: 1.2 !important;
+  border-radius: 4px !important;
+  min-height: 28px !important;
 }
 
 .compact-context-menu .ant-dropdown-menu-item-divider {
-    margin: 2px 0 !important;
+  margin: 2px 0 !important;
 }

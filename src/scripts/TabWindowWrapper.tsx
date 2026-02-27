@@ -1,25 +1,36 @@
-import { List } from 'antd'
+
 import React, { useEffect, useRef } from 'react'
 import ContentLoader from 'react-content-loader'
 import { useDispatch, useSelector } from 'react-redux'
-import { DndContext, closestCenter, KeyboardSensor, PointerSensor, useSensor, useSensors, DragEndEvent } from '@dnd-kit/core'
-import { SortableContext, verticalListSortingStrategy, useSortable } from '@dnd-kit/sortable'
+import {
+  DndContext,
+  closestCenter,
+  KeyboardSensor,
+  PointerSensor,
+  useSensor,
+  useSensors,
+  DragEndEvent
+} from '@dnd-kit/core'
+import {
+  SortableContext,
+  verticalListSortingStrategy,
+  useSortable
+} from '@dnd-kit/sortable'
 import { CSS } from '@dnd-kit/utilities'
 import { arrayMove } from '@dnd-kit/sortable'
 import type { RootState } from '~/store/store'
-import { SimpleAutoSizer } from '~/components/SimpleAutoSizer';
-import { SimpleFixedSizeList } from '~/components/SimpleFixedSizeList';
+import { SimpleAutoSizer } from '~/components/SimpleAutoSizer'
+import { SimpleFixedSizeList } from '~/components/SimpleFixedSizeList'
 
 import { Tab } from '~/components/Tab/Tab'
 import { GroupHeader } from '~/components/Tab/GroupHeader'
 import { TabGroupHeader } from '~/components/Tab/TabGroupHeader'
-import { SortableTabs } from '~/components/Tab/SortableTabs'
 import { asyncFilterTabs, getCurrentWindow } from './general'
 import { updateFilteredTabs } from '~/store/tabSlice'
 // @ts-ignore
 import { saveSession } from '~/components/getsetSessions'
-import { useResponsive } from '~/hooks/useResponsive';
-import { FloatingActionBar } from '~/components/FloatingActionBar';
+import { useResponsive } from '~/hooks/useResponsive'
+import { FloatingActionBar } from '~/components/FloatingActionBar'
 
 const MyLoader = ({ width }: { width: number }) => (
   <ContentLoader
@@ -77,9 +88,11 @@ function useTabOperations() {
   }
 }
 
-
-
-const Row = ({ index, style, data }: { index: number; style: React.CSSProperties; data: any }) => {
+const Row = ({
+  index,
+  style,
+  data
+}: { index: number; style: React.CSSProperties; data: any }) => {
   const {
     displayItems,
     collapsedGroups,
@@ -98,14 +111,15 @@ const Row = ({ index, style, data }: { index: number; style: React.CSSProperties
     handleCloseTabGroup,
     handleFocusTabGroup, // Restore handleFocusTabGroup
     isCompact,
-    isSelectionMode,
-  } = data;
+    isSelectionMode
+  } = data
 
-  const item = displayItems[index];
+  const item = displayItems[index]
 
   // Always call hooks
-  const sortableId = item ? item.id : `dummy-${index}`;
-  const sortableDisabled = !item || item.type === 'header' || item.type === 'tab-group-header';
+  const sortableId = item ? item.id : `dummy-${index}`
+  const sortableDisabled =
+    !item || item.type === 'header' || item.type === 'tab-group-header'
 
   const {
     attributes,
@@ -114,16 +128,16 @@ const Row = ({ index, style, data }: { index: number; style: React.CSSProperties
     transform,
     transition,
     isDragging
-  } = useSortable({ id: sortableId, disabled: sortableDisabled });
+  } = useSortable({ id: sortableId, disabled: sortableDisabled })
 
-  if (!item) return null;
+  if (!item) return null
 
   const dndStyle: React.CSSProperties = {
     ...style,
     transform: CSS.Transform.toString(transform),
     transition,
-    zIndex: isDragging ? 9999 : 'auto',
-  };
+    zIndex: isDragging ? 9999 : 'auto'
+  }
 
   if (item.type === 'header') {
     return (
@@ -145,9 +159,15 @@ const Row = ({ index, style, data }: { index: number; style: React.CSSProperties
 
   if (item.type === 'domain-header') {
     return (
-      <div style={style} className="px-4 py-2 bg-slate-100 flex items-center justify-between cursor-pointer border-b border-white" onClick={() => toggleGroup(`domain-${item.title}`)}>
+      <div
+        style={style}
+        className="px-4 py-2 bg-slate-100 flex items-center justify-between cursor-pointer border-b border-white"
+        onClick={() => toggleGroup(`domain-${item.title}`)}
+      >
         <span className="font-bold text-slate-700">{item.title}</span>
-        <span className="text-xs text-slate-500 bg-slate-200 px-2 py-0.5 rounded-full">{item.count}</span>
+        <span className="text-xs text-slate-500 bg-slate-200 px-2 py-0.5 rounded-full">
+          {item.count}
+        </span>
       </div>
     )
   }
@@ -183,35 +203,46 @@ const Row = ({ index, style, data }: { index: number; style: React.CSSProperties
         {...tabOperations}
       />
     </div>
-  );
-};
+  )
+}
 
 function TabList() {
   const dispatch = useDispatch()
-  const { tabs, filteredTabs, selectedTabs, selectedWindow, isSelectionMode } = useSelector((state: RootState) => state.tabs)
-  const { isCompact } = useResponsive(); // Add useResponsive
+  const { tabs, filteredTabs, selectedTabs, selectedWindow, isSelectionMode } =
+    useSelector((state: RootState) => state.tabs)
+  const { isCompact } = useResponsive() // Add useResponsive
   const searchState = useSelector((state: RootState) => state.search)
   const tabOperations = useTabOperations()
   const [isLoading, setIsLoading] = React.useState(false)
   const listRef = useRef<any>(null)
   const [groupedTabsSetting, setGroupedTabsSetting] = React.useState(true)
-  const [tabActionButtonsSetting, setTabActionButtonsSetting] = React.useState<'always' | 'hover'>('hover')
-  const [currentWindowId, setCurrentWindowId] = React.useState<number | null>(null)
-  const [collapsedGroups, setCollapsedGroups] = React.useState<Set<number | string>>(new Set())
-  const [collapsedTabGroups, setCollapsedTabGroups] = React.useState<Set<number>>(new Set())
-  const [tabGroups, setTabGroups] = React.useState<Record<number, chrome.tabGroups.TabGroup>>({})
+  const [tabActionButtonsSetting, setTabActionButtonsSetting] = React.useState<
+    'always' | 'hover'
+  >('hover')
+  const [currentWindowId, setCurrentWindowId] = React.useState<number | null>(
+    null
+  )
+  const [collapsedGroups, setCollapsedGroups] = React.useState<
+    Set<number | string>
+  >(new Set())
+  const [collapsedTabGroups, setCollapsedTabGroups] = React.useState<
+    Set<number>
+  >(new Set())
+  const [tabGroups, setTabGroups] = React.useState<
+    Record<number, chrome.tabGroups.TabGroup>
+  >({})
 
   const sensors = useSensors(
     useSensor(PointerSensor, {
       activationConstraint: {
-        distance: 8,
-      },
+        distance: 8
+      }
     }),
     useSensor(KeyboardSensor)
   )
 
   const toggleGroup = (windowId: number | string) => {
-    setCollapsedGroups(prev => {
+    setCollapsedGroups((prev) => {
       const next = new Set(prev)
       // @ts-ignore
       if (next.has(windowId)) next.delete(windowId)
@@ -221,7 +252,7 @@ function TabList() {
   }
 
   const toggleTabGroup = (groupId: number) => {
-    setCollapsedTabGroups(prev => {
+    setCollapsedTabGroups((prev) => {
       const next = new Set(prev)
       if (next.has(groupId)) next.delete(groupId)
       else next.add(groupId)
@@ -242,7 +273,9 @@ function TabList() {
   }
 
   const handleDiscardWindow = (windowId: number) => {
-    const tabsToDiscard = filteredTabs.filter((t: any) => t.windowId === windowId && !t.active).map((t: any) => t.id)
+    const tabsToDiscard = filteredTabs
+      .filter((t: any) => t.windowId === windowId && !t.active)
+      .map((t: any) => t.id)
     if (tabsToDiscard.length > 0) {
       chrome.tabs.discard(tabsToDiscard)
     }
@@ -261,14 +294,18 @@ function TabList() {
   }
 
   const handleCloseTabGroup = (groupId: number) => {
-    const tabsToClose = filteredTabs.filter((t: any) => t.groupId === groupId).map((t: any) => t.id)
+    const tabsToClose = filteredTabs
+      .filter((t: any) => t.groupId === groupId)
+      .map((t: any) => t.id)
     if (tabsToClose.length > 0) {
       chrome.tabs.remove(tabsToClose)
     }
   }
 
   const handleDiscardTabGroup = (groupId: number) => {
-    const tabsToDiscard = filteredTabs.filter((t: any) => t.groupId === groupId && !t.active).map((t: any) => t.id)
+    const tabsToDiscard = filteredTabs
+      .filter((t: any) => t.groupId === groupId && !t.active)
+      .map((t: any) => t.id)
     if (tabsToDiscard.length > 0) {
       chrome.tabs.discard(tabsToDiscard)
     }
@@ -285,12 +322,12 @@ function TabList() {
   useEffect(() => {
     const fetchGroups = () => {
       if (!chrome.tabGroups) {
-        console.warn('⚠️ chrome.tabGroups API is not available');
-        return;
+        console.warn('⚠️ chrome.tabGroups API is not available')
+        return
       }
       chrome.tabGroups.query({}, (groups) => {
         const groupMap: Record<number, chrome.tabGroups.TabGroup> = {}
-        groups.forEach(g => {
+        groups.forEach((g) => {
           groupMap[g.id] = g
         })
         setTabGroups(groupMap)
@@ -306,20 +343,24 @@ function TabList() {
     chrome.tabGroups.onRemoved.addListener(onGroupUpdated)
 
     chrome.storage.local.get(['groupedTabs', 'tabActionButtons'], (result) => {
-      if (result.groupedTabs !== undefined) setGroupedTabsSetting(result.groupedTabs)
-      if (result.tabActionButtons) setTabActionButtonsSetting(result.tabActionButtons)
+      if (result.groupedTabs !== undefined)
+        setGroupedTabsSetting(result.groupedTabs)
+      if (result.tabActionButtons)
+        setTabActionButtonsSetting(result.tabActionButtons)
     })
 
     // Listen for storage changes
     const handleStorageChange = (changes: any, area: string) => {
       if (area === 'local') {
-        if (changes.groupedTabs) setGroupedTabsSetting(changes.groupedTabs.newValue)
-        if (changes.tabActionButtons) setTabActionButtonsSetting(changes.tabActionButtons.newValue)
+        if (changes.groupedTabs)
+          setGroupedTabsSetting(changes.groupedTabs.newValue)
+        if (changes.tabActionButtons)
+          setTabActionButtonsSetting(changes.tabActionButtons.newValue)
       }
     }
     chrome.storage.onChanged.addListener(handleStorageChange)
 
-    getCurrentWindow().then(win => {
+    getCurrentWindow().then((win) => {
       if (win && typeof win.id === 'number') {
         setCurrentWindowId(win.id)
       }
@@ -337,9 +378,13 @@ function TabList() {
     // 1. Filter tabs based on selectedWindow
     let tabsToDisplay = filteredTabs
     if (selectedWindow === 'current') {
-      tabsToDisplay = filteredTabs.filter((t: any) => t.windowId === currentWindowId)
+      tabsToDisplay = filteredTabs.filter(
+        (t: any) => t.windowId === currentWindowId
+      )
     } else if (selectedWindow !== 'all') {
-      tabsToDisplay = filteredTabs.filter((t: any) => t.windowId === Number(selectedWindow))
+      tabsToDisplay = filteredTabs.filter(
+        (t: any) => t.windowId === Number(selectedWindow)
+      )
     }
 
     // 2. Sort tabs by windowId then index
@@ -385,11 +430,15 @@ function TabList() {
       if (showWindowHeader && collapsedGroups.has(tab.windowId)) return
 
       // Tab Group Header
-      const currentGroupId = (tab.groupId && tab.groupId !== -1) ? tab.groupId : -1
+      const currentGroupId =
+        tab.groupId && tab.groupId !== -1 ? tab.groupId : -1
 
       // Check if we need to insert a group header
       // We insert if the group ID changed OR if we just switched windows (even if group ID happens to be same integer, which is unlikely across windows but safe to check)
-      if (currentGroupId !== lastGroupId || (showWindowHeader && tab.windowId !== lastWindowId)) {
+      if (
+        currentGroupId !== lastGroupId ||
+        (showWindowHeader && tab.windowId !== lastWindowId)
+      ) {
         lastGroupId = currentGroupId
 
         if (currentGroupId !== -1) {
@@ -406,10 +455,12 @@ function TabList() {
       }
 
       // If tab group is collapsed, skip tabs
-      if (currentGroupId !== -1 && collapsedTabGroups.has(currentGroupId)) return
+      if (currentGroupId !== -1 && collapsedTabGroups.has(currentGroupId))
+        return
 
       // Tab Item
-      const groupInfo = currentGroupId !== -1 ? tabGroups[currentGroupId] : undefined
+      const groupInfo =
+        currentGroupId !== -1 ? tabGroups[currentGroupId] : undefined
       items.push({
         ...tab,
         type: 'tab',
@@ -419,7 +470,15 @@ function TabList() {
     })
 
     return items
-  }, [filteredTabs, selectedWindow, groupedTabsSetting, currentWindowId, collapsedGroups, collapsedTabGroups, tabGroups])
+  }, [
+    filteredTabs,
+    selectedWindow,
+    groupedTabsSetting,
+    currentWindowId,
+    collapsedGroups,
+    collapsedTabGroups,
+    tabGroups
+  ])
 
   useEffect(() => {
     const filterAndUpdate = async () => {
@@ -439,7 +498,12 @@ function TabList() {
           },
           tabs
         )
-        console.log('🔍 Filtered tabs result:', filtered?.length, 'Original tabs:', tabs.length)
+        console.log(
+          '🔍 Filtered tabs result:',
+          filtered?.length,
+          'Original tabs:',
+          tabs.length
+        )
         dispatch(updateFilteredTabs(filtered || tabs))
       } catch (error) {
         console.error('❌ Error filtering tabs:', error)
@@ -457,55 +521,63 @@ function TabList() {
     }
   }, [searchState, tabs, dispatch])
 
-  console.log('📋 TabList render - filteredTabs:', filteredTabs, 'length:', filteredTabs?.length)
+  console.log(
+    '📋 TabList render - filteredTabs:',
+    filteredTabs,
+    'length:',
+    filteredTabs?.length
+  )
 
   const handleDragEnd = (event: DragEndEvent) => {
-    const { active, over } = event;
-    if (!over || active.id === over.id) return;
+    const { active, over } = event
+    if (!over || active.id === over.id) return
 
-    const activeId = active.id;
-    const overId = over.id;
+    const activeId = active.id
+    const overId = over.id
 
     // Find the items in displayItems to get their metadata (windowId, etc.)
-    const activeItem = displayItems.find(item => item.id === activeId);
-    const overItem = displayItems.find(item => item.id === overId);
+    const activeItem = displayItems.find((item) => item.id === activeId)
+    const overItem = displayItems.find((item) => item.id === overId)
 
-    if (!activeItem || !overItem) return;
+    if (!activeItem || !overItem) return
 
     // If dragging a header, do nothing for now (or implement window reordering later)
-    if (activeItem.type === 'header' || activeItem.type === 'tab-group-header') return;
+    if (activeItem.type === 'header' || activeItem.type === 'tab-group-header')
+      return
 
     // Determine target window and index
-    let targetWindowId = overItem.windowId;
-    let targetIndex = -1;
+    let targetWindowId = overItem.windowId
+    let targetIndex = -1
 
     if (overItem.type === 'header') {
       // Dropped on a window header -> move to start of that window
-      targetWindowId = overItem.windowId;
-      targetIndex = 0;
+      targetWindowId = overItem.windowId
+      targetIndex = 0
     } else if (overItem.type === 'tab-group-header') {
       // Dropped on a group header -> move to start of that group
       // For simplicity, we'll just move to the window of that group for now,
       // finding the exact index inside a group requires more logic about group ranges.
       // Let's just treat it as moving to that window.
       // Ideally we find the first tab in that group and insert before it.
-      const firstTabInGroup = filteredTabs.find((t: any) => t.groupId === overItem.groupId);
+      const firstTabInGroup = filteredTabs.find(
+        (t: any) => t.groupId === overItem.groupId
+      )
       if (firstTabInGroup) {
-        targetWindowId = firstTabInGroup.windowId;
-        targetIndex = firstTabInGroup.index;
+        targetWindowId = firstTabInGroup.windowId
+        targetIndex = firstTabInGroup.index
       } else {
         // Empty group?
-        targetWindowId = overItem.windowId; // Fallback
+        targetWindowId = overItem.windowId // Fallback
       }
     } else {
       // Dropped on another tab
-      targetWindowId = overItem.windowId;
-      targetIndex = overItem.index;
+      targetWindowId = overItem.windowId
+      targetIndex = overItem.index
     }
 
     // Optimistic UI Update (Local State)
-    const oldIndex = filteredTabs.findIndex((tab: any) => tab.id === activeId);
-    const newIndex = filteredTabs.findIndex((tab: any) => tab.id === overId);
+    const oldIndex = filteredTabs.findIndex((tab: any) => tab.id === activeId)
+    const newIndex = filteredTabs.findIndex((tab: any) => tab.id === overId)
 
     // Note: arrayMove works for reordering within the same list.
     // For cross-window, we might need to remove from one place and insert in another if we want full optimistic UI.
@@ -514,55 +586,61 @@ function TabList() {
     // So strictly speaking, we might not *need* to update local state if the chrome event is fast enough.
     // But for smoothness, let's try to update local state if it's the same window.
     if (activeItem.windowId === targetWindowId) {
-      const newTabs = arrayMove(filteredTabs, oldIndex, newIndex);
-      dispatch(updateFilteredTabs(newTabs));
+      const newTabs = arrayMove(filteredTabs, oldIndex, newIndex)
+      dispatch(updateFilteredTabs(newTabs))
     }
 
     // Perform Chrome Action
     if (activeItem.windowId !== targetWindowId) {
       // Moving to a different window
-      chrome.tabs.move(Number(activeId), { windowId: targetWindowId, index: targetIndex });
+      chrome.tabs.move(Number(activeId), {
+        windowId: targetWindowId,
+        index: targetIndex
+      })
       // Also need to update the windowId in our local state to prevent jumpiness before refetch?
       // Actually, let's rely on the chrome event listener to refresh the list.
     } else {
       // Same window reorder
-      chrome.tabs.move(Number(activeId), { index: targetIndex });
+      chrome.tabs.move(Number(activeId), { index: targetIndex })
     }
-  };
+  }
 
   if (isLoading) {
     return <MyLoader width={400} />
   }
 
-  const itemData = React.useMemo(() => ({
-    displayItems,
-    collapsedGroups,
-    collapsedTabGroups,
-    selectedTabs,
-    tabActionButtonsSetting,
-    tabOperations,
-    toggleGroup,
-    toggleTabGroup,
-    handleSaveWindow,
-    handleDiscardWindow,
-    handleCloseWindow,
-    handleFocusWindow,
-    handleSaveTabGroup,
-    handleDiscardTabGroup,
-    handleCloseTabGroup,
-    handleFocusTabGroup,
-    isCompact, // Add isCompact
-    isSelectionMode // Add isSelectionMode
-  }), [
-    displayItems,
-    collapsedGroups,
-    collapsedTabGroups,
-    selectedTabs,
-    tabActionButtonsSetting,
-    tabOperations,
-    isCompact,
-    isSelectionMode
-  ]);
+  const itemData = React.useMemo(
+    () => ({
+      displayItems,
+      collapsedGroups,
+      collapsedTabGroups,
+      selectedTabs,
+      tabActionButtonsSetting,
+      tabOperations,
+      toggleGroup,
+      toggleTabGroup,
+      handleSaveWindow,
+      handleDiscardWindow,
+      handleCloseWindow,
+      handleFocusWindow,
+      handleSaveTabGroup,
+      handleDiscardTabGroup,
+      handleCloseTabGroup,
+      handleFocusTabGroup,
+      isCompact, // Add isCompact
+      isSelectionMode // Add isSelectionMode
+    }),
+    [
+      displayItems,
+      collapsedGroups,
+      collapsedTabGroups,
+      selectedTabs,
+      tabActionButtonsSetting,
+      tabOperations,
+      isCompact,
+      isSelectionMode
+    ]
+  )
 
   return (
     <div className="absolute inset-0 overflow-hidden">
@@ -573,7 +651,10 @@ function TabList() {
       >
         <SimpleAutoSizer>
           {({ height, width }: { height: number; width: number }) => (
-            <SortableContext items={displayItems.map(i => i.id)} strategy={verticalListSortingStrategy}>
+            <SortableContext
+              items={displayItems.map((i) => i.id)}
+              strategy={verticalListSortingStrategy}
+            >
               <SimpleFixedSizeList
                 ref={listRef}
                 height={height}

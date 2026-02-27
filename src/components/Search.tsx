@@ -1,11 +1,15 @@
-import { Input, message } from 'antd'
+import { Input, } from 'antd'
 import { debounce } from 'lodash'
 import React, { memo, useCallback, useEffect, useState } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
-import { Pin, PinOff, Volume2, VolumeX } from 'lucide-react'
+import { Pin, Volume2, VolumeX } from 'lucide-react'
 import ErrorBoundary from '~/scripts/ErrorBoundary'
 import { makePlaceholder as doPlaceholder } from '~/scripts/general'
-import { toggleAudible, togglePinned, toggleRegex, toggleSearchIn, updateSearchTerm } from '~/store/searchSlice'
+import {
+  toggleAudible,
+  togglePinned,
+  updateSearchTerm
+} from '~/store/searchSlice'
 
 const { Search: AntSearch } = Input
 
@@ -35,8 +39,7 @@ const Search = () => {
   useEffect(() => {
     setPlaceholder(doPlaceholder(searchIn, regex))
   }, [searchIn])
-  useEffect(() => {
-  }, [regex])
+  useEffect(() => {}, [regex])
   useEffect(() => {
     if (searchTerm === '') {
       const inputSearch = document.getElementById('search-field')
@@ -90,31 +93,52 @@ const Search = () => {
                 <button
                   className="!border-0 flex align-items-center bg-transparent cursor-pointer p-0"
                   type="button"
-                  aria-label={audibleSearch ? "Show all tabs" : "Filter audible only"}
-                  title={audibleSearch ? "Show all tabs" : "Filter audible only"}
-                  onClick={() => dispatch(toggleAudible())}>
+                  aria-label={
+                    audibleSearch ? 'Show all tabs' : 'Filter audible only'
+                  }
+                  title={
+                    audibleSearch ? 'Show all tabs' : 'Filter audible only'
+                  }
+                  onClick={() => dispatch(toggleAudible())}
+                >
                   {audibleSearch ? (
-                    <Volume2 size={16} className="text-[#0487cf]" aria-hidden="true" />
+                    <Volume2
+                      size={16}
+                      className="text-[#0487cf]"
+                      aria-hidden="true"
+                    />
                   ) : (
-                    <VolumeX size={16} className="text-[#0487cf]" aria-hidden="true" />
+                    <VolumeX
+                      size={16}
+                      className="text-[#0487cf]"
+                      aria-hidden="true"
+                    />
                   )}
                 </button>
 
                 <button
                   className="!border-0 bg-transparent cursor-pointer flex align-items-center p-0"
                   type="button"
-                  aria-label={pinnedSearch ? "Show all tabs" : "Filter pinned only"}
-                  title={pinnedSearch ? "Show all tabs" : "Filter pinned only"}
-                  onClick={() => dispatch(togglePinned())}>
+                  aria-label={
+                    pinnedSearch ? 'Show all tabs' : 'Filter pinned only'
+                  }
+                  title={pinnedSearch ? 'Show all tabs' : 'Filter pinned only'}
+                  onClick={() => dispatch(togglePinned())}
+                >
                   {pinnedSearch ? (
-                    <Pin size={16} className="text-[#0487cf] fill-current" aria-hidden="true" />
+                    <Pin
+                      size={16}
+                      className="text-[#0487cf] fill-current"
+                      aria-hidden="true"
+                    />
                   ) : (
-                    <Pin size={16} className="text-[#0487cf]" aria-hidden="true" />
+                    <Pin
+                      size={16}
+                      className="text-[#0487cf]"
+                      aria-hidden="true"
+                    />
                   )}
                 </button>
-
-
-
               </div>
             </div>
           }

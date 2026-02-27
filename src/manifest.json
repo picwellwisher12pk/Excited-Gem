@@ -17,10 +17,7 @@
     "sidePanel",
     "scripting"
   ],
-  "host_permissions": [
-    "https://*.youtube.com/*",
-    "http://*.youtube.com/*"
-  ],
+  "host_permissions": ["https://*.youtube.com/*", "http://*.youtube.com/*"],
   "{{chrome}}.action": {
     "default_icon": {
       "19": "logo.svg",
@@ -36,8 +33,6 @@
   },
   "background": {
     "{{chrome}}.service_worker": "src/background.ts",
-    "{{firefox}}.scripts": [
-      "src/background.ts"
-    ]
+    "{{firefox}}.scripts": ["src/background.ts"]
   }
 }

@@ -1,38 +1,38 @@
-import { createSlice } from "@reduxjs/toolkit";
-import { preferences } from "../scripts/defaultPreferences";
+import { createSlice } from '@reduxjs/toolkit'
+import { preferences } from '../scripts/defaultPreferences'
 
-const searchIn = { ...preferences.search.searchIn };
-const regex = preferences.search.regex || false;
+const searchIn = { ...preferences.search.searchIn }
+const regex = preferences.search.regex || false
 export const searchSlice = createSlice({
-  name: "search",
+  name: 'search',
   initialState: {
-    searchTerm: "",
+    searchTerm: '',
     searchIn,
     audibleSearch: false,
     pinnedSearch: false,
-    regex,
+    regex
   },
   reducers: {
     updateSearchTerm: (state, action) => {
-      state.searchTerm = action.payload;
+      state.searchTerm = action.payload
     },
     toggleRegex: (state) => {
-      state.regex = !state.regex;
+      state.regex = !state.regex
     },
     setRegex: (state, action) => {
-      state.regex = action.payload;
+      state.regex = action.payload
     },
     toggleSearchIn: (state, action) => {
-      state.searchIn = { ...action.payload };
+      state.searchIn = { ...action.payload }
     },
     toggleAudible: (state) => {
-      state.audibleSearch = !state.audibleSearch;
+      state.audibleSearch = !state.audibleSearch
     },
     togglePinned: (state) => {
-      state.pinnedSearch = !state.pinnedSearch;
-    },
-  },
-});
+      state.pinnedSearch = !state.pinnedSearch
+    }
+  }
+})
 
 // Action creators are generated for each case reducer function
 export const {
@@ -40,7 +40,7 @@ export const {
   toggleSearchIn,
   toggleAudible,
   togglePinned,
-  toggleRegex,
-} = searchSlice.actions;
+  toggleRegex
+} = searchSlice.actions
 
-export default searchSlice.reducer;
+export default searchSlice.reducer

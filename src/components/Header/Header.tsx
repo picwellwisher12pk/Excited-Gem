@@ -3,12 +3,10 @@ import { useCallback, useEffect, useMemo, useState } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 import type { ReactNode } from 'react'
 import {
-  RefreshCw,
   Pin,
   VolumeX,
   X,
   Move,
-  Volume2,
   Save,
   Moon,
   ChevronDown
@@ -22,7 +20,6 @@ import { MoveModal } from '~/components/Modals/Move'
 import { SaveModal } from '~/components/Modals/Save'
 import WindowSelector from '~/components/WindowSelector'
 import Brand from './Brand'
-import MenuItemButton from './MenuItemButton'
 import Selection from './Selection'
 import SortButton from './SortButton'
 import Btn from '~/components/Btn'
@@ -59,11 +56,13 @@ export default function Header({
   allSelected = false,
   allMuted = false,
   allPinned = false,
-  processSelectedTabs = () => { },
+  processSelectedTabs = () => {},
   sidebarToggle
 }: Readonly<HeaderProps>) {
   const dispatch = useDispatch()
-  const { selectedTabs, tabs, filteredTabs } = useSelector((state: { tabs: TabState }) => state.tabs)
+  const { selectedTabs, tabs, filteredTabs } = useSelector(
+    (state: { tabs: TabState }) => state.tabs
+  )
   const [checkedList, setCheckedList] = useState(selectedTabs)
   const [indeterminate, setIndeterminate] = useState(false)
   const [checkAll, setCheckAll] = useState(false)
@@ -108,9 +107,9 @@ export default function Header({
   const pinMenu = {
     items: pinActions.map((action) => ({
       key: action,
-      label: action,
+      label: action
     })),
-    onClick: ({ key }) => handlePin(key),
+    onClick: ({ key }) => handlePin(key)
   }
 
   const pinSelect = (
@@ -126,9 +125,9 @@ export default function Header({
   const muteMenu = {
     items: muteActions.map((action) => ({
       key: action,
-      label: action,
+      label: action
     })),
-    onClick: ({ key }) => handleMute(key),
+    onClick: ({ key }) => handleMute(key)
   }
 
   const muteSelect = (
@@ -150,15 +149,14 @@ export default function Header({
               <SidebarToggleButton onClick={sidebarToggle} />
             </div>
           )}
-          <div className="hidden sm:block">
-            {Brand(logo)}
-          </div>
+          <div className="hidden sm:block">{Brand(logo)}</div>
         </div>
         {children}
       </section>
       <section
         className="flex flex-row justify-between items-center mt-1"
-        id="selection-action">
+        id="selection-action"
+      >
         <div className="flex mb-0 overflow-x-auto sm:overflow-visible no-scrollbar">
           <div className="mr-3 shrink-0">
             <Selection />
@@ -173,12 +171,8 @@ export default function Header({
             <span className="px-2 pl-0 text-white select-none font-semibold">
               Actions for selection ({selectedTabs.length} tabs)
             </span>
-            <div>
-              {pinSelect}
-            </div>
-            <div>
-              {muteSelect}
-            </div>
+            <div>{pinSelect}</div>
+            <div>{muteSelect}</div>
             <div>
               <Btn onClick={() => setSaveModalVisible(true)}>
                 <Save size={14} className="inline mr-1" />
@@ -223,7 +217,6 @@ export default function Header({
           </Space>
         )}
 
-
         <Space className="mr-1">
           <div>
             <MoreActionsMenu />
@@ -232,9 +225,14 @@ export default function Header({
           <div>
             <Btn
               onClick={() => {
-                processSelectedTabs(!allMuted ? 'muteSelected' : 'unmuteSelected')
+                processSelectedTabs(
+                  !allMuted ? 'muteSelected' : 'unmuteSelected'
+                )
               }}
-              title={!allMuted ? 'Mute All Visible Tabs' : 'Unmute All Visible Tabs'}>
+              title={
+                !allMuted ? 'Mute All Visible Tabs' : 'Unmute All Visible Tabs'
+              }
+            >
               {iconSound}
             </Btn>
           </div>

@@ -1,12 +1,12 @@
 let chrome = {
-  default_locale: "en",
-  homepage_url: "https://amirhameed.com",
-  minimum_chrome_version: "versionString",
+  default_locale: 'en',
+  homepage_url: 'https://amirhameed.com',
+  minimum_chrome_version: 'versionString',
   omnibox: {
-    keyword: "eg",
+    keyword: 'eg'
   },
   options_ui: {
-    page: "options.html",
-    open_in_tab: true,
-  },
-};
+    page: 'options.html',
+    open_in_tab: true
+  }
+}

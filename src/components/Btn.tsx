@@ -23,7 +23,8 @@ export default function Btn({
       {...props}
       className={`align-items-center min-w-[40px] shadow-md hover:shadow-sm active:shadow-none
       ${!border ? btnBorder : '!border !border-zinc-200'}
-      ${gradient ? btnGradient : ''} ${props.className}`}>
+      ${gradient ? btnGradient : ''} ${props.className}`}
+    >
       {Array.isArray(children) && children.length > 1 ? (
         <div className="flex items-center gap-1">{children}</div>
       ) : (

@@ -1,16 +1,16 @@
-import {Select} from 'antd'
-import React, {useEffect, useState} from 'react'
-import {useDispatch, useSelector} from 'react-redux'
+import { Select } from 'antd'
+import { useEffect, useState } from 'react'
+import { useDispatch, useSelector } from 'react-redux'
 
-import {getAllWindows, getCurrentWindow} from '~/scripts/general'
-import {updateSelectedWindow} from '~/store/tabSlice'
+import { getAllWindows, getCurrentWindow } from '~/scripts/general'
+import { updateSelectedWindow } from '~/store/tabSlice'
 
-const {Option} = Select
+const { Option } = Select
 
 export default function WindowSelector() {
   const dispatch = useDispatch()
   // const [dropdownVisible, setDropDown] = useState(false)
-  const {selectedWindow} = useSelector((state) => state.tabs) //'current'
+  const { selectedWindow } = useSelector((state) => state.tabs) //'current'
   const [allWindows, setAllWindows] = useState([])
   const [loading, setLoading] = useState(true)
   const [currentWindow, setCurrentWindow] = useState({})
@@ -31,18 +31,21 @@ export default function WindowSelector() {
         label={window.id}
         onClick={() =>
           setWindow(currentWindow.id === window.id ? 'current' : window.id)
-        }>
+        }
+      >
         <span
           className={`flex justify-between align-items-center btn-link`}
           onClick={() => {
             setWindow(window.id)
-          }}>
+          }}
+        >
           <div>
             <span
               className={
                 'inline-block w-2 h-2 rounded-full mb-[1px] mr-2 ' +
                 (currentWindow.id === window.id ? 'bg-green-500' : '')
-              }></span>
+              }
+            ></span>
             <span>
               Window
               {currentWindow.id === window.id && (
@@ -54,7 +57,8 @@ export default function WindowSelector() {
           <small
             className={
               window.tabs.length > 50 ? '!text-orange-600' : '!text-lime-700'
-            }>
+            }
+          >
             {window.tabs.length} tab{window.tabs.length > 1 && 's'}
           </small>
         </span>
@@ -80,13 +84,15 @@ export default function WindowSelector() {
             className={
               'inline-block w-2 h-2 rounded-full mb-[1px] mr-2 ' +
               (currentWindow.id === window.id && 'bg-green-500')
-            }></span>
+            }
+          ></span>
           <span>All Windows</span>
         </div>
         <small
           className={
             totalTabCount > 50 ? '!text-orange-600' : '!text-green-500'
-          }>
+          }
+        >
           {totalTabCount} tab{totalTabCount > 1 && 's'}
         </small>
       </div>
@@ -100,7 +106,8 @@ export default function WindowSelector() {
             className={
               'inline-block w-2 h-2 rounded-full mb-[1px] mr-2 ' +
               (selectedWindow.id === window.id ? 'bg-green-500' : '')
-            }></span>
+            }
+          ></span>
           <span>
             Window <small className="text-gray-400"> (current)</small>
           </span>
@@ -110,7 +117,8 @@ export default function WindowSelector() {
             currentWindow.tabs?.length > 50
               ? '!text-orange-600'
               : '!text-green-500'
-          }>
+          }
+        >
           {currentWindow.tabs?.length} tab
           {currentWindow.tabs?.length > 1 && 's'}
         </small>
@@ -126,13 +134,14 @@ export default function WindowSelector() {
   return (
     <Select
       loading={loading}
-      style={{width: 200}}
+      style={{ width: 200 }}
       size={'small'}
       defaultValue={{
         value: selectedWindow
       }}
       className="!border-0 shadow-md hover:shadow-sm active:shadow-none"
-      onSelect={setWindow}>
+      onSelect={setWindow}
+    >
       {[optionAll, optionCurrent, ...options]}
     </Select>
   )

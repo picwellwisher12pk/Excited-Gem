@@ -1,1 +1,1 @@
-export { default, SidebarToggleButton } from './Sidebar';
+export { default, SidebarToggleButton } from './Sidebar'

@@ -1,14 +1,10 @@
-import React, { useCallback } from 'react'
+import { useCallback } from 'react'
 import TimesIcon from 'react:/src/icons/times.svg'
 import VolumeOffIcon from 'react:/src/icons/volume-off.svg'
 import VolumeSlashIcon from 'react:/src/icons/volume-slash.svg'
 import VolumeIcon from 'react:/src/icons/volume.svg'
 
 import ItemBtn from '../ItemBtn'
-
-
-
-
 
 export const iconHeight: number = 16
 

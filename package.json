@@ -20,6 +20,7 @@
   "scripts": {
     "start": "nodemon",
     "dev": "plasmo dev",
+    "dev:win": "plasmo dev & ./scripts/sync-build.sh",
     "build": "plasmo build",
     "package": "plasmo package",
     "start:chromium": "web-ext run --source-dir ./extension --target=chromium",
@@ -109,7 +110,8 @@
       "storage",
       "sidePanel",
       "tabGroups",
-      "identity"
+      "identity",
+      "bookmarks"
     ],
     "side_panel": {
       "default_path": "tabs/home.html"

@@ -56,7 +56,7 @@ chrome.runtime.onInstalled.addListener(() => {
   //   chrome.storage.local.get("preferences").then((result) => {})
   // })
   // getTabs("current").then((tabs) => setBadge(tabs.length))
-  console.log("Excited Gem: Extension Installed.")
+  console.log('Excited Gem: Extension Installed.')
 })
 chrome.tabs.onRemoved.addListener((tabId) => {
   // chrome.tabs.get(homepageOpened.id, () => {
@@ -86,9 +86,9 @@ chrome.tabs.onRemoved.addListener((tabId) => {
 /////////////////////
 
 chrome.action.onClicked.addListener((tab) => {
-  console.info("Extension Page opening")
+  console.info('Extension Page opening')
   chrome.tabs
-    .create({ url: chrome.runtime.getURL("popup.html"), pinned: true })
+    .create({ url: chrome.runtime.getURL('popup.html'), pinned: true })
     .then((tab) => tab)
   // openExcitedGemPage();
 })

@@ -87,3 +87,6 @@ src/images/solid/
 thumbs.db
 utils/.npmrc
 /.idea
+# Bookmark Data
+bookmarks_backup_*.json
+bookmarks_categorized*.json

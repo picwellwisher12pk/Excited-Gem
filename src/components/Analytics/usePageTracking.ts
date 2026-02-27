@@ -1,5 +1,5 @@
-import { useEffect } from 'react';
-import { analytics } from '~/utils/analytics';
+import { useEffect } from 'react'
+import { analytics } from '~/utils/analytics'
 
 /**
  * Hook to track page views in Google Analytics
@@ -8,6 +8,6 @@ import { analytics } from '~/utils/analytics';
  */
 export function usePageTracking(pagePath: string, pageTitle: string) {
   useEffect(() => {
-    analytics.trackPageView(pagePath, pageTitle);
-  }, [pagePath, pageTitle]);
+    analytics.trackPageView(pagePath, pageTitle)
+  }, [pagePath, pageTitle])
 }

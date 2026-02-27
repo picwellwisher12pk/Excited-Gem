@@ -2,10 +2,13 @@ import { Checkbox } from 'antd'
 import { memo, useCallback } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 
-import { clearSelectedTabs, invertSelectedTabs, selectAllTabs } from '~/store/tabSlice'
+import {
+  clearSelectedTabs,
+  invertSelectedTabs,
+  selectAllTabs
+} from '~/store/tabSlice'
 import { ArrowRightLeft } from 'lucide-react'
 import Btn from '~/components/Btn'
-
 
 const Selection = () => {
   const dispatch = useDispatch()
@@ -25,7 +28,8 @@ const Selection = () => {
     <div className="flex shadow-md">
       <span
         className="bg-zinc-200 px-2 !rounded-l text-black select-none"
-        title="Un/Select only filtered or visible tabs">
+        title="Un/Select only filtered or visible tabs"
+      >
         <Checkbox
           onChange={handleAllSelection}
           indeterminate={
@@ -37,7 +41,8 @@ const Selection = () => {
       <Btn
         title="Invert Selection"
         onClick={handleInversion}
-        className="!rounded-l-[0] shdow-none flex items-center gap-1">
+        className="!rounded-l-[0] shdow-none flex items-center gap-1"
+      >
         <ArrowRightLeft size={14} className="text-zinc-600" />
         <span className="hidden sm:inline">Invert</span>
       </Btn>

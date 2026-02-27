@@ -1,19 +1,25 @@
 import { Checkbox } from 'antd'
-import React from 'react'
 // @ts-ignore
 import Loading from 'react:/src/icons/spinner-third.svg'
 
-
-export function TabIcon({ onChange, checked, loading, discarded, src, title, isSelectionMode }: Readonly<{
-  onChange: () => void;
-  checked: boolean;
-  loading: boolean;
-  src: string;
-  discarded: boolean;
-  title: string;
-  isSelectionMode: boolean;
+export function TabIcon({
+  onChange,
+  checked,
+  loading,
+  discarded,
+  src,
+  title,
+  isSelectionMode
+}: Readonly<{
+  onChange: () => void
+  checked: boolean
+  loading: boolean
+  src: string
+  discarded: boolean
+  title: string
+  isSelectionMode: boolean
 }>) {
-  const showCheckbox = isSelectionMode || checked;
+  const showCheckbox = isSelectionMode || checked
 
   return (
     <div
@@ -21,18 +27,22 @@ export function TabIcon({ onChange, checked, loading, discarded, src, title, isS
       aria-label={`Tab selection and favicon for ${title}`}
     >
       {/* Checkbox: Visible if selected, in selection mode, or on hover */}
-      <div className={`absolute inset-0 flex items-center justify-center transition-opacity duration-200 ${showCheckbox ? 'opacity-100' : 'opacity-0 group-hover:opacity-100 z-10'}`}>
+      <div
+        className={`absolute inset-0 flex items-center justify-center transition-opacity duration-200 ${showCheckbox ? 'opacity-100' : 'opacity-0 group-hover:opacity-100 z-10'}`}
+      >
         <Checkbox
           onChange={(e) => {
-            e.stopPropagation(); // Prevent tab click
-            onChange();
+            e.stopPropagation() // Prevent tab click
+            onChange()
           }}
           checked={checked}
         />
       </div>
 
       {/* Favicon/Loading: Visible if NOT selected/mode, fades out on hover */}
-      <div className={`flex items-center justify-center transition-opacity duration-200 ${showCheckbox ? 'opacity-0' : 'group-hover:opacity-0 opacity-100'}`}>
+      <div
+        className={`flex items-center justify-center transition-opacity duration-200 ${showCheckbox ? 'opacity-0' : 'group-hover:opacity-0 opacity-100'}`}
+      >
         {loading ? (
           <Loading className={'spinner'} style={{ fill: 'blue' }} />
         ) : (

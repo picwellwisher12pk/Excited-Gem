@@ -1,5 +1,4 @@
-// import offCanvasNav from "./vendor/codedrops/sidebarEffects";
-import React from 'react'
+
 import ReactDOM from 'react-dom'
 import { Provider } from 'react-redux'
 
@@ -37,10 +36,6 @@ import '../images/sound-icon.svg'
 import { DevSupport } from '@react-buddy/ide-toolbox'
 
 import { ComponentPreviews, useInitial } from '~/dev'
-
-
-
-
 
 let env = require('../../utils/env')
 let client = env.browserClient == 'firefox' ? browser : chrome
@@ -94,7 +89,8 @@ window.tabsgroup = ReactDOM.render(
   <Provider store={store}>
     <DevSupport
       ComponentPreviews={ComponentPreviews}
-      useInitialHook={useInitial}>
+      useInitialHook={useInitial}
+    >
       <TabsGroup />
     </DevSupport>
   </Provider>,

@@ -1,1 +1,1 @@
-module.exports = require("./TabsGroup")
+module.exports = require('./TabsGroup')

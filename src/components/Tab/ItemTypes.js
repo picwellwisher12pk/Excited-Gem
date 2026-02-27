@@ -1,3 +1,3 @@
 export const ItemTypes = {
-  Tab: 'tab',
+  Tab: 'tab'
 }

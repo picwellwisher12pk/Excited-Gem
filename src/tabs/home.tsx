@@ -9,19 +9,21 @@ import '~/styles/index.css'
 import '~/styles/index.css'
 import '~/styles/accessibility.css'
 import { StrictMode } from 'react'
-import { ConfigProvider } from "antd";
+import { ConfigProvider } from 'antd'
 
 function Home() {
   return (
     <StrictMode>
       <Provider store={store}>
-        <ConfigProvider theme={{
-          token: {
-            borderRadius: 4,
-            borderRadiusSM: 4,
-            borderRadiusLG: 4
-          }
-        }}>
+        <ConfigProvider
+          theme={{
+            token: {
+              borderRadius: 4,
+              borderRadiusSM: 4,
+              borderRadiusLG: 4
+            }
+          }}
+        >
           <ActiveTabs />
           {/* <PersistGate loading={null} persistor={persistor}>
         </PersistGate> */}
