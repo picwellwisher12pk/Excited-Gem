@@ -64,8 +64,12 @@ export async function saveSession(tabs, name) {
   let sessions = storage.sessions || []
 
   const windowMap = {}
+  const seenUrls = new Set() // Dedup: never store duplicate URLs in same session
 
   tabs.forEach((tab) => {
+    if (!tab.url || seenUrls.has(tab.url)) return // skip duplicates
+    seenUrls.add(tab.url)
+
     let index = urlBank.findIndex((u) => u.url === tab.url)
     if (index === -1) {
       urlBank.push({ url: tab.url, title: tab.title })
@@ -286,4 +290,291 @@ export async function importSessions(data, merge = true) {
   }
 
   return getSessions()
+}
+
+// ─── LIBRARIES & LISTS ──────────────────────────────────────────────────────
+
+/**
+ * Save selected tabs as a new List inside a Library.
+ *
+ * @param {Array<{url,title,windowId?}>} tabs
+ * @param {string}  listName        - name for the list (empty = unnamed)
+ * @param {string|null} libraryId   - existing library id, or null to create new
+ * @param {string}  newLibraryName  - used when libraryId is null
+ * @returns {Promise<{library, list}>}
+ */
+export async function saveList(tabs, listName, libraryId, newLibraryName) {
+  const storage = await getStorage(['urlBank', 'libraries'])
+  let urlBank = storage.urlBank || []
+  let libraries = storage.libraries || {}
+
+  // Resolve / create library
+  let library
+  if (libraryId && libraries[libraryId]) {
+    library = libraries[libraryId]
+  } else {
+    const newId = `lib_${Date.now()}`
+    library = {
+      id: newId,
+      name: newLibraryName || 'Unnamed Library',
+      created: Date.now(),
+      lists: {}
+    }
+    libraries[newId] = library
+    libraryId = newId
+  }
+
+  // Build a set of URLs already in this library (for dedup across lists)
+  const existingUrlsInLibrary = new Set()
+  Object.values(library.lists).forEach((list) => {
+    list.tabs.forEach((idx) => {
+      if (urlBank[idx]) existingUrlsInLibrary.add(urlBank[idx].url)
+    })
+  })
+
+  // Build tab index list, deduplicating within this save AND against library
+  const seenInThisSave = new Set()
+  const tabIndices = []
+
+  for (const tab of tabs) {
+    if (!tab.url) continue
+    if (seenInThisSave.has(tab.url)) continue // duplicate in selection
+    if (existingUrlsInLibrary.has(tab.url)) continue // already in library
+    seenInThisSave.add(tab.url)
+
+    let index = urlBank.findIndex((u) => u.url === tab.url)
+    if (index === -1) {
+      urlBank.push({ url: tab.url, title: tab.title })
+      index = urlBank.length - 1
+    }
+    tabIndices.push(index)
+  }
+
+  const listId = `list_${Date.now()}`
+  const newList = {
+    id: listId,
+    name: listName || '',
+    created: Date.now(),
+    tabs: tabIndices
+  }
+
+  library.lists[listId] = newList
+  libraries[libraryId] = library
+
+  await setStorage({ urlBank, libraries })
+  return { library, list: newList }
+}
+
+/**
+ * Get all libraries with hydrated tab data.
+ */
+export async function getLists() {
+  const storage = await getStorage(['urlBank', 'libraries'])
+  const urlBank = storage.urlBank || []
+  const libraries = storage.libraries || {}
+
+  return Object.values(libraries).map((lib) => ({
+    ...lib,
+    lists: Object.values(lib.lists).map((list) => ({
+      ...list,
+      tabs: list.tabs
+        .map((idx) => urlBank[idx] || { url: 'about:blank', title: 'Missing' })
+    }))
+  }))
+}
+
+/**
+ * Add more tabs to an existing list within a library.
+ */
+export async function addTabsToList(tabs, libraryId, listId) {
+  const storage = await getStorage(['urlBank', 'libraries'])
+  let urlBank = storage.urlBank || []
+  let libraries = storage.libraries || {}
+
+  const library = libraries[libraryId]
+  if (!library) throw new Error('Library not found')
+  const list = library.lists[listId]
+  if (!list) throw new Error('List not found')
+
+  // Collect existing URLs in this list
+  const existingUrls = new Set(
+    list.tabs.map((idx) => (urlBank[idx] ? urlBank[idx].url : null)).filter(Boolean)
+  )
+
+  for (const tab of tabs) {
+    if (!tab.url || existingUrls.has(tab.url)) continue
+    existingUrls.add(tab.url)
+    let index = urlBank.findIndex((u) => u.url === tab.url)
+    if (index === -1) {
+      urlBank.push({ url: tab.url, title: tab.title })
+      index = urlBank.length - 1
+    }
+    list.tabs.push(index)
+  }
+
+  await setStorage({ urlBank, libraries })
+  return getLists()
+}
+
+export async function removeLibrary(libraryId) {
+  const storage = await getStorage(['libraries'])
+  const libraries = storage.libraries || {}
+  delete libraries[libraryId]
+  await setStorage({ libraries })
+  return getLists()
+}
+
+export async function removeList(libraryId, listId) {
+  const storage = await getStorage(['libraries'])
+  const libraries = storage.libraries || {}
+  if (libraries[libraryId]) {
+    delete libraries[libraryId].lists[listId]
+  }
+  await setStorage({ libraries })
+  return getLists()
+}
+
+export async function renameLibrary(libraryId, name) {
+  const storage = await getStorage(['libraries'])
+  const libraries = storage.libraries || {}
+  if (libraries[libraryId]) {
+    libraries[libraryId].name = name
+    await setStorage({ libraries })
+  }
+  return getLists()
+}
+
+export async function renameTabList(libraryId, listId, name) {
+  const storage = await getStorage(['libraries'])
+  const libraries = storage.libraries || {}
+  if (libraries[libraryId] && libraries[libraryId].lists[listId]) {
+    libraries[libraryId].lists[listId].name = name
+    await setStorage({ libraries })
+  }
+  return getLists()
+}
+
+/**
+ * Save tabs as Chrome Bookmarks.
+ *
+ * Folder hierarchy:  parentBookmarkId → rootFolderName → libraryName → listName → bookmarks
+ *
+ * @param {Array<{url,title}>} tabs
+ * @param {string} listName
+ * @param {string} libraryName
+ * @param {string|null} parentBookmarkId - bookmark folder id (Bookmarks Bar = '1', Other = '2')
+ * @param {string} rootFolderName        - top-level grouping folder, default "Excited Gem Lists"
+ */
+export async function saveListAsBookmarks(tabs, listName, libraryName, parentBookmarkId, rootFolderName) {
+  const browser = window.browser || window.chrome
+  const seenUrls = new Set()
+
+  // Find or create a folder by title under a given parent
+  const findOrCreateFolder = (parentId, name) =>
+    new Promise((resolve) => {
+      browser.bookmarks.search({ title: name }, (results) => {
+        const existing = results.find(
+          (r) => r.parentId === parentId && !r.url
+        )
+        if (existing) {
+          resolve(existing)
+        } else {
+          browser.bookmarks.create({ parentId, title: name }, resolve)
+        }
+      })
+    })
+
+  // Bookmarks Bar id='1', Other Bookmarks id='2'
+  const anchorId = parentBookmarkId || '1'
+
+  // Root grouping folder  →  Library folder  →  List folder
+  const rootFolder = await findOrCreateFolder(anchorId, rootFolderName || 'Excited Gem Lists')
+  const libFolder = await findOrCreateFolder(rootFolder.id, libraryName || 'My Library')
+  const listFolder = await findOrCreateFolder(
+    libFolder.id,
+    listName || `List ${new Date().toLocaleString()}`
+  )
+
+  for (const tab of tabs) {
+    if (!tab.url || seenUrls.has(tab.url)) continue
+    seenUrls.add(tab.url)
+    await new Promise((resolve) =>
+      browser.bookmarks.create(
+        { parentId: listFolder.id, title: tab.title || tab.url, url: tab.url },
+        resolve
+      )
+    )
+  }
+
+  return listFolder
+}
+
+/**
+ * Read lists saved as Chrome Bookmarks under the "Excited Gem Lists" root folders.
+ *
+ * Scans the entire bookmark tree for any folder whose children are all folders
+ * (library-level), then reads those as libraries → lists → tabs.
+ *
+ * Returns data in the same shape as getLists():
+ *   [{ id, name, created, storageType:'bookmarks', lists: [{ id, name, created, tabs:[{url,title}] }] }]
+ */
+export async function getBookmarkLists(rootFolderName = 'Excited Gem Lists') {
+  const browser = window.browser || window.chrome
+  if (!browser.bookmarks) return []
+
+  const tree = await new Promise((resolve) =>
+    browser.bookmarks.getTree(resolve)
+  )
+
+  const results = []
+
+  // Walk the entire bookmark tree to find all folders with the target name
+  function findRootFolders(nodes) {
+    const found = []
+    for (const node of nodes) {
+      if (!node.url && node.title === rootFolderName) {
+        found.push(node)
+      }
+      if (node.children) found.push(...findRootFolders(node.children))
+    }
+    return found
+  }
+
+  const roots = findRootFolders(tree[0]?.children || [])
+
+  for (const root of roots) {
+    // Each child of root is a Library folder
+    const libraryFolders = (root.children || []).filter((n) => !n.url)
+
+    for (const lib of libraryFolders) {
+      const lists = []
+
+      // Each child of lib is a List folder
+      const listFolders = (lib.children || []).filter((n) => !n.url)
+
+      for (const list of listFolders) {
+        const tabs = (list.children || [])
+          .filter((n) => !!n.url)
+          .map((n) => ({ url: n.url, title: n.title }))
+
+        lists.push({
+          id: list.id,
+          name: list.title,
+          created: list.dateAdded || Date.now(),
+          tabs
+        })
+      }
+
+      results.push({
+        id: lib.id,
+        name: lib.title,
+        created: lib.dateAdded || Date.now(),
+        storageType: 'bookmarks',
+        bookmarkRootId: root.id,
+        lists
+      })
+    }
+  }
+
+  return results
 }

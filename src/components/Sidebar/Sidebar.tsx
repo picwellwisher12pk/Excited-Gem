@@ -1,10 +1,10 @@
 import { useState } from 'react'
 import { Menu, Button } from 'antd'
-import { LayoutGrid, Folder, Settings, Menu as MenuIcon, X } from 'lucide-react'
+import { LayoutGrid, Folder, Settings, Menu as MenuIcon, X, BookmarkPlus } from 'lucide-react'
 import type { MenuProps } from 'antd'
 
 interface SidebarProps {
-  currentPage: 'tabs' | 'sessions' | 'settings' | 'bookmarks'
+  currentPage: 'tabs' | 'sessions' | 'settings' | 'bookmarks' | 'lists'
   collapsed?: boolean
   onToggle?: () => void
 }
@@ -53,6 +53,11 @@ export default function Sidebar({
       key: 'sessions',
       icon: <Folder size={18} />,
       label: <a href="/tabs/sessions.html">Sessions</a>
+    },
+    {
+      key: 'lists',
+      icon: <BookmarkPlus size={18} />,
+      label: <a href="/tabs/lists.html">Lists</a>
     },
     {
       key: 'settings',
