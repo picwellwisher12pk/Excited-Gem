@@ -8,7 +8,7 @@ import parse from 'html-react-parser'
 import { controlYouTubeVideo } from '~/services/tabService'
 import { useDispatch, useSelector } from 'react-redux'
 import { Pin, Volume2, VolumeX, X, Moon } from 'lucide-react'
-import { toggleSelectionMode, updateSelectedTabs } from '~/store/tabSlice'
+import { toggleSelectionMode, updateSelectedTabs, selectTabRange } from '~/store/tabSlice'
 import ItemBtn from '../ItemBtn'
 import { TabIcon } from './TabIcon'
 import { markSearchedTerm, } from './helpers'
@@ -211,8 +211,12 @@ export const Tab = React.forwardRef<HTMLDivElement, TabProps>(
     }
 
     // Event handlers
-    const handleSelectedTabsUpdate = React.useCallback(() => {
-      dispatch(updateSelectedTabs({ id, selected: !selected }))
+    const handleSelectedTabsUpdate = React.useCallback((shiftKey: boolean) => {
+      if (shiftKey) {
+        dispatch(selectTabRange(id))
+      } else {
+        dispatch(updateSelectedTabs({ id, selected: !selected }))
+      }
     }, [dispatch, id, selected])
 
     const handleTabClick = React.useCallback(() => {

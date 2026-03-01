@@ -30,7 +30,7 @@ import { updateFilteredTabs } from '~/store/tabSlice'
 // @ts-ignore
 import { saveSession } from '~/components/getsetSessions'
 import { useResponsive } from '~/hooks/useResponsive'
-import { FloatingActionBar } from '~/components/FloatingActionBar'
+
 
 const MyLoader = ({ width }: { width: number }) => (
   <ContentLoader
@@ -669,7 +669,6 @@ function TabList() {
           )}
         </SimpleAutoSizer>
       </DndContext>
-      <FloatingActionBar />
     </div>
   )
 }

@@ -1,7 +1,7 @@
 {
   "name": "excited-gem",
   "displayName": "Excited Gem",
-  "version": "1.1.0",
+  "version": "1.3.0",
   "description": "A tool to manage your tabs and other browser related features.",
   "homepage": "https://picwellwisher12pk.github.io/excited-gem/",
   "license": "MIT",
@@ -111,7 +111,8 @@
       "sidePanel",
       "tabGroups",
       "identity",
-      "bookmarks"
+      "bookmarks",
+      "unlimitedStorage"
     ],
     "side_panel": {
       "default_path": "tabs/home.html"

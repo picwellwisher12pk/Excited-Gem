@@ -11,7 +11,7 @@ export function TabIcon({
   title,
   isSelectionMode
 }: Readonly<{
-  onChange: () => void
+  onChange: (shiftKey: boolean) => void
   checked: boolean
   loading: boolean
   src: string
@@ -32,8 +32,10 @@ export function TabIcon({
       >
         <Checkbox
           onChange={(e) => {
-            e.stopPropagation() // Prevent tab click
-            onChange()
+            e.stopPropagation()
+            // Pass shiftKey so Tab can decide between range and single select
+            const nativeEvent = e.nativeEvent as MouseEvent
+            onChange(nativeEvent.shiftKey)
           }}
           checked={checked}
         />

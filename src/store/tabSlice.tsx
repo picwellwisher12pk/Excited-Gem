@@ -30,7 +30,8 @@ interface TabState {
   selectedTabs: number[]
   selectedWindow: number
   youtubePermissionGranted: boolean
-  isSelectionMode: boolean // Add selection mode state
+  isSelectionMode: boolean
+  lastSelectedTabId: number | null // anchor for shift-select
 }
 
 const initialState: TabState = {
@@ -39,7 +40,8 @@ const initialState: TabState = {
   selectedTabs: [],
   selectedWindow: chrome.windows?.WINDOW_ID_CURRENT || -1,
   youtubePermissionGranted: false,
-  isSelectionMode: false // Default false
+  isSelectionMode: false,
+  lastSelectedTabId: null
 }
 
 export const tabSlice = createSlice({
@@ -51,9 +53,43 @@ export const tabSlice = createSlice({
     },
     updateSelectedTabs: (state, action) => {
       let { id, selected } = action.payload
-      selected
-        ? state.selectedTabs.push(id)
-        : state.selectedTabs.splice(state.selectedTabs.indexOf(id), 1)
+      if (selected) {
+        if (!state.selectedTabs.includes(id)) state.selectedTabs.push(id)
+      } else {
+        state.selectedTabs = state.selectedTabs.filter((t) => t !== id)
+      }
+      state.lastSelectedTabId = id
+      window.selectedTabs = [...state.selectedTabs]
+    },
+    // Select all tabs between lastSelectedTabId and the given id (inclusive)
+    selectTabRange: (state, action) => {
+      const clickedId: number = action.payload
+      const anchor = state.lastSelectedTabId
+      if (anchor === null || anchor === clickedId) {
+        // No anchor — treat as normal toggle
+        if (!state.selectedTabs.includes(clickedId)) {
+          state.selectedTabs.push(clickedId)
+        } else {
+          state.selectedTabs = state.selectedTabs.filter((t) => t !== clickedId)
+        }
+        state.lastSelectedTabId = clickedId
+        window.selectedTabs = [...state.selectedTabs]
+        return
+      }
+      // Find positions in filteredTabs order
+      const ids = state.filteredTabs.map((t) => t.id)
+      const anchorIdx = ids.indexOf(anchor)
+      const clickedIdx = ids.indexOf(clickedId)
+      if (anchorIdx === -1 || clickedIdx === -1) return
+      const [from, to] = anchorIdx < clickedIdx
+        ? [anchorIdx, clickedIdx]
+        : [clickedIdx, anchorIdx]
+      const rangeIds = ids.slice(from, to + 1)
+      // Add all range IDs that aren't already selected
+      rangeIds.forEach((id) => {
+        if (!state.selectedTabs.includes(id)) state.selectedTabs.push(id)
+      })
+      // Don't update anchor on range select (next shift-click extends from same anchor)
       window.selectedTabs = [...state.selectedTabs]
     },
     updateFilteredTabs: (state, action) => {
@@ -128,6 +164,7 @@ export const {
   invertSelectedTabs,
   updateActiveTabs,
   updateSelectedTabs,
+  selectTabRange,
   updateFilteredTabs,
   clearSelectedTabs,
   updateSelectedWindow,
