@@ -1,13 +1,29 @@
 import { Dropdown, MenuProps, Badge } from 'antd'
-import { MoreVertical, Copy, RefreshCw } from 'lucide-react'
-import { useMemo, useState } from 'react'
+import { MoreVertical, Copy, RefreshCw, Youtube } from 'lucide-react'
+import { useEffect, useMemo, useState } from 'react'
 import { useSelector } from 'react-redux'
 import Btn from '~/components/Btn'
 import { DuplicateTabsModal } from '~/components/Modals/DuplicateTabsModal'
+import { message } from 'antd'
 
 const MoreActionsMenu = () => {
   const { tabs } = useSelector((state: any) => state.tabs)
   const [isDuplicateModalOpen, setIsDuplicateModalOpen] = useState(false)
+  const [hasYoutubeApiKey, setHasYoutubeApiKey] = useState(false)
+
+  useEffect(() => {
+    chrome.storage.local.get('youtubeApiKey', (result) => {
+      setHasYoutubeApiKey(!!result.youtubeApiKey)
+    })
+
+    const listener = (changes: any, area: string) => {
+      if (area === 'local' && changes.youtubeApiKey) {
+        setHasYoutubeApiKey(!!changes.youtubeApiKey.newValue)
+      }
+    }
+    chrome.storage.onChanged.addListener(listener)
+    return () => chrome.storage.onChanged.removeListener(listener)
+  }, [])
 
   const duplicateCount = useMemo(() => {
     const urlCounts: Record<string, number> = {}
@@ -34,7 +50,20 @@ const MoreActionsMenu = () => {
       label: 'Force refresh tabs view',
       icon: <RefreshCw size={14} />,
       onClick: () => window.location.reload()
-    }
+    },
+    ...(hasYoutubeApiKey
+      ? [
+        {
+          key: 'fetch-youtube',
+          label: 'Fetch YouTube Data',
+          icon: <Youtube size={14} />,
+          onClick: () => {
+            chrome.runtime.sendMessage({ type: 'REFRESH_YOUTUBE_DATA' })
+            message.success('Refreshing YouTube data...')
+          }
+        }
+      ]
+      : [])
   ]
 
   return (

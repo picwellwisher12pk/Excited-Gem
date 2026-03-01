@@ -4,6 +4,48 @@ import { extractVideoId, parseIsoDuration } from './utils/youtube'
 
 console.log('DEBUG: Background script loaded')
 
+// --- Storage Debouncing & Cache Management ---
+const MAX_CACHE_SIZE = 1000
+const youtubeVideoInfo = new Map<any, any>()
+const youtubeApiCache = new Map<string, any>()
+
+function pruneCache() {
+  if (youtubeApiCache.size <= MAX_CACHE_SIZE) return
+
+  // Sort by timestamp and keep only the newest ones
+  const entries = Array.from(youtubeApiCache.entries())
+  entries.sort((a, b) => (b[1].timestamp || 0) - (a[1].timestamp || 0))
+
+  const kept = entries.slice(0, MAX_CACHE_SIZE)
+  youtubeApiCache.clear()
+  kept.forEach(([id, info]) => youtubeApiCache.set(id, info))
+}
+
+// Debounce storage writes to avoid IO errors during bulk updates
+let saveTimeout: any = null
+function debouncedSaveYoutubeCache() {
+  if (saveTimeout) clearTimeout(saveTimeout)
+  saveTimeout = setTimeout(() => {
+    pruneCache()
+    chrome.storage.local.set({
+      youtubeApiCache: Object.fromEntries(youtubeApiCache)
+    })
+    saveTimeout = null
+  }, 1000)
+}
+
+let saveInfoMapTimeout: any = null
+function debouncedSaveYoutubeInfoMap() {
+  if (saveInfoMapTimeout) clearTimeout(saveInfoMapTimeout)
+  saveInfoMapTimeout = setTimeout(() => {
+    chrome.storage.local.set({
+      youtubeInfoMap: Object.fromEntries(youtubeVideoInfo)
+    })
+    saveInfoMapTimeout = null
+  }, 1000)
+}
+// --------------------------
+
 function onRemoved(tabId, removeInfo) {
   getTabs().then((tabs) => {
     // window.tabs = tabs;
@@ -85,10 +127,6 @@ chrome.action.onClicked.addListener(async (tab) => {
   await openInTab(extensionUrl, tabManagementMode, tab.windowId)
 })
 
-// Store YouTube video information by tab ID
-const youtubeVideoInfo = new Map<number, any>()
-const youtubeApiCache = new Map<string, any>()
-
 // Restore state from storage on startup
 chrome.storage.local
   .get(['youtubeInfoMap', 'youtubeApiCache'])
@@ -115,9 +153,9 @@ chrome.storage.local
 
 const fetchingYoutubeApi = new Set<string>()
 
-async function fetchYouTubeApiInfo(videoId: string) {
-  console.log(`DEBUG: fetchYouTubeApiInfo called for ${videoId}`)
-  if (youtubeApiCache.has(videoId)) {
+async function fetchYouTubeApiInfo(videoId: string, force = false) {
+  console.log(`DEBUG: fetchYouTubeApiInfo called for ${videoId} (force=${force})`)
+  if (!force && youtubeApiCache.has(videoId)) {
     const cached = youtubeApiCache.get(videoId)!
     const isRecent = Date.now() - cached.timestamp < 24 * 60 * 60 * 1000;
     // If it's recent AND actually has a duration (or it's been less than 5 minutes for failures)
@@ -151,10 +189,9 @@ async function fetchYouTubeApiInfo(videoId: string) {
 
       const info = { title, duration, timestamp: Date.now() }
       youtubeApiCache.set(videoId, info)
-      chrome.storage.local.set({
-        youtubeApiCache: Object.fromEntries(youtubeApiCache)
-      })
+      debouncedSaveYoutubeCache()
       fetchingYoutubeApi.delete(videoId)
+      return info
     } else {
       // API request succeeded but returned no items (e.g. video private/deleted)
       const info = {
@@ -163,9 +200,7 @@ async function fetchYouTubeApiInfo(videoId: string) {
         timestamp: Date.now()
       }
       youtubeApiCache.set(videoId, info)
-      chrome.storage.local.set({
-        youtubeApiCache: Object.fromEntries(youtubeApiCache)
-      })
+      debouncedSaveYoutubeCache()
       fetchingYoutubeApi.delete(videoId)
       return info
     }
@@ -176,9 +211,7 @@ async function fetchYouTubeApiInfo(videoId: string) {
   // Also cache as failed if there's a network error so we don't spam requests
   const info = { title: 'Unknown Video', duration: 0, timestamp: Date.now() }
   youtubeApiCache.set(videoId, info)
-  chrome.storage.local.set({
-    youtubeApiCache: Object.fromEntries(youtubeApiCache)
-  })
+  debouncedSaveYoutubeCache()
   fetchingYoutubeApi.delete(videoId)
   return info
 }
@@ -201,9 +234,7 @@ chrome.runtime.onMessage.addListener((message, sender, sendResponse) => {
     youtubeVideoInfo.set(url, message.data)
 
     // Store in local storage so UI components can pick it up
-    chrome.storage.local.set({
-      youtubeInfoMap: Object.fromEntries(youtubeVideoInfo)
-    })
+    debouncedSaveYoutubeInfoMap()
   }
 
   // Handle requests for YouTube info
@@ -220,6 +251,20 @@ chrome.runtime.onMessage.addListener((message, sender, sendResponse) => {
     )
     fetchYouTubeApiInfo(message.videoId)
   }
+
+  if (message.type === 'REFRESH_YOUTUBE_DATA') {
+    console.log('DEBUG: Background received REFRESH_YOUTUBE_DATA')
+    chrome.tabs.query({}).then((tabs) => {
+      tabs.forEach((tab) => {
+        if (tab.url && (tab.url.includes('youtube.com/') || tab.url.includes('youtu.be/'))) {
+          const videoId = extractVideoId(tab.url)
+          if (videoId) {
+            fetchYouTubeApiInfo(videoId, true)
+          }
+        }
+      })
+    })
+  }
 })
 
 // Clean up data when a tab is closed
@@ -235,9 +280,7 @@ chrome.tabs.onRemoved.addListener(async (tabId) => {
       }
     }
     if (changed) {
-      chrome.storage.local.set({
-        youtubeInfoMap: Object.fromEntries(youtubeVideoInfo)
-      })
+      debouncedSaveYoutubeInfoMap()
     }
   } catch (e) {
     console.error('Error cleaning up youtubeVideoInfo', e)
