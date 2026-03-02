@@ -25,6 +25,9 @@ export const searchSlice = createSlice({
     toggleSearchIn: (state, action) => {
       state.searchIn = { ...action.payload }
     },
+    setSearchIn: (state, action) => {
+      state.searchIn = action.payload
+    },
     toggleAudible: (state) => {
       state.audibleSearch = !state.audibleSearch
     },
@@ -40,7 +43,9 @@ export const {
   toggleSearchIn,
   toggleAudible,
   togglePinned,
-  toggleRegex
+  toggleRegex,
+  setRegex,
+  setSearchIn
 } = searchSlice.actions
 
 export default searchSlice.reducer

@@ -27,6 +27,7 @@ import { GroupHeader } from '~/components/Tab/GroupHeader'
 import { TabGroupHeader } from '~/components/Tab/TabGroupHeader'
 import { asyncFilterTabs, getCurrentWindow } from './general'
 import { updateFilteredTabs } from '~/store/tabSlice'
+import { setRegex, setSearchIn } from '~/store/searchSlice'
 // @ts-ignore
 import { saveSession } from '~/components/getsetSessions'
 import { useResponsive } from '~/hooks/useResponsive'
@@ -356,9 +357,19 @@ function TabList() {
           setGroupedTabsSetting(changes.groupedTabs.newValue)
         if (changes.tabActionButtons)
           setTabActionButtonsSetting(changes.tabActionButtons.newValue)
+        if (changes.regex)
+          dispatch(setRegex(changes.regex.newValue))
+        if (changes.searchIn)
+          dispatch(setSearchIn(changes.searchIn.newValue))
       }
     }
     chrome.storage.onChanged.addListener(handleStorageChange)
+
+    // Load initial values
+    chrome.storage.local.get(['regex', 'searchIn'], (result) => {
+      if (result.regex !== undefined) dispatch(setRegex(result.regex))
+      if (result.searchIn) dispatch(setSearchIn(result.searchIn))
+    })
 
     getCurrentWindow().then((win) => {
       if (win && typeof win.id === 'number') {

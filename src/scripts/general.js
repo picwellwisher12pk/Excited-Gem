@@ -67,8 +67,8 @@ export function saveData(data, message = 'Data saved') {
         message: message
       },
       () =>
-        // notificationId
-        {}
+      // notificationId
+      { }
     )
   })
 }
@@ -550,28 +550,26 @@ export const filterTabs = (
       audible and pinned, return true. */
       try {
         let regexTest = new RegExp(searchTerm, ignoreCase ? 'i' : '')
-        if (searchIn[0] && regexTest.test(title) && isAudible && isPinned)
+        if (searchIn.title && regexTest.test(title) && isAudible && isPinned)
           return true
-        if (searchIn[1] && regexTest.test(url) && isAudible && isPinned)
+        if (searchIn.url && regexTest.test(url) && isAudible && isPinned)
           return true
       } catch (error) {
-        console.error('Search error:', error)
+        // Silently fail during typing for invalid regex
+        return false
       }
     } else {
-      if (searchIn[0] && !ignoreCase)
-        return title.includes(searchTerm) && isAudible && isPinned
-      if (searchIn[0] && ignoreCase)
-        return (
-          title.toLowerCase().includes(searchTerm.toLowerCase()) &&
-          isAudible &&
-          isPinned
-        )
-      if (searchIn[1])
-        return (
-          url.toLowerCase().includes(searchTerm.toLowerCase()) &&
-          isAudible &&
-          isPinned
-        )
+      const lowerSearchTerm = searchTerm.toLowerCase()
+      if (searchIn.title) {
+        const matches = ignoreCase
+          ? title.toLowerCase().includes(lowerSearchTerm)
+          : title.includes(searchTerm)
+        if (matches && isAudible && isPinned) return true
+      }
+      if (searchIn.url) {
+        const matches = url.toLowerCase().includes(lowerSearchTerm)
+        if (matches && isAudible && isPinned) return true
+      }
     }
   })
 

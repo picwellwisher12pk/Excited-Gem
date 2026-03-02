@@ -70,9 +70,13 @@ function SettingsPageContent() {
         'groupedTabs',
         'tabActionButtons',
         'youtubeApiKey',
-        'userProfile'
+        'userProfile',
+        'regex',
+        'searchIn'
       ],
       (result) => {
+        if (result.regex !== undefined) dispatch(setRegex(result.regex))
+        if (result.searchIn) dispatch(toggleSearchIn(result.searchIn))
         if (result.sessionsView) setSessionsView(result.sessionsView)
         if (result.displayMode) setDisplayMode(result.displayMode)
         if (result.tabManagementMode)
@@ -136,6 +140,20 @@ function SettingsPageContent() {
     setYoutubeApiKey(val)
     browser.storage.local.set({ youtubeApiKey: val }, () => {
       message.success('YouTube API Key saved')
+    })
+  }
+
+  const handleRegexChange = (value: boolean) => {
+    dispatch(setRegex(value))
+    browser.storage.local.set({ regex: value }, () => {
+      message.success('Regex search setting saved')
+    })
+  }
+
+  const handleSearchInChange = (newSearchIn: any) => {
+    dispatch(toggleSearchIn(newSearchIn))
+    browser.storage.local.set({ searchIn: newSearchIn }, () => {
+      message.success('Search criteria saved')
     })
   }
 
@@ -515,12 +533,10 @@ function SettingsPageContent() {
                             <Checkbox
                               checked={searchIn.title}
                               onChange={() =>
-                                dispatch(
-                                  toggleSearchIn({
-                                    ...searchIn,
-                                    title: !searchIn.title
-                                  })
-                                )
+                                handleSearchInChange({
+                                  ...searchIn,
+                                  title: !searchIn.title
+                                })
                               }
                             >
                               Title
@@ -528,9 +544,10 @@ function SettingsPageContent() {
                             <Checkbox
                               checked={searchIn.url}
                               onChange={() =>
-                                dispatch(
-                                  toggleSearchIn({ ...searchIn, url: !searchIn.url })
-                                )
+                                handleSearchInChange({
+                                  ...searchIn,
+                                  url: !searchIn.url
+                                })
                               }
                             >
                               URL
@@ -544,7 +561,7 @@ function SettingsPageContent() {
                           <Space>
                             <Radio.Group
                               value={regex}
-                              onChange={() => dispatch(toggleRegex())}
+                              onChange={(e) => handleRegexChange(e.target.value)}
                             >
                               <Radio value={true}>Enabled</Radio>
                               <Radio value={false}>Disabled</Radio>
