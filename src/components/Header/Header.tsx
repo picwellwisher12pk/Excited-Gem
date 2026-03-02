@@ -14,18 +14,18 @@ import {
   XCircle
 } from 'lucide-react'
 
-import logo from '~/assets/logo.svg'
+import logo from '../../assets/logo.svg'
 
-import { getAllWindows, getCurrentWindow, processTabs } from '~/scripts/general'
-import { clearSelectedTabs } from '~/store/tabSlice'
-import { MoveModal } from '~/components/Modals/Move'
-import { SaveListModal } from '~/components/Modals/SaveListModal'
-import WindowSelector from '~/components/WindowSelector'
+import { getAllWindows, getCurrentWindow, processTabs } from '../../scripts/general'
+import { clearSelectedTabs } from '../../store/tabSlice'
+import { MoveModal } from '../../components/Modals/Move'
+import { SaveListModal } from '../../components/Modals/SaveListModal'
+import WindowSelector from '../../components/WindowSelector'
 import Brand from './Brand'
 import Selection from './Selection'
 import SortButton from './SortButton'
-import Btn from '~/components/Btn'
-import { SidebarToggleButton } from '~/components/Sidebar'
+import Btn from '../../components/Btn'
+import { SidebarToggleButton } from '../../components/Sidebar'
 import MoreActionsMenu from './MoreActionsMenu'
 
 const { Option } = Select

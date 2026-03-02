@@ -2,7 +2,7 @@ import { Button } from 'antd'
 import type { ButtonProps } from 'antd'
 import type { ReactNode } from 'react'
 
-import { btnBorder, btnGradient } from '~/scripts/constants'
+import { btnBorder, btnGradient } from '../scripts/constants'
 
 interface BtnProps extends ButtonProps {
   gradient?: boolean

@@ -21,7 +21,7 @@ import {
     getLists,
     saveList,
     saveListAsBookmarks
-} from '../getsetSessions'
+} from '../../components/getsetSessions'
 
 const { Text } = Typography
 const browser = chrome

@@ -2,9 +2,9 @@ import { DownOutlined } from '@ant-design/icons'
 import type { MenuProps } from 'antd'
 import { Dropdown } from 'antd'
 //@ts-ignore
-import { sortTabs } from '~/scripts/general'
+import { sortTabs } from '../../scripts/general'
 import { ArrowDownWideNarrow } from 'lucide-react'
-import Btn from '../Btn'
+import Btn from '../../components/Btn'
 
 const SortButton = ({ tabs }) => {
   const onClick: MenuProps['onClick'] = ({ key }) => {

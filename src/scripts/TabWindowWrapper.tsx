@@ -18,19 +18,19 @@ import {
 } from '@dnd-kit/sortable'
 import { CSS } from '@dnd-kit/utilities'
 import { arrayMove } from '@dnd-kit/sortable'
-import type { RootState } from '~/store/store'
-import { SimpleAutoSizer } from '~/components/SimpleAutoSizer'
-import { SimpleFixedSizeList } from '~/components/SimpleFixedSizeList'
+import type { RootState } from '../store/store'
+import { SimpleAutoSizer } from '../components/SimpleAutoSizer'
+import { SimpleFixedSizeList } from '../components/SimpleFixedSizeList'
 
-import { Tab } from '~/components/Tab/Tab'
-import { GroupHeader } from '~/components/Tab/GroupHeader'
-import { TabGroupHeader } from '~/components/Tab/TabGroupHeader'
+import { Tab } from '../components/Tab/Tab'
+import { GroupHeader } from '../components/Tab/GroupHeader'
+import { TabGroupHeader } from '../components/Tab/TabGroupHeader'
 import { asyncFilterTabs, getCurrentWindow } from './general'
-import { updateFilteredTabs } from '~/store/tabSlice'
-import { setRegex, setSearchIn } from '~/store/searchSlice'
+import { updateFilteredTabs } from '../store/tabSlice'
+import { setRegex, setSearchIn } from '../store/searchSlice'
 // @ts-ignore
-import { saveSession } from '~/components/getsetSessions'
-import { useResponsive } from '~/hooks/useResponsive'
+import { saveSession } from '../components/getsetSessions'
+import { useResponsive } from '../hooks/useResponsive'
 
 
 const MyLoader = ({ width }: { width: number }) => (

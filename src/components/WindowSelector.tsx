@@ -2,8 +2,8 @@ import { Select } from 'antd'
 import { useEffect, useState } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 
-import { getAllWindows, getCurrentWindow } from '~/scripts/general'
-import { updateSelectedWindow } from '~/store/tabSlice'
+import { getAllWindows, getCurrentWindow } from '../scripts/general'
+import { updateSelectedWindow } from '../store/tabSlice'
 
 const { Option } = Select
 

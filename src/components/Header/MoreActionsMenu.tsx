@@ -2,8 +2,8 @@ import { Dropdown, MenuProps, Badge } from 'antd'
 import { MoreVertical, Copy, RefreshCw, Youtube } from 'lucide-react'
 import { useEffect, useMemo, useState } from 'react'
 import { useSelector } from 'react-redux'
-import Btn from '~/components/Btn'
-import { DuplicateTabsModal } from '~/components/Modals/DuplicateTabsModal'
+import Btn from '../../components/Btn'
+import { DuplicateTabsModal } from '../../components/Modals/DuplicateTabsModal'
 import { message } from 'antd'
 
 const MoreActionsMenu = () => {

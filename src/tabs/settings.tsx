@@ -25,17 +25,17 @@ import {
   CloudSyncOutlined,
   CloudDownloadOutlined
 } from '@ant-design/icons'
-import { loginAndGetProfile, logout, UserProfile } from '~/utils/auth'
-import { backupToDrive, restoreFromDrive } from '~/utils/drive'
-import Sidebar, { SidebarToggleButton } from '~/components/Sidebar'
-import Brand from '~/components/Header/Brand'
-import logo from '~/assets/logo.svg'
-import store from '~/store/store'
-import { usePageTracking } from '~/components/Analytics/usePageTracking'
+import { loginAndGetProfile, logout, UserProfile } from '../utils/auth'
+import { backupToDrive, restoreFromDrive } from '../utils/drive'
+import Sidebar, { SidebarToggleButton } from '../components/Sidebar'
+import Brand from '../components/Header/Brand'
+import logo from '../assets/logo.svg'
+import store from '../store/store'
+import { usePageTracking } from '../components/Analytics/usePageTracking'
 import { useDispatch, useSelector } from 'react-redux'
-import { toggleRegex, toggleSearchIn, setRegex, setSearchIn } from '~/store/searchSlice'
+import { toggleRegex, toggleSearchIn, setRegex, setSearchIn } from '../store/searchSlice'
 import 'antd/dist/reset.css'
-import '~/styles/index.css'
+import '../styles/index.css'
 
 const { Title, Text } = Typography
 const browser = chrome

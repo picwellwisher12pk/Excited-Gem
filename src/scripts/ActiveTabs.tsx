@@ -2,20 +2,20 @@ import { useMemo, useState } from 'react'
 import { useSelector } from 'react-redux'
 
 // import { profilerCallback } from "/src/scripts/general"
-import store from '~/store/store'
-import { updateActiveTabs, updateFilteredTabs } from '~/store/tabSlice'
-import { getTabs } from '~/scripts/browserActions'
-import { extractVideoId } from '~/utils/youtube'
+import store from '../store/store'
+import { updateActiveTabs, updateFilteredTabs } from '../store/tabSlice'
+import { getTabs } from '../scripts/browserActions'
+import { extractVideoId } from '../utils/youtube'
 
-import '~/assets/logo.svg'
-import '~/assets/dev-logo.svg'
+import '../assets/logo.svg'
+import '../assets/dev-logo.svg'
 
 import TabWindowWrapper from './TabWindowWrapper'
-import Header from '~/components/Header/Header'
-import Navigation from '~/components/Header/Navigation'
-import Search from '~/components/Search'
-import Sidebar from '~/components/Sidebar'
-import { usePageTracking } from '~/components/Analytics/usePageTracking'
+import Header from '../components/Header/Header'
+import Navigation from '../components/Header/Navigation'
+import Search from '../components/Search'
+import Sidebar from '../components/Sidebar'
+import { usePageTracking } from '../components/Analytics/usePageTracking'
 
 export async function updateTabs(getTabs, store) {
   const tabs = await getTabs(store.getState().tabs.selectedWindow)

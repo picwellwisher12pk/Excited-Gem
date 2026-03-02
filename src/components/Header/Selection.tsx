@@ -6,9 +6,9 @@ import {
   clearSelectedTabs,
   invertSelectedTabs,
   selectAllTabs
-} from '~/store/tabSlice'
+} from '../../store/tabSlice'
 import { ArrowRightLeft } from 'lucide-react'
-import Btn from '~/components/Btn'
+import Btn from '../../components/Btn'
 
 const Selection = () => {
   const dispatch = useDispatch()

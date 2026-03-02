@@ -4,7 +4,7 @@ import VolumeOffIcon from 'react:/src/icons/volume-off.svg'
 import VolumeSlashIcon from 'react:/src/icons/volume-slash.svg'
 import VolumeIcon from 'react:/src/icons/volume.svg'
 
-import ItemBtn from '../ItemBtn'
+import ItemBtn from '../../components/ItemBtn'
 
 export const iconHeight: number = 16
 

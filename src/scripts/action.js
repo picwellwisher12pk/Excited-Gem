@@ -1,4 +1,4 @@
-// import { getTabs } from "~/scripts/browserActions.ts"
+// import { getTabs } from "../scripts/browserActions.ts"
 
 import store from '../store/store'
 

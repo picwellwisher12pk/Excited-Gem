@@ -1,6 +1,6 @@
 import { useState, useEffect, useMemo } from 'react';
 import { Layout, Typography, Spin, Tree, Button, Space, Input, Dropdown, MenuProps, Modal, Form, Checkbox, List, Tooltip } from 'antd';
-import { SimpleAutoSizer } from '~/components/SimpleAutoSizer';
+import { SimpleAutoSizer } from '../../components/SimpleAutoSizer';
 import {
     FolderOutlined,
     FileOutlined,
@@ -14,12 +14,12 @@ import {
     CopyOutlined
 } from '@ant-design/icons';
 const { Text, Title } = Typography;
-import { SidebarToggleButton } from '~/components/Sidebar';
-import Sidebar from '~/components/Sidebar/Sidebar';
-import Brand from '~/components/Header/Brand';
-import ItemBtn from '~/components/ItemBtn';
+import { SidebarToggleButton } from '../../components/Sidebar';
+import Sidebar from '../../components/Sidebar/Sidebar';
+import Brand from '../../components/Header/Brand';
+import ItemBtn from '../../components/ItemBtn';
 import { Move, Copy } from 'lucide-react';
-import logo from '~/assets/logo.svg';
+import logo from '../../assets/logo.svg';
 import {
     getTree,
     searchBookmarks,
@@ -34,9 +34,9 @@ import {
     copyBookmarks,
     findDuplicates,
     BookmarkNode
-} from '~/utils/bookmarks';
+} from '../../utils/bookmarks';
 
-import '~/styles/index.css';
+import '../../styles/index.css';
 
 const { Content } = Layout;
 

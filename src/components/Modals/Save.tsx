@@ -11,7 +11,7 @@ import {
 import { useState } from 'react'
 import { useSelector } from 'react-redux'
 
-import { saveSession } from '../getsetSessions'
+import { saveSession } from '../../components/getsetSessions'
 
 const { Option } = Select
 const { Text } = Typography
@@ -39,11 +39,11 @@ export const SaveModal = (props) => {
           const tab = tabs.find((t) => t.id === id)
           return tab
             ? {
-                url: tab.url,
-                title: tab.title,
-                windowId: tab.windowId || 0,
-                favIconUrl: tab.favIconUrl
-              }
+              url: tab.url,
+              title: tab.title,
+              windowId: tab.windowId || 0,
+              favIconUrl: tab.favIconUrl
+            }
             : null
         })
         .filter(Boolean)

@@ -1,6 +1,6 @@
 
 
-// import { HOMEPAGEURL } from "~/scripts/general"
+// import { HOMEPAGEURL } from "../scripts/general"
 
 export function getCurrentWindow() {
   return chrome.windows.getCurrent({ populate: true })

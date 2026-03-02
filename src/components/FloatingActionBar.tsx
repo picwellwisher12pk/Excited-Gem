@@ -1,8 +1,8 @@
 
 import { useDispatch, useSelector } from 'react-redux'
 import { Trash2, FolderInput, XCircle, Pin, BookmarkPlus } from 'lucide-react'
-import { clearSelectedTabs, toggleSelectionMode } from '~/store/tabSlice'
-import type { RootState } from '~/store/store'
+import { clearSelectedTabs, toggleSelectionMode } from '../store/tabSlice'
+import type { RootState } from '../store/store'
 import { useState } from 'react'
 import { SaveListModal } from './Modals/SaveListModal'
 import { message } from 'antd'

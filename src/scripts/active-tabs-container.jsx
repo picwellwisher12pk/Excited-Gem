@@ -4,7 +4,7 @@ import { Provider } from 'react-redux'
 
 //JS libraries
 // import packagedAndBroadcast from './components/communications.js';
-import { updateTabs } from '~/scripts/browserActions.ts'
+import { updateTabs } from '../scripts/browserActions.ts'
 
 // import selectTab from './components/tabSelection.js';
 // require("./components/general.js");
@@ -35,7 +35,7 @@ import '../images/sound-icon.svg'
 
 import { DevSupport } from '@react-buddy/ide-toolbox'
 
-import { ComponentPreviews, useInitial } from '~/dev'
+import { ComponentPreviews, useInitial } from '../dev'
 
 let env = require('../../utils/env')
 let client = env.browserClient == 'firefox' ? browser : chrome

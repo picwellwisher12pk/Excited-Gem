@@ -1,5 +1,5 @@
 import { useState } from 'react'
-import { removeSessions } from '~/components/getsetSessions'
+import { removeSessions } from '../../components/getsetSessions'
 
 // Helper function to convert timestamp to readable date
 function timeConverter(timestamp: number): string {

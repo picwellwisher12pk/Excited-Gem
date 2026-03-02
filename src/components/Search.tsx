@@ -3,13 +3,13 @@ import { debounce } from 'lodash'
 import React, { memo, useCallback, useEffect, useState } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 import { Pin, Volume2, VolumeX } from 'lucide-react'
-import ErrorBoundary from '~/scripts/ErrorBoundary'
-import { makePlaceholder as doPlaceholder } from '~/scripts/general'
+import ErrorBoundary from '../scripts/ErrorBoundary'
+import { makePlaceholder as doPlaceholder } from '../scripts/general'
 import {
   toggleAudible,
   togglePinned,
   updateSearchTerm
-} from '~/store/searchSlice'
+} from '../store/searchSlice'
 
 const { Search: AntSearch } = Input
 

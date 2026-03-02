@@ -33,15 +33,15 @@ import {
     removeList,
     renameLibrary,
     renameTabList
-} from '~/components/getsetSessions'
-import Sidebar, { SidebarToggleButton } from '~/components/Sidebar'
-import Brand from '~/components/Header/Brand'
-import logo from '~/assets/logo.svg'
-import store from '~/store/store'
-import { analytics } from '~/utils/analytics'
-import { usePageTracking } from '~/components/Analytics/usePageTracking'
+} from '../components/getsetSessions'
+import Sidebar, { SidebarToggleButton } from '../components/Sidebar'
+import Brand from '../components/Header/Brand'
+import logo from '../assets/logo.svg'
+import store from '../store/store'
+import { analytics } from '../utils/analytics'
+import { usePageTracking } from '../components/Analytics/usePageTracking'
 import 'antd/dist/reset.css'
-import '~/styles/index.css'
+import '../styles/index.css'
 
 const { Search } = Input
 const browser = chrome

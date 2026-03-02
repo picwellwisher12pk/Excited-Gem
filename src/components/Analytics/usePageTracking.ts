@@ -1,5 +1,5 @@
 import { useEffect } from 'react'
-import { analytics } from '~/utils/analytics'
+import { analytics } from '../../utils/analytics'
 
 /**
  * Hook to track page views in Google Analytics

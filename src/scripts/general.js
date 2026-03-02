@@ -1,4 +1,4 @@
-import { saveTabs, saveURLs } from '~/components/getsetSessions'
+import { saveTabs, saveURLs } from '../components/getsetSessions'
 
 export const HOMEPAGEURL = chrome.runtime.getURL('/tabs/home.html')
 let refinedTabs
