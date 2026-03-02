@@ -26,7 +26,7 @@ import logo from '~/assets/logo.svg'
 import store from '~/store/store'
 import { usePageTracking } from '~/components/Analytics/usePageTracking'
 import { useDispatch, useSelector } from 'react-redux'
-import { toggleRegex, toggleSearchIn } from '~/store/searchSlice'
+import { toggleRegex, toggleSearchIn, setRegex, setSearchIn } from '~/store/searchSlice'
 import 'antd/dist/reset.css'
 import '~/styles/index.css'
 
