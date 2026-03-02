@@ -37,6 +37,31 @@ jobs:
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
+      - name: Debug SUBMIT_KEYS
+        env:
+          SUBMIT_KEYS: ${{ secrets.SUBMIT_KEYS }}
+        run: |
+          if [ -z "$SUBMIT_KEYS" ]; then
+            echo "::error::SUBMIT_KEYS secret is empty!"
+            exit 1
+          fi
+          # Check if valid JSON and show keys (not values)
+          echo "$SUBMIT_KEYS" | jq -r 'keys'
+          echo "Structure check: $(echo "$SUBMIT_KEYS" | jq -r '.chrome | keys')"
+
+          # Check for missing required fields in the chrome sub-object
+          FIELDS=$(echo "$SUBMIT_KEYS" | jq -r '.chrome | keys | join(",")')
+          MISSING=""
+          [[ "$FIELDS" != *"extensionId"* ]] && MISSING+=" extensionId"
+          [[ "$FIELDS" != *"clientId"* ]] && MISSING+=" clientId"
+          [[ "$FIELDS" != *"clientSecret"* ]] && MISSING+=" clientSecret"
+          [[ "$FIELDS" != *"refreshToken"* ]] && MISSING+=" refreshToken"
+
+          if [ ! -z "$MISSING" ]; then
+            echo "::error::SUBMIT_KEYS is missing the following fields in .chrome:$MISSING"
+            exit 1
+          fi
+
       - name: Browser Platform Publisher
         uses: plasmohq/bpp@v3
         with:
