@@ -33,7 +33,11 @@
     "outdated": "npm outdated",
     "patch": "npm version patch",
     "minor": "npm version minor",
-    "major": "npm version major"
+    "major": "npm version major",
+    "release": "standard-version",
+    "release:minor": "standard-version --release-as minor",
+    "release:patch": "standard-version --release-as patch",
+    "release:major": "standard-version --release-as major"
   },
   "dependencies": {
     "@ant-design/icons": "^5.5.2",
@@ -100,6 +104,7 @@
     "nodemon": "^3.1.9",
     "postcss": "^8.5.6",
     "react-devtools": "^6.1.1",
+    "standard-version": "^9.5.0",
     "tailwindcss": "3",
     "ts-node": "^10.9.2",
     "typescript": "^5.7.2"
