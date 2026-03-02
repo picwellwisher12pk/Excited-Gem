@@ -645,23 +645,24 @@ function SettingsPageContent() {
           </div>
         </div>
       </div>
-      )
+    </div>
+  )
 }
 
-      export default function SettingsPage() {
+export default function SettingsPage() {
   return (
-      <Provider store={store}>
-        <ConfigProvider
-          theme={{
-            token: {
-              borderRadius: 4,
-              borderRadiusSM: 4,
-              borderRadiusLG: 4
-            }
-          }}
-        >
-          <SettingsPageContent />
-        </ConfigProvider>
-      </Provider>
-      )
+    <Provider store={store}>
+      <ConfigProvider
+        theme={{
+          token: {
+            borderRadius: 4,
+            borderRadiusSM: 4,
+            borderRadiusLG: 4
+          }
+        }}
+      >
+        <SettingsPageContent />
+      </ConfigProvider>
+    </Provider>
+  )
 }
