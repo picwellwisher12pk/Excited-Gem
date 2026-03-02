@@ -22,8 +22,9 @@ jobs:
       - name: Build and Package
         # Plasmo package command builds and zips the extension
         run: |
-          mkdir -p build
+          bun run build
           bun run package
+          ls -R build/
 
       - name: Create Release
         uses: softprops/action-gh-release@v2
@@ -36,16 +37,25 @@ jobs:
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
+      - name: Prepare BPP Keys
+        id: bpp_keys
+        env:
+          EXT_ID: ${{ secrets.CHROME_EXTENSION_ID }}
+          CLIENT_ID: ${{ secrets.GOOGLE_CLIENT_ID }}
+          CLIENT_SECRET: ${{ secrets.GOOGLE_CLIENT_SECRET }}
+          REFRESH_TOKEN: ${{ secrets.GOOGLE_REFRESH_TOKEN }}
+        run: |
+          # Sanitize secrets (remove newlines/whitespace)
+          S_EXT_ID=$(echo "$EXT_ID" | tr -d '[:space:]')
+          S_CLIENT_ID=$(echo "$CLIENT_ID" | tr -d '[:space:]')
+          S_CLIENT_SECRET=$(echo "$CLIENT_SECRET" | tr -d '[:space:]')
+          S_REFRESH_TOKEN=$(echo "$REFRESH_TOKEN" | tr -d '[:space:]')
+
+          # Construct JSON in a single line to avoid parsing issues
+          KEYS_JSON="{\"chrome\":{\"extensionId\":\"$S_EXT_ID\",\"zip\":\"build/chrome-mv3-prod.zip\",\"clientId\":\"$S_CLIENT_ID\",\"clientSecret\":\"$S_CLIENT_SECRET\",\"refreshToken\":\"$S_REFRESH_TOKEN\"}}"
+          echo "KEYS=$KEYS_JSON" >> $GITHUB_ENV
+
       - name: Browser Platform Publisher
         uses: plasmohq/bpp@v3
         with:
-          keys: |
-            {
-              "chrome": {
-                "extensionId": "${{ secrets.CHROME_EXTENSION_ID }}",
-                "zip": "build/chrome-mv3-prod.zip",
-                "clientId": "${{ secrets.GOOGLE_CLIENT_ID }}",
-                "clientSecret": "${{ secrets.GOOGLE_CLIENT_SECRET }}",
-                "refreshToken": "${{ secrets.GOOGLE_REFRESH_TOKEN }}"
-              }
-            }
+          keys: ${{ env.KEYS }}
