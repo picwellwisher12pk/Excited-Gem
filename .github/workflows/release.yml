@@ -63,7 +63,19 @@ jobs:
           S_CLIENT_SECRET=$(echo "$CLIENT_SECRET" | tr -d '[:space:]' | tr -d '"')
           S_REFRESH_TOKEN=$(echo "$REFRESH_TOKEN" | tr -d '[:space:]' | tr -d '"')
 
-          # 3. Safe Construction: Use jq to create valid JSON (handles escaping)
+          # 3. Debug lengths (Safe to log)
+          echo "Debug: Sanitized Extension ID Length: ${#S_EXT_ID}"
+          echo "Debug: Sanitized Client ID Length: ${#S_CLIENT_ID}"
+          echo "Debug: Sanitized Client Secret Length: ${#S_CLIENT_SECRET}"
+          echo "Debug: Sanitized Refresh Token Length: ${#S_REFRESH_TOKEN}"
+
+          # 4. Strict Validation: Fail if sanitized values are empty
+          if [ -z "$S_EXT_ID" ] || [ -z "$S_CLIENT_ID" ] || [ -z "$S_CLIENT_SECRET" ] || [ -z "$S_REFRESH_TOKEN" ]; then
+            echo "::error::One or more sanitized secrets are empty. Check your GitHub Secrets for accidental whitespace or quotes."
+            exit 1
+          fi
+
+          # 5. Safe Construction: Use jq to create valid JSON (handles escaping)
           # Use -c for compact (single-line) output
           KEYS_JSON=$(jq -c -n \
             --arg ext_id "$S_EXT_ID" \
@@ -73,7 +85,7 @@ jobs:
             --arg refresh_token "$S_REFRESH_TOKEN" \
             '{chrome: {extensionId: $ext_id, zip: $zip, clientId: $client_id, clientSecret: $client_secret, refreshToken: $refresh_token}}')
 
-          # 4. Export to environment
+          # 6. Export to environment
           echo "KEYS=$KEYS_JSON" >> $GITHUB_ENV
 
       - name: Browser Platform Publisher
