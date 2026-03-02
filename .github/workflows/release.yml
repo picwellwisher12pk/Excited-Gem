@@ -39,28 +39,18 @@ jobs:
 
       - name: Prepare BPP Keys
         id: bpp_keys
-        env:
-          SUBMIT_KEYS: ${{ secrets.SUBMIT_KEYS }}
         run: |
-          if [ -z "$SUBMIT_KEYS" ]; then
-            echo "::error::SUBMIT_KEYS secret is empty!"
-            exit 1
-          fi
+          # Use jq to build exactly what BPP needs, mapping extId to extensionId
+          # and flattening the structure to be perfectly valid JSON.
+          CLEAN_JSON=$(echo '${{ secrets.SUBMIT_KEYS }}' | jq -c '{chrome: (.chrome | (if has("extId") then .extensionId = .extId | del(.extId) else . end))}')
 
-          # Normalize 'extId' to 'extensionId' automatically for BPP compatibility
-          NORMALIZED=$(echo "$SUBMIT_KEYS" | jq -c '.chrome |= (if has("extId") then .extensionId = .extId | del(.extId) else . end)')
+          echo "BPP_KEYS=$CLEAN_JSON" >> $GITHUB_ENV
 
-          # Verification: Show keys (Safe/Masked)
-          echo "Normalized Keys:"
-          echo "$NORMALIZED" | jq -r '.chrome | keys'
-
-          # Export using heredoc for safety with JSON strings
-          echo "keys<<EOF" >> $GITHUB_OUTPUT
-          echo "$NORMALIZED" >> $GITHUB_OUTPUT
-          echo "EOF" >> $GITHUB_OUTPUT
+          # Verification: Show zip exists
+          ls -l build/chrome-mv3-prod.zip
 
       - name: Browser Platform Publisher
         uses: plasmohq/bpp@v3
         with:
-          keys: ${{ steps.bpp_keys.outputs.keys }}
+          keys: ${{ env.BPP_KEYS }}
           zip: build/chrome-mv3-prod.zip
