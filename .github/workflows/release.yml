@@ -46,7 +46,11 @@ jobs:
           node -e 'const fs = require("fs"); fs.appendFileSync(process.env.GITHUB_ENV, "BPP_KEYS=" + JSON.stringify(require("./bpp-keys.json")) + "\n")'
 
       - name: Browser Platform Publisher
-        uses: plasmohq/bpp@v3
+        uses: mnao305/chrome-extension-upload@v5.0.0
         with:
-          keys: ${{ env.BPP_KEYS }}
-          zip: build/chrome-mv3-prod.zip
+          file-path: build/chrome-mv3-prod.zip
+          extension-id: ${{ secrets.EXTENSION_ID }}
+          client-id: ${{ secrets.CLIENT_ID }}
+          client-secret: ${{ secrets.CLIENT_SECRET }}
+          refresh-token: ${{ secrets.REFRESH_TOKEN }}
+          publish: true
