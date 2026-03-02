@@ -64,7 +64,8 @@ jobs:
           S_REFRESH_TOKEN=$(echo "$REFRESH_TOKEN" | tr -d '[:space:]' | tr -d '"')
 
           # 3. Safe Construction: Use jq to create valid JSON (handles escaping)
-          KEYS_JSON=$(jq -n \
+          # Use -c for compact (single-line) output
+          KEYS_JSON=$(jq -c -n \
             --arg ext_id "$S_EXT_ID" \
             --arg zip "build/chrome-mv3-prod.zip" \
             --arg client_id "$S_CLIENT_ID" \
