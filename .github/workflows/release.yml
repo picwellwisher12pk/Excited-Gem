@@ -50,7 +50,14 @@ jobs:
           # Normalize 'extId' to 'extensionId' automatically for BPP compatibility
           NORMALIZED=$(echo "$SUBMIT_KEYS" | jq -c '.chrome |= (if has("extId") then .extensionId = .extId | del(.extId) else . end)')
 
-          echo "keys=$NORMALIZED" >> $GITHUB_OUTPUT
+          # Verification: Show keys (Safe/Masked)
+          echo "Normalized Keys:"
+          echo "$NORMALIZED" | jq -r '.chrome | keys'
+
+          # Export using heredoc for safety with JSON strings
+          echo "keys<<EOF" >> $GITHUB_OUTPUT
+          echo "$NORMALIZED" >> $GITHUB_OUTPUT
+          echo "EOF" >> $GITHUB_OUTPUT
 
       - name: Browser Platform Publisher
         uses: plasmohq/bpp@v3
