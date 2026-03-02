@@ -37,13 +37,6 @@ jobs:
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
-      - name: Prepare BPP Keys
-        run: |
-          # Write normalized keys to a file to ensure JSON integrity
-          echo '${{ secrets.SUBMIT_KEYS }}' | jq -c '{chrome: (.chrome | (if has("extId") then .extensionId = .extId | del(.extId) else . end))}' > bpp-keys.json
-
-          # Read back using Node.js into BPP_KEYS env var (safe from shell corruption)
-          node -e 'const fs = require("fs"); fs.appendFileSync(process.env.GITHUB_ENV, "BPP_KEYS=" + JSON.stringify(require("./bpp-keys.json")) + "\n")'
 
       - name: Browser Platform Publisher
         uses: mnao305/chrome-extension-upload@v5.0.0
@@ -53,4 +46,4 @@ jobs:
           client-id: ${{ secrets.GOOGLE_CLIENT_ID }}
           client-secret: ${{ secrets.GOOGLE_CLIENT_SECRET }}
           refresh-token: ${{ secrets.GOOGLE_REFRESH_TOKEN }}
-          publish: true
+          publish: false
