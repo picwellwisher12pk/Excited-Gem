@@ -38,19 +38,15 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
       - name: Prepare BPP Keys
-        id: bpp_keys
         run: |
-          # Use jq to build exactly what BPP needs, mapping extId to extensionId
-          # and flattening the structure to be perfectly valid JSON.
-          CLEAN_JSON=$(echo '${{ secrets.SUBMIT_KEYS }}' | jq -c '{chrome: (.chrome | (if has("extId") then .extensionId = .extId | del(.extId) else . end))}')
+          # Write normalized keys to a file to ensure JSON integrity
+          echo '${{ secrets.SUBMIT_KEYS }}' | jq -c '{chrome: (.chrome | (if has("extId") then .extensionId = .extId | del(.extId) else . end))}' > bpp-keys.json
 
-          echo "BPP_KEYS=$CLEAN_JSON" >> $GITHUB_ENV
-
-          # Verification: Show zip exists
-          ls -l build/chrome-mv3-prod.zip
+          # Final verification: Check that the file is valid JSON and has the ID
+          jq -e '.chrome.extensionId' bpp-keys.json > /dev/null
 
       - name: Browser Platform Publisher
         uses: plasmohq/bpp@v3
         with:
-          keys: ${{ env.BPP_KEYS }}
+          keys: bpp-keys.json
           zip: build/chrome-mv3-prod.zip
