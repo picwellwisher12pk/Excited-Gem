@@ -90,3 +90,5 @@ utils/.npmrc
 # Bookmark Data
 bookmarks_backup_*.json
 bookmarks_categorized*.json
+
+keys.json
