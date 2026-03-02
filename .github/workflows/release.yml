@@ -42,11 +42,11 @@ jobs:
           # Write normalized keys to a file to ensure JSON integrity
           echo '${{ secrets.SUBMIT_KEYS }}' | jq -c '{chrome: (.chrome | (if has("extId") then .extensionId = .extId | del(.extId) else . end))}' > bpp-keys.json
 
-          # Final verification: Check that the file is valid JSON and has the ID
-          jq -e '.chrome.extensionId' bpp-keys.json > /dev/null
+          # Read back using Node.js into BPP_KEYS env var (safe from shell corruption)
+          echo "BPP_KEYS=$(node -e 'process.stdout.write(require("./bpp-keys.json"))')" >> $GITHUB_ENV
 
       - name: Browser Platform Publisher
         uses: plasmohq/bpp@v3
         with:
-          keys: bpp-keys.json
+          keys: ${{ env.BPP_KEYS }}
           zip: build/chrome-mv3-prod.zip
