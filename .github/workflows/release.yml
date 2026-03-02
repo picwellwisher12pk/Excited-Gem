@@ -21,7 +21,9 @@ jobs:
 
       - name: Build and Package
         # Plasmo package command builds and zips the extension
-        run: bun run package
+        run: |
+          mkdir -p build
+          bun run package
 
       - name: Create Release
         uses: softprops/action-gh-release@v2
