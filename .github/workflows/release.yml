@@ -50,9 +50,12 @@ jobs:
           echo "Structure check: $(echo "$SUBMIT_KEYS" | jq -r '.chrome | keys')"
 
           # Check for missing required fields in the chrome sub-object
+          # We accept either 'extensionId' or 'extId'
           FIELDS=$(echo "$SUBMIT_KEYS" | jq -r '.chrome | keys | join(",")')
           MISSING=""
-          [[ "$FIELDS" != *"extensionId"* ]] && MISSING+=" extensionId"
+          if [[ "$FIELDS" != *"extensionId"* ]] && [[ "$FIELDS" != *"extId"* ]]; then
+            MISSING+=" extensionId/extId"
+          fi
           [[ "$FIELDS" != *"clientId"* ]] && MISSING+=" clientId"
           [[ "$FIELDS" != *"clientSecret"* ]] && MISSING+=" clientSecret"
           [[ "$FIELDS" != *"refreshToken"* ]] && MISSING+=" refreshToken"
