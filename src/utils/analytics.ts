@@ -1,4 +1,4 @@
-// Google Analytics utility for Chrome Extension
+// Google Analytics utility for Browser Extension
 // This uses the Measurement Protocol for extensions
 
 // Hard-coded GA4 Measurement ID - Replace with your actual ID

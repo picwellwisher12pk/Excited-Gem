@@ -590,7 +590,7 @@ function TabList() {
       dispatch(updateFilteredTabs(newTabs))
     }
 
-    // Perform Chrome Action
+    // Perform Browser Action
     if (activeItem.windowId !== targetWindowId) {
       // Moving to a different window
       chrome.tabs.move(Number(activeId), {

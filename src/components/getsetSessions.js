@@ -455,7 +455,7 @@ export async function renameTabList(libraryId, listId, name) {
 }
 
 /**
- * Save tabs as Chrome Bookmarks.
+ * Save tabs as Browser Bookmarks.
  *
  * Folder hierarchy:  parentBookmarkId → rootFolderName → libraryName → listName → bookmarks
  *
@@ -510,7 +510,7 @@ export async function saveListAsBookmarks(tabs, listName, libraryName, parentBoo
 }
 
 /**
- * Read lists saved as Chrome Bookmarks under the "Excited Gem Lists" root folders.
+ * Read lists saved as Browser Bookmarks under the "Excited Gem Lists" root folders.
  *
  * Scans the entire bookmark tree for any folder whose children are all folders
  * (library-level), then reads those as libraries → lists → tabs.

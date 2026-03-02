@@ -567,7 +567,7 @@ function SettingsPageContent() {
                       </div>
                       <div>
                         <Text type="secondary">
-                          A powerful tab management extension for Chrome
+                          A powerful tab management extension for Browser
                         </Text>
                       </div>
                       <div className="mt-4 pt-4 border-t">

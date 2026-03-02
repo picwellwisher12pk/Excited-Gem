@@ -1,6 +1,7 @@
 import { getTabs, setBadge, setTabCountInBadge } from './scripts/browserActions'
 import { preferences } from './scripts/defaultPreferences'
 import { extractVideoId, parseIsoDuration } from './utils/youtube'
+const browser = (typeof window !== 'undefined' ? window.browser : (globalThis as any).browser) || chrome
 
 console.log('DEBUG: Background script loaded')
 
@@ -27,7 +28,7 @@ function debouncedSaveYoutubeCache() {
   if (saveTimeout) clearTimeout(saveTimeout)
   saveTimeout = setTimeout(() => {
     pruneCache()
-    chrome.storage.local.set({
+    browser.storage.local.set({
       youtubeApiCache: Object.fromEntries(youtubeApiCache)
     })
     saveTimeout = null
@@ -38,7 +39,7 @@ let saveInfoMapTimeout: any = null
 function debouncedSaveYoutubeInfoMap() {
   if (saveInfoMapTimeout) clearTimeout(saveInfoMapTimeout)
   saveInfoMapTimeout = setTimeout(() => {
-    chrome.storage.local.set({
+    browser.storage.local.set({
       youtubeInfoMap: Object.fromEntries(youtubeVideoInfo)
     })
     saveInfoMapTimeout = null
@@ -52,37 +53,37 @@ function onRemoved(tabId, removeInfo) {
   })
 }
 
-chrome.runtime.onInstalled.addListener(() => {
+browser.runtime.onInstalled.addListener(() => {
   let jsonObj = {}
   jsonObj['preferences'] = preferences
-  chrome.storage.local.set(jsonObj).then((result) => {
-    chrome.storage.local.get('preferences').then((result) => {})
+  browser.storage.local.set(jsonObj).then((result) => {
+    browser.storage.local.get('preferences').then((result) => {})
   })
   getTabs('current').then((tabs) => setBadge(tabs.length))
 })
-chrome.tabs.onRemoved.addListener((tabId, removeInfo) => {
+browser.tabs.onRemoved.addListener((tabId, removeInfo) => {
   console.log('Excited Gem: Tab Removed/Closed.')
   onRemoved(tabId, removeInfo)
   setTabCountInBadge(tabId, true)
 })
 
-chrome.tabs.onDetached.addListener(onRemoved)
+browser.tabs.onDetached.addListener(onRemoved)
 
-chrome.tabs.onCreated.addListener((tab) => {
+browser.tabs.onCreated.addListener((tab) => {
   getTabs('current').then((tabs) => setBadge(tabs.length))
   if (tab.url) handleTabForYouTubeApi(tab.url)
 })
-chrome.tabs.onUpdated.addListener((tabId, changeInfo, tab) => {
+browser.tabs.onUpdated.addListener((tabId, changeInfo, tab) => {
   if (changeInfo.url) {
     handleTabForYouTubeApi(changeInfo.url)
   }
 })
 
-chrome.tabs.onAttached.addListener(() => {
+browser.tabs.onAttached.addListener(() => {
   getTabs('current').then((tabs) => setBadge(tabs.length))
 })
 
-/* Chrome Actions */
+/* Browser Actions */
 
 async function openInTab(
   url: string,
@@ -90,45 +91,45 @@ async function openInTab(
   currentWindowId: number
 ) {
   if (mode === 'single') {
-    const tabs = await chrome.tabs.query({ url })
+    const tabs = await browser.tabs.query({ url })
     if (tabs.length > 0) {
       const tab = tabs[0]
       if (tab.id) {
-        await chrome.tabs.update(tab.id, { active: true })
-        await chrome.windows.update(tab.windowId, { focused: true })
+        await browser.tabs.update(tab.id, { active: true })
+        await browser.windows.update(tab.windowId, { focused: true })
       }
       return
     }
   } else {
     // per-window
-    const tabs = await chrome.tabs.query({ url, windowId: currentWindowId })
+    const tabs = await browser.tabs.query({ url, windowId: currentWindowId })
     if (tabs.length > 0) {
       if (tabs[0].id) {
-        await chrome.tabs.update(tabs[0].id, { active: true })
+        await browser.tabs.update(tabs[0].id, { active: true })
       }
       return
     }
   }
 
   // If not found, create
-  await chrome.tabs.create({ url, pinned: true })
+  await browser.tabs.create({ url, pinned: true })
 }
 
-chrome.action.onClicked.addListener(async (tab) => {
+browser.action.onClicked.addListener(async (tab) => {
   // If openPanelOnActionClick is true (sidebar mode), this listener will NOT fire.
   // If popup is set (popup mode), this listener will NOT fire.
   // So this only fires for 'tab' mode or fallback.
-  const { tabManagementMode = 'single' } = await chrome.storage.local.get([
+  const { tabManagementMode = 'single' } = await browser.storage.local.get([
     'tabManagementMode'
   ])
-  const extensionUrl = chrome.runtime.getURL('/tabs/home.html')
+  const extensionUrl = browser.runtime.getURL('/tabs/home.html')
 
   console.log('DEBUG: onClicked fired. Assuming Tab Mode.')
   await openInTab(extensionUrl, tabManagementMode, tab.windowId)
 })
 
 // Restore state from storage on startup
-chrome.storage.local
+browser.storage.local
   .get(['youtubeInfoMap', 'youtubeApiCache'])
   .then(({ youtubeInfoMap, youtubeApiCache: savedCache }) => {
     if (youtubeInfoMap) {
@@ -169,7 +170,7 @@ async function fetchYouTubeApiInfo(videoId: string, force = false) {
   fetchingYoutubeApi.add(videoId)
 
   const { youtubeApiKey: customApiKey } =
-    await chrome.storage.local.get('youtubeApiKey')
+    await browser.storage.local.get('youtubeApiKey')
   const apiKey = customApiKey || process.env.PLASMO_PUBLIC_YOUTUBE_API_KEY
   if (!apiKey || apiKey === 'YOUR_YOUTUBE_API_KEY_HERE' || apiKey === '') {
     fetchingYoutubeApi.delete(videoId)

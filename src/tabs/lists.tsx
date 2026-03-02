@@ -44,6 +44,7 @@ import 'antd/dist/reset.css'
 import '~/styles/index.css'
 
 const { Search } = Input
+const browser = chrome
 
 interface TabData {
     url: string
@@ -103,14 +104,14 @@ function LibraryList({
     }
 
     const openAllTabs = (tabs: TabData[]) => {
-        tabs.forEach((t) => chrome.tabs.create({ url: t.url }))
+        tabs.forEach((t) => browser.tabs.create({ url: t.url }))
         message.success(`${tabs.length} tabs opened`)
         analytics.trackEvent('Lists', 'Open All Tabs')
     }
 
     const handleDeleteLibrary = async (libId: string) => {
         if (isBookmarks) {
-            await new Promise<void>((res) => chrome.bookmarks.removeTree(libId, res))
+            await new Promise<void>((res) => browser.bookmarks.removeTree(libId, res))
         } else {
             await removeLibrary(libId)
         }
@@ -120,7 +121,7 @@ function LibraryList({
 
     const handleDeleteList = async (libId: string, listId: string) => {
         if (isBookmarks) {
-            await new Promise<void>((res) => chrome.bookmarks.removeTree(listId, res))
+            await new Promise<void>((res) => browser.bookmarks.removeTree(listId, res))
         } else {
             await removeList(libId, listId)
         }
@@ -131,7 +132,7 @@ function LibraryList({
     const commitRenameLib = async (libId: string) => {
         if (!editName.trim()) { setEditingLibId(null); return }
         if (isBookmarks) {
-            await new Promise<void>((res) => chrome.bookmarks.update(libId, { title: editName.trim() }, () => res()))
+            await new Promise<void>((res) => browser.bookmarks.update(libId, { title: editName.trim() }, () => res()))
         } else {
             await renameLibrary(libId, editName.trim())
         }
@@ -143,7 +144,7 @@ function LibraryList({
     const commitRenameList = async (libId: string, listId: string) => {
         if (!editName.trim()) { setEditingListKey(null); return }
         if (isBookmarks) {
-            await new Promise<void>((res) => chrome.bookmarks.update(listId, { title: editName.trim() }, () => res()))
+            await new Promise<void>((res) => browser.bookmarks.update(listId, { title: editName.trim() }, () => res()))
         } else {
             await renameTabList(libId, listId, editName.trim())
         }
@@ -156,7 +157,7 @@ function LibraryList({
         return (
             <Empty
                 description={isBookmarks
-                    ? 'No bookmark lists saved yet — choose "Chrome Bookmarks" when saving a list'
+                    ? 'No bookmark lists saved yet — choose "Browser Bookmarks" when saving a list'
                     : 'No extension lists yet — select tabs and click "Save as List"'
                 }
                 className="mt-16"
@@ -301,7 +302,7 @@ function LibraryList({
                                                                     <div className="text-[10px] text-gray-400 truncate">{tab.url}</div>
                                                                 </div>
                                                                 <Button type="link" size="small"
-                                                                    onClick={() => chrome.tabs.create({ url: tab.url })}
+                                                                    onClick={() => browser.tabs.create({ url: tab.url })}
                                                                     className="shrink-0"
                                                                 >
                                                                     Open

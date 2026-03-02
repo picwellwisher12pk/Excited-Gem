@@ -10,7 +10,7 @@ html,
 body {
   /* Ensure we take up max space in popup mode */
   min-width: 320px;
-  /* Chrome max popup size is approx 800x600 */
+  /* Browser max popup size is approx 800x600 */
   /* We can set a large max-width which acts as a default width in popup */
   /* but in a tab it will just be full width */
 }
@@ -311,7 +311,7 @@ mark {
 
 /*
  * Force width/height to maximize popup size
- * Chrome default max: ~800x600
+ * Browser default max: ~800x600
  * Using viewports units ensures it fills whatever container it's in (Tab or Popup)
  * but setting explicit min-dims helps usage as a popup
  */
@@ -343,7 +343,7 @@ body {
  *
  * BETTER: Let's NOT set a strict min-width on body globally, because it breaks Sidebar.
  * Instead, we trust the container.
- * Chrome Popups tend to shrink-wrap content.
+ * Browser Popups tend to shrink-wrap content.
  * So if we put a wide element in there, the popup expands.
  *
  * Strategy: Add a helper class 'extension-popup' usage if we could,
@@ -383,7 +383,7 @@ body {
 
    Solution: `window.matchMedia` in JS to set a class?
    Or just `min-width: 350px` (mobile size) and `width: 100%`.
-   Chrome popup defaults to 800x600 IF the content demands it.
+   Browser popup defaults to 800x600 IF the content demands it.
 
    I will add a specific rule that if the window width is essentially "large enough" (e.g. > 600px already? no),
    this is circular.

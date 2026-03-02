@@ -1,9 +1,9 @@
 /**
- * Utility functions for interacting with the Chrome Bookmarks API.
+ * Utility functions for interacting with the Browser Bookmarks API.
  * This file provides Promise-based wrappers around the callback-based chrome.bookmarks API.
  */
 
-// Basic Type Definitions based on chrome.bookmarks.BookmarkTreeNode
+// Basic Type Definitions based on Browser bookmarks.BookmarkTreeNode
 export interface BookmarkNode {
   id: string;
   parentId?: string;

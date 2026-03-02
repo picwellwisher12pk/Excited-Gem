@@ -24,6 +24,7 @@ import {
 } from '../getsetSessions'
 
 const { Text } = Typography
+const browser = chrome
 
 interface TabData {
     id: number
@@ -128,8 +129,8 @@ export function SaveListModal({
             }
         })
         // Load bookmark folders
-        if (chrome.bookmarks) {
-            chrome.bookmarks.getTree((tree) => {
+        if (browser.bookmarks) {
+            browser.bookmarks.getTree((tree) => {
                 const treeData = buildBookmarkTree(tree[0]?.children || [])
                 setBookmarkFolders(treeData)
             })
@@ -168,7 +169,7 @@ export function SaveListModal({
             }
 
             if (closeTabs) {
-                chrome.tabs.remove(selectedTabIds)
+                browser.tabs.remove(selectedTabIds)
             }
 
             onSaved?.()
@@ -235,7 +236,7 @@ export function SaveListModal({
                                     <Text type="secondary" className="ml-2 text-xs">Saved inside the extension, accessible from the Lists page</Text>
                                 </Radio>
                                 <Radio value="bookmarks">
-                                    <span className="font-medium">Chrome Bookmarks</span>
+                                    <span className="font-medium">Browser Bookmarks</span>
                                     <Text type="secondary" className="ml-2 text-xs">Saved as a bookmark folder in your browser</Text>
                                 </Radio>
                             </Space>
