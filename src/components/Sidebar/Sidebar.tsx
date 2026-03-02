@@ -26,6 +26,7 @@ export function SidebarToggleButton({ onClick }: { onClick: () => void }) {
   )
 }
 
+const browser = chrome
 export default function Sidebar({
   currentPage,
   collapsed: externalCollapsed,
@@ -43,7 +44,7 @@ export default function Sidebar({
     }
   }
 
-  const items: MenuProps['items'] = [
+  const mainItems: MenuProps['items'] = [
     {
       key: 'tabs',
       icon: <LayoutGrid size={18} />,
@@ -60,14 +61,17 @@ export default function Sidebar({
       label: <a href="/tabs/lists.html">Lists</a>
     },
     {
-      key: 'settings',
-      icon: <Settings size={18} />,
-      label: <a href="/tabs/settings.html">Settings</a>
-    },
-    {
       key: 'bookmarks',
       icon: <Folder size={18} />,
       label: <a href="/tabs/bookmarks.html">Bookmarks</a>
+    }
+  ]
+
+  const settingsItems: MenuProps['items'] = [
+    {
+      key: 'settings',
+      icon: <Settings size={18} />,
+      label: <a href="/tabs/settings.html">Settings</a>
     }
   ]
 
@@ -96,19 +100,29 @@ export default function Sidebar({
             className="!text-white hover:!bg-white/10 flex items-center justify-center"
           />
         </div>
-        <Menu
-          mode="inline"
-          selectedKeys={[currentPage]}
-          items={items}
-          className="!bg-transparent !border-0 pt-4 flex-1"
-          theme="dark"
-        />
+        <div className="flex-1 flex flex-col justify-between">
+          <Menu
+            mode="inline"
+            selectedKeys={[currentPage]}
+            items={mainItems}
+            className="!bg-transparent !border-0 pt-4"
+            theme="dark"
+          />
+
+          <Menu
+            mode="inline"
+            selectedKeys={[currentPage]}
+            items={settingsItems}
+            className="!bg-transparent !border-0 pb-4"
+            theme="dark"
+          />
+        </div>
 
         {/* Footer */}
         <div className="p-4 border-t border-white/20">
           <div className="text-white font-semibold text-sm">Excited Gem</div>
           <div className="text-white/60 text-xs mt-1">
-            v{chrome.runtime.getManifest().version}
+            v{browser.runtime.getManifest().version}
           </div>
         </div>
       </div>
