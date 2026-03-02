@@ -26,11 +26,17 @@ jobs:
           bun run package
           ls -R build/
 
+      - name: Upload Artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: chrome-mv3-prod
+          path: build/*.zip
+
       - name: Create Release
         uses: softprops/action-gh-release@v2
         with:
           files: |
-            build/chrome-mv3-prod.zip
+            build/*.zip
           draft: false
           prerelease: false
           generate_release_notes: true
@@ -41,3 +47,4 @@ jobs:
         uses: plasmohq/bpp@v3
         with:
           keys: ${{ secrets.SUBMIT_KEYS }}
+          artifact: chrome-mv3-prod
