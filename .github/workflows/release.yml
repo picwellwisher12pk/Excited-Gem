@@ -85,10 +85,10 @@ jobs:
             --arg refresh_token "$S_REFRESH_TOKEN" \
             '{chrome: {extensionId: $ext_id, zip: $zip, clientId: $client_id, clientSecret: $client_secret, refreshToken: $refresh_token}}')
 
-          # 6. Export to environment
-          echo "KEYS=$KEYS_JSON" >> $GITHUB_ENV
+          # 6. Export to outputs (more reliable than GITHUB_ENV for JSON strings)
+          echo "keys=$KEYS_JSON" >> $GITHUB_OUTPUT
 
       - name: Browser Platform Publisher
         uses: plasmohq/bpp@v3
         with:
-          keys: ${{ env.KEYS }}
+          keys: ${{ steps.bpp_keys.outputs.keys }}
