@@ -42,3 +42,17 @@ jobs:
           generate_release_notes: true
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Browser Platform Publisher
+        uses: plasmohq/bpp@v3
+        with:
+          keys: |
+            {
+              "chrome": {
+                "extensionId": "${{ secrets.CHROME_EXTENSION_ID }}",
+                "zip": "build/chrome-mv3-prod.zip",
+                "clientId": "${{ secrets.GOOGLE_CLIENT_ID }}",
+                "clientSecret": "${{ secrets.GOOGLE_CLIENT_SECRET }}",
+                "refreshToken": "${{ secrets.GOOGLE_REFRESH_TOKEN }}"
+              }
+            }
