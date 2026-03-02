@@ -31,6 +31,7 @@ import 'antd/dist/reset.css'
 import '~/styles/index.css'
 
 const { Title, Text } = Typography
+const browser = chrome
 
 function SettingsPageContent() {
   const dispatch = useDispatch()
@@ -60,7 +61,7 @@ function SettingsPageContent() {
   usePageTracking('/settings', 'Settings')
 
   useEffect(() => {
-    chrome.storage.local.get(
+    browser.storage.local.get(
       [
         'sessionsView',
         'displayMode',
@@ -88,42 +89,42 @@ function SettingsPageContent() {
 
   const handleSearchBehaviorChange = (value: 'debounce' | 'enter') => {
     setSearchBehavior(value)
-    chrome.storage.local.set({ searchBehavior: value }, () => {
+    browser.storage.local.set({ searchBehavior: value }, () => {
       message.success('Search behavior saved')
     })
   }
 
   const handleSessionsViewChange = (value: 'compact' | 'expanded') => {
     setSessionsView(value)
-    chrome.storage.local.set({ sessionsView: value }, () => {
+    browser.storage.local.set({ sessionsView: value }, () => {
       message.success('Settings saved')
     })
   }
 
   const handleDisplayModeChange = (value: 'sidebar' | 'tab' | 'popup') => {
     setDisplayMode(value)
-    chrome.storage.local.set({ displayMode: value }, () => {
+    browser.storage.local.set({ displayMode: value }, () => {
       message.success('Display mode saved')
     })
   }
 
   const handleTabManagementModeChange = (value: 'single' | 'per-window') => {
     setTabManagementMode(value)
-    chrome.storage.local.set({ tabManagementMode: value }, () => {
+    browser.storage.local.set({ tabManagementMode: value }, () => {
       message.success('Tab management mode saved')
     })
   }
 
   const handleGroupedTabsChange = (value: boolean) => {
     setGroupedTabs(value)
-    chrome.storage.local.set({ groupedTabs: value }, () => {
+    browser.storage.local.set({ groupedTabs: value }, () => {
       message.success('Grouped tabs setting saved')
     })
   }
 
   const handleTabActionButtonsChange = (value: 'always' | 'hover') => {
     setTabActionButtons(value)
-    chrome.storage.local.set({ tabActionButtons: value }, () => {
+    browser.storage.local.set({ tabActionButtons: value }, () => {
       message.success('Tab action buttons setting saved')
     })
   }
@@ -133,7 +134,7 @@ function SettingsPageContent() {
   ) => {
     const val = e.target.value
     setYoutubeApiKey(val)
-    chrome.storage.local.set({ youtubeApiKey: val }, () => {
+    browser.storage.local.set({ youtubeApiKey: val }, () => {
       message.success('YouTube API Key saved')
     })
   }
@@ -142,7 +143,7 @@ function SettingsPageContent() {
     try {
       const { profile } = await loginAndGetProfile()
       setUserProfile(profile)
-      chrome.storage.local.set({ userProfile: profile })
+      browser.storage.local.set({ userProfile: profile })
       message.success('Successfully logged in')
     } catch (err) {
       message.error('Login failed')
@@ -152,14 +153,14 @@ function SettingsPageContent() {
   const handleLogout = async () => {
     await logout()
     setUserProfile(null)
-    chrome.storage.local.remove('userProfile')
+    browser.storage.local.remove('userProfile')
     message.success('Logged out')
   }
 
   const handleBackup = async () => {
     setIsBackingUp(true)
     try {
-      const data = await chrome.storage.local.get(null)
+      const data = await browser.storage.local.get(null)
       await backupToDrive(data)
       message.success('Successfully backed up to Google Drive')
     } catch (err) {
@@ -174,7 +175,7 @@ function SettingsPageContent() {
     try {
       const data = await restoreFromDrive()
       if (data) {
-        await chrome.storage.local.set(data)
+        await browser.storage.local.set(data)
         message.success('Successfully restored from Google Drive')
       } else {
         message.info('No backup found')
@@ -562,7 +563,7 @@ function SettingsPageContent() {
                       <div>
                         <Text strong>Excited Gem</Text>
                         <div>
-                          <Text type="secondary">Version 1.0.0</Text>
+                          <Text type="secondary">Version {browser.runtime.getManifest().version}</Text>
                         </div>
                       </div>
                       <div>
