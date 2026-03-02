@@ -45,11 +45,11 @@ jobs:
           CLIENT_SECRET: ${{ secrets.GOOGLE_CLIENT_SECRET }}
           REFRESH_TOKEN: ${{ secrets.GOOGLE_REFRESH_TOKEN }}
         run: |
-          # Sanitize secrets (remove newlines/whitespace)
-          S_EXT_ID=$(echo "$EXT_ID" | tr -d '[:space:]')
-          S_CLIENT_ID=$(echo "$CLIENT_ID" | tr -d '[:space:]')
-          S_CLIENT_SECRET=$(echo "$CLIENT_SECRET" | tr -d '[:space:]')
-          S_REFRESH_TOKEN=$(echo "$REFRESH_TOKEN" | tr -d '[:space:]')
+          # Sanitize secrets: remove newlines, spaces, and double quotes (common paste errors)
+          S_EXT_ID=$(echo "$EXT_ID" | tr -d '[:space:]' | tr -d '"')
+          S_CLIENT_ID=$(echo "$CLIENT_ID" | tr -d '[:space:]' | tr -d '"')
+          S_CLIENT_SECRET=$(echo "$CLIENT_SECRET" | tr -d '[:space:]' | tr -d '"')
+          S_REFRESH_TOKEN=$(echo "$REFRESH_TOKEN" | tr -d '[:space:]' | tr -d '"')
 
           # Construct JSON in a single line to avoid parsing issues
           KEYS_JSON="{\"chrome\":{\"extensionId\":\"$S_EXT_ID\",\"zip\":\"build/chrome-mv3-prod.zip\",\"clientId\":\"$S_CLIENT_ID\",\"clientSecret\":\"$S_CLIENT_SECRET\",\"refreshToken\":\"$S_REFRESH_TOKEN\"}}"
