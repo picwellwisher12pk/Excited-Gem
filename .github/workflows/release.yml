@@ -43,7 +43,7 @@ jobs:
           echo '${{ secrets.SUBMIT_KEYS }}' | jq -c '{chrome: (.chrome | (if has("extId") then .extensionId = .extId | del(.extId) else . end))}' > bpp-keys.json
 
           # Read back using Node.js into BPP_KEYS env var (safe from shell corruption)
-          echo "BPP_KEYS=$(node -e 'process.stdout.write(require("./bpp-keys.json"))')" >> $GITHUB_ENV
+          node -e 'const fs = require("fs"); fs.appendFileSync(process.env.GITHUB_ENV, "BPP_KEYS=" + JSON.stringify(require("./bpp-keys.json")) + "\n")'
 
       - name: Browser Platform Publisher
         uses: plasmohq/bpp@v3
