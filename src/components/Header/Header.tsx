@@ -3,30 +3,29 @@ import { useCallback, useEffect, useMemo, useState } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 import type { ReactNode } from 'react'
 import {
-  RefreshCw,
   Pin,
   VolumeX,
   X,
   Move,
-  Volume2,
   Save,
   Moon,
-  ChevronDown
+  ChevronDown,
+  Layers,
+  XCircle
 } from 'lucide-react'
 
-import logo from '~/assets/logo.svg'
+import logo from '../../assets/logo.svg'
 
-import { getAllWindows, getCurrentWindow, processTabs } from '~/scripts/general'
-import { clearSelectedTabs } from '~/store/tabSlice'
-import { MoveModal } from '~/components/Modals/Move'
-import { SaveModal } from '~/components/Modals/Save'
-import WindowSelector from '~/components/WindowSelector'
+import { getAllWindows, getCurrentWindow, processTabs } from '../../scripts/general'
+import { clearSelectedTabs } from '../../store/tabSlice'
+import { MoveModal } from '../../components/Modals/Move'
+import { SaveListModal } from '../../components/Modals/SaveListModal'
+import WindowSelector from '../../components/WindowSelector'
 import Brand from './Brand'
-import MenuItemButton from './MenuItemButton'
 import Selection from './Selection'
 import SortButton from './SortButton'
-import Btn from '~/components/Btn'
-import { SidebarToggleButton } from '~/components/Sidebar'
+import Btn from '../../components/Btn'
+import { SidebarToggleButton } from '../../components/Sidebar'
 import MoreActionsMenu from './MoreActionsMenu'
 
 const { Option } = Select
@@ -63,7 +62,9 @@ export default function Header({
   sidebarToggle
 }: Readonly<HeaderProps>) {
   const dispatch = useDispatch()
-  const { selectedTabs, tabs, filteredTabs } = useSelector((state: { tabs: TabState }) => state.tabs)
+  const { selectedTabs, tabs, filteredTabs } = useSelector(
+    (state: { tabs: TabState }) => state.tabs
+  )
   const [checkedList, setCheckedList] = useState(selectedTabs)
   const [indeterminate, setIndeterminate] = useState(false)
   const [checkAll, setCheckAll] = useState(false)
@@ -71,7 +72,7 @@ export default function Header({
   const [allWindows, setAllWindows] = useState([])
   const [currentWindow, setCurrentWindow] = useState({})
   const [moveModalVisible, setMoveModalVisible] = useState(false)
-  const [saveModalVisible, setSaveModalVisible] = useState(false)
+  const [saveListModalVisible, setSaveListModalVisible] = useState(false)
 
   async function getWindows() {
     setAllWindows(await getAllWindows())
@@ -108,14 +109,14 @@ export default function Header({
   const pinMenu = {
     items: pinActions.map((action) => ({
       key: action,
-      label: action,
+      label: action
     })),
-    onClick: ({ key }) => handlePin(key),
+    onClick: ({ key }) => handlePin(key)
   }
 
   const pinSelect = (
     <Dropdown menu={pinMenu} trigger={['click']}>
-      <Btn className="mr-2 flex items-center">
+      <Btn className="flex items-center">
         <Pin size={14} className="mr-1" />
         <span>Pin</span>
         <ChevronDown size={14} className="ml-2 text-zinc-500" />
@@ -126,14 +127,14 @@ export default function Header({
   const muteMenu = {
     items: muteActions.map((action) => ({
       key: action,
-      label: action,
+      label: action
     })),
-    onClick: ({ key }) => handleMute(key),
+    onClick: ({ key }) => handleMute(key)
   }
 
   const muteSelect = (
     <Dropdown menu={muteMenu} trigger={['click']}>
-      <Btn className="mr-2 flex items-center">
+      <Btn className="flex items-center">
         <VolumeX size={14} className="mr-1" />
         <span>Mute</span>
         <ChevronDown size={14} className="ml-2 text-zinc-500" />
@@ -150,15 +151,14 @@ export default function Header({
               <SidebarToggleButton onClick={sidebarToggle} />
             </div>
           )}
-          <div className="hidden sm:block">
-            {Brand(logo)}
-          </div>
+          <div className="hidden sm:block">{Brand(logo)}</div>
         </div>
         {children}
       </section>
       <section
         className="flex flex-row justify-between items-center mt-1"
-        id="selection-action">
+        id="selection-action"
+      >
         <div className="flex mb-0 overflow-x-auto sm:overflow-visible no-scrollbar">
           <div className="mr-3 shrink-0">
             <Selection />
@@ -169,72 +169,76 @@ export default function Header({
           </div>
         </div>
         {selectedTabs.length > 0 && (
-          <Space>
+          <Space size="small" wrap>
             <span className="px-2 pl-0 text-white select-none font-semibold">
               Actions for selection ({selectedTabs.length} tabs)
             </span>
-            <div>
-              {pinSelect}
-            </div>
-            <div>
-              {muteSelect}
-            </div>
-            <div>
-              <Btn onClick={() => setSaveModalVisible(true)}>
-                <Save size={14} className="inline mr-1" />
-                <span> Save ...</span>
-              </Btn>
-            </div>
-            <div>
-              <Btn
-                title="Move Selected Tabs"
-                onClick={() => setMoveModalVisible(true)}
-              >
-                <Move size={14} className="mr-1" />
-                <Space>
-                  <span>Move ...</span>
-                </Space>
-              </Btn>
-            </div>
-            <div>
-              <Btn
-                title="Close Selected"
-                onClick={() => {
-                  processTabs('closeSelected', selectedTabs, tabs, () => {
-                    dispatch(clearSelectedTabs())
-                  })
-                }}
-              >
-                <X size={14} className="mr-1 text-red-500" />
-                <span> Close</span>
-              </Btn>
-            </div>
-            <div>
-              <Btn
-                title="Discard Selected"
-                onClick={() => {
-                  processTabs('discardSelected', selectedTabs, tabs)
-                }}
-              >
-                <Moon size={14} className="mr-1" />
-                <span> Discard</span>
-              </Btn>
-            </div>
+            {pinSelect}
+            {muteSelect}
+            <Btn
+              title="Group Selected Tabs"
+              onClick={() => {
+                if (selectedTabs.length > 0) {
+                  chrome.tabs.group({ tabIds: selectedTabs })
+                }
+              }}
+            >
+              <Layers size={14} className="inline mr-1" />
+              <span>Group</span>
+            </Btn>
+            <Btn onClick={() => setSaveListModalVisible(true)}>
+              <Save size={14} className="inline mr-1" />
+              <span>Save as List...</span>
+            </Btn>
+            <Btn
+              title="Move Selected Tabs"
+              onClick={() => setMoveModalVisible(true)}
+            >
+              <Move size={14} className="mr-1" />
+              <span>Move...</span>
+            </Btn>
+            <Btn
+              title="Close Selected"
+              onClick={() => {
+                processTabs('closeSelected', selectedTabs, tabs, () => {
+                  dispatch(clearSelectedTabs())
+                })
+              }}
+            >
+              <X size={14} className="mr-1 text-red-500" />
+              <span>Close</span>
+            </Btn>
+            <Btn
+              title="Discard Selected"
+              onClick={() => processTabs('discardSelected', selectedTabs, tabs)}
+            >
+              <Moon size={14} className="mr-1" />
+              <span>Discard</span>
+            </Btn>
+            <Btn
+              title="Clear Selection"
+              onClick={() => dispatch(clearSelectedTabs())}
+            >
+              <XCircle size={14} className="mr-1 text-gray-400" />
+              <span>Clear</span>
+            </Btn>
           </Space>
         )}
-
-
         <Space className="mr-1">
           <div>
             <MoreActionsMenu />
           </div>
-
           <div>
             <Btn
               onClick={() => {
-                processSelectedTabs(!allMuted ? 'muteSelected' : 'unmuteSelected')
+                processSelectedTabs(
+                  !allMuted ? 'muteSelected' : 'unmuteSelected'
+                )
               }}
-              title={!allMuted ? 'Mute All Visible Tabs' : 'Unmute All Visible Tabs'}>
+              title={
+                !allMuted ? 'Mute All Visible Tabs' : 'Unmute All Visible Tabs'
+              }
+            >
               {iconSound}
             </Btn>
           </div>
@@ -248,10 +252,11 @@ export default function Header({
           setMoveModalVisible={setMoveModalVisible}
         />
       )}
-      {saveModalVisible && (
-        <SaveModal
-          selectedTabs={selectedTabs}
-          setSaveModalVisible={setSaveModalVisible}
+      {saveListModalVisible && (
+        <SaveListModal
+          open={saveListModalVisible}
+          selectedTabIds={selectedTabs}
+          onClose={() => setSaveListModalVisible(false)}
         />
       )}
     </header>

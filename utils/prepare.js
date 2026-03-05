@@ -1,7 +1,7 @@
-var fileSystem = require("fs-extra"),
-    path = require("path");
+var fileSystem = require('fs-extra'),
+  path = require('path')
 
 // clean de dist folder
-fileSystem.emptyDirSync(path.join(__dirname, "../dist"));
+fileSystem.emptyDirSync(path.join(__dirname, '../dist'))
 
-require("./manifest.generator");
+require('./manifest.generator')

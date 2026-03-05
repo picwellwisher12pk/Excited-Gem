@@ -1,10 +1,9 @@
-import { useSortable } from '@dnd-kit/sortable';
-import { CSS } from '@dnd-kit/utilities';
-import { TabProps } from './Tab';
+import { useSortable } from '@dnd-kit/sortable'
+import { CSS } from '@dnd-kit/utilities'
 
 interface SortableTabProps {
-  tab: { id: number };
-  children: React.ReactNode;
+  tab: { id: number }
+  children: React.ReactNode
 }
 
 export function SortableTab({ tab, children }: SortableTabProps) {
@@ -14,17 +13,17 @@ export function SortableTab({ tab, children }: SortableTabProps) {
     setNodeRef,
     transform,
     transition,
-    isDragging,
-  } = useSortable({ id: tab.id });
+    isDragging
+  } = useSortable({ id: tab.id })
 
   const style = {
     transform: CSS.Transform.toString(transform),
     transition,
     opacity: isDragging ? 0.5 : 1,
-    cursor: 'grab',
-  };
+    cursor: 'grab'
+  }
 
-  console.log('🔖 SortableTab rendering tab:', tab.id);
+  console.log('🔖 SortableTab rendering tab:', tab.id)
 
   return (
     <div
@@ -36,5 +35,5 @@ export function SortableTab({ tab, children }: SortableTabProps) {
     >
       {children}
     </div>
-  );
+  )
 }

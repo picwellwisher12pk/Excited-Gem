@@ -1,14 +1,14 @@
-(function (global, factory) {
-  if (typeof define === "function" && define.amd) {
-    define("webextension-polyfill", ["module"], factory);
-  } else if (typeof exports !== "undefined") {
-    factory(module);
+;(function (global, factory) {
+  if (typeof define === 'function' && define.amd) {
+    define('webextension-polyfill', ['module'], factory)
+  } else if (typeof exports !== 'undefined') {
+    factory(module)
   } else {
     var mod = {
       exports: {}
-    };
-    factory(mod);
-    global.browser = mod.exports;
+    }
+    factory(mod)
+    global.browser = mod.exports
   }
 })(this, function (module) {
   /* webextension-polyfill - v0.3.1 - Tue Aug 21 2018 10:09:34 */
@@ -17,11 +17,16 @@
   /* This Source Code Form is subject to the terms of the Mozilla Public
    * License, v. 2.0. If a copy of the MPL was not distributed with this
    * file, You can obtain one at http://mozilla.org/MPL/2.0/. */
-  "use strict";
+  'use strict'
 
-  if (typeof browser === "undefined" || Object.getPrototypeOf(browser) !== Object.prototype) {
-    const CHROME_SEND_MESSAGE_CALLBACK_NO_RESPONSE_MESSAGE = "The message port closed before a response was received.";
-    const SEND_RESPONSE_DEPRECATION_WARNING = "Returning a Promise is the preferred way to send a reply from an onMessage/onMessageExternal listener, as the sendResponse will be removed from the specs (See https://developer.mozilla.org/docs/Mozilla/Add-ons/WebExtensions/API/runtime/onMessage)";
+  if (
+    typeof browser === 'undefined' ||
+    Object.getPrototypeOf(browser) !== Object.prototype
+  ) {
+    const CHROME_SEND_MESSAGE_CALLBACK_NO_RESPONSE_MESSAGE =
+      'The message port closed before a response was received.'
+    const SEND_RESPONSE_DEPRECATION_WARNING =
+      'Returning a Promise is the preferred way to send a reply from an onMessage/onMessageExternal listener, as the sendResponse will be removed from the specs (See https://developer.mozilla.org/docs/Mozilla/Add-ons/WebExtensions/API/runtime/onMessage)'
 
     // Wrapping the bulk of this polyfill in a one-time-use function is a minor
     // optimization for Firefox. Since Spidermonkey does not fully parse the
@@ -33,669 +38,671 @@
       // at build time by replacing the following "include" with the content of the
       // JSON file.
       const apiMetadata = {
-        "alarms": {
-          "clear": {
-            "minArgs": 0,
-            "maxArgs": 1
+        alarms: {
+          clear: {
+            minArgs: 0,
+            maxArgs: 1
           },
-          "clearAll": {
-            "minArgs": 0,
-            "maxArgs": 0
+          clearAll: {
+            minArgs: 0,
+            maxArgs: 0
           },
-          "get": {
-            "minArgs": 0,
-            "maxArgs": 1
+          get: {
+            minArgs: 0,
+            maxArgs: 1
           },
-          "getAll": {
-            "minArgs": 0,
-            "maxArgs": 0
+          getAll: {
+            minArgs: 0,
+            maxArgs: 0
           }
         },
-        "bookmarks": {
-          "create": {
-            "minArgs": 1,
-            "maxArgs": 1
+        bookmarks: {
+          create: {
+            minArgs: 1,
+            maxArgs: 1
           },
-          "get": {
-            "minArgs": 1,
-            "maxArgs": 1
+          get: {
+            minArgs: 1,
+            maxArgs: 1
           },
-          "getChildren": {
-            "minArgs": 1,
-            "maxArgs": 1
+          getChildren: {
+            minArgs: 1,
+            maxArgs: 1
           },
-          "getRecent": {
-            "minArgs": 1,
-            "maxArgs": 1
+          getRecent: {
+            minArgs: 1,
+            maxArgs: 1
           },
-          "getSubTree": {
-            "minArgs": 1,
-            "maxArgs": 1
+          getSubTree: {
+            minArgs: 1,
+            maxArgs: 1
           },
-          "getTree": {
-            "minArgs": 0,
-            "maxArgs": 0
+          getTree: {
+            minArgs: 0,
+            maxArgs: 0
           },
-          "move": {
-            "minArgs": 2,
-            "maxArgs": 2
+          move: {
+            minArgs: 2,
+            maxArgs: 2
           },
-          "remove": {
-            "minArgs": 1,
-            "maxArgs": 1
+          remove: {
+            minArgs: 1,
+            maxArgs: 1
           },
-          "removeTree": {
-            "minArgs": 1,
-            "maxArgs": 1
+          removeTree: {
+            minArgs: 1,
+            maxArgs: 1
           },
-          "search": {
-            "minArgs": 1,
-            "maxArgs": 1
+          search: {
+            minArgs: 1,
+            maxArgs: 1
           },
-          "update": {
-            "minArgs": 2,
-            "maxArgs": 2
+          update: {
+            minArgs: 2,
+            maxArgs: 2
           }
         },
-        "browserAction": {
-          "disable": {
-            "minArgs": 0,
-            "maxArgs": 1,
-            "fallbackToNoCallback": true
+        browserAction: {
+          disable: {
+            minArgs: 0,
+            maxArgs: 1,
+            fallbackToNoCallback: true
           },
-          "enable": {
-            "minArgs": 0,
-            "maxArgs": 1,
-            "fallbackToNoCallback": true
+          enable: {
+            minArgs: 0,
+            maxArgs: 1,
+            fallbackToNoCallback: true
           },
-          "getBadgeBackgroundColor": {
-            "minArgs": 1,
-            "maxArgs": 1
+          getBadgeBackgroundColor: {
+            minArgs: 1,
+            maxArgs: 1
           },
-          "getBadgeText": {
-            "minArgs": 1,
-            "maxArgs": 1
+          getBadgeText: {
+            minArgs: 1,
+            maxArgs: 1
           },
-          "getPopup": {
-            "minArgs": 1,
-            "maxArgs": 1
+          getPopup: {
+            minArgs: 1,
+            maxArgs: 1
           },
-          "getTitle": {
-            "minArgs": 1,
-            "maxArgs": 1
+          getTitle: {
+            minArgs: 1,
+            maxArgs: 1
           },
-          "openPopup": {
-            "minArgs": 0,
-            "maxArgs": 0
+          openPopup: {
+            minArgs: 0,
+            maxArgs: 0
           },
-          "setBadgeBackgroundColor": {
-            "minArgs": 1,
-            "maxArgs": 1,
-            "fallbackToNoCallback": true
+          setBadgeBackgroundColor: {
+            minArgs: 1,
+            maxArgs: 1,
+            fallbackToNoCallback: true
           },
-          "setBadgeText": {
-            "minArgs": 1,
-            "maxArgs": 1,
-            "fallbackToNoCallback": true
+          setBadgeText: {
+            minArgs: 1,
+            maxArgs: 1,
+            fallbackToNoCallback: true
           },
-          "setIcon": {
-            "minArgs": 1,
-            "maxArgs": 1
+          setIcon: {
+            minArgs: 1,
+            maxArgs: 1
           },
-          "setPopup": {
-            "minArgs": 1,
-            "maxArgs": 1,
-            "fallbackToNoCallback": true
+          setPopup: {
+            minArgs: 1,
+            maxArgs: 1,
+            fallbackToNoCallback: true
           },
-          "setTitle": {
-            "minArgs": 1,
-            "maxArgs": 1,
-            "fallbackToNoCallback": true
+          setTitle: {
+            minArgs: 1,
+            maxArgs: 1,
+            fallbackToNoCallback: true
           }
         },
-        "browsingData": {
-          "remove": {
-            "minArgs": 2,
-            "maxArgs": 2
+        browsingData: {
+          remove: {
+            minArgs: 2,
+            maxArgs: 2
           },
-          "removeCache": {
-            "minArgs": 1,
-            "maxArgs": 1
+          removeCache: {
+            minArgs: 1,
+            maxArgs: 1
           },
-          "removeCookies": {
-            "minArgs": 1,
-            "maxArgs": 1
+          removeCookies: {
+            minArgs: 1,
+            maxArgs: 1
           },
-          "removeDownloads": {
-            "minArgs": 1,
-            "maxArgs": 1
+          removeDownloads: {
+            minArgs: 1,
+            maxArgs: 1
           },
-          "removeFormData": {
-            "minArgs": 1,
-            "maxArgs": 1
+          removeFormData: {
+            minArgs: 1,
+            maxArgs: 1
           },
-          "removeHistory": {
-            "minArgs": 1,
-            "maxArgs": 1
+          removeHistory: {
+            minArgs: 1,
+            maxArgs: 1
           },
-          "removeLocalStorage": {
-            "minArgs": 1,
-            "maxArgs": 1
+          removeLocalStorage: {
+            minArgs: 1,
+            maxArgs: 1
           },
-          "removePasswords": {
-            "minArgs": 1,
-            "maxArgs": 1
+          removePasswords: {
+            minArgs: 1,
+            maxArgs: 1
           },
-          "removePluginData": {
-            "minArgs": 1,
-            "maxArgs": 1
+          removePluginData: {
+            minArgs: 1,
+            maxArgs: 1
           },
-          "settings": {
-            "minArgs": 0,
-            "maxArgs": 0
+          settings: {
+            minArgs: 0,
+            maxArgs: 0
           }
         },
-        "commands": {
-          "getAll": {
-            "minArgs": 0,
-            "maxArgs": 0
+        commands: {
+          getAll: {
+            minArgs: 0,
+            maxArgs: 0
           }
         },
-        "contextMenus": {
-          "remove": {
-            "minArgs": 1,
-            "maxArgs": 1
+        contextMenus: {
+          remove: {
+            minArgs: 1,
+            maxArgs: 1
           },
-          "removeAll": {
-            "minArgs": 0,
-            "maxArgs": 0
+          removeAll: {
+            minArgs: 0,
+            maxArgs: 0
           },
-          "update": {
-            "minArgs": 2,
-            "maxArgs": 2
+          update: {
+            minArgs: 2,
+            maxArgs: 2
           }
         },
-        "cookies": {
-          "get": {
-            "minArgs": 1,
-            "maxArgs": 1
+        cookies: {
+          get: {
+            minArgs: 1,
+            maxArgs: 1
           },
-          "getAll": {
-            "minArgs": 1,
-            "maxArgs": 1
+          getAll: {
+            minArgs: 1,
+            maxArgs: 1
           },
-          "getAllCookieStores": {
-            "minArgs": 0,
-            "maxArgs": 0
+          getAllCookieStores: {
+            minArgs: 0,
+            maxArgs: 0
           },
-          "remove": {
-            "minArgs": 1,
-            "maxArgs": 1
+          remove: {
+            minArgs: 1,
+            maxArgs: 1
           },
-          "set": {
-            "minArgs": 1,
-            "maxArgs": 1
+          set: {
+            minArgs: 1,
+            maxArgs: 1
           }
         },
-        "devtools": {
-          "inspectedWindow": {
-            "eval": {
-              "minArgs": 1,
-              "maxArgs": 2
+        devtools: {
+          inspectedWindow: {
+            eval: {
+              minArgs: 1,
+              maxArgs: 2
             }
           },
-          "panels": {
-            "create": {
-              "minArgs": 3,
-              "maxArgs": 3,
-              "singleCallbackArg": true
-            }
-          }
-        },
-        "downloads": {
-          "cancel": {
-            "minArgs": 1,
-            "maxArgs": 1
-          },
-          "download": {
-            "minArgs": 1,
-            "maxArgs": 1
-          },
-          "erase": {
-            "minArgs": 1,
-            "maxArgs": 1
-          },
-          "getFileIcon": {
-            "minArgs": 1,
-            "maxArgs": 2
-          },
-          "open": {
-            "minArgs": 1,
-            "maxArgs": 1,
-            "fallbackToNoCallback": true
-          },
-          "pause": {
-            "minArgs": 1,
-            "maxArgs": 1
-          },
-          "removeFile": {
-            "minArgs": 1,
-            "maxArgs": 1
-          },
-          "resume": {
-            "minArgs": 1,
-            "maxArgs": 1
-          },
-          "search": {
-            "minArgs": 1,
-            "maxArgs": 1
-          },
-          "show": {
-            "minArgs": 1,
-            "maxArgs": 1,
-            "fallbackToNoCallback": true
-          }
-        },
-        "extension": {
-          "isAllowedFileSchemeAccess": {
-            "minArgs": 0,
-            "maxArgs": 0
-          },
-          "isAllowedIncognitoAccess": {
-            "minArgs": 0,
-            "maxArgs": 0
-          }
-        },
-        "history": {
-          "addUrl": {
-            "minArgs": 1,
-            "maxArgs": 1
-          },
-          "deleteAll": {
-            "minArgs": 0,
-            "maxArgs": 0
-          },
-          "deleteRange": {
-            "minArgs": 1,
-            "maxArgs": 1
-          },
-          "deleteUrl": {
-            "minArgs": 1,
-            "maxArgs": 1
-          },
-          "getVisits": {
-            "minArgs": 1,
-            "maxArgs": 1
-          },
-          "search": {
-            "minArgs": 1,
-            "maxArgs": 1
-          }
-        },
-        "i18n": {
-          "detectLanguage": {
-            "minArgs": 1,
-            "maxArgs": 1
-          },
-          "getAcceptLanguages": {
-            "minArgs": 0,
-            "maxArgs": 0
-          }
-        },
-        "identity": {
-          "launchWebAuthFlow": {
-            "minArgs": 1,
-            "maxArgs": 1
-          }
-        },
-        "idle": {
-          "queryState": {
-            "minArgs": 1,
-            "maxArgs": 1
-          }
-        },
-        "management": {
-          "get": {
-            "minArgs": 1,
-            "maxArgs": 1
-          },
-          "getAll": {
-            "minArgs": 0,
-            "maxArgs": 0
-          },
-          "getSelf": {
-            "minArgs": 0,
-            "maxArgs": 0
-          },
-          "setEnabled": {
-            "minArgs": 2,
-            "maxArgs": 2
-          },
-          "uninstallSelf": {
-            "minArgs": 0,
-            "maxArgs": 1
-          }
-        },
-        "notifications": {
-          "clear": {
-            "minArgs": 1,
-            "maxArgs": 1
-          },
-          "create": {
-            "minArgs": 1,
-            "maxArgs": 2
-          },
-          "getAll": {
-            "minArgs": 0,
-            "maxArgs": 0
-          },
-          "getPermissionLevel": {
-            "minArgs": 0,
-            "maxArgs": 0
-          },
-          "update": {
-            "minArgs": 2,
-            "maxArgs": 2
-          }
-        },
-        "pageAction": {
-          "getPopup": {
-            "minArgs": 1,
-            "maxArgs": 1
-          },
-          "getTitle": {
-            "minArgs": 1,
-            "maxArgs": 1
-          },
-          "hide": {
-            "minArgs": 1,
-            "maxArgs": 1,
-            "fallbackToNoCallback": true
-          },
-          "setIcon": {
-            "minArgs": 1,
-            "maxArgs": 1
-          },
-          "setPopup": {
-            "minArgs": 1,
-            "maxArgs": 1,
-            "fallbackToNoCallback": true
-          },
-          "setTitle": {
-            "minArgs": 1,
-            "maxArgs": 1,
-            "fallbackToNoCallback": true
-          },
-          "show": {
-            "minArgs": 1,
-            "maxArgs": 1,
-            "fallbackToNoCallback": true
-          }
-        },
-        "permissions": {
-          "contains": {
-            "minArgs": 1,
-            "maxArgs": 1
-          },
-          "getAll": {
-            "minArgs": 0,
-            "maxArgs": 0
-          },
-          "remove": {
-            "minArgs": 1,
-            "maxArgs": 1
-          },
-          "request": {
-            "minArgs": 1,
-            "maxArgs": 1
-          }
-        },
-        "runtime": {
-          "getBackgroundPage": {
-            "minArgs": 0,
-            "maxArgs": 0
-          },
-          "getBrowserInfo": {
-            "minArgs": 0,
-            "maxArgs": 0
-          },
-          "getPlatformInfo": {
-            "minArgs": 0,
-            "maxArgs": 0
-          },
-          "openOptionsPage": {
-            "minArgs": 0,
-            "maxArgs": 0
-          },
-          "requestUpdateCheck": {
-            "minArgs": 0,
-            "maxArgs": 0
-          },
-          "sendMessage": {
-            "minArgs": 1,
-            "maxArgs": 3
-          },
-          "sendNativeMessage": {
-            "minArgs": 2,
-            "maxArgs": 2
-          },
-          "setUninstallURL": {
-            "minArgs": 1,
-            "maxArgs": 1
-          }
-        },
-        "sessions": {
-          "getDevices": {
-            "minArgs": 0,
-            "maxArgs": 1
-          },
-          "getRecentlyClosed": {
-            "minArgs": 0,
-            "maxArgs": 1
-          },
-          "restore": {
-            "minArgs": 0,
-            "maxArgs": 1
-          }
-        },
-        "storage": {
-          "local": {
-            "clear": {
-              "minArgs": 0,
-              "maxArgs": 0
-            },
-            "get": {
-              "minArgs": 0,
-              "maxArgs": 1
-            },
-            "getBytesInUse": {
-              "minArgs": 0,
-              "maxArgs": 1
-            },
-            "remove": {
-              "minArgs": 1,
-              "maxArgs": 1
-            },
-            "set": {
-              "minArgs": 1,
-              "maxArgs": 1
-            }
-          },
-          "managed": {
-            "get": {
-              "minArgs": 0,
-              "maxArgs": 1
-            },
-            "getBytesInUse": {
-              "minArgs": 0,
-              "maxArgs": 1
-            }
-          },
-          "sync": {
-            "clear": {
-              "minArgs": 0,
-              "maxArgs": 0
-            },
-            "get": {
-              "minArgs": 0,
-              "maxArgs": 1
-            },
-            "getBytesInUse": {
-              "minArgs": 0,
-              "maxArgs": 1
-            },
-            "remove": {
-              "minArgs": 1,
-              "maxArgs": 1
-            },
-            "set": {
-              "minArgs": 1,
-              "maxArgs": 1
+          panels: {
+            create: {
+              minArgs: 3,
+              maxArgs: 3,
+              singleCallbackArg: true
             }
           }
         },
-        "tabs": {
-          "captureVisibleTab": {
-            "minArgs": 0,
-            "maxArgs": 2
+        downloads: {
+          cancel: {
+            minArgs: 1,
+            maxArgs: 1
           },
-          "create": {
-            "minArgs": 1,
-            "maxArgs": 1
+          download: {
+            minArgs: 1,
+            maxArgs: 1
           },
-          "detectLanguage": {
-            "minArgs": 0,
-            "maxArgs": 1
+          erase: {
+            minArgs: 1,
+            maxArgs: 1
           },
-          "discard": {
-            "minArgs": 0,
-            "maxArgs": 1
+          getFileIcon: {
+            minArgs: 1,
+            maxArgs: 2
           },
-          "duplicate": {
-            "minArgs": 1,
-            "maxArgs": 1
+          open: {
+            minArgs: 1,
+            maxArgs: 1,
+            fallbackToNoCallback: true
           },
-          "executeScript": {
-            "minArgs": 1,
-            "maxArgs": 2
+          pause: {
+            minArgs: 1,
+            maxArgs: 1
           },
-          "get": {
-            "minArgs": 1,
-            "maxArgs": 1
+          removeFile: {
+            minArgs: 1,
+            maxArgs: 1
           },
-          "getCurrent": {
-            "minArgs": 0,
-            "maxArgs": 0
+          resume: {
+            minArgs: 1,
+            maxArgs: 1
           },
-          "getZoom": {
-            "minArgs": 0,
-            "maxArgs": 1
+          search: {
+            minArgs: 1,
+            maxArgs: 1
           },
-          "getZoomSettings": {
-            "minArgs": 0,
-            "maxArgs": 1
-          },
-          "highlight": {
-            "minArgs": 1,
-            "maxArgs": 1
-          },
-          "insertCSS": {
-            "minArgs": 1,
-            "maxArgs": 2
-          },
-          "move": {
-            "minArgs": 2,
-            "maxArgs": 2
-          },
-          "query": {
-            "minArgs": 1,
-            "maxArgs": 1
-          },
-          "reload": {
-            "minArgs": 0,
-            "maxArgs": 2
-          },
-          "remove": {
-            "minArgs": 1,
-            "maxArgs": 1
-          },
-          "removeCSS": {
-            "minArgs": 1,
-            "maxArgs": 2
-          },
-          "sendMessage": {
-            "minArgs": 2,
-            "maxArgs": 3
-          },
-          "setZoom": {
-            "minArgs": 1,
-            "maxArgs": 2
-          },
-          "setZoomSettings": {
-            "minArgs": 1,
-            "maxArgs": 2
-          },
-          "update": {
-            "minArgs": 1,
-            "maxArgs": 2
+          show: {
+            minArgs: 1,
+            maxArgs: 1,
+            fallbackToNoCallback: true
           }
         },
-        "topSites": {
-          "get": {
-            "minArgs": 0,
-            "maxArgs": 0
+        extension: {
+          isAllowedFileSchemeAccess: {
+            minArgs: 0,
+            maxArgs: 0
+          },
+          isAllowedIncognitoAccess: {
+            minArgs: 0,
+            maxArgs: 0
           }
         },
-        "webNavigation": {
-          "getAllFrames": {
-            "minArgs": 1,
-            "maxArgs": 1
+        history: {
+          addUrl: {
+            minArgs: 1,
+            maxArgs: 1
           },
-          "getFrame": {
-            "minArgs": 1,
-            "maxArgs": 1
+          deleteAll: {
+            minArgs: 0,
+            maxArgs: 0
+          },
+          deleteRange: {
+            minArgs: 1,
+            maxArgs: 1
+          },
+          deleteUrl: {
+            minArgs: 1,
+            maxArgs: 1
+          },
+          getVisits: {
+            minArgs: 1,
+            maxArgs: 1
+          },
+          search: {
+            minArgs: 1,
+            maxArgs: 1
           }
         },
-        "webRequest": {
-          "handlerBehaviorChanged": {
-            "minArgs": 0,
-            "maxArgs": 0
+        i18n: {
+          detectLanguage: {
+            minArgs: 1,
+            maxArgs: 1
+          },
+          getAcceptLanguages: {
+            minArgs: 0,
+            maxArgs: 0
           }
         },
-        "windows": {
-          "create": {
-            "minArgs": 0,
-            "maxArgs": 1
+        identity: {
+          launchWebAuthFlow: {
+            minArgs: 1,
+            maxArgs: 1
+          }
+        },
+        idle: {
+          queryState: {
+            minArgs: 1,
+            maxArgs: 1
+          }
+        },
+        management: {
+          get: {
+            minArgs: 1,
+            maxArgs: 1
           },
-          "get": {
-            "minArgs": 1,
-            "maxArgs": 2
+          getAll: {
+            minArgs: 0,
+            maxArgs: 0
           },
-          "getAll": {
-            "minArgs": 0,
-            "maxArgs": 1
+          getSelf: {
+            minArgs: 0,
+            maxArgs: 0
           },
-          "getCurrent": {
-            "minArgs": 0,
-            "maxArgs": 1
+          setEnabled: {
+            minArgs: 2,
+            maxArgs: 2
           },
-          "getLastFocused": {
-            "minArgs": 0,
-            "maxArgs": 1
+          uninstallSelf: {
+            minArgs: 0,
+            maxArgs: 1
+          }
+        },
+        notifications: {
+          clear: {
+            minArgs: 1,
+            maxArgs: 1
           },
-          "remove": {
-            "minArgs": 1,
-            "maxArgs": 1
+          create: {
+            minArgs: 1,
+            maxArgs: 2
           },
-          "update": {
-            "minArgs": 2,
-            "maxArgs": 2
+          getAll: {
+            minArgs: 0,
+            maxArgs: 0
+          },
+          getPermissionLevel: {
+            minArgs: 0,
+            maxArgs: 0
+          },
+          update: {
+            minArgs: 2,
+            maxArgs: 2
+          }
+        },
+        pageAction: {
+          getPopup: {
+            minArgs: 1,
+            maxArgs: 1
+          },
+          getTitle: {
+            minArgs: 1,
+            maxArgs: 1
+          },
+          hide: {
+            minArgs: 1,
+            maxArgs: 1,
+            fallbackToNoCallback: true
+          },
+          setIcon: {
+            minArgs: 1,
+            maxArgs: 1
+          },
+          setPopup: {
+            minArgs: 1,
+            maxArgs: 1,
+            fallbackToNoCallback: true
+          },
+          setTitle: {
+            minArgs: 1,
+            maxArgs: 1,
+            fallbackToNoCallback: true
+          },
+          show: {
+            minArgs: 1,
+            maxArgs: 1,
+            fallbackToNoCallback: true
+          }
+        },
+        permissions: {
+          contains: {
+            minArgs: 1,
+            maxArgs: 1
+          },
+          getAll: {
+            minArgs: 0,
+            maxArgs: 0
+          },
+          remove: {
+            minArgs: 1,
+            maxArgs: 1
+          },
+          request: {
+            minArgs: 1,
+            maxArgs: 1
+          }
+        },
+        runtime: {
+          getBackgroundPage: {
+            minArgs: 0,
+            maxArgs: 0
+          },
+          getBrowserInfo: {
+            minArgs: 0,
+            maxArgs: 0
+          },
+          getPlatformInfo: {
+            minArgs: 0,
+            maxArgs: 0
+          },
+          openOptionsPage: {
+            minArgs: 0,
+            maxArgs: 0
+          },
+          requestUpdateCheck: {
+            minArgs: 0,
+            maxArgs: 0
+          },
+          sendMessage: {
+            minArgs: 1,
+            maxArgs: 3
+          },
+          sendNativeMessage: {
+            minArgs: 2,
+            maxArgs: 2
+          },
+          setUninstallURL: {
+            minArgs: 1,
+            maxArgs: 1
+          }
+        },
+        sessions: {
+          getDevices: {
+            minArgs: 0,
+            maxArgs: 1
+          },
+          getRecentlyClosed: {
+            minArgs: 0,
+            maxArgs: 1
+          },
+          restore: {
+            minArgs: 0,
+            maxArgs: 1
+          }
+        },
+        storage: {
+          local: {
+            clear: {
+              minArgs: 0,
+              maxArgs: 0
+            },
+            get: {
+              minArgs: 0,
+              maxArgs: 1
+            },
+            getBytesInUse: {
+              minArgs: 0,
+              maxArgs: 1
+            },
+            remove: {
+              minArgs: 1,
+              maxArgs: 1
+            },
+            set: {
+              minArgs: 1,
+              maxArgs: 1
+            }
+          },
+          managed: {
+            get: {
+              minArgs: 0,
+              maxArgs: 1
+            },
+            getBytesInUse: {
+              minArgs: 0,
+              maxArgs: 1
+            }
+          },
+          sync: {
+            clear: {
+              minArgs: 0,
+              maxArgs: 0
+            },
+            get: {
+              minArgs: 0,
+              maxArgs: 1
+            },
+            getBytesInUse: {
+              minArgs: 0,
+              maxArgs: 1
+            },
+            remove: {
+              minArgs: 1,
+              maxArgs: 1
+            },
+            set: {
+              minArgs: 1,
+              maxArgs: 1
+            }
+          }
+        },
+        tabs: {
+          captureVisibleTab: {
+            minArgs: 0,
+            maxArgs: 2
+          },
+          create: {
+            minArgs: 1,
+            maxArgs: 1
+          },
+          detectLanguage: {
+            minArgs: 0,
+            maxArgs: 1
+          },
+          discard: {
+            minArgs: 0,
+            maxArgs: 1
+          },
+          duplicate: {
+            minArgs: 1,
+            maxArgs: 1
+          },
+          executeScript: {
+            minArgs: 1,
+            maxArgs: 2
+          },
+          get: {
+            minArgs: 1,
+            maxArgs: 1
+          },
+          getCurrent: {
+            minArgs: 0,
+            maxArgs: 0
+          },
+          getZoom: {
+            minArgs: 0,
+            maxArgs: 1
+          },
+          getZoomSettings: {
+            minArgs: 0,
+            maxArgs: 1
+          },
+          highlight: {
+            minArgs: 1,
+            maxArgs: 1
+          },
+          insertCSS: {
+            minArgs: 1,
+            maxArgs: 2
+          },
+          move: {
+            minArgs: 2,
+            maxArgs: 2
+          },
+          query: {
+            minArgs: 1,
+            maxArgs: 1
+          },
+          reload: {
+            minArgs: 0,
+            maxArgs: 2
+          },
+          remove: {
+            minArgs: 1,
+            maxArgs: 1
+          },
+          removeCSS: {
+            minArgs: 1,
+            maxArgs: 2
+          },
+          sendMessage: {
+            minArgs: 2,
+            maxArgs: 3
+          },
+          setZoom: {
+            minArgs: 1,
+            maxArgs: 2
+          },
+          setZoomSettings: {
+            minArgs: 1,
+            maxArgs: 2
+          },
+          update: {
+            minArgs: 1,
+            maxArgs: 2
+          }
+        },
+        topSites: {
+          get: {
+            minArgs: 0,
+            maxArgs: 0
+          }
+        },
+        webNavigation: {
+          getAllFrames: {
+            minArgs: 1,
+            maxArgs: 1
+          },
+          getFrame: {
+            minArgs: 1,
+            maxArgs: 1
+          }
+        },
+        webRequest: {
+          handlerBehaviorChanged: {
+            minArgs: 0,
+            maxArgs: 0
+          }
+        },
+        windows: {
+          create: {
+            minArgs: 0,
+            maxArgs: 1
+          },
+          get: {
+            minArgs: 1,
+            maxArgs: 2
+          },
+          getAll: {
+            minArgs: 0,
+            maxArgs: 1
+          },
+          getCurrent: {
+            minArgs: 0,
+            maxArgs: 1
+          },
+          getLastFocused: {
+            minArgs: 0,
+            maxArgs: 1
+          },
+          remove: {
+            minArgs: 1,
+            maxArgs: 1
+          },
+          update: {
+            minArgs: 2,
+            maxArgs: 2
           }
         }
-      };
+      }
 
       if (Object.keys(apiMetadata).length === 0) {
-        throw new Error("api-metadata.json has not been included in browser-polyfill");
+        throw new Error(
+          'api-metadata.json has not been included in browser-polyfill'
+        )
       }
 
       /**
@@ -710,16 +717,16 @@
        */
       class DefaultWeakMap extends WeakMap {
         constructor(createItem, items = undefined) {
-          super(items);
-          this.createItem = createItem;
+          super(items)
+          this.createItem = createItem
         }
 
         get(key) {
           if (!this.has(key)) {
-            this.set(key, this.createItem(key));
+            this.set(key, this.createItem(key))
           }
 
-          return super.get(key);
+          return super.get(key)
         }
       }
 
@@ -730,9 +737,11 @@
        * @param {*} value The value to test.
        * @returns {boolean} True if the value is thenable.
        */
-      const isThenable = value => {
-        return value && typeof value === "object" && typeof value.then === "function";
-      };
+      const isThenable = (value) => {
+        return (
+          value && typeof value === 'object' && typeof value.then === 'function'
+        )
+      }
 
       /**
        * Creates and returns a function which, when called, will resolve or reject
@@ -764,16 +773,17 @@
       const makeCallback = (promise, metadata) => {
         return (...callbackArgs) => {
           if (chrome.runtime.lastError) {
-            promise.reject(chrome.runtime.lastError);
+            promise.reject(chrome.runtime.lastError)
           } else if (metadata.singleCallbackArg || callbackArgs.length <= 1) {
-            promise.resolve(callbackArgs[0]);
+            promise.resolve(callbackArgs[0])
           } else {
-            promise.resolve(callbackArgs);
+            promise.resolve(callbackArgs)
           }
-        };
-      };
+        }
+      }
 
-      const pluralizeArguments = numArgs => numArgs == 1 ? "argument" : "arguments";
+      const pluralizeArguments = (numArgs) =>
+        numArgs == 1 ? 'argument' : 'arguments'
 
       /**
        * Creates a wrapper function for a method with the given name and metadata.
@@ -800,11 +810,15 @@
       const wrapAsyncFunction = (name, metadata) => {
         return function asyncFunctionWrapper(target, ...args) {
           if (args.length < metadata.minArgs) {
-            throw new Error(`Expected at least ${metadata.minArgs} ${pluralizeArguments(metadata.minArgs)} for ${name}(), got ${args.length}`);
+            throw new Error(
+              `Expected at least ${metadata.minArgs} ${pluralizeArguments(metadata.minArgs)} for ${name}(), got ${args.length}`
+            )
           }
 
           if (args.length > metadata.maxArgs) {
-            throw new Error(`Expected at most ${metadata.maxArgs} ${pluralizeArguments(metadata.maxArgs)} for ${name}(), got ${args.length}`);
+            throw new Error(
+              `Expected at most ${metadata.maxArgs} ${pluralizeArguments(metadata.maxArgs)} for ${name}(), got ${args.length}`
+            )
           }
 
           return new Promise((resolve, reject) => {
@@ -813,28 +827,35 @@
               // and so the polyfill will try to call it with a callback first, and it will fallback
               // to not passing the callback if the first call fails.
               try {
-                target[name](...args, makeCallback({ resolve, reject }, metadata));
+                target[name](
+                  ...args,
+                  makeCallback({ resolve, reject }, metadata)
+                )
               } catch (cbError) {
-                console.warn(`${name} API method doesn't seem to support the callback parameter, ` + "falling back to call it without a callback: ", cbError);
+                console.warn(
+                  `${name} API method doesn't seem to support the callback parameter, ` +
+                    'falling back to call it without a callback: ',
+                  cbError
+                )
 
-                target[name](...args);
+                target[name](...args)
 
                 // Update the API method metadata, so that the next API calls will not try to
                 // use the unsupported callback anymore.
-                metadata.fallbackToNoCallback = false;
-                metadata.noCallback = true;
+                metadata.fallbackToNoCallback = false
+                metadata.noCallback = true
 
-                resolve();
+                resolve()
               }
             } else if (metadata.noCallback) {
-              target[name](...args);
-              resolve();
+              target[name](...args)
+              resolve()
             } else {
-              target[name](...args, makeCallback({ resolve, reject }, metadata));
+              target[name](...args, makeCallback({ resolve, reject }, metadata))
             }
-          });
-        };
-      };
+          })
+        }
+      }
 
       /**
        * Wraps an existing method of the target object, so that calls to it are
@@ -858,12 +879,12 @@
       const wrapMethod = (target, method, wrapper) => {
         return new Proxy(method, {
           apply(targetMethod, thisObj, args) {
-            return wrapper.call(thisObj, target, ...args);
+            return wrapper.call(thisObj, target, ...args)
           }
-        });
-      };
+        })
+      }
 
-      let hasOwnProperty = Function.call.bind(Object.prototype.hasOwnProperty);
+      let hasOwnProperty = Function.call.bind(Object.prototype.hasOwnProperty)
 
       /**
        * Wraps an object in a Proxy which intercepts and wraps certain methods
@@ -889,45 +910,49 @@
        * @returns {Proxy<object>}
        */
       const wrapObject = (target, wrappers = {}, metadata = {}) => {
-        let cache = Object.create(null);
+        let cache = Object.create(null)
         let handlers = {
           has(proxyTarget, prop) {
-            return prop in target || prop in cache;
+            return prop in target || prop in cache
           },
 
           get(proxyTarget, prop, receiver) {
             if (prop in cache) {
-              return cache[prop];
+              return cache[prop]
             }
 
             if (!(prop in target)) {
-              return undefined;
+              return undefined
             }
 
-            let value = target[prop];
+            let value = target[prop]
 
-            if (typeof value === "function") {
+            if (typeof value === 'function') {
               // This is a method on the underlying object. Check if we need to do
               // any wrapping.
 
-              if (typeof wrappers[prop] === "function") {
+              if (typeof wrappers[prop] === 'function') {
                 // We have a special-case wrapper for this method.
-                value = wrapMethod(target, target[prop], wrappers[prop]);
+                value = wrapMethod(target, target[prop], wrappers[prop])
               } else if (hasOwnProperty(metadata, prop)) {
                 // This is an async method that we have metadata for. Create a
                 // Promise wrapper for it.
-                let wrapper = wrapAsyncFunction(prop, metadata[prop]);
-                value = wrapMethod(target, target[prop], wrapper);
+                let wrapper = wrapAsyncFunction(prop, metadata[prop])
+                value = wrapMethod(target, target[prop], wrapper)
               } else {
                 // This is a method that we don't know or care about. Return the
                 // original method, bound to the underlying object.
-                value = value.bind(target);
+                value = value.bind(target)
               }
-            } else if (typeof value === "object" && value !== null && (hasOwnProperty(wrappers, prop) || hasOwnProperty(metadata, prop))) {
+            } else if (
+              typeof value === 'object' &&
+              value !== null &&
+              (hasOwnProperty(wrappers, prop) || hasOwnProperty(metadata, prop))
+            ) {
               // This is an object that we need to do some wrapping for the children
               // of. Create a sub-object wrapper for it with the appropriate child
               // metadata.
-              value = wrapObject(value, wrappers[prop], metadata[prop]);
+              value = wrapObject(value, wrappers[prop], metadata[prop])
             } else {
               // We don't need to do any wrapping for this property,
               // so just forward all access to the underlying object.
@@ -935,37 +960,37 @@
                 configurable: true,
                 enumerable: true,
                 get() {
-                  return target[prop];
+                  return target[prop]
                 },
                 set(value) {
-                  target[prop] = value;
+                  target[prop] = value
                 }
-              });
+              })
 
-              return value;
+              return value
             }
 
-            cache[prop] = value;
-            return value;
+            cache[prop] = value
+            return value
           },
 
           set(proxyTarget, prop, value, receiver) {
             if (prop in cache) {
-              cache[prop] = value;
+              cache[prop] = value
             } else {
-              target[prop] = value;
+              target[prop] = value
             }
-            return true;
+            return true
           },
 
           defineProperty(proxyTarget, prop, desc) {
-            return Reflect.defineProperty(cache, prop, desc);
+            return Reflect.defineProperty(cache, prop, desc)
           },
 
           deleteProperty(proxyTarget, prop) {
-            return Reflect.deleteProperty(cache, prop);
+            return Reflect.deleteProperty(cache, prop)
           }
-        };
+        }
 
         // Per contract of the Proxy API, the "get" proxy handler must return the
         // original value of the target if that value is declared read-only and
@@ -977,9 +1002,9 @@
         // The proxy handlers themselves will still use the original `target`
         // instead of the `proxyTarget`, so that the methods and properties are
         // dereferenced via the original targets.
-        let proxyTarget = Object.create(target);
-        return new Proxy(proxyTarget, handlers);
-      };
+        let proxyTarget = Object.create(target)
+        return new Proxy(proxyTarget, handlers)
+      }
 
       /**
        * Creates a set of wrapper functions for an event object, which handles
@@ -997,26 +1022,26 @@
        *
        * @returns {object}
        */
-      const wrapEvent = wrapperMap => ({
+      const wrapEvent = (wrapperMap) => ({
         addListener(target, listener, ...args) {
-          target.addListener(wrapperMap.get(listener), ...args);
+          target.addListener(wrapperMap.get(listener), ...args)
         },
 
         hasListener(target, listener) {
-          return target.hasListener(wrapperMap.get(listener));
+          return target.hasListener(wrapperMap.get(listener))
         },
 
         removeListener(target, listener) {
-          target.removeListener(wrapperMap.get(listener));
+          target.removeListener(wrapperMap.get(listener))
         }
-      });
+      })
 
       // Keep track if the deprecation warning has been logged at least once.
-      let loggedSendResponseDeprecationWarning = false;
+      let loggedSendResponseDeprecationWarning = false
 
-      const onMessageWrappers = new DefaultWeakMap(listener => {
-        if (typeof listener !== "function") {
-          return listener;
+      const onMessageWrappers = new DefaultWeakMap((listener) => {
+        if (typeof listener !== 'function') {
+          return listener
         }
 
         /**
@@ -1037,128 +1062,156 @@
          *        yield a response. False otherwise.
          */
         return function onMessage(message, sender, sendResponse) {
-          let didCallSendResponse = false;
+          let didCallSendResponse = false
 
-          let wrappedSendResponse;
-          let sendResponsePromise = new Promise(resolve => {
+          let wrappedSendResponse
+          let sendResponsePromise = new Promise((resolve) => {
             wrappedSendResponse = function (response) {
               if (!loggedSendResponseDeprecationWarning) {
-                console.warn(SEND_RESPONSE_DEPRECATION_WARNING, new Error().stack);
-                loggedSendResponseDeprecationWarning = true;
+                console.warn(
+                  SEND_RESPONSE_DEPRECATION_WARNING,
+                  new Error().stack
+                )
+                loggedSendResponseDeprecationWarning = true
               }
-              didCallSendResponse = true;
-              resolve(response);
-            };
-          });
+              didCallSendResponse = true
+              resolve(response)
+            }
+          })
 
-          let result;
+          let result
           try {
-            result = listener(message, sender, wrappedSendResponse);
+            result = listener(message, sender, wrappedSendResponse)
           } catch (err) {
-            result = Promise.reject(err);
+            result = Promise.reject(err)
           }
 
-          const isResultThenable = result !== true && isThenable(result);
+          const isResultThenable = result !== true && isThenable(result)
 
           // If the listener didn't returned true or a Promise, or called
           // wrappedSendResponse synchronously, we can exit earlier
           // because there will be no response sent from this listener.
           if (result !== true && !isResultThenable && !didCallSendResponse) {
-            return false;
+            return false
           }
 
           // A small helper to send the message if the promise resolves
           // and an error if the promise rejects (a wrapped sendMessage has
           // to translate the message into a resolved promise or a rejected
           // promise).
-          const sendPromisedResult = promise => {
-            promise.then(msg => {
-              // send the message value.
-              sendResponse(msg);
-            }, error => {
-              // Send a JSON representation of the error if the rejected value
-              // is an instance of error, or the object itself otherwise.
-              let message;
-              if (error && (error instanceof Error || typeof error.message === "string")) {
-                message = error.message;
-              } else {
-                message = "An unexpected error occurred";
-              }
+          const sendPromisedResult = (promise) => {
+            promise
+              .then(
+                (msg) => {
+                  // send the message value.
+                  sendResponse(msg)
+                },
+                (error) => {
+                  // Send a JSON representation of the error if the rejected value
+                  // is an instance of error, or the object itself otherwise.
+                  let message
+                  if (
+                    error &&
+                    (error instanceof Error ||
+                      typeof error.message === 'string')
+                  ) {
+                    message = error.message
+                  } else {
+                    message = 'An unexpected error occurred'
+                  }
 
-              sendResponse({
-                __mozWebExtensionPolyfillReject__: true,
-                message
-              });
-            }).catch(err => {
-              // Print an error on the console if unable to send the response.
-              console.error("Failed to send onMessage rejected reply", err);
-            });
-          };
+                  sendResponse({
+                    __mozWebExtensionPolyfillReject__: true,
+                    message
+                  })
+                }
+              )
+              .catch((err) => {
+                // Print an error on the console if unable to send the response.
+                console.error('Failed to send onMessage rejected reply', err)
+              })
+          }
 
           // If the listener returned a Promise, send the resolved value as a
           // result, otherwise wait the promise related to the wrappedSendResponse
           // callback to resolve and send it as a response.
           if (isResultThenable) {
-            sendPromisedResult(result);
+            sendPromisedResult(result)
           } else {
-            sendPromisedResult(sendResponsePromise);
+            sendPromisedResult(sendResponsePromise)
           }
 
           // Let Chrome know that the listener is replying.
-          return true;
-        };
-      });
+          return true
+        }
+      })
 
       const wrappedSendMessageCallback = ({ reject, resolve }, reply) => {
         if (chrome.runtime.lastError) {
           // Detect when none of the listeners replied to the sendMessage call and resolve
           // the promise to undefined as in Firefox.
           // See https://github.com/mozilla/webextension-polyfill/issues/130
-          if (chrome.runtime.lastError.message === CHROME_SEND_MESSAGE_CALLBACK_NO_RESPONSE_MESSAGE) {
-            resolve();
+          if (
+            chrome.runtime.lastError.message ===
+            CHROME_SEND_MESSAGE_CALLBACK_NO_RESPONSE_MESSAGE
+          ) {
+            resolve()
           } else {
-            reject(chrome.runtime.lastError);
+            reject(chrome.runtime.lastError)
           }
         } else if (reply && reply.__mozWebExtensionPolyfillReject__) {
           // Convert back the JSON representation of the error into
           // an Error instance.
-          reject(new Error(reply.message));
+          reject(new Error(reply.message))
         } else {
-          resolve(reply);
+          resolve(reply)
         }
-      };
+      }
 
       const wrappedSendMessage = (name, metadata, apiNamespaceObj, ...args) => {
         if (args.length < metadata.minArgs) {
-          throw new Error(`Expected at least ${metadata.minArgs} ${pluralizeArguments(metadata.minArgs)} for ${name}(), got ${args.length}`);
+          throw new Error(
+            `Expected at least ${metadata.minArgs} ${pluralizeArguments(metadata.minArgs)} for ${name}(), got ${args.length}`
+          )
         }
 
         if (args.length > metadata.maxArgs) {
-          throw new Error(`Expected at most ${metadata.maxArgs} ${pluralizeArguments(metadata.maxArgs)} for ${name}(), got ${args.length}`);
+          throw new Error(
+            `Expected at most ${metadata.maxArgs} ${pluralizeArguments(metadata.maxArgs)} for ${name}(), got ${args.length}`
+          )
         }
 
         return new Promise((resolve, reject) => {
-          const wrappedCb = wrappedSendMessageCallback.bind(null, { resolve, reject });
-          args.push(wrappedCb);
-          apiNamespaceObj.sendMessage(...args);
-        });
-      };
+          const wrappedCb = wrappedSendMessageCallback.bind(null, {
+            resolve,
+            reject
+          })
+          args.push(wrappedCb)
+          apiNamespaceObj.sendMessage(...args)
+        })
+      }
 
       const staticWrappers = {
         runtime: {
           onMessage: wrapEvent(onMessageWrappers),
           onMessageExternal: wrapEvent(onMessageWrappers),
-          sendMessage: wrappedSendMessage.bind(null, "sendMessage", { minArgs: 1, maxArgs: 3 })
+          sendMessage: wrappedSendMessage.bind(null, 'sendMessage', {
+            minArgs: 1,
+            maxArgs: 3
+          })
         },
         tabs: {
-          sendMessage: wrappedSendMessage.bind(null, "sendMessage", { minArgs: 2, maxArgs: 3 })
+          sendMessage: wrappedSendMessage.bind(null, 'sendMessage', {
+            minArgs: 2,
+            maxArgs: 3
+          })
         }
-      };
+      }
       const settingMetadata = {
         clear: { minArgs: 1, maxArgs: 1 },
         get: { minArgs: 1, maxArgs: 1 },
         set: { minArgs: 1, maxArgs: 1 }
-      };
+      }
       apiMetadata.privacy = {
         network: {
           networkPredictionEnabled: settingMetadata,
@@ -1171,16 +1224,16 @@
           hyperlinkAuditingEnabled: settingMetadata,
           referrersEnabled: settingMetadata
         }
-      };
+      }
 
-      return wrapObject(chrome, staticWrappers, apiMetadata);
-    };
+      return wrapObject(chrome, staticWrappers, apiMetadata)
+    }
 
     // The build process adds a UMD wrapper around this file, which makes the
     // `module` variable available.
-    module.exports = wrapAPIs(); // eslint-disable-line no-undef
+    module.exports = wrapAPIs() // eslint-disable-line no-undef
   } else {
-    module.exports = browser; // eslint-disable-line no-undef
+    module.exports = browser // eslint-disable-line no-undef
   }
-});
+})
 //# sourceMappingURL=browser-polyfill.js.map

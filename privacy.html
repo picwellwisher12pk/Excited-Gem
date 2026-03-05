@@ -1,0 +1,204 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Privacy Policy - Excited Gem</title>
+    <style>
+        :root {
+            --primary: #6366f1;
+            --primary-dark: #4f46e5;
+            --text-main: #1f2937;
+            --text-light: #6b7280;
+            --bg-page: #f9fafb;
+            --bg-card: #ffffff;
+        }
+
+        body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+            line-height: 1.6;
+            color: var(--text-main);
+            background-color: var(--bg-page);
+            margin: 0;
+            padding: 0;
+        }
+
+        .container {
+            max-width: 800px;
+            margin: 40px auto;
+            padding: 40px;
+            background: var(--bg-card);
+            border-radius: 12px;
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+        }
+
+        h1 {
+            color: var(--primary);
+            font-size: 2.5rem;
+            margin-bottom: 0.5rem;
+            text-align: center;
+        }
+
+        .last-updated {
+            text-align: center;
+            color: var(--text-light);
+            font-size: 0.9rem;
+            margin-bottom: 3rem;
+        }
+
+        h2 {
+            border-bottom: 2px solid #f3f4f6;
+            padding-bottom: 8px;
+            margin-top: 2.5rem;
+            color: #111827;
+        }
+
+        p,
+        li {
+            font-size: 1.05rem;
+            margin-bottom: 1rem;
+        }
+
+        ul {
+            padding-left: 1.5rem;
+        }
+
+        .permission-card {
+            background-color: #f8fafc;
+            border-left: 4px solid var(--primary);
+            padding: 1rem 1.5rem;
+            margin: 1.5rem 0;
+            border-radius: 0 8px 8px 0;
+        }
+
+        .permission-name {
+            font-weight: bold;
+            color: var(--primary-dark);
+            display: block;
+            margin-bottom: 4px;
+            font-family: monospace;
+        }
+
+        footer {
+            text-align: center;
+            padding: 40px 0;
+            color: var(--text-light);
+            font-size: 0.9rem;
+        }
+
+        @media (max-width: 640px) {
+            .container {
+                margin: 0;
+                border-radius: 0;
+                padding: 20px;
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+    <div class="container">
+        <h1>Privacy Policy</h1>
+        <p class="last-updated">Last Updated: March 6, 2026</p>
+
+        <section>
+            <h2>1. Introduction</h2>
+            <p>Welcome to <strong>Excited Gem</strong>. Your privacy is critically important to us. This Privacy Policy
+                describes how Excited Gem ("the Extension") handles data when you use our browser extension and its
+                associated services.</p>
+            <p>Excited Gem is a unified productivity tool designed to manage tabs, bookmarks, and media playback. By
+                design, we prioritize local data processing to ensure your browsing habits remain private.</p>
+        </section>
+
+        <section>
+            <h2>2. Data Collection and Usage</h2>
+            <p>Excited Gem operates primarily as a <strong>Local-First</strong> extension. We do not maintain any
+                central servers that collect your browsing history, personal files, or identity information.</p>
+            <ul>
+                <li><strong>Local Storage:</strong> All extension settings, categorized bookmarks, and tab session data
+                    are stored locally in your browser using <code>chrome.storage.local</code>.</li>
+                <li><strong>No External Transmission:</strong> We do not sell, trade, or transmit your personal data to
+                    any third-party servers, except when explicitly initiated by you (e.g., syncing to your own Google
+                    Drive).</li>
+            </ul>
+        </section>
+
+        <section>
+            <h2>3. Permissions Disclosure</h2>
+            <p>To provide its core functionality, Excited Gem requires specific permissions. Here is exactly how we use
+                them:</p>
+
+            <div class="permission-card">
+                <span class="permission-name">host_permissions (youtube.com/watch*, youtube.com/shorts/*)</span>
+                Used to monitor YouTube playback state (title, progress, play/pause) so you can control media directly
+                from the extension sidebar. This access is strictly limited to YouTube video and shorts pages.
+            </div>
+
+            <div class="permission-card">
+                <span class="permission-name">bookmarks</span>
+                Required to allow you to organize, categorize, and move your bookmarks into specialized groups within
+                the extension interface.
+            </div>
+
+            <div class="permission-card">
+                <span class="permission-name">tabs / tabGroups</span>
+                Allows the extension to display your open tabs in the sidebar for easy navigation and group management.
+            </div>
+
+            <div class="permission-card">
+                <span class="permission-name">unlimitedStorage</span>
+                Necessary to ensure that large bookmark collections and complex session histories are saved without
+                being truncated by default browser storage limits.
+            </div>
+
+            <div class="permission-card">
+                <span class="permission-name">identity / oauth2</span>
+                Used exclusively to allow you to back up your extension data to your personal <strong>Google Drive (App
+                    Data folder)</strong>. The extension never sees your Google account password.
+            </div>
+        </section>
+
+        <section>
+            <h2>4. Third-Party Services</h2>
+            <p>Excited Gem interacts with the following third-party services:</p>
+            <ul>
+                <li><strong>YouTube API:</strong> Used to fetch high-quality video metadata (such as duration and
+                    official titles) for better organization in your dashboard. This interaction is subject to YouTube's
+                    Terms of Service and Google's Privacy Policy.</li>
+                <li><strong>Google Drive:</strong> If you enable "Sync," data is uploaded to your private Google Drive
+                    account. We do not have access to any files in your Drive except those created by this extension.
+                </li>
+            </ul>
+        </section>
+
+        <section>
+            <h2>5. Data Security</h2>
+            <p>We use industry-standard browser security implementations to protect your data. Since your data is stored
+                locally, its security also depends on the security of your device and browser.</p>
+        </section>
+
+        <section>
+            <h2>6. Changes to This Policy</h2>
+            <p>We may update our Privacy Policy from time to time. We will notify you of any changes by posting the new
+                Privacy Policy on this page and updating the "Last Updated" date at the top.</p>
+        </section>
+
+        <section>
+            <h2>7. Contact Us</h2>
+            <p>If you have any questions or suggestions about our Privacy Policy, do not hesitate to contact us at:</p>
+            <p><strong>Email:</strong> amir.hameed@example.com (Replace with your actual email)<br>
+                <strong>Project Homepage:</strong> <a
+                    href="https://picwellwisher12pk.github.io/excited-gem/">https://picwellwisher12pk.github.io/excited-gem/</a>
+            </p>
+        </section>
+    </div>
+
+    <footer>
+        &copy; 2026 Excited Gem. Built with privacy in mind.
+    </footer>
+
+</body>
+
+</html>

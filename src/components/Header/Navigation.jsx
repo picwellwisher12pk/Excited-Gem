@@ -1,5 +1,5 @@
 import { Badge } from 'antd'
-import React, { memo } from 'react'
+import { memo } from 'react'
 
 const Navigation = ({ tabCount }) => {
   console.log('navigation')
@@ -13,11 +13,13 @@ const Navigation = ({ tabCount }) => {
             count={tabCount}
             color={tabCount > 50 ? 'orange' : 'green '}
             size="small"
-            className="!border-0">
+            className="!border-0"
+          >
             <a
               className=" text-white font-weight-bold"
               href="/tabs/home.html"
-              id="go-to-tabs">
+              id="go-to-tabs"
+            >
               Tabs
               <span className="sr-only">(current)</span>
             </a>

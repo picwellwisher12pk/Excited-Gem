@@ -1,3 +1,1 @@
-let firefox = {
-
-}
+let firefox = {}

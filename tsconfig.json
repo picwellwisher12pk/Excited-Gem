@@ -1,8 +1,6 @@
 {
   "extends": "plasmo/templates/tsconfig.base",
-  "exclude": [
-    "node_modules"
-  ],
+  "exclude": ["node_modules"],
   "include": [
     "src",
     ".plasmo/index.d.ts",
@@ -13,13 +11,9 @@
   ],
   "compilerOptions": {
     "paths": {
-      "~*": [
-        "./src*"
-      ]
+      "~*": ["./src*"]
     },
-    "types": [
-      "chrome"
-    ],
+    "types": ["chrome"],
     "moduleResolution": "node",
     "esModuleInterop": true,
     "skipLibCheck": true,

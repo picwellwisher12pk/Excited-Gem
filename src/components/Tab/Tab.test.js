@@ -1,7 +1,7 @@
-import expect from 'expect';
+import expect from 'expect'
 
 describe('empty', () => {
   it('should work', () => {
-    expect(true).toEqual(true);
-  });
-});
+    expect(true).toEqual(true)
+  })
+})

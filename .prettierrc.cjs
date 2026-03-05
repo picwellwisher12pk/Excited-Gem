@@ -7,11 +7,11 @@ module.exports = {
   useTabs: false,
   semi: false,
   singleQuote: true,
-  trailingComma: "none",
+  trailingComma: 'none',
   bracketSpacing: true,
   bracketSameLine: true,
-  plugins: [require.resolve("@plasmohq/prettier-plugin-sort-imports")],
-  importOrder: ["^@plasmohq/(.*)$", "^~(.*)$", "^[./]"],
+  plugins: [require.resolve('@plasmohq/prettier-plugin-sort-imports')],
+  importOrder: ['^@plasmohq/(.*)$', '^~(.*)$', '^[./]'],
   importOrderSeparation: true,
   importOrderSortSpecifiers: true
 }

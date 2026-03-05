@@ -1,55 +1,55 @@
 .tab-item {
-    padding: 0 16px 0;
-    padding-left: 15px;
-    margin-bottom: -1px;
-    border: 1px solid #ddd;
-    display: flex;
-    flex: 1;
-    width: 100%;
-    border-radius: 0;
-    text-overflow: ellipsis;
-    white-space: nowrap;
-    position: relative;
-    background-color: #fff;
-    flex-basis: 40px;
-    transition: all 0.2s;
+  padding: 0 16px 0;
+  padding-left: 15px;
+  margin-bottom: -1px;
+  border: 1px solid #ddd;
+  display: flex;
+  flex: 1;
+  width: 100%;
+  border-radius: 0;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  position: relative;
+  background-color: #fff;
+  flex-basis: 40px;
+  transition: all 0.2s;
 }
 
 .tab-item.hidden {
-    display: none;
+  display: none;
 }
 
 .tab-item.idle .tab-name,
 .tab-item.idle .tab-favicon {
-    opacity: 0.5;
+  opacity: 0.5;
 }
 
 .tab-item.selected {
-    background-color: #acd8fb;
+  background-color: #acd8fb;
 }
 
 .tab-item:hover {
-    background-color: #eee;
+  background-color: #eee;
 }
 
 .tab-item .tab-title {
-    max-width: 50vw;
+  max-width: 50vw;
 }
 
 .tab-item .clickable {
-    color: #000;
+  color: #000;
 }
 
 .tab-item .clickable:hover {
-    color: #000;
-    text-decoration: none;
+  color: #000;
+  text-decoration: none;
 }
 
 .tab-item img,
 .tab-item span.favicon {
-    width: 16px;
-    height: 16px;
-    margin: 0 5px;
+  width: 16px;
+  height: 16px;
+  margin: 0 5px;
 }
 
 .tab-item img[src=""],
@@ -58,164 +58,164 @@
 .tab-item span.favicon[src=""],
 .tab-item span.favicon[src^="chrome-extension://"],
 .tab-item span.favicon[src^="chrome://"] {
-    display: inline-block;
-    border: 1px solid gray;
-    text-indent: -9999px;
+  display: inline-block;
+  border: 1px solid gray;
+  text-indent: -9999px;
 }
 
 .tab-item .tab-favicon {
-    margin-right: 15px;
-    width: 16px;
-    height: 16px;
+  margin-right: 15px;
+  width: 16px;
+  height: 16px;
 }
 
 .tab-item .tab-favicon img {
-    margin: 0;
-    transition: all 0.2s;
+  margin: 0;
+  transition: all 0.2s;
 }
 
 .tab-item .tab-favicon .checkbox {
-    opacity: 0;
-    position: absolute;
-    left: 0;
-    top: 3px;
+  opacity: 0;
+  position: absolute;
+  left: 0;
+  top: 3px;
 }
 
 .tab-item .tab-favicon:hover .checkbox {
-    opacity: 1;
+  opacity: 1;
 }
 
 .tab-item .tab-favicon:hover img {
-    opacity: 0;
+  opacity: 0;
 }
 
 .tab-item.checked {
-    background-color: #e3f1fc;
-    border-color: #548dbb;
+  background-color: #e3f1fc;
+  border-color: #548dbb;
 }
 
 .tab-item.checked .dimmed.tab-url {
-    color: #0062cc;
+  color: #0062cc;
 }
 
 .tab-item.checked .tab-favicon .checkbox {
-    opacity: 1;
+  opacity: 1;
 }
 
 .tab-item.checked .tab-favicon img {
-    opacity: 0;
+  opacity: 0;
 }
 
 .tab-item .glyphicon {
-    padding-left: 5px;
-    padding-right: 5px;
+  padding-left: 5px;
+  padding-right: 5px;
 }
 
 .tab-item .glyphicon.disabled {
-    color: #aaa;
+  color: #aaa;
 }
 
 .tab-item .dimmed {
-    color: #aebdd0;
+  color: #aebdd0;
 }
 
 .tab-item .trimmed {
-    margin-left: 15px;
+  margin-left: 15px;
 }
 
 .tab-item .tab-url {
-    flex: 1;
+  flex: 1;
 }
 
 .tab-item .tab-name {
-    flex-shrink: 0;
-    max-width: 600px;
+  flex-shrink: 0;
+  max-width: 600px;
 }
 
 .tab-item .tab-name:hover {
-    color: blue;
+  color: blue;
 }
 
 .tab-item .tab-actions {
-    width: auto;
+  width: auto;
 }
 
 .tab-item .tab-actions li {
-    display: none;
+  display: none;
 }
 
 .tab-item .tab-actions li.active {
-    display: inline-block;
+  display: inline-block;
 }
 
 .tab-item:hover .tab-actions {
-    display: block;
-    width: auto;
+  display: block;
+  width: auto;
 }
 
 .tab-item:hover .tab-actions li {
-    display: inline-block;
-    width: auto;
+  display: inline-block;
+  width: auto;
 }
 
 .tab-item .tab-actions li {
-    opacity: 0.4;
+  opacity: 0.4;
 }
 
 .tab-item .tab-actions:hover li {
-    display: inline-block;
-    opacity: 1;
+  display: inline-block;
+  opacity: 1;
 }
 
 .clip {
-    word-wrap: break-word;
-    overflow: hidden;
-    text-overflow: ellipsis;
-    text-align: left;
-    white-space: nowrap;
+  word-wrap: break-word;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  text-align: left;
+  white-space: nowrap;
 }
 
 .tab-actions {
-    flex-shrink: 0;
-    overflow: hidden;
-    transition: all 0.4s;
+  flex-shrink: 0;
+  overflow: hidden;
+  transition: all 0.4s;
 }
 
 .tab-actions li {
-    transition: all 0.2s;
-    display: inline-block;
-    overflow: hidden;
-    margin-right: 5px;
+  transition: all 0.2s;
+  display: inline-block;
+  overflow: hidden;
+  margin-right: 5px;
 }
 
 .tab-actions li:last-child {
-    margin-right: 0;
+  margin-right: 0;
 }
 
 .tab-actions li i {
-    padding: 6px;
+  padding: 6px;
 }
 
 .tab-actions li.active {
-    opacity: 1;
+  opacity: 1;
 }
 
 .tab-actions:hover li {
-    display: inline-block;
-    opacity: 1;
+  display: inline-block;
+  opacity: 1;
 }
 
 .tab-actions li.pin-tab i {
-    color: #007bff;
-    /* $link-color (primary blue) */
+  color: #007bff;
+  /* $link-color (primary blue) */
 }
 
 .tab-actions li.sound-tab i {
-    color: #17a2b8;
-    /* $info (cyan) */
+  color: #17a2b8;
+  /* $info (cyan) */
 }
 
 .tab-actions li.remove-tab i {
-    color: #d1335b;
-    /* $brand-secondary-color */
+  color: #d1335b;
+  /* $brand-secondary-color */
 }

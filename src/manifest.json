@@ -18,8 +18,10 @@
     "scripting"
   ],
   "host_permissions": [
-    "https://*.youtube.com/*",
-    "http://*.youtube.com/*"
+    "https://*.youtube.com/watch*",
+    "https://*.youtube.com/shorts/*",
+    "http://*.youtube.com/watch*",
+    "http://*.youtube.com/shorts/*"
   ],
   "{{chrome}}.action": {
     "default_icon": {
