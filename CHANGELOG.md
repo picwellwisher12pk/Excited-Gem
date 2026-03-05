@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [1.5.0](https://github.com/picwellwisher12pk/Excited-Gem/compare/v1.4.7...v1.5.0) (2026-03-05)
+
+
+### Bug Fixes
+
+* **build:** convert all ~/ imports to relative paths and fix CWS publication script ([c0fc8c3](https://github.com/picwellwisher12pk/Excited-Gem/commit/c0fc8c3bcffb61143131023e637a6c7fd44016e6))
+
 ### [1.4.7](https://github.com/picwellwisher12pk/Excited-Gem/compare/v1.4.6...v1.4.7) (2026-03-02)
 
 ### [1.4.6](https://github.com/picwellwisher12pk/Excited-Gem/compare/v1.4.5...v1.4.6) (2026-03-02)
