@@ -2,9 +2,10 @@ import type { PlasmoCSConfig } from 'plasmo'
 
 export const config: PlasmoCSConfig = {
   matches: [
-    'https://www.youtube.com/*',
-    'http://www.youtube.com/*',
-    'https://youtube.com/shorts/*'
+    'https://*.youtube.com/watch*',
+    'http://*.youtube.com/watch*',
+    'https://*.youtube.com/shorts/*',
+    'http://*.youtube.com/shorts/*'
   ]
 }
 

@@ -126,8 +126,10 @@
       "default_path": "tabs/home.html"
     },
     "host_permissions": [
-      "https://*.youtube.com/*",
-      "http://*.youtube.com/*"
+      "https://*.youtube.com/watch*",
+      "https://*.youtube.com/shorts/*",
+      "http://*.youtube.com/watch*",
+      "http://*.youtube.com/shorts/*"
     ],
     "oauth2": {
       "client_id": "895689043158-ilstmlvd16i9p88n22b7sva0d6mhnp6n.apps.googleusercontent.com",

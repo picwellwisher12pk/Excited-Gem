@@ -1,7 +1,12 @@
 import type { PlasmoCSConfig } from 'plasmo'
 
 export const config: PlasmoCSConfig = {
-  matches: ['http://*/*', 'https://*/*']
+  matches: [
+    'https://*.youtube.com/watch*',
+    'http://*.youtube.com/watch*',
+    'https://*.youtube.com/shorts/*',
+    'http://*.youtube.com/shorts/*'
+  ]
 }
 
 /* eslint-disable no-console */

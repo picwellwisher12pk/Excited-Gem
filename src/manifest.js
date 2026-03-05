@@ -36,8 +36,10 @@ export default async function getManifest() {
       'scripting'
     ],
     optional_host_permissions: [
-      'https://*.youtube.com/*',
-      'http://*.youtube.com/*'
+      'https://*.youtube.com/watch*',
+      'https://*.youtube.com/shorts/*',
+      'http://*.youtube.com/watch*',
+      'http://*.youtube.com/shorts/*'
     ],
     side_panel: {
       default_path: 'tabs/home.html'
