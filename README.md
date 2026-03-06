@@ -1,3 +1,7 @@
+<p align="center">
+  <img src="src/assets/logo.svg" width="128" alt="Excited Gem Logo">
+</p>
+
 # 💎 Excited Gem
 
 Excited Gem is a high-performance, unified productivity browser extension designed for power users. More than just a tab manager, it serves as your digital workspace—combining advanced session management, YouTube media control, and secure cloud synchronization into a beautiful, lightning-fast interface.
@@ -38,13 +42,9 @@ Excited Gem is a high-performance, unified productivity browser extension design
 
 ---
 
-## 📸 Screenshots
+## 📸 Visual Experience
 
-### Main Dashboard
-![Main Dashboard](./Designs/Screenshots/main-normal.JPG)
-
-### Advanced Filtering
-![Advanced Filtering](./Designs/Screenshots/main-filter.JPG)
+![Excited Gem Dashboard](Designs/new.jpg)
 
 ---
 
