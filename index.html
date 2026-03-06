@@ -1,77 +1,106 @@
 <!DOCTYPE html>
-<html lang="en-us">
+<html lang="en">
 
 <head>
     <meta charset="UTF-8">
-    <title>Excited Gem by picwellwisher12pk</title>
+    <title>Excited Gem - Advanced Tab & Media Workspace</title>
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <link rel="stylesheet" type="text/css" href="src/styles/github/normalize.css" media="screen">
     <link rel="stylesheet" type="text/css" href="src/styles/github/stylesheet.css" media="screen">
     <link rel="stylesheet" type="text/css" href="src/styles/github/github-light.css" media="screen">
     <link href='https://fonts.googleapis.com/css?family=Open+Sans:400,700' rel='stylesheet' type='text/css'>
+    <style>
+        .privacy-link {
+            display: inline-block;
+            margin-top: 20px;
+            padding: 10px 20px;
+            background: #6366f1;
+            color: white !important;
+            border-radius: 6px;
+            text-decoration: none;
+            font-weight: bold;
+        }
+
+        .privacy-link:hover {
+            background: #4f46e5;
+        }
+
+        .feature-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 20px;
+            margin-top: 30px;
+        }
+
+        @media (max-width: 600px) {
+            .feature-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
 </head>
 
 <body>
     <section class="page-header">
-        <h1 class="project-name">Excited Gem</h1>
-        <h2 class="project-tagline">This repo is a quest to improve the famous extension for Chrome &quot;OneTab&quot; with respect to UI and UX along with some more useful options.</h2>
-        <a href="https://github.com/picwellwisher12pk/onetab-advanced" class="btn">View on GitHub</a>
-        <a href="https://github.com/picwellwisher12pk/onetab-advanced/zipball/master" class="btn">Download .zip</a>
-        <a href="https://github.com/picwellwisher12pk/onetab-advanced/tarball/master" class="btn">Download .tar.gz</a>
+        <h1 class="project-name">💎 Excited Gem</h1>
+        <h2 class="project-tagline">A high-performance, unified productivity workspace for power users.</h2>
+        <a href="https://github.com/picwellwisher12pk/Excited-Gem" class="btn">View on GitHub</a>
+        <a href="https://picwellwisher12pk.github.io/excited-gem/privacy.html" class="btn">Privacy Policy</a>
     </section>
 
     <section class="main-content">
-        <h1>
-            <a id="excited-gem" class="anchor" href="#excited-gem" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Excited Gem</h1>
+        <h1>Beyond Tab Management</h1>
+        <p>Excited Gem is designed to revolutionize how you interact with your browser. It combines advanced session
+            preservation with specialized media controls and secure cloud synchronization.</p>
 
-        <p>This repo is a quest to improve the famous extension for Chrome "OneTab" with respect to UI and UX along with some more useful options for regular Chrome users and developers/programmers.</p>
+        <div class="feature-grid">
+            <div class="feature-item">
+                <h3>🚀 Smart Sessions</h3>
+                <p>Save entire windows or tab groups into persistent sessions. Organize them into custom libraries to
+                    declutter your workflow instantly.</p>
+            </div>
+            <div class="feature-item">
+                <h3>📺 YouTube Remote</h3>
+                <p>Control YouTube playback (Play/Pause, Seek) directly from the extension sidebar. Full support for
+                    <strong>YouTube Shorts</strong>.</p>
+            </div>
+            <div class="feature-item">
+                <h3>☁️ Secure Cloud Sync</h3>
+                <p>Back up your workspace to your personal <strong>Google Drive</strong>. We use a Bring-Your-Own-Key
+                    (BYOK) model to ensure your data stays truly private.</p>
+            </div>
+            <div class="feature-item">
+                <h3>🔍 Regex Search</h3>
+                <p>Find specific tabs across multiple windows using powerful Regular Expression filtering on titles and
+                    URLs.</p>
+            </div>
+        </div>
 
-        <h2>
-            <a id="idea" class="anchor" href="#idea" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Idea</h2>
+        <h2 id="visuals">Visuals</h2>
+        <h3>Main Dashboard</h3>
+        <p>The Active Tabs list provides a real-time overview of your workspace, highlighting audible, pinned, and
+            grouped tabs.</p>
+        <p><img src="./Designs/Screenshots/main-normal.JPG" alt="Excited Gem Main Dashboard"
+                style="max-width: 100%; border-radius: 8px; box-shadow: 0 4px 12px rgba(0,0,0,0.1);"></p>
 
-        <p>The thought to make such a thing happened when I faced few problems while using Chrome browser. I love to read and research a lot. And while doing that I end opening more than 50 tabs. Mostly 60 or 70. It is then when I start having problem of
-            managing my tabs. With so many tabs stacked up, it was hard to know which tab was which. Sometimes I accidently closed a tab in try to select it.</p>
+        <h3>Powerful Filtering</h3>
+        <p>Filter through dozens of tabs instantly with lightning-fast search and specific attribute toggles.</p>
+        <p><img src="./Designs/Screenshots/main-filter.JPG" alt="Filtering and Search"
+                style="max-width: 100%; border-radius: 8px; box-shadow: 0 4px 12px rgba(0,0,0,0.1);"></p>
 
-        <p>I could have gone with some simple solutions like move all my opened tabs to bookmarks and open them later when need it. Then I found an nice Chrome extension "One Tab". It was doing a great job. In fact part of the reason and inspiration to make
-            this project came from that extension.</p>
+        <hr>
 
-        <p>So I decided to make something useful and also learn something new while making it. That is how I started building it and learned quite a bit about Javascript, Chrome Extension API, ReactJS and Typescript.</p>
-
-        <h2>
-            <a id="visuals" class="anchor" href="#visuals" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Visuals</h2>
-
-        <h3>
-            <a id="main" class="anchor" href="#main" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Main</h3>
-
-        <p>In the Following screen you can see all the tabs that have been opened in the current browser window. The Active Tabs list show you not only the currently opened tabs but also their attributes like whether it is pinned or not, whether it is audible
-            or not. You can make a tab pinned or mute a tab, or go to a tab by clicking on its link(name).
-
-            <img src="./Designs/Screenshots/main-normal.JPG" alt="Normal"> </p>
-
-        <p>The Active Tabs list keep changing , every time the tabs are either moved , removed or created, pinned or muted.</p>
-
-        <p>The total number of tabs for current window is shown on the extension icon (top right next to address bar).</p>
-
-        <h3>
-            <a id="filtering" class="anchor" href="#filtering" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Filtering</h3>
-
-        <p><img src="./Designs/Screenshots/main-filter.JPG" alt="Filtering"> Currently this extension support two types of filtering for Active Tabs.<br> 1. Normal (String/text search) 2. Regex/Regular Expressions</p>
-
-        <p>The filtering is case Insensitive for now. But I shall soon add option to quickly toggle that.</p>
-
-        <p>For now that was it. Lot of future plans for this project. Shall keep you updated.</p>
-
-        <p>from Pakistan with LOVE.</p>
+        <p style="text-align: center;">
+            <a href="https://picwellwisher12pk.github.io/excited-gem/privacy.html" class="privacy-link">Read our Privacy
+                Policy</a>
+        </p>
 
         <footer class="site-footer">
-            <span class="site-footer-owner"><a href="https://github.com/picwellwisher12pk/onetab-advanced">Excited Gem</a> is maintained by <a href="https://github.com/picwellwisher12pk">picwellwisher12pk</a>.</span>
-
-
+            <span class="site-footer-owner"><a href="https://github.com/picwellwisher12pk/Excited-Gem">Excited Gem</a>
+                is maintained by <a href="https://github.com/picwellwisher12pk">Amir Hameed</a>.</span>
+            <p>From Pakistan with ❤️</p>
         </footer>
-
     </section>
-
-
 </body>
 
 </html>
