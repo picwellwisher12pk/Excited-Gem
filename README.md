@@ -38,6 +38,16 @@ Excited Gem is a high-performance, unified productivity browser extension design
 
 ---
 
+## 📸 Screenshots
+
+### Main Dashboard
+![Main Dashboard](./Designs/Screenshots/main-normal.JPG)
+
+### Advanced Filtering
+![Advanced Filtering](./Designs/Screenshots/main-filter.JPG)
+
+---
+
 ## 🛠 Tech Stack
 
 - **Core**: [React](https://reactjs.org/) & [TypeScript](https://www.typescriptlang.org/)
